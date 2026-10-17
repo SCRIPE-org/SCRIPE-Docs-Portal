@@ -3,7 +3,6 @@
  * Currently backed by static repository.
  */
 
-import type { IApiService } from "@core/interfaces/api.interface";
 import type { IDocsService } from "../../domain/interfaces/IDocsService";
 import type { IDocsRepository, SearchResult } from "../../domain/interfaces/IDocsRepository";
 import type { DocPage } from "../../domain/entities/DocPage";
@@ -15,8 +14,7 @@ import type { DocCategory } from "../../domain/entities/DocCategory";
  */
 export class DocsService implements IDocsService {
   constructor(
-    private readonly repository: IDocsRepository,
-    private readonly api?: IApiService
+    private readonly repository: IDocsRepository
   ) {}
 
   getPage(slug: string): DocPage | undefined {

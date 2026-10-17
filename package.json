@@ -2,6 +2,7 @@
   "name": "scripe-docs-portal",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "packageManager": "pnpm@9.15.4",
   "scripts": {
     "dev": "next dev -p 3002",

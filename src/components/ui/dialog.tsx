@@ -30,9 +30,15 @@ export function Dialog({
 export function DialogContent({
   children,
   className,
+  onOpenAutoFocus,
+  onCloseAutoFocus,
+  ...props
 }: {
   children: React.ReactNode;
   className?: string;
+  onOpenAutoFocus?: (e?: any) => void;
+  onCloseAutoFocus?: (e?: any) => void;
+  [key: string]: any;
 }) {
   const ctx = React.useContext(DialogContext);
 

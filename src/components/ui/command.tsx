@@ -7,8 +7,14 @@ import { cn } from "@/lib/utils";
 export function Command({
   className,
   children,
+  label,
+  shouldFilter,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: React.HTMLAttributes<HTMLDivElement> & {
+  label?: string;
+  shouldFilter?: boolean;
+  [key: string]: any;
+}) {
   return (
     <div
       className={cn(
@@ -107,10 +113,13 @@ export function CommandGroup({
 export function CommandItem({
   className,
   onSelect,
+  value,
   children,
   ...props
 }: {
   onSelect?: () => void;
+  value?: string;
+  [key: string]: any;
 } & React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
