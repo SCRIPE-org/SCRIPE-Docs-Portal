@@ -1,0 +1,69 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@engine/*": [
+        "./src/engine/*"
+      ],
+      "@content/*": [
+        "./src/content/*",
+        "./src/data/content/*"
+      ],
+      "@locales/*": [
+        "./src/locales/*"
+      ],
+      "@core/ui/*": [
+        "./src/components/ui/*"
+      ],
+      "@/core/ui/*": [
+        "./src/components/ui/*"
+      ],
+      "@core/common/utils": [
+        "./src/lib/utils"
+      ],
+      "@core/config/branding": [
+        "./src/lib/branding"
+      ],
+      "@core/providers/theme-provider": [
+        "./src/engine/providers/ThemeProvider"
+      ],
+      "@modules/docs/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

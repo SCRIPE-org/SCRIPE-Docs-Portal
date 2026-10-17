@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "sessions": {
+    "f3886833-d97b-43df-bb0c-1010e36ef039": {
+      "updatedAt": 1787740563450,
+      "files": {
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Frontend\\src\\modules\\shared\\docs\\src\\locales\\pages\\custom-fields\\en.ts": {
+          "editCount": 1,
+          "findings": []
+        },
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Frontend\\src\\modules\\shared\\docs\\src\\locales\\pages\\custom-fields\\ar.ts": {
+          "editCount": 2,
+          "findings": []
+        },
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Frontend\\src\\modules\\shared\\docs\\src\\locales\\pages\\custom-fields\\de.ts": {
+          "editCount": 2,
+          "findings": []
+        },
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Frontend\\src\\modules\\shared\\docs\\src\\locales\\pages\\custom-fields\\ru.ts": {
+          "editCount": 3,
+          "findings": []
+        },
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Frontend\\src\\modules\\shared\\docs\\src\\locales\\pages\\custom-fields\\es.ts": {
+          "editCount": 3,
+          "findings": []
+        },
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Frontend\\src\\modules\\shared\\docs\\src\\locales\\pages\\custom-fields\\zh.ts": {
+          "editCount": 3,
+          "findings": []
+        },
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Frontend\\src\\modules\\shared\\docs\\src\\locales\\pages\\custom-fields\\fr.ts": {
+          "editCount": 10,
+          "findings": []
+        },
+        "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\claude\\D--01-PROJECTS-SCRIPE\\f3886833-d97b-43df-bb0c-1010e36ef039\\scratchpad\\fr_parity_check.test.ts": {
+          "editCount": 1,
+          "findings": []
+        },
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Frontend\\src\\modules\\shared\\docs\\src\\locales\\pages\\custom-fields\\__frParityCheck.test.ts": {
+          "editCount": 2,
+          "findings": []
+        }
+      }
+    }
+  }
+}
