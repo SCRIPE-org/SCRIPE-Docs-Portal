@@ -85,7 +85,10 @@
 /* Light theme — brand duo has no nx equivalent (DESIGN_BAR §1.12 keeps these
    marketing-owned), so each keeps its hue/chroma and only drops lightness,
    the same ratio globals.css itself uses for --nx-accent / --nx-secondary. */
-:root:not(.dark) {
+html.light,
+.light,
+:root:not(.dark),
+[data-theme="light"] {
   --com-violet: oklch(0.42 0.13 128);
   --com-violet-hi: oklch(0.46 0.15 128);
   --com-cyan: oklch(0.42 0.13 128);
@@ -3012,10 +3015,16 @@
   margin: 2rem 0;
 }
 
-/* Content area max width on inner pages */
+/* Content area max width and proper vertical breathing room on inner pages */
 .com-content-area {
   width: 100%;
-  padding-top: 0;
+  padding-top: clamp(2rem, 4vw, 3.5rem);
+  padding-bottom: clamp(4rem, 8vw, 6rem);
+}
+
+.com-content-area--full {
+  grid-template-columns: minmax(0, 1fr) !important;
+  max-width: 980px;
 }
 
 /* Fix signal card in inner page hero */

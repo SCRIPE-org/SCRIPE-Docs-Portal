@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Terminal,
   Copy,
@@ -188,7 +189,7 @@ export function InteractiveCliPreview() {
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex items-center gap-1 overflow-x-auto py-1">
+        <div className="flex items-center gap-1 overflow-x-auto py-1 relative">
           {TABS.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab.id === tab.id;
@@ -199,14 +200,23 @@ export function InteractiveCliPreview() {
                   setActiveTab(tab);
                   setRunLog(null);
                 }}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium transition-all ${
+                className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                   isActive
-                    ? "bg-primary text-primary-foreground font-semibold shadow-xs"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    ? "text-primary-foreground font-semibold"
+                    : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                 }`}
               >
-                <Icon size={13} />
-                <span>{tab.label}</span>
+                {isActive && (
+                  <motion.div
+                    layoutId="activeCliTab"
+                    className="absolute inset-0 rounded-md bg-primary shadow-xs"
+                    transition={{ type: "spring", stiffness: 450, damping: 32 }}
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-1.5">
+                  <Icon size={13} />
+                  <span>{tab.label}</span>
+                </span>
               </button>
             );
           })}
@@ -218,7 +228,7 @@ export function InteractiveCliPreview() {
             <button
               onClick={handleRunSim}
               disabled={isRunning}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border border-border bg-muted/50 text-foreground hover:border-primary/50 hover:bg-muted transition-colors disabled:opacity-50"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border border-border bg-muted/50 text-foreground hover:border-primary/50 hover:bg-muted transition-colors disabled:opacity-50 cursor-pointer"
             >
               <Play
                 size={12}
@@ -232,7 +242,7 @@ export function InteractiveCliPreview() {
 
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border border-border bg-muted/50 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border border-border bg-muted/50 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
             aria-label="Copy code to clipboard"
           >
             {copied ? (
@@ -251,10 +261,19 @@ export function InteractiveCliPreview() {
       </div>
 
       {/* Code Area */}
-      <div className="relative p-4 sm:p-6 bg-muted/10 font-mono text-xs sm:text-sm overflow-x-auto leading-relaxed">
-        <pre className="text-foreground/90 font-mono">
-          <code>{activeTab.code}</code>
-        </pre>
+      <div className="relative p-4 sm:p-6 bg-muted/10 font-mono text-xs sm:text-sm overflow-x-auto leading-relaxed min-h-[220px]">
+        <AnimatePresence mode="wait">
+          <motion.pre
+            key={activeTab.id}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.16 }}
+            className="text-foreground/90 font-mono"
+          >
+            <code>{activeTab.code}</code>
+          </motion.pre>
+        </AnimatePresence>
 
         {/* Simulation Output Stream */}
         {runLog && runLog.length > 0 && (

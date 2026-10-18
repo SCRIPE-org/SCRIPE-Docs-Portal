@@ -146,7 +146,7 @@ export function ArchitectureRadar() {
                 y1="50"
                 x2="50"
                 y2="6"
-                stroke="#c6ff00"
+                stroke="hsl(var(--primary))"
                 strokeWidth="0.75"
               />
               <path
@@ -159,8 +159,16 @@ export function ArchitectureRadar() {
             {/* Gradient definition */}
             <defs>
               <radialGradient id="radarGradient" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#c6ff00" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="#c6ff00" stopOpacity="0" />
+                <stop
+                  offset="0%"
+                  stopColor="hsl(var(--primary))"
+                  stopOpacity="0.4"
+                />
+                <stop
+                  offset="100%"
+                  stopColor="hsl(var(--primary))"
+                  stopOpacity="0"
+                />
               </radialGradient>
             </defs>
 
@@ -174,7 +182,7 @@ export function ArchitectureRadar() {
                 y2="50"
                 stroke={
                   activeNode.id === node.id || activeNode.id === "backend"
-                    ? "#c6ff00"
+                    ? "hsl(var(--primary))"
                     : "currentColor"
                 }
                 className={

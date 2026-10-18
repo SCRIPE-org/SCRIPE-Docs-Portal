@@ -81,10 +81,17 @@
     --chart-6: 346 87% 60%;
     --chart-7: 48 96% 53%;
     --chart-8: 239 84% 67%;
+    /* Spacing & Layout Tokens */
+    --com-gutter: clamp(1.25rem, 5vw, 4rem);
+    --com-max: 1320px;
+    --com-header-h: 64px;
+    --com-prose: 68ch;
   }
 
+  html.light,
   .light,
-  :root:not(.dark) {
+  :root:not(.dark),
+  [data-theme="light"] {
     --background: 80 14% 97%;
     --foreground: 0 0% 5%;
 
@@ -94,7 +101,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 5%;
 
-    --primary: 74 100% 38%;
+    --primary: 74 100% 32%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 80 10% 93%;
@@ -103,7 +110,7 @@
     --muted: 80 10% 92%;
     --muted-foreground: 120 3% 40%;
 
-    --accent: 74 100% 38%;
+    --accent: 74 100% 32%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -111,7 +118,13 @@
 
     --border: 80 10% 86%;
     --input: 80 10% 86%;
-    --ring: 74 100% 38%;
+    --ring: 74 100% 32%;
+
+    /* SCRIPE NX Identity Tokens for Light */
+    --scripe-signal: #4d7c0f;
+    --scripe-void: #f7f8f5;
+    --scripe-carbon: #eef0eb;
+    --scripe-ink: #0d0d0e;
 
     --nx-ground: #f7f8f5;
     --nx-surface: #ffffff;
@@ -125,12 +138,12 @@
     --nx-line: #d5d9d3;
     --nx-line-hi: #aeb4ad;
 
-    --nx-accent: #4c6200;
+    --nx-accent: #3f6212;
     --nx-accent-fill: #c6ff00;
     --nx-on-fill: #0d0d0e;
     --nx-accent-wash: rgba(198, 255, 0, 0.15);
-    --nx-focus: rgba(76, 98, 0, 0.6);
-    --nx-glow: 0 0 20px -2px rgba(100, 140, 0, 0.25);
+    --nx-focus: rgba(63, 98, 18, 0.6);
+    --nx-glow: 0 0 20px -2px rgba(63, 98, 18, 0.25);
 
     --info: 199 89% 40%;
     --warning: 38 92% 40%;
@@ -140,6 +153,11 @@
     --nx-warning: #d97706;
     --nx-info: #0284c7;
     --nx-success: #059669;
+
+    --com-gutter: clamp(1.25rem, 5vw, 4rem);
+    --com-max: 1320px;
+    --com-header-h: 64px;
+    --com-prose: 68ch;
 
     /* High-contrast readable syntax highlighting tokens for light mode */
     --chart-1: 142 76% 28%;

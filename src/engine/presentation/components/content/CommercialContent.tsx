@@ -196,7 +196,9 @@ export function CommercialContent({
       </header>
 
       {/* ── Content Area ───────────────────────────────────────────── */}
-      <div className="com-content-area">
+      <div
+        className={`com-content-area ${headings.length === 0 ? "com-content-area--full" : ""}`}
+      >
         {/* TOC Rail */}
         {headings.length > 0 && (
           <aside
