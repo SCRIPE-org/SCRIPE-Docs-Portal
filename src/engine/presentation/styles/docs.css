@@ -403,6 +403,7 @@
   flex: 1;
   min-width: 0;
   display: flex;
+  justify-content: center;
 }
 
 .docs-content {
@@ -413,6 +414,7 @@
      Not transitioned: the reader-width control re-flows the whole article, and
      animating a layout property reflows it on every frame for no visual gain. */
   max-width: 800px; /* default when no style override — this is the "compact" starting value */
+  margin-inline: auto;
 }
 
 /* ─── Breadcrumb ──────────────────────────────────────────────────────── */

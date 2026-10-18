@@ -3020,11 +3020,15 @@ html.light,
   width: 100%;
   padding-top: clamp(2rem, 4vw, 3.5rem);
   padding-bottom: clamp(4rem, 8vw, 6rem);
+  padding-inline: var(--com-gutter);
+  margin-inline: auto;
 }
 
 .com-content-area--full {
   grid-template-columns: minmax(0, 1fr) !important;
   max-width: 980px;
+  margin-inline: auto;
+  width: 100%;
 }
 
 /* Fix signal card in inner page hero */

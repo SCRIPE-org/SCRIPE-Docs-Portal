@@ -145,7 +145,7 @@ export function SelectItem({
     if (isSelected) {
       ctx?.setSelectedLabel(children);
     }
-  }, [isSelected, children]);
+  }, [isSelected, children, ctx]);
 
   return (
     <div

@@ -90,7 +90,6 @@
 
   html.light,
   .light,
-  :root:not(.dark),
   [data-theme="light"] {
     --background: 80 14% 97%;
     --foreground: 0 0% 5%;

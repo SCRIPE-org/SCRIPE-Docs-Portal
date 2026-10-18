@@ -5,10 +5,13 @@ const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
-  <div className="relative w-full overflow-auto rounded-lg border border-white/10 my-4">
+  <div className="relative w-full overflow-auto rounded-lg border border-border my-4">
     <table
       ref={ref}
-      className={cn("w-full caption-bottom text-sm text-white/80", className)}
+      className={cn(
+        "w-full caption-bottom text-sm text-foreground/80",
+        className,
+      )}
       {...props}
     />
   </div>
@@ -22,7 +25,7 @@ const TableHeader = React.forwardRef<
   <thead
     ref={ref}
     className={cn(
-      "[&_tr]:border-b [&_tr]:border-white/10 bg-white/5",
+      "[&_tr]:border-b [&_tr]:border-border bg-muted/40",
       className,
     )}
     {...props}
@@ -48,7 +51,7 @@ const TableFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tfoot
     ref={ref}
-    className={cn("border-t border-white/10 bg-white/5 font-medium", className)}
+    className={cn("border-t border-border bg-muted/50 font-medium", className)}
     {...props}
   />
 ));
@@ -61,7 +64,7 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "border-b border-white/10 transition-colors hover:bg-white/[0.04]",
+      "border-b border-border transition-colors hover:bg-muted/50",
       className,
     )}
     {...props}
@@ -76,7 +79,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-10 px-4 text-left align-middle font-medium text-white/50 [&:has([role=checkbox])]:pr-0",
+      "h-10 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
       className,
     )}
     {...props}

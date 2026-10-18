@@ -34,16 +34,15 @@ export function Dialog({
 export function DialogContent({
   children,
   className,
-  onOpenAutoFocus,
-  onCloseAutoFocus,
+  onOpenAutoFocus: _onOpenAutoFocus,
+  onCloseAutoFocus: _onCloseAutoFocus,
   ...props
 }: {
   children: React.ReactNode;
   className?: string;
-  onOpenAutoFocus?: (e?: any) => void;
-  onCloseAutoFocus?: (e?: any) => void;
-  [key: string]: any;
-}) {
+  onOpenAutoFocus?: (e?: Event) => void;
+  onCloseAutoFocus?: (e?: Event) => void;
+} & React.HTMLAttributes<HTMLDivElement>) {
   const ctx = React.useContext(DialogContext);
 
   React.useEffect(() => {
@@ -59,19 +58,20 @@ export function DialogContent({
   if (!ctx?.open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-fade-in">
       <div className="fixed inset-0" onClick={() => ctx.onOpenChange(false)} />
       <div
         className={cn(
-          "relative z-50 w-full max-w-lg rounded-xl border border-white/10 bg-[#0d0d0e] p-6 shadow-2xl transition-all",
+          "relative z-50 w-full max-w-lg rounded-xl border border-border bg-card text-card-foreground p-6 shadow-2xl transition-all",
           className,
         )}
+        {...props}
       >
         <button
           onClick={() => ctx.onOpenChange(false)}
-          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-scripe-signal"
+          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary"
         >
-          <X className="h-4 w-4 text-white/70" />
+          <X className="h-4 w-4 text-muted-foreground" />
           <span className="sr-only">Close</span>
         </button>
         {children}
@@ -102,7 +102,7 @@ export function DialogTitle({
   return (
     <h2
       className={cn(
-        "text-lg font-semibold leading-none tracking-tight text-white",
+        "text-lg font-semibold leading-none tracking-tight text-foreground",
         className,
       )}
       {...props}
