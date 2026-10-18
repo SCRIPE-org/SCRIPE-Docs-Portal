@@ -25,7 +25,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const fullSlug = slug.join("/");
   const page = docsContainer.docsRepository.getPage(fullSlug);
 
-  const title = resolveDocsKey(page?.titleKey) || page?.slug || "Technical Documentation";
+  const title =
+    resolveDocsKey(page?.titleKey) || page?.slug || "Technical Documentation";
   const description =
     resolveDocsKey(page?.descriptionKey) ||
     "Technical documentation for the SCRIPE sports operations platform.";

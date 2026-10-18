@@ -15,7 +15,10 @@ export const CODE_LINES = [
       { type: "fn", text: "CreateTenantHandler" },
     ],
   },
-  { ln: "2", parts: [{ type: "comment", text: "  // IAutoRegisteredJob + Clean Arch" }] },
+  {
+    ln: "2",
+    parts: [{ type: "comment", text: "  // IAutoRegisteredJob + Clean Arch" }],
+  },
   {
     ln: "3",
     parts: [

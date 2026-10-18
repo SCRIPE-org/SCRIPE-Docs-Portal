@@ -24,7 +24,7 @@ export function EmptyState({
         "flex flex-col items-center justify-center text-center p-8 rounded-xl border border-white/10 bg-[#0d0d0e]/60 backdrop-blur-md",
         size === "sm" && "p-4",
         size === "lg" && "p-12",
-        className
+        className,
       )}
     >
       {Icon && (
@@ -32,7 +32,9 @@ export function EmptyState({
           <Icon className="h-7 w-7" />
         </div>
       )}
-      <h3 className="text-lg font-semibold text-white tracking-tight">{title}</h3>
+      <h3 className="text-lg font-semibold text-white tracking-tight">
+        {title}
+      </h3>
       {description && (
         <p className="mt-1 text-sm text-white/60 max-w-sm">{description}</p>
       )}

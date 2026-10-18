@@ -64,7 +64,10 @@ export const NAV_SECTIONS: readonly NavSection[] = [
       { href: "/commercial/pricing-showcase", key: "pricing" },
       { href: "/commercial/investor-overview", key: "investorOverview" },
       { href: "/commercial/partner-journey", key: "partnerJourney" },
-      { href: "/commercial/entitlements-subscriptions", key: "subscriptionEngine" },
+      {
+        href: "/commercial/entitlements-subscriptions",
+        key: "subscriptionEngine",
+      },
       { href: "/commercial/roi-analysis", key: "roiAnalysis" },
     ],
   },
@@ -94,7 +97,7 @@ export function sectionLabelKey(sectionId: string): string {
 export function sectionItemKey(
   sectionId: string,
   itemKey: string,
-  field: "title" | "desc"
+  field: "title" | "desc",
 ): string {
   return `commercialMegaMenu.${sectionId}.items.${itemKey}.${field}`;
 }
@@ -107,5 +110,7 @@ export function sectionItemKey(
  */
 export function getPanelFocusables(panel: HTMLElement | null): HTMLElement[] {
   if (!panel) return [];
-  return Array.from(panel.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"));
+  return Array.from(
+    panel.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"),
+  );
 }

@@ -87,7 +87,9 @@ export function LifecycleTracer({ steps, titleKey }: LifecycleTracerProps) {
                   : t("widgets.lifecycleTracer.directionOutbound")}
               </span>
             </div>
-            <h4 className="mb-2 text-base font-semibold text-nx-ink">{t(activeStep.labelKey)}</h4>
+            <h4 className="mb-2 text-base font-semibold text-nx-ink">
+              {t(activeStep.labelKey)}
+            </h4>
             <p className="text-pretty text-sm leading-relaxed text-nx-ink-2">
               {t(activeStep.descriptionKey)}
             </p>
@@ -103,7 +105,7 @@ export function LifecycleTracer({ steps, titleKey }: LifecycleTracerProps) {
                       "rounded-nx-sm border px-2 py-1 text-[11px]",
                       isActiveActor
                         ? "border-nx-accent bg-nx-accent-wash font-bold text-nx-accent"
-                        : "border-transparent text-nx-ink-3"
+                        : "border-transparent text-nx-ink-3",
                     )}
                   >
                     {t(ACTOR_LABEL_KEY[actor])}

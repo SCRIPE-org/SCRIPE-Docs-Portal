@@ -23,10 +23,13 @@ function resolveDocsKey(key: string | undefined): string | undefined {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const rawSlug = slug.join("/");
-  const fullSlug = rawSlug.startsWith("commercial/") ? rawSlug : `commercial/${rawSlug}`;
+  const fullSlug = rawSlug.startsWith("commercial/")
+    ? rawSlug
+    : `commercial/${rawSlug}`;
   const page = docsContainer.docsRepository.getPage(fullSlug);
 
-  const title = resolveDocsKey(page?.titleKey) || page?.slug || "Commercial Operations";
+  const title =
+    resolveDocsKey(page?.titleKey) || page?.slug || "Commercial Operations";
   const description =
     resolveDocsKey(page?.descriptionKey) ||
     "Commercial and operational documentation for the SCRIPE sports operations platform.";
@@ -45,7 +48,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CommercialDocsSlugPage({ params }: Props) {
   const { slug } = await params;
   const rawSlug = slug.join("/");
-  const fullSlug = rawSlug.startsWith("commercial/") ? rawSlug : `commercial/${rawSlug}`;
+  const fullSlug = rawSlug.startsWith("commercial/")
+    ? rawSlug
+    : `commercial/${rawSlug}`;
 
   return <CommercialDocsView slug={fullSlug} />;
 }

@@ -13,14 +13,23 @@ import type { DocPage } from "../../domain/entities/DocPage";
  * Composes all data needed by the active view.
  * Filters navigation by mode (technical vs commercial).
  */
-export function useDocsViewModel(slug: string, mode: "technical" | "commercial" = "technical") {
+export function useDocsViewModel(
+  slug: string,
+  mode: "technical" | "commercial" = "technical",
+) {
   const repo = docsContainer.docsRepository;
 
   // ─── Page Data ──────────────────────────────────────────────
-  const page: DocPage | undefined = useMemo(() => repo.getPage(slug), [slug, repo]);
+  const page: DocPage | undefined = useMemo(
+    () => repo.getPage(slug),
+    [slug, repo],
+  );
 
   // ─── Navigation ─────────────────────────────────────────────
-  const allCategories: DocCategory[] = useMemo(() => repo.getNavigation(), [repo]);
+  const allCategories: DocCategory[] = useMemo(
+    () => repo.getNavigation(),
+    [repo],
+  );
 
   // Filter categories by mode: commercial categories use 'commercial-' prefix
   const categories: DocCategory[] = useMemo(() => {
@@ -61,8 +70,14 @@ export function useDocsViewModel(slug: string, mode: "technical" | "commercial" 
   const prevSlug = useMemo(() => repo.getPrevSlug(slug), [slug, repo]);
   const nextSlug = useMemo(() => repo.getNextSlug(slug), [slug, repo]);
 
-  const prevPage = useMemo(() => (prevSlug ? repo.getPage(prevSlug) : undefined), [prevSlug, repo]);
-  const nextPage = useMemo(() => (nextSlug ? repo.getPage(nextSlug) : undefined), [nextSlug, repo]);
+  const prevPage = useMemo(
+    () => (prevSlug ? repo.getPage(prevSlug) : undefined),
+    [prevSlug, repo],
+  );
+  const nextPage = useMemo(
+    () => (nextSlug ? repo.getPage(nextSlug) : undefined),
+    [nextSlug, repo],
+  );
 
   // ─── Search ────────────────────────────────────────────────
   const { t } = useDocsI18n();
@@ -70,7 +85,7 @@ export function useDocsViewModel(slug: string, mode: "technical" | "commercial" 
     (query: string): SearchResult[] => {
       return repo.search(query, mode, t);
     },
-    [repo, mode, t]
+    [repo, mode, t],
   );
 
   return {

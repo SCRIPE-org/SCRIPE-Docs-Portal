@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import { useDocsI18n } from "../../providers/DocsI18nProvider";
-import type { DiagramNode, DiagramConnection } from "../../../domain/entities/DocSection";
+import type {
+  DiagramNode,
+  DiagramConnection,
+} from "../../../domain/entities/DocSection";
 import { DiagramNodeItem } from "../ui/DiagramNodeItem";
 
 interface InteractiveDiagramProps {
@@ -14,9 +17,15 @@ interface InteractiveDiagramProps {
 /**
  * Documentation for module export
  */
-export function InteractiveDiagram({ nodes, connections, titleKey }: InteractiveDiagramProps) {
+export function InteractiveDiagram({
+  nodes,
+  connections,
+  titleKey,
+}: InteractiveDiagramProps) {
   const { t } = useDocsI18n();
-  const [activeNode, setActiveNode] = useState<DiagramNode | null>(nodes[0] || null);
+  const [activeNode, setActiveNode] = useState<DiagramNode | null>(
+    nodes[0] || null,
+  );
 
   return (
     <div className="mb-8">
@@ -37,11 +46,16 @@ export function InteractiveDiagram({ nodes, connections, titleKey }: Interactive
               />
               {conn && (
                 <div className="flex flex-col items-center px-2">
-                  <span className="text-lg font-bold text-nx-ink-3" aria-hidden="true">
+                  <span
+                    className="text-lg font-bold text-nx-ink-3"
+                    aria-hidden="true"
+                  >
                     →
                   </span>
                   {conn.labelKey && (
-                    <span className="text-[11px] text-nx-ink-2">{t(conn.labelKey)}</span>
+                    <span className="text-[11px] text-nx-ink-2">
+                      {t(conn.labelKey)}
+                    </span>
                   )}
                 </div>
               )}

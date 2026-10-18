@@ -10,6 +10,8 @@ interface CommercialPageConnectorProps {
  * CommercialPageConnector — Thin client component that bridges
  * the server page.tsx to the CommercialDocsView client component.
  */
-export function CommercialPageConnector({ slug }: CommercialPageConnectorProps) {
+export function CommercialPageConnector({
+  slug,
+}: CommercialPageConnectorProps) {
   return <CommercialDocsView slug={slug} />;
 }

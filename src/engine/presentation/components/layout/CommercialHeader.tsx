@@ -6,14 +6,26 @@
  */
 "use client";
 
-import { useState, useRef, useEffect, useCallback, type KeyboardEvent } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  type KeyboardEvent,
+} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Button } from "@core/ui/button";
 import { useDocsI18n } from "../../providers/DocsI18nProvider";
 import { BRAND } from "@core/config/branding";
-import { ChevronDown, SearchIcon, DocsIcon, ArrowIcon, MenuIcon } from "./CommercialHeaderIcons";
+import {
+  ChevronDown,
+  SearchIcon,
+  DocsIcon,
+  ArrowIcon,
+  MenuIcon,
+} from "./CommercialHeaderIcons";
 import {
   NAV_SECTIONS,
   MEGA_PANEL_ID,
@@ -21,6 +33,7 @@ import {
   getPanelFocusables,
 } from "./CommercialNavData";
 import { CommercialMegaPanel } from "./CommercialMegaPanel";
+import { DocsLangSwitcher, DocsThemeToggle } from "./DocsHeader";
 
 /**
  * Properties for the CommercialHeader component.
@@ -35,7 +48,10 @@ export interface CommercialHeaderProps {
 /**
  * Main header component for commercial documentation and showcase routes.
  */
-export function CommercialHeader({ onSearchOpen, onMobileMenuOpen }: CommercialHeaderProps) {
+export function CommercialHeader({
+  onSearchOpen,
+  onMobileMenuOpen,
+}: CommercialHeaderProps) {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [panelVisible, setPanelVisible] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -128,7 +144,9 @@ export function CommercialHeader({ onSearchOpen, onMobileMenuOpen }: CommercialH
             href="/"
             prefetch={false}
             className="com-header-logo"
-            aria-label={t("commercialHeader.logoAria", { brand: BRAND.namePascal })}
+            aria-label={t("commercialHeader.logoAria", {
+              brand: BRAND.namePascal,
+            })}
           >
             <span className="com-header-logo-mark">
               <Image
@@ -143,7 +161,9 @@ export function CommercialHeader({ onSearchOpen, onMobileMenuOpen }: CommercialH
             </span>
             <span className="com-header-brand-copy">
               <span className="com-header-logo-name">{BRAND.nameUpper}</span>
-              <span className="com-header-logo-badge">{t("common.commercial")}</span>
+              <span className="com-header-logo-badge">
+                {t("common.commercial")}
+              </span>
             </span>
           </Link>
 
@@ -205,7 +225,9 @@ export function CommercialHeader({ onSearchOpen, onMobileMenuOpen }: CommercialH
                 <SearchIcon />
               </span>
               <span>{t("commercialHeader.searchLabel")}</span>
-              <kbd className="com-header-search-shortcut">{t("common.searchShortcut")}</kbd>
+              <kbd className="com-header-search-shortcut">
+                {t("common.searchShortcut")}
+              </kbd>
             </Button>
 
             {/* Tech docs link */}
@@ -218,6 +240,11 @@ export function CommercialHeader({ onSearchOpen, onMobileMenuOpen }: CommercialH
               <DocsIcon />
               <span>{t("commercialHeader.techDocsLabel")}</span>
             </Link>
+
+            <div className="flex items-center gap-1.5">
+              <DocsLangSwitcher />
+              <DocsThemeToggle />
+            </div>
 
             {/* CTA */}
             <Link

@@ -25,7 +25,9 @@ export function FileExplorer({ moduleName, files }: FileExplorerProps) {
         </div>
         <div className="flex flex-col gap-0.5">
           {files.length === 0 ? (
-            <p className="text-xs text-nx-ink-3">{t("widgets.fileExplorer.emptyTree")}</p>
+            <p className="text-xs text-nx-ink-3">
+              {t("widgets.fileExplorer.emptyTree")}
+            </p>
           ) : (
             files.map((file, idx) => (
               <FileTreeNode
@@ -49,7 +51,9 @@ export function FileExplorer({ moduleName, files }: FileExplorerProps) {
             </p>
           </div>
         ) : (
-          <p className="text-sm text-nx-ink-2">{t("widgets.fileExplorer.selectFilePrompt")}</p>
+          <p className="text-sm text-nx-ink-2">
+            {t("widgets.fileExplorer.selectFilePrompt")}
+          </p>
         )}
       </div>
     </div>

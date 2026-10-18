@@ -3,7 +3,8 @@
 import { useId } from "react";
 import { useDocsI18n } from "../../providers/DocsI18nProvider";
 
-type InfoVariant = "note" | "tip" | "warning" | "danger" | "info" | "success" | "caution";
+type InfoVariant =
+  "note" | "tip" | "warning" | "danger" | "info" | "success" | "caution";
 
 interface InfoBlockProps {
   variant: InfoVariant;
@@ -140,7 +141,11 @@ export function InfoBlock({ variant, contentKey, titleKey }: InfoBlockProps) {
   const titleId = useId();
 
   return (
-    <aside className="docs-info" data-variant={variant} aria-labelledby={titleId}>
+    <aside
+      className="docs-info"
+      data-variant={variant}
+      aria-labelledby={titleId}
+    >
       {variantIcons[variant]}
       <div>
         <p id={titleId} className="docs-info-title">

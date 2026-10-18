@@ -36,7 +36,8 @@ export function TabGroup({ tabs }: TabGroupProps) {
 
       let next: number | null = null;
       if (event.key === forward) next = (activeTab + 1) % tabsCount;
-      else if (event.key === backward) next = (activeTab - 1 + tabsCount) % tabsCount;
+      else if (event.key === backward)
+        next = (activeTab - 1 + tabsCount) % tabsCount;
       else if (event.key === "Home") next = 0;
       else if (event.key === "End") next = tabsCount - 1;
 
@@ -45,7 +46,7 @@ export function TabGroup({ tabs }: TabGroupProps) {
       setActiveTab(next);
       document.getElementById(`${baseId}-tab-${next}`)?.focus();
     },
-    [activeTab, direction, tabsCount, baseId]
+    [activeTab, direction, tabsCount, baseId],
   );
 
   return (
@@ -73,7 +74,11 @@ export function TabGroup({ tabs }: TabGroupProps) {
         ))}
       </div>
       {tabs[activeTab] && (
-        <div role="tabpanel" id={panelId(activeTab)} aria-labelledby={tabId(activeTab)}>
+        <div
+          role="tabpanel"
+          id={panelId(activeTab)}
+          aria-labelledby={tabId(activeTab)}
+        >
           <CodeBlock
             code={tabs[activeTab].code}
             language={tabs[activeTab].language}

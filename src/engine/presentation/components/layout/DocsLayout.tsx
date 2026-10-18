@@ -1,7 +1,10 @@
 "use client";
 
 import type React from "react";
-import { DocsI18nProvider, type DocScope } from "../../providers/DocsI18nProvider";
+import {
+  DocsI18nProvider,
+  type DocScope,
+} from "../../providers/DocsI18nProvider";
 import { ThemeProvider } from "@core/providers/theme-provider";
 import "../../styles/docs.css";
 import "../../styles/commercial.css";

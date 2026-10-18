@@ -9,7 +9,9 @@ interface DialogContextType {
   onOpenChange: (open: boolean) => void;
 }
 
-const DialogContext = React.createContext<DialogContextType | undefined>(undefined);
+const DialogContext = React.createContext<DialogContextType | undefined>(
+  undefined,
+);
 
 export function Dialog({
   children,
@@ -21,7 +23,9 @@ export function Dialog({
   onOpenChange?: (open: boolean) => void;
 }) {
   return (
-    <DialogContext.Provider value={{ open, onOpenChange: onOpenChange || (() => {}) }}>
+    <DialogContext.Provider
+      value={{ open, onOpenChange: onOpenChange || (() => {}) }}
+    >
       {open && children}
     </DialogContext.Provider>
   );
@@ -56,14 +60,11 @@ export function DialogContent({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-      <div
-        className="fixed inset-0"
-        onClick={() => ctx.onOpenChange(false)}
-      />
+      <div className="fixed inset-0" onClick={() => ctx.onOpenChange(false)} />
       <div
         className={cn(
           "relative z-50 w-full max-w-lg rounded-xl border border-white/10 bg-[#0d0d0e] p-6 shadow-2xl transition-all",
-          className
+          className,
         )}
       >
         <button
@@ -85,7 +86,10 @@ export function DialogHeader({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("flex flex-col space-y-1.5 text-center sm:text-left", className)}
+      className={cn(
+        "flex flex-col space-y-1.5 text-center sm:text-left",
+        className,
+      )}
       {...props}
     />
   );
@@ -97,7 +101,10 @@ export function DialogTitle({
 }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h2
-      className={cn("text-lg font-semibold leading-none tracking-tight text-white", className)}
+      className={cn(
+        "text-lg font-semibold leading-none tracking-tight text-white",
+        className,
+      )}
       {...props}
     />
   );

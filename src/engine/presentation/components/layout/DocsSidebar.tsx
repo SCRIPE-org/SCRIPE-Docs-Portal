@@ -4,7 +4,10 @@
 
 import Link from "next/link";
 import { useDocsI18n } from "../../providers/DocsI18nProvider";
-import type { DocCategory, DocNavItem } from "../../../domain/entities/DocCategory";
+import type {
+  DocCategory,
+  DocNavItem,
+} from "../../../domain/entities/DocCategory";
 import { useState, useCallback } from "react";
 import {
   Rocket,
@@ -89,7 +92,10 @@ import {
 /**
  * Documentation for module export
  */
-export const docsIcons: Record<string, (props: LucideProps) => React.ReactNode> = {
+export const docsIcons: Record<
+  string,
+  (props: LucideProps) => React.ReactNode
+> = {
   rocket: (props) => <Rocket aria-hidden="true" {...props} />,
   "book-open": (props) => <BookOpen aria-hidden="true" {...props} />,
   layout: (props) => <Layout aria-hidden="true" {...props} />,
@@ -175,7 +181,11 @@ interface DocsSidebarProps {
  * Presentation UI component rendering the docs sidebar.
  * Arranges layout boundaries and accessibility targets (WCAG, tab index) using the core design library (@core/ui/*).
  */
-export function DocsSidebar({ categories, activeSlug, basePath = "/technical" }: DocsSidebarProps) {
+export function DocsSidebar({
+  categories,
+  activeSlug,
+  basePath = "/technical",
+}: DocsSidebarProps) {
   const { t } = useDocsI18n();
 
   // Track which categories are expanded
@@ -189,19 +199,21 @@ export function DocsSidebar({ categories, activeSlug, basePath = "/technical" }:
   });
 
   // Track which sub-groups are expanded
-  const [subExpanded, setSubExpanded] = useState<Record<string, boolean>>(() => {
-    const initial: Record<string, boolean> = {};
-    for (const cat of categories) {
-      for (const item of cat.items) {
-        if (item.children) {
-          const childSlugs = item.children.map((c) => c.slug).filter(Boolean);
-          const hasActive = childSlugs.includes(activeSlug);
-          initial[item.id] = hasActive;
+  const [subExpanded, setSubExpanded] = useState<Record<string, boolean>>(
+    () => {
+      const initial: Record<string, boolean> = {};
+      for (const cat of categories) {
+        for (const item of cat.items) {
+          if (item.children) {
+            const childSlugs = item.children.map((c) => c.slug).filter(Boolean);
+            const hasActive = childSlugs.includes(activeSlug);
+            initial[item.id] = hasActive;
+          }
         }
       }
-    }
-    return initial;
-  });
+      return initial;
+    },
+  );
 
   // Auto-expand the category and sub-group containing the active slug
   const [prevActiveSlug, setPrevActiveSlug] = useState(activeSlug);
@@ -255,7 +267,10 @@ export function DocsSidebar({ categories, activeSlug, basePath = "/technical" }:
             <span style={{ flex: 1 }}>{t(item.titleKey)}</span>
             <ChevronRight size={14} aria-hidden="true" />
           </button>
-          <div className="docs-sidebar-subgroup-items" data-expanded={isSubOpen}>
+          <div
+            className="docs-sidebar-subgroup-items"
+            data-expanded={isSubOpen}
+          >
             <div className="docs-sidebar-subgroup-items-inner">
               {item.children.map((child) => {
                 if (!child.slug) return null;
@@ -297,7 +312,10 @@ export function DocsSidebar({ categories, activeSlug, basePath = "/technical" }:
         data-active={isActive}
       >
         {item.icon
-          ? (docsIcons[item.icon]?.({ size: 15, className: "docs-sidebar-item-icon" }) ?? null)
+          ? (docsIcons[item.icon]?.({
+              size: 15,
+              className: "docs-sidebar-item-icon",
+            }) ?? null)
           : null}
         <span>{t(item.titleKey)}</span>
       </Link>
@@ -319,8 +337,13 @@ export function DocsSidebar({ categories, activeSlug, basePath = "/technical" }:
               <ChevronRight size={14} aria-hidden="true" />
             </button>
 
-            <div className="docs-sidebar-items" data-expanded={expanded[cat.id] ?? false}>
-              <div className="docs-sidebar-items-inner">{cat.items.map(renderItem)}</div>
+            <div
+              className="docs-sidebar-items"
+              data-expanded={expanded[cat.id] ?? false}
+            >
+              <div className="docs-sidebar-items-inner">
+                {cat.items.map(renderItem)}
+              </div>
             </div>
           </div>
         );

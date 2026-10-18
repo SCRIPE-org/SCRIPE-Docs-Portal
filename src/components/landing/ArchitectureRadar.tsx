@@ -1,7 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { Server, Globe, Smartphone, BookOpen, Terminal, Shield, Database, Cpu } from "lucide-react";
+import {
+  Server,
+  Globe,
+  Smartphone,
+  BookOpen,
+  Terminal,
+  Shield,
+  Database,
+  Cpu,
+} from "lucide-react";
 
 interface NodeData {
   id: string;
@@ -71,26 +80,75 @@ export function ArchitectureRadar() {
   const [activeNode, setActiveNode] = useState<NodeData>(NODES[0]);
 
   return (
-    <div className="relative rounded-2xl border border-white/10 bg-[#0d0d0e]/80 backdrop-blur-xl p-6 sm:p-8 overflow-hidden">
+    <div className="relative rounded-2xl border border-border bg-card/90 text-card-foreground backdrop-blur-xl p-6 sm:p-8 overflow-hidden shadow-sm">
       {/* Ambient background glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(198,255,0,0.06),transparent_70%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(198,255,0,0.08),transparent_70%)] pointer-events-none" />
 
       <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
         {/* Radar Visualizer SVG */}
         <div className="relative w-full max-w-[420px] aspect-square flex items-center justify-center">
           <svg className="w-full h-full" viewBox="0 0 100 100">
             {/* Concentric Radar Rings */}
-            <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="0.5" />
-            <circle cx="50" cy="50" r="32" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="0.5" />
-            <circle cx="50" cy="50" r="18" fill="none" stroke="rgba(198,255,0,0.15)" strokeWidth="0.75" />
+            <circle
+              cx="50"
+              cy="50"
+              r="44"
+              fill="none"
+              stroke="currentColor"
+              className="text-border opacity-70"
+              strokeWidth="0.5"
+            />
+            <circle
+              cx="50"
+              cy="50"
+              r="32"
+              fill="none"
+              stroke="currentColor"
+              className="text-border opacity-80"
+              strokeWidth="0.5"
+            />
+            <circle
+              cx="50"
+              cy="50"
+              r="18"
+              fill="none"
+              stroke="currentColor"
+              className="text-primary opacity-30"
+              strokeWidth="0.75"
+            />
 
             {/* Crosshairs */}
-            <line x1="50" y1="6" x2="50" y2="94" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" strokeDasharray="1 2" />
-            <line x1="6" y1="50" x2="94" y2="50" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" strokeDasharray="1 2" />
+            <line
+              x1="50"
+              y1="6"
+              x2="50"
+              y2="94"
+              stroke="currentColor"
+              className="text-border opacity-60"
+              strokeWidth="0.5"
+              strokeDasharray="1 2"
+            />
+            <line
+              x1="6"
+              y1="50"
+              x2="94"
+              y2="50"
+              stroke="currentColor"
+              className="text-border opacity-60"
+              strokeWidth="0.5"
+              strokeDasharray="1 2"
+            />
 
             {/* Sweep Beam (respects prefers-reduced-motion) */}
             <g className="radar-sweep">
-              <line x1="50" y1="50" x2="50" y2="6" stroke="rgba(198,255,0,0.6)" strokeWidth="0.75" />
+              <line
+                x1="50"
+                y1="50"
+                x2="50"
+                y2="6"
+                stroke="#c6ff00"
+                strokeWidth="0.75"
+              />
               <path
                 d="M 50 50 L 50 6 A 44 44 0 0 1 81 19 Z"
                 fill="url(#radarGradient)"
@@ -114,7 +172,16 @@ export function ArchitectureRadar() {
                 y1={node.y}
                 x2="50"
                 y2="50"
-                stroke={activeNode.id === node.id || activeNode.id === "backend" ? "rgba(198,255,0,0.4)" : "rgba(255,255,255,0.12)"}
+                stroke={
+                  activeNode.id === node.id || activeNode.id === "backend"
+                    ? "#c6ff00"
+                    : "currentColor"
+                }
+                className={
+                  activeNode.id === node.id || activeNode.id === "backend"
+                    ? "opacity-60"
+                    : "text-border opacity-50"
+                }
                 strokeWidth={activeNode.id === node.id ? "1" : "0.5"}
                 strokeDasharray="1.5 2"
               />
@@ -140,19 +207,25 @@ export function ArchitectureRadar() {
                 }}
                 className={`group relative flex items-center justify-center rounded-xl transition-all ${
                   isCenter
-                    ? "h-14 w-14 bg-[#151719] border-2 border-scripe-signal shadow-[0_0_25px_rgba(198,255,0,0.3)] z-20"
+                    ? "h-14 w-14 bg-card border-2 border-primary shadow-[0_0_25px_rgba(198,255,0,0.35)] z-20"
                     : isActive
-                    ? "h-11 w-11 bg-scripe-signal text-[#0d0d0e] shadow-[0_0_20px_rgba(198,255,0,0.4)] z-20"
-                    : "h-10 w-10 bg-[#151719] border border-white/15 text-white/70 hover:border-scripe-signal/60 hover:text-white z-10"
+                      ? "h-11 w-11 bg-primary text-primary-foreground shadow-[0_0_20px_rgba(198,255,0,0.4)] z-20"
+                      : "h-10 w-10 bg-card border border-border text-muted-foreground hover:border-primary/60 hover:text-foreground z-10"
                 }`}
                 aria-label={node.name}
               >
                 <Icon
                   size={isCenter ? 24 : 18}
-                  className={isCenter ? "text-scripe-signal" : isActive ? "text-[#0d0d0e]" : "text-white/80"}
+                  className={
+                    isCenter
+                      ? "text-primary"
+                      : isActive
+                        ? "text-primary-foreground"
+                        : "text-foreground/80"
+                  }
                 />
                 {isCenter && (
-                  <span className="absolute -bottom-6 text-[10px] font-mono uppercase tracking-wider text-scripe-signal font-bold whitespace-nowrap">
+                  <span className="absolute -bottom-6 text-[10px] font-mono uppercase tracking-wider text-primary font-bold whitespace-nowrap">
                     CORE MONOLITH
                   </span>
                 )}
@@ -163,43 +236,45 @@ export function ArchitectureRadar() {
 
         {/* Selected Node Specs Card */}
         <div className="flex-1 w-full max-w-lg flex flex-col justify-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-scripe-signal/10 border border-scripe-signal/20 text-scripe-signal text-xs font-mono mb-4 w-fit">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-mono mb-4 w-fit">
             <Cpu size={13} />
             <span>INTERACTIVE ECOSYSTEM RADAR</span>
           </div>
 
-          <h3 className="text-2xl font-bold text-white tracking-tight mb-2">
+          <h3 className="text-2xl font-bold text-foreground tracking-tight mb-2">
             {activeNode.name}
           </h3>
-          <p className="text-white/60 text-sm mb-6">
+          <p className="text-muted-foreground text-sm mb-6">
             {activeNode.role}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-              <div className="text-xs text-white/40 font-mono uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                <Database size={12} className="text-scripe-signal" />
+            <div className="rounded-xl border border-border bg-muted/30 p-4">
+              <div className="text-xs text-muted-foreground font-mono uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                <Database size={12} className="text-primary" />
                 <span>Technology Stack</span>
               </div>
-              <div className="text-sm font-medium text-white/90">
+              <div className="text-sm font-medium text-foreground">
                 {activeNode.tech}
               </div>
             </div>
 
-            <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-              <div className="text-xs text-white/40 font-mono uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                <Shield size={12} className="text-scripe-signal" />
+            <div className="rounded-xl border border-border bg-muted/30 p-4">
+              <div className="text-xs text-muted-foreground font-mono uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                <Shield size={12} className="text-primary" />
                 <span>Architecture Protocol</span>
               </div>
-              <div className="text-sm font-medium text-white/90">
+              <div className="text-sm font-medium text-foreground">
                 {activeNode.protocol}
               </div>
             </div>
           </div>
 
-          <div className="mt-6 flex items-center gap-3 text-xs text-white/40">
-            <span className="inline-block h-2 w-2 rounded-full bg-scripe-signal animate-pulse" />
-            <span>Click any node in the radar to inspect its architecture boundary</span>
+          <div className="mt-6 flex items-center gap-3 text-xs text-muted-foreground">
+            <span className="inline-block h-2 w-2 rounded-full bg-primary animate-pulse" />
+            <span>
+              Click any node in the radar to inspect its architecture boundary
+            </span>
           </div>
         </div>
       </div>

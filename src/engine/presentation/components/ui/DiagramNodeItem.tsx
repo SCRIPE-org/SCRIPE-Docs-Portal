@@ -15,7 +15,11 @@ interface DiagramNodeItemProps {
  * the diagram is walkable by keyboard; `aria-pressed` marks which node's
  * detail is currently shown below the flow.
  */
-export function DiagramNodeItem({ node, isActive, onClick }: DiagramNodeItemProps) {
+export function DiagramNodeItem({
+  node,
+  isActive,
+  onClick,
+}: DiagramNodeItemProps) {
   const { t } = useDocsI18n();
   return (
     <Button

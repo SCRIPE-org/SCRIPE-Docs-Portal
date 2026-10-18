@@ -1,0 +1,11 @@
+node_modules
+.next
+dist
+pnpm-lock.yaml
+*.min.js
+*.min.css
+src/locales/
+src/data/
+src/domain/
+src/engine/data/
+src/engine/domain/

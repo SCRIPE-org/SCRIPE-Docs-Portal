@@ -3,7 +3,10 @@
 
 import Link from "next/link";
 import { useDocsI18n } from "../../providers/DocsI18nProvider";
-import type { DocCategory, DocNavItem } from "../../../domain/entities/DocCategory";
+import type {
+  DocCategory,
+  DocNavItem,
+} from "../../../domain/entities/DocCategory";
 import { useState, useCallback } from "react";
 import { X, ChevronRight } from "lucide-react";
 import { docsIcons } from "./DocsSidebar";
@@ -30,19 +33,21 @@ export function DocsMobileNav({
   const { t } = useDocsI18n();
 
   // Track which sub-groups are expanded
-  const [subExpanded, setSubExpanded] = useState<Record<string, boolean>>(() => {
-    const initial: Record<string, boolean> = {};
-    for (const cat of categories) {
-      for (const item of cat.items) {
-        if (item.children) {
-          const childSlugs = item.children.map((c) => c.slug).filter(Boolean);
-          const hasActive = childSlugs.includes(activeSlug);
-          initial[item.id] = hasActive;
+  const [subExpanded, setSubExpanded] = useState<Record<string, boolean>>(
+    () => {
+      const initial: Record<string, boolean> = {};
+      for (const cat of categories) {
+        for (const item of cat.items) {
+          if (item.children) {
+            const childSlugs = item.children.map((c) => c.slug).filter(Boolean);
+            const hasActive = childSlugs.includes(activeSlug);
+            initial[item.id] = hasActive;
+          }
         }
       }
-    }
-    return initial;
-  });
+      return initial;
+    },
+  );
 
   // Auto-expand sub-groups on navigation
   const [prevActiveSlug, setPrevActiveSlug] = useState(activeSlug);
@@ -79,7 +84,9 @@ export function DocsMobileNav({
     // ─── Sub-group with children ─────────────────────────────
     if (item.children && item.children.length > 0) {
       const isSubOpen = subExpanded[item.id] ?? false;
-      const subItemsHeight = isSubOpen ? `${item.children.length * 36}px` : "0px";
+      const subItemsHeight = isSubOpen
+        ? `${item.children.length * 36}px`
+        : "0px";
 
       return (
         <div key={item.id} className="docs-sidebar-subgroup">
@@ -92,7 +99,10 @@ export function DocsMobileNav({
             <span style={{ flex: 1 }}>{t(item.titleKey)}</span>
             <ChevronRight size={14} aria-hidden="true" />
           </button>
-          <div className="docs-sidebar-subgroup-items" style={{ maxHeight: subItemsHeight }}>
+          <div
+            className="docs-sidebar-subgroup-items"
+            style={{ maxHeight: subItemsHeight }}
+          >
             {item.children.map((child) => {
               if (!child.slug) return null;
               const isActive = child.slug === activeSlug;
@@ -106,8 +116,10 @@ export function DocsMobileNav({
                   onClick={onClose}
                 >
                   {child.icon
-                    ? (docsIcons[child.icon]?.({ size: 14, className: "docs-sidebar-item-icon" }) ??
-                      null)
+                    ? (docsIcons[child.icon]?.({
+                        size: 14,
+                        className: "docs-sidebar-item-icon",
+                      }) ?? null)
                     : null}
                   <span>{t(child.titleKey)}</span>
                 </Link>
@@ -131,7 +143,10 @@ export function DocsMobileNav({
         onClick={onClose}
       >
         {item.icon
-          ? (docsIcons[item.icon]?.({ size: 15, className: "docs-sidebar-item-icon" }) ?? null)
+          ? (docsIcons[item.icon]?.({
+              size: 15,
+              className: "docs-sidebar-item-icon",
+            }) ?? null)
           : null}
         <span>{t(item.titleKey)}</span>
       </Link>
@@ -142,7 +157,11 @@ export function DocsMobileNav({
     <>
       <div className="docs-mobile-overlay" onClick={onClose} />
       <nav className="docs-mobile-nav">
-        <button className="docs-mobile-close" onClick={onClose} aria-label={t("common.closeMenu")}>
+        <button
+          className="docs-mobile-close"
+          onClick={onClose}
+          aria-label={t("common.closeMenu")}
+        >
           <X size={16} aria-hidden="true" />
         </button>
 
@@ -152,7 +171,10 @@ export function DocsMobileNav({
               <div className="docs-sidebar-category-btn cursor-default">
                 <span>{t(cat.titleKey)}</span>
               </div>
-              <div className="docs-sidebar-items" style={{ maxHeight: "9999px" }}>
+              <div
+                className="docs-sidebar-items"
+                style={{ maxHeight: "9999px" }}
+              >
                 {cat.items.map(renderItem)}
               </div>
             </div>

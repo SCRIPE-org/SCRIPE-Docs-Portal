@@ -56,7 +56,10 @@ export function TechnicalDocsView({ slug }: TechnicalDocsViewProps) {
   if (vm.isNotFound) {
     return (
       <div className="docs-root" dir={direction}>
-        <DocsHeader onSearchOpen={search.openSearch} onMobileMenuOpen={sidebar.openMobileMenu} />
+        <DocsHeader
+          onSearchOpen={search.openSearch}
+          onMobileMenuOpen={sidebar.openMobileMenu}
+        />
         <div className="docs-wrapper">
           <DocsSidebar categories={vm.categories} activeSlug={slug} />
           <div className="docs-content-wrapper">
@@ -86,9 +89,14 @@ export function TechnicalDocsView({ slug }: TechnicalDocsViewProps) {
   return (
     <div className="docs-root" dir={direction}>
       <ReadingProgress />
-      <DocsHeader onSearchOpen={search.openSearch} onMobileMenuOpen={sidebar.openMobileMenu} />
+      <DocsHeader
+        onSearchOpen={search.openSearch}
+        onMobileMenuOpen={sidebar.openMobileMenu}
+      />
 
-      <div className={`docs-wrapper ${sidebarCollapsed ? "sidebar-collapsed" : ""}`}>
+      <div
+        className={`docs-wrapper ${sidebarCollapsed ? "sidebar-collapsed" : ""}`}
+      >
         <DocsSidebar categories={vm.categories} activeSlug={slug} />
 
         <div className="docs-content-wrapper">
@@ -107,22 +115,32 @@ export function TechnicalDocsView({ slug }: TechnicalDocsViewProps) {
               />
 
               {/* Reader Toolbar */}
-              <div className="reader-toolbar flex select-none items-center gap-2 rounded-nx-md border border-[color:color-mix(in_srgb,var(--nx-line)_40%,transparent)] bg-[color:color-mix(in_srgb,var(--nx-raised)_40%,transparent)] px-3 py-1.5 text-sm">
+              <div className="reader-toolbar flex select-none items-center gap-1.5 rounded-lg border border-border bg-muted/40 backdrop-blur-sm px-2.5 py-1.5 text-sm shadow-xs">
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
                   onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                  className={`reader-toolbar-btn h-auto rounded-nx-sm p-1 text-nx-ink-3 transition-colors duration-nx-micro ease-nx-enter hover:text-nx-ink motion-reduce:transition-none ${sidebarCollapsed ? "bg-nx-accent-wash text-nx-accent" : "hover:bg-nx-hover"}`}
-                  title={sidebarCollapsed ? t("common.expandSidebar") : t("common.collapseSidebar")}
+                  className={`reader-toolbar-btn h-7 w-7 rounded-md p-1 transition-colors ${
+                    sidebarCollapsed
+                      ? "bg-primary/15 text-primary"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
+                  title={
+                    sidebarCollapsed
+                      ? t("common.expandSidebar")
+                      : t("common.collapseSidebar")
+                  }
                   aria-label={
-                    sidebarCollapsed ? t("common.expandSidebar") : t("common.collapseSidebar")
+                    sidebarCollapsed
+                      ? t("common.expandSidebar")
+                      : t("common.collapseSidebar")
                   }
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
+                    width="16"
+                    height="16"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -136,13 +154,17 @@ export function TechnicalDocsView({ slug }: TechnicalDocsViewProps) {
                   </svg>
                 </Button>
 
-                <div className="reader-toolbar-divider mx-1 h-4 w-px bg-[color:color-mix(in_srgb,var(--nx-line)_60%,transparent)]" />
+                <div className="reader-toolbar-divider mx-1 h-3.5 w-px bg-border" />
 
                 <Button
                   type="button"
                   variant="ghost"
                   onClick={() => setFontSize(14)}
-                  className={`reader-toolbar-btn h-auto rounded-nx-sm px-2 py-0.5 transition-colors duration-nx-micro ease-nx-enter motion-reduce:transition-none ${fontSize === 14 ? "bg-nx-accent-fill font-bold text-nx-on-fill" : "text-nx-ink-3 hover:bg-nx-hover hover:text-nx-ink"}`}
+                  className={`reader-toolbar-btn h-7 rounded-md px-2 py-0.5 text-xs transition-colors ${
+                    fontSize === 14
+                      ? "bg-primary text-primary-foreground font-bold shadow-xs"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
                   title={t("common.fontSizeSmall")}
                   aria-label={t("common.fontSizeSmall")}
                 >
@@ -152,7 +174,11 @@ export function TechnicalDocsView({ slug }: TechnicalDocsViewProps) {
                   type="button"
                   variant="ghost"
                   onClick={() => setFontSize(16)}
-                  className={`reader-toolbar-btn h-auto rounded-nx-sm px-2 py-0.5 transition-colors duration-nx-micro ease-nx-enter motion-reduce:transition-none ${fontSize === 16 ? "bg-nx-accent-fill font-bold text-nx-on-fill" : "text-nx-ink-3 hover:bg-nx-hover hover:text-nx-ink"}`}
+                  className={`reader-toolbar-btn h-7 rounded-md px-2 py-0.5 text-xs transition-colors ${
+                    fontSize === 16
+                      ? "bg-primary text-primary-foreground font-bold shadow-xs"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
                   title={t("common.fontSizeMedium")}
                   aria-label={t("common.fontSizeMedium")}
                 >
@@ -162,28 +188,42 @@ export function TechnicalDocsView({ slug }: TechnicalDocsViewProps) {
                   type="button"
                   variant="ghost"
                   onClick={() => setFontSize(18)}
-                  className={`reader-toolbar-btn h-auto rounded-nx-sm px-2 py-0.5 transition-colors duration-nx-micro ease-nx-enter motion-reduce:transition-none ${fontSize === 18 ? "bg-nx-accent-fill font-bold text-nx-on-fill" : "text-nx-ink-3 hover:bg-nx-hover hover:text-nx-ink"}`}
+                  className={`reader-toolbar-btn h-7 rounded-md px-2 py-0.5 text-xs transition-colors ${
+                    fontSize === 18
+                      ? "bg-primary text-primary-foreground font-bold shadow-xs"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
                   title={t("common.fontSizeLarge")}
                   aria-label={t("common.fontSizeLarge")}
                 >
                   A+
                 </Button>
 
-                <div className="reader-toolbar-divider mx-1 h-4 w-px bg-[color:color-mix(in_srgb,var(--nx-line)_60%,transparent)]" />
+                <div className="reader-toolbar-divider mx-1 h-3.5 w-px bg-border" />
 
                 <Button
                   type="button"
                   variant="ghost"
                   onClick={() => setWideLayout(!wideLayout)}
-                  className={`reader-toolbar-btn h-auto rounded-nx-sm px-2 py-0.5 transition-colors duration-nx-micro ease-nx-enter motion-reduce:transition-none ${wideLayout ? "bg-nx-accent-fill font-bold text-nx-on-fill" : "text-nx-ink-3 hover:bg-nx-hover hover:text-nx-ink"}`}
+                  className={`reader-toolbar-btn h-7 rounded-md px-2.5 py-0.5 text-xs transition-colors ${
+                    wideLayout
+                      ? "bg-primary text-primary-foreground font-bold shadow-xs"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
                   title={
-                    wideLayout ? t("common.switchToCompactLayout") : t("common.switchToWideLayout")
+                    wideLayout
+                      ? t("common.switchToCompactLayout")
+                      : t("common.switchToWideLayout")
                   }
                   aria-label={
-                    wideLayout ? t("common.switchToCompactLayout") : t("common.switchToWideLayout")
+                    wideLayout
+                      ? t("common.switchToCompactLayout")
+                      : t("common.switchToWideLayout")
                   }
                 >
-                  {wideLayout ? t("common.layoutCompact") : t("common.layoutWide")}
+                  {wideLayout
+                    ? t("common.layoutCompact")
+                    : t("common.layoutWide")}
                 </Button>
               </div>
             </div>

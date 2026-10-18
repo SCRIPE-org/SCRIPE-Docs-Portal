@@ -35,9 +35,13 @@ export function PipelineNodeItem({
       </div>
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="docs-pipeline-node-name">{name}</div>
-        {description && <div className="docs-pipeline-node-desc">{description}</div>}
+        {description && (
+          <div className="docs-pipeline-node-desc">{description}</div>
+        )}
       </div>
-      {duration !== undefined && <div className="docs-pipeline-node-duration">{duration}ms</div>}
+      {duration !== undefined && (
+        <div className="docs-pipeline-node-duration">{duration}ms</div>
+      )}
     </>
   );
 
@@ -49,7 +53,7 @@ export function PipelineNodeItem({
         onClick={onClick}
         className={cn(
           "docs-pipeline-node h-auto justify-start p-0 text-start hover:bg-transparent",
-          stateClass
+          stateClass,
         )}
       >
         {body}
@@ -57,5 +61,9 @@ export function PipelineNodeItem({
     );
   }
 
-  return <div className={cn("docs-pipeline-node cursor-default", stateClass)}>{body}</div>;
+  return (
+    <div className={cn("docs-pipeline-node cursor-default", stateClass)}>
+      {body}
+    </div>
+  );
 }

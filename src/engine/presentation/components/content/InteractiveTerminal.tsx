@@ -13,7 +13,10 @@ interface InteractiveTerminalProps {
 /**
  * Documentation for module export
  */
-export function InteractiveTerminal({ tabs, titleKey }: InteractiveTerminalProps) {
+export function InteractiveTerminal({
+  tabs,
+  titleKey,
+}: InteractiveTerminalProps) {
   const { t } = useDocsI18n();
   const [activeIdx, setActiveIdx] = useState(0);
   const panelId = useId();
@@ -45,9 +48,12 @@ export function InteractiveTerminal({ tabs, titleKey }: InteractiveTerminalProps
         </div>
         <div className="docs-terminal-body" role="tabpanel" id={panelId}>
           <div className="docs-terminal-line">
-            <span className="prompt">$</span> <span className="cmd">{tabs[activeIdx].command}</span>
+            <span className="prompt">$</span>{" "}
+            <span className="cmd">{tabs[activeIdx].command}</span>
           </div>
-          <div className="docs-terminal-output">{t(tabs[activeIdx].outputKey)}</div>
+          <div className="docs-terminal-output">
+            {t(tabs[activeIdx].outputKey)}
+          </div>
         </div>
       </div>
     </div>

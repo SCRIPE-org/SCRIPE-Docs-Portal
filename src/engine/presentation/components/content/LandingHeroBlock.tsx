@@ -26,7 +26,12 @@ const stagger: Variants = {
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 22, filter: "blur(7px)" },
-  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.65, ease: EASE } },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.65, ease: EASE },
+  },
 };
 
 /**
@@ -67,28 +72,49 @@ function SplitWords({ text, gradient }: { text: string; gradient?: boolean }) {
  * @param props Section model containing headline keys, subtitle keys, and CTA URLs.
  * @returns Rendered landing hero block with scroll parallax effects.
  */
-export function LandingHeroBlock({ section }: { section: LandingHeroBlockSection }) {
+export function LandingHeroBlock({
+  section,
+}: {
+  section: LandingHeroBlockSection;
+}) {
   const { t } = useDocsI18n();
   const { stats } = usePublicPlatformStats();
   const heroRef = useRef<HTMLElement>(null);
 
   /* Scroll-driven parallax */
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
   const copyY = useTransform(scrollYProgress, [0, 1], [0, -60]);
   const cardY = useTransform(scrollYProgress, [0, 1], [0, -30]);
   const bgY = useTransform(scrollYProgress, [0, 1], [0, 80]);
 
   return (
     <>
-      <section className="com-hero" ref={heroRef} aria-labelledby="commercial-hero-title">
+      <section
+        className="com-hero"
+        ref={heroRef}
+        aria-labelledby="commercial-hero-title"
+      >
         {/* Background layers */}
-        <motion.div className="com-hero-bg" style={{ y: bgY }} aria-hidden="true" />
+        <motion.div
+          className="com-hero-bg"
+          style={{ y: bgY }}
+          aria-hidden="true"
+        />
         <div className="com-hero-grid" aria-hidden="true" />
         <div className="com-hero-noise" aria-hidden="true" />
 
         {/* Orbital rings */}
-        <div className="com-hero-orb-ring com-hero-orb-ring--1" aria-hidden="true" />
-        <div className="com-hero-orb-ring com-hero-orb-ring--2" aria-hidden="true" />
+        <div
+          className="com-hero-orb-ring com-hero-orb-ring--1"
+          aria-hidden="true"
+        />
+        <div
+          className="com-hero-orb-ring com-hero-orb-ring--2"
+          aria-hidden="true"
+        />
 
         <div className="com-hero-inner">
           {/* Left: Copy */}
@@ -100,13 +126,23 @@ export function LandingHeroBlock({ section }: { section: LandingHeroBlockSection
             variants={stagger}
           >
             {/* Kicker badge */}
-            <motion.div className="com-hero-badge" variants={fadeUp} aria-label="Live platform">
+            <motion.div
+              className="com-hero-badge"
+              variants={fadeUp}
+              aria-label="Live platform"
+            >
               <span className="com-hero-badge-dot" aria-hidden="true" />
-              {section.kickerKey ? t(section.kickerKey) : "The B2B2C SaaS Platform"}
+              {section.kickerKey
+                ? t(section.kickerKey)
+                : "The B2B2C SaaS Platform"}
             </motion.div>
 
             {/* Main headline */}
-            <motion.h1 id="commercial-hero-title" className="com-hero-title" variants={stagger}>
+            <motion.h1
+              id="commercial-hero-title"
+              className="com-hero-title"
+              variants={stagger}
+            >
               <SplitWords text={t(section.title1Key)} gradient={false} />
               {section.title2Key && (
                 <>
@@ -131,7 +167,11 @@ export function LandingHeroBlock({ section }: { section: LandingHeroBlockSection
                 {t(section.primaryCtaKey)}
                 <ArrowIcon />
               </Link>
-              <Button type="button" variant="ghost" className="com-btn com-btn--play">
+              <Button
+                type="button"
+                variant="ghost"
+                className="com-btn com-btn--play"
+              >
                 <span className="com-btn-play-ring">
                   <PlayIcon />
                 </span>
@@ -140,7 +180,11 @@ export function LandingHeroBlock({ section }: { section: LandingHeroBlockSection
             </motion.div>
 
             {/* Trust strip */}
-            <motion.div className="com-hero-trust" variants={fadeUp} aria-label="Certifications">
+            <motion.div
+              className="com-hero-trust"
+              variants={fadeUp}
+              aria-label="Certifications"
+            >
               {["SOC 2 Type II", "GDPR Compliant", "99.9% SLA"].map((item) => (
                 <span key={item} className="com-hero-trust-item">
                   <CheckIcon />

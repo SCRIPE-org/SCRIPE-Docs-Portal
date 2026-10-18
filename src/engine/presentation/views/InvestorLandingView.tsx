@@ -66,8 +66,14 @@ const PERSONA_DATA: Record<
     subtitleKey: "commercial.investorOverview.personaSelectorPartnerDesc",
     metrics: [
       { value: "30%", labelKey: "commercial.partnerJourney.typeResellerTitle" },
-      { value: "White-label", labelKey: "commercial.partnerJourney.typeWhiteLabelTitle" },
-      { value: "Marketplace", labelKey: "commercial.partnerJourney.typeTechTitle" },
+      {
+        value: "White-label",
+        labelKey: "commercial.partnerJourney.typeWhiteLabelTitle",
+      },
+      {
+        value: "Marketplace",
+        labelKey: "commercial.partnerJourney.typeTechTitle",
+      },
     ],
     bullets: [
       "commercial.investorOverview.personaSelectorPartnerBenefit1",
@@ -97,7 +103,9 @@ export function InvestorLandingView() {
 
       {/* Intro Header */}
       <div className="inv-intro">
-        <h1 className="inv-main-title">{t("commercial.investorOverview.title")}</h1>
+        <h1 className="inv-main-title">
+          {t("commercial.investorOverview.title")}
+        </h1>
         <p className="inv-main-sub">{t("commercial.investorOverview.intro")}</p>
       </div>
 
@@ -112,7 +120,9 @@ export function InvestorLandingView() {
             onClick={() => setPersona(p)}
             style={
               persona === p
-                ? ({ "--btn-color": PERSONA_DATA[p].color } as React.CSSProperties)
+                ? ({
+                    "--btn-color": PERSONA_DATA[p].color,
+                  } as React.CSSProperties)
                 : undefined
             }
           >

@@ -2,7 +2,14 @@
 
 import { useDocsI18n } from "../../providers/DocsI18nProvider";
 import type { ApiEndpoint } from "../../../domain/entities/DocSection";
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@core/ui/table";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@core/ui/table";
 
 interface ApiTableProps {
   endpoints: ApiEndpoint[];
@@ -43,7 +50,11 @@ export function ApiTable({ endpoints }: ApiTableProps) {
               <TableCell>{t(ep.descriptionKey)}</TableCell>
               <TableCell>
                 <span className="docs-auth-badge" data-auth={ep.auth}>
-                  {ep.auth ? <>🔒 {t("api.authRequired")}</> : <>🌐 {t("api.noAuth")}</>}
+                  {ep.auth ? (
+                    <>🔒 {t("api.authRequired")}</>
+                  ) : (
+                    <>🌐 {t("api.noAuth")}</>
+                  )}
                 </span>
               </TableCell>
             </TableRow>

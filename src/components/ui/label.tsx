@@ -11,10 +11,10 @@ export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
       ref={ref}
       className={cn(
         "text-xs font-medium leading-none text-nx-ink-2 peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-        className
+        className,
       )}
       {...props}
     />
-  )
+  ),
 );
 Label.displayName = "Label";

@@ -19,7 +19,7 @@ export function Command({
     <div
       className={cn(
         "flex h-full w-full flex-col overflow-hidden rounded-md bg-[#0d0d0e] text-white",
-        className
+        className,
       )}
       {...props}
     >
@@ -46,7 +46,7 @@ export function CommandInput({
       <input
         className={cn(
           "flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-white/40 text-white disabled:cursor-not-allowed disabled:opacity-50",
-          className
+          className,
         )}
         value={value}
         onChange={(e) => onValueChange?.(e.target.value)}
@@ -64,7 +64,10 @@ export function CommandList({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("max-h-[300px] overflow-y-auto overflow-x-hidden p-2", className)}
+      className={cn(
+        "max-h-[300px] overflow-y-auto overflow-x-hidden p-2",
+        className,
+      )}
       {...props}
     >
       {children}
@@ -125,7 +128,7 @@ export function CommandItem({
     <div
       className={cn(
         "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-white/10 hover:text-white aria-selected:bg-white/10 aria-selected:text-white",
-        className
+        className,
       )}
       onClick={onSelect}
       {...props}

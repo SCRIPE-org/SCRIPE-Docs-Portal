@@ -35,7 +35,11 @@ const ACTOR_LABEL_KEY: Record<LifecycleStep["actor"], string> = {
 /**
  * Documentation for module export
  */
-export function LifecycleStepItem({ step, isActive, onClick }: LifecycleStepItemProps) {
+export function LifecycleStepItem({
+  step,
+  isActive,
+  onClick,
+}: LifecycleStepItemProps) {
   const { t } = useDocsI18n();
   const color = chartColor(ACTOR_SLOT[step.actor]);
   const isInbound = step.direction === "inbound";
@@ -48,12 +52,15 @@ export function LifecycleStepItem({ step, isActive, onClick }: LifecycleStepItem
       aria-current={isActive ? "step" : undefined}
       className={cn(
         "docs-lifecycle-step-card block h-auto w-full justify-start text-start font-normal",
-        isActive && "active"
+        isActive && "active",
       )}
       style={{ borderInlineStartWidth: "3px", borderInlineStartColor: color }}
     >
       <div className="mb-1 flex items-center justify-between gap-2">
-        <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color }}>
+        <span
+          className="text-[11px] font-semibold uppercase tracking-wider"
+          style={{ color }}
+        >
           {t(ACTOR_LABEL_KEY[step.actor])}
         </span>
         <span className="text-[11px] text-nx-ink-2">
@@ -63,7 +70,9 @@ export function LifecycleStepItem({ step, isActive, onClick }: LifecycleStepItem
             : t("widgets.lifecycleTracer.directionOutbound")}
         </span>
       </div>
-      <div className="text-sm font-semibold text-nx-ink">{t(step.labelKey)}</div>
+      <div className="text-sm font-semibold text-nx-ink">
+        {t(step.labelKey)}
+      </div>
     </Button>
   );
 }

@@ -5,7 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { Search, Menu, Building, Globe, Check, Moon, Sun, Code2, Github } from "lucide-react";
+import {
+  Search,
+  Menu,
+  Building,
+  Globe,
+  Check,
+  Moon,
+  Sun,
+  Code2,
+  Github,
+} from "lucide-react";
 import { useDocsI18n } from "../../providers/DocsI18nProvider";
 import { BRAND } from "@/lib/branding";
 
@@ -14,17 +24,20 @@ interface DocsHeaderProps {
   onMobileMenuOpen: () => void;
 }
 
-export function DocsHeader({ onSearchOpen, onMobileMenuOpen }: DocsHeaderProps) {
+export function DocsHeader({
+  onSearchOpen,
+  onMobileMenuOpen,
+}: DocsHeaderProps) {
   const { t } = useDocsI18n();
   const pathname = usePathname();
   const isCommercial = pathname?.startsWith("/commercial");
 
   return (
-    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-white/10 bg-[#050506]/90 backdrop-blur-md px-4 sm:px-6 py-3">
+    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-border bg-background/85 backdrop-blur-md px-4 sm:px-6 py-3">
       <div className="flex items-center gap-4 sm:gap-6">
         {/* Mobile hamburger */}
         <button
-          className="flex sm:hidden items-center justify-center p-1.5 rounded-md text-white/70 hover:text-white hover:bg-white/10"
+          className="flex sm:hidden items-center justify-center p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted"
           onClick={onMobileMenuOpen}
           aria-label={t("common.menu")}
         >
@@ -32,8 +45,12 @@ export function DocsHeader({ onSearchOpen, onMobileMenuOpen }: DocsHeaderProps) 
         </button>
 
         {/* Logo */}
-        <Link href="/" prefetch={false} className="flex items-center gap-2.5 group">
-          <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-white/5 border border-white/10 transition-transform group-hover:scale-105">
+        <Link
+          href="/"
+          prefetch={false}
+          className="flex items-center gap-2.5 group"
+        >
+          <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-muted/50 border border-border transition-transform group-hover:scale-105">
             <Image
               src="/brand/app-logo-1024.png"
               alt={BRAND.namePascal}
@@ -43,21 +60,23 @@ export function DocsHeader({ onSearchOpen, onMobileMenuOpen }: DocsHeaderProps) 
               className="object-contain"
             />
           </div>
-          <span className="font-bold text-white tracking-tight text-base group-hover:text-scripe-signal transition-colors">
+          <span className="font-bold text-foreground tracking-tight text-base group-hover:text-primary transition-colors">
             {BRAND.nameUpper}
-            <span className="ml-1 text-xs px-1.5 py-0.5 rounded bg-scripe-signal/15 text-scripe-signal font-mono font-medium">DOCS</span>
+            <span className="ml-1 text-xs px-1.5 py-0.5 rounded bg-primary/15 text-primary font-mono font-medium">
+              DOCS
+            </span>
           </span>
         </Link>
 
         {/* Section Navigation Switcher */}
-        <nav className="hidden md:flex items-center gap-1 bg-white/5 p-1 rounded-lg border border-white/10 text-xs font-medium">
+        <nav className="hidden md:flex items-center gap-1 bg-muted/40 p-1 rounded-lg border border-border text-xs font-medium">
           <Link
             href="/technical"
             prefetch={false}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-all ${
               !isCommercial
-                ? "bg-scripe-signal text-[#0d0d0e] font-semibold shadow-sm"
-                : "text-white/70 hover:text-white hover:bg-white/5"
+                ? "bg-primary text-primary-foreground font-semibold shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
             }`}
           >
             <Code2 size={13} />
@@ -68,8 +87,8 @@ export function DocsHeader({ onSearchOpen, onMobileMenuOpen }: DocsHeaderProps) 
             prefetch={false}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-all ${
               isCommercial
-                ? "bg-scripe-signal text-[#0d0d0e] font-semibold shadow-sm"
-                : "text-white/70 hover:text-white hover:bg-white/5"
+                ? "bg-primary text-primary-foreground font-semibold shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
             }`}
           >
             <Building size={13} />
@@ -80,15 +99,15 @@ export function DocsHeader({ onSearchOpen, onMobileMenuOpen }: DocsHeaderProps) 
 
       {/* Search Trigger */}
       <button
-        className="flex items-center gap-3 px-3.5 py-1.5 rounded-lg border border-white/10 bg-white/5 hover:border-scripe-signal/50 hover:bg-white/10 text-white/60 hover:text-white transition-all text-sm w-44 sm:w-64 max-w-full justify-between"
+        className="flex items-center gap-3 px-3.5 py-1.5 rounded-lg border border-border bg-muted/30 hover:border-primary/50 hover:bg-muted text-muted-foreground hover:text-foreground transition-all text-sm w-44 sm:w-64 max-w-full justify-between"
         onClick={onSearchOpen}
         aria-label={t("common.search")}
       >
         <div className="flex items-center gap-2">
-          <Search size={14} className="text-white/50" />
+          <Search size={14} className="text-muted-foreground" />
           <span className="text-xs">{t("common.search")}</span>
         </div>
-        <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono rounded bg-white/10 border border-white/10 text-white/50">
+        <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono rounded bg-muted border border-border text-muted-foreground">
           ⌘K
         </kbd>
       </button>
@@ -99,7 +118,7 @@ export function DocsHeader({ onSearchOpen, onMobileMenuOpen }: DocsHeaderProps) 
           href="https://github.com/SCRIPE-org"
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden sm:flex items-center justify-center h-8 w-8 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+          className="hidden sm:flex items-center justify-center h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
           aria-label="GitHub Repository"
         >
           <Github size={16} />
@@ -112,14 +131,16 @@ export function DocsHeader({ onSearchOpen, onMobileMenuOpen }: DocsHeaderProps) 
   );
 }
 
-function DocsLangSwitcher() {
-  const { language, setLanguage, languages, currentLanguageInfo, t } = useDocsI18n();
+export function DocsLangSwitcher() {
+  const { language, setLanguage, languages, currentLanguageInfo, t } =
+    useDocsI18n();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node))
+        setOpen(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
@@ -128,24 +149,24 @@ function DocsLangSwitcher() {
   return (
     <div className="relative" ref={ref}>
       <button
-        className="flex items-center gap-1.5 h-8 px-2.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-white/80 hover:text-white text-xs font-medium transition-colors"
+        className="flex items-center gap-1.5 h-8 px-2.5 rounded-lg border border-border bg-muted/30 hover:bg-muted text-muted-foreground hover:text-foreground text-xs font-medium transition-colors"
         onClick={() => setOpen(!open)}
         aria-label={t("common.language")}
         aria-expanded={open}
       >
-        <Globe size={14} className="text-scripe-signal" />
+        <Globe size={14} className="text-primary" />
         <span>{currentLanguageInfo.code.toUpperCase()}</span>
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-40 rounded-xl border border-white/10 bg-[#0d0d0e] p-1.5 shadow-2xl z-50 animate-fade-in text-xs">
+        <div className="absolute right-0 mt-2 w-40 rounded-xl border border-border bg-popover text-popover-foreground p-1.5 shadow-2xl z-50 animate-fade-in text-xs">
           {languages.map((lang) => (
             <button
               key={lang.code}
               className={`flex w-full items-center justify-between px-3 py-2 rounded-lg text-left transition-colors ${
                 lang.code === language
-                  ? "bg-scripe-signal/15 text-scripe-signal font-semibold"
-                  : "text-white/70 hover:text-white hover:bg-white/5"
+                  ? "bg-primary/15 text-primary font-semibold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
               }`}
               onClick={() => {
                 setLanguage(lang.code);
@@ -162,14 +183,26 @@ function DocsLangSwitcher() {
   );
 }
 
-function DocsThemeToggle() {
+export function DocsThemeToggle() {
   const { t } = useDocsI18n();
-  const { theme, setTheme } = useTheme();
-  const isDark = theme === "dark";
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="h-8 w-8 rounded-lg border border-border bg-muted/20" />
+    );
+  }
+
+  const isDark = resolvedTheme === "dark";
 
   return (
     <button
-      className="flex items-center justify-center h-8 w-8 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+      className="flex items-center justify-center h-8 w-8 rounded-lg border border-border bg-muted/30 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label={t("common.toggleTheme")}
     >

@@ -35,7 +35,10 @@ export function GlossaryCard({ term }: GlossaryCardProps) {
         aria-pressed={!primaryIsEnglish}
         onClick={() => setPrimaryIsEnglish((current) => !current)}
       >
-        <span className="docs-glossary-header" data-primary={primaryIsEnglish ? "en" : "ar"}>
+        <span
+          className="docs-glossary-header"
+          data-primary={primaryIsEnglish ? "en" : "ar"}
+        >
           {/* Each term carries its own lang so a screen reader switches voice
               instead of reading Arabic with an English pronunciation. */}
           <span className="docs-term-en" lang="en">
@@ -46,7 +49,9 @@ export function GlossaryCard({ term }: GlossaryCardProps) {
           </span>
         </span>
         <span className="docs-glossary-desc">{t(term.descriptionKey)}</span>
-        <span className="docs-glossary-indicator">{t("common.glossaryFlip")}</span>
+        <span className="docs-glossary-indicator">
+          {t("common.glossaryFlip")}
+        </span>
       </Button>
     </li>
   );

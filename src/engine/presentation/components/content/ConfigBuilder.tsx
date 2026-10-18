@@ -3,7 +3,13 @@
 import { useCallback, useState } from "react";
 import { useDocsI18n } from "../../providers/DocsI18nProvider";
 import { cn } from "@core/common/utils";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/core/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/core/ui/select";
 import { Label } from "@/core/ui/label";
 import { Button } from "@/core/ui/button";
 
@@ -14,7 +20,7 @@ interface ConfigBuilderProps {
 const selectClass = cn(
   "h-10 w-full appearance-none rounded-nx-control border border-nx-line bg-nx-ground px-3 py-2 text-sm text-nx-ink",
   "transition-[color,border-color,background-color,box-shadow] duration-nx-micro ease-nx-enter motion-reduce:transition-none",
-  "hover:border-nx-line-hi focus-visible:outline-none focus-visible:border-nx-accent focus-visible:shadow-nx-focus"
+  "hover:border-nx-line-hi focus-visible:outline-none focus-visible:border-nx-accent focus-visible:shadow-nx-focus",
 );
 
 const labelClass = "mb-1.5 block text-xs font-medium text-nx-ink-2";
@@ -79,7 +85,9 @@ export function ConfigBuilder({ titleKey }: ConfigBuilderProps) {
               <SelectItem value="PostgreSql">
                 {t("widgets.configBuilder.providerPostgres")}
               </SelectItem>
-              <SelectItem value="Oracle">{t("widgets.configBuilder.providerOracle")}</SelectItem>
+              <SelectItem value="Oracle">
+                {t("widgets.configBuilder.providerOracle")}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -93,8 +101,12 @@ export function ConfigBuilder({ titleKey }: ConfigBuilderProps) {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Single">{t("widgets.configBuilder.modeSingle")}</SelectItem>
-              <SelectItem value="Multi">{t("widgets.configBuilder.modeMulti")}</SelectItem>
+              <SelectItem value="Single">
+                {t("widgets.configBuilder.modeSingle")}
+              </SelectItem>
+              <SelectItem value="Multi">
+                {t("widgets.configBuilder.modeMulti")}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -108,9 +120,15 @@ export function ConfigBuilder({ titleKey }: ConfigBuilderProps) {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Native">{t("widgets.configBuilder.jobsNative")}</SelectItem>
-              <SelectItem value="Hangfire">{t("widgets.configBuilder.jobsHangfire")}</SelectItem>
-              <SelectItem value="Quartz">{t("widgets.configBuilder.jobsQuartz")}</SelectItem>
+              <SelectItem value="Native">
+                {t("widgets.configBuilder.jobsNative")}
+              </SelectItem>
+              <SelectItem value="Hangfire">
+                {t("widgets.configBuilder.jobsHangfire")}
+              </SelectItem>
+              <SelectItem value="Quartz">
+                {t("widgets.configBuilder.jobsQuartz")}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -164,7 +182,12 @@ export function ConfigBuilder({ titleKey }: ConfigBuilderProps) {
             )}
           </Button>
         </div>
-        <pre className="docs-code-pre" tabIndex={0} role="region" aria-label={outputFilename}>
+        <pre
+          className="docs-code-pre"
+          tabIndex={0}
+          role="region"
+          aria-label={outputFilename}
+        >
           <code>{appsettingsJson}</code>
         </pre>
       </div>

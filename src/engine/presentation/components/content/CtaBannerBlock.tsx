@@ -14,7 +14,12 @@ const container: Variants = {
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24, filter: "blur(4px)" },
-  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.72, ease: EASE } },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.72, ease: EASE },
+  },
 };
 
 /* ── Icons ────────────────────────────────────────────────────────────── */
@@ -92,7 +97,11 @@ const TRUST_BADGES = [
 ];
 
 /* ── Main component ───────────────────────────────────────────────────── */
-export function CtaBannerBlock({ section }: { section: CtaBannerBlockSection }) {
+export function CtaBannerBlock({
+  section,
+}: {
+  section: CtaBannerBlockSection;
+}) {
   const { t } = useDocsI18n();
 
   // Split title at midpoint for gradient mark
@@ -113,11 +122,19 @@ export function CtaBannerBlock({ section }: { section: CtaBannerBlockSection }) 
       >
         {/* Copy */}
         <div className="com-cta-copy">
-          <motion.p className="com-cta-eyebrow" variants={fadeUp} aria-hidden="true">
+          <motion.p
+            className="com-cta-eyebrow"
+            variants={fadeUp}
+            aria-hidden="true"
+          >
             Ready to launch
           </motion.p>
 
-          <motion.h2 id="commercial-cta-title" className="com-cta-title" variants={fadeUp}>
+          <motion.h2
+            id="commercial-cta-title"
+            className="com-cta-title"
+            variants={fadeUp}
+          >
             {left}
             {right && (
               <>
@@ -155,7 +172,10 @@ export function CtaBannerBlock({ section }: { section: CtaBannerBlockSection }) 
           </div>
 
           {/* Trust badges */}
-          <div className="com-trust-badges" aria-label="Compliance certifications">
+          <div
+            className="com-trust-badges"
+            aria-label="Compliance certifications"
+          >
             {TRUST_BADGES.map((b) => (
               <div key={b.label} className="com-trust-badge">
                 {b.icon}

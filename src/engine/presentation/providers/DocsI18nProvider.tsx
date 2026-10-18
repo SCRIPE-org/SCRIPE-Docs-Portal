@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, unused-imports/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 /**
@@ -16,7 +16,14 @@
  */
 
 import type React from "react";
-import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 import {
   allDocsEn,
   allDocsAr,
@@ -89,7 +96,9 @@ interface DocsI18nContextType {
   loadSection: (slug: string) => void;
 }
 
-const DocsI18nContext = createContext<DocsI18nContextType | undefined>(undefined);
+const DocsI18nContext = createContext<DocsI18nContextType | undefined>(
+  undefined,
+);
 
 // ─── Provider ──────────────────────────────────────────────────
 /**
@@ -107,7 +116,7 @@ export function DocsI18nProvider({
 
   const currentLanguageInfo = useMemo(
     () => DOC_LANGUAGES.find((l) => l.code === language) ?? DOC_LANGUAGES[0],
-    [language]
+    [language],
   );
 
   const direction = currentLanguageInfo.direction;
@@ -141,7 +150,7 @@ export function DocsI18nProvider({
         if (found && typeof value === "string") {
           if (params) {
             return value.replace(/\{\{(\w+)\}\}/g, (match, paramKey) =>
-              params[paramKey] !== undefined ? String(params[paramKey]) : match
+              params[paramKey] !== undefined ? String(params[paramKey]) : match,
             );
           }
           return value;
@@ -150,7 +159,7 @@ export function DocsI18nProvider({
 
       return key;
     },
-    [language]
+    [language],
   );
 
   const setLanguage = useCallback((lang: DocLanguage) => {
@@ -211,7 +220,7 @@ export function DocsI18nProvider({
       currentLanguageInfo,
       loadSection,
     }),
-    [language, direction, setLanguage, t, currentLanguageInfo, loadSection]
+    [language, direction, setLanguage, t, currentLanguageInfo, loadSection],
   );
 
   // Note: isHydrated is only used to restore the saved language from localStorage.
@@ -219,7 +228,11 @@ export function DocsI18nProvider({
   // The language preference is applied after mount — first render always uses "en"
   // which immediately switches to the stored preference without any visible flash.
 
-  return <DocsI18nContext.Provider value={contextValue}>{children}</DocsI18nContext.Provider>;
+  return (
+    <DocsI18nContext.Provider value={contextValue}>
+      {children}
+    </DocsI18nContext.Provider>
+  );
 }
 
 // ─── Hook ──────────────────────────────────────────────────────

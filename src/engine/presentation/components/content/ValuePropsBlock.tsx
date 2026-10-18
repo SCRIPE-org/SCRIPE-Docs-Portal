@@ -9,7 +9,13 @@ import type { CSSProperties } from "react";
 import { motion } from "framer-motion";
 import { useDocsI18n } from "../../providers/DocsI18nProvider";
 import type { ValuePropsBlockSection } from "../../../domain/entities/DocSection";
-import { ICONS, ICON_COLORS, ICON_BG_COLORS, BAR_DATA, CELL_SIZES } from "./ValuePropsIcons";
+import {
+  ICONS,
+  ICON_COLORS,
+  ICON_BG_COLORS,
+  BAR_DATA,
+  CELL_SIZES,
+} from "./ValuePropsIcons";
 import { ValuePropsCodeSnippet } from "./ValuePropsCodeSnippet";
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -70,7 +76,11 @@ function BentoCell({ titleKey, descKey, index, isCodeCell }: BentoCellProps) {
       ) : (
         <div className="com-bento-bars" aria-hidden="true">
           {bars.map((h, bi) => (
-            <div key={bi} className="com-bento-bar" style={{ height: `${h}%` }} />
+            <div
+              key={bi}
+              className="com-bento-bar"
+              style={{ height: `${h}%` }}
+            />
           ))}
         </div>
       )}
@@ -84,7 +94,11 @@ function BentoCell({ titleKey, descKey, index, isCodeCell }: BentoCellProps) {
  * @param props Section properties containing localized title and proposition items.
  * @returns Rendered value propositions section.
  */
-export function ValuePropsBlock({ section }: { section: ValuePropsBlockSection }) {
+export function ValuePropsBlock({
+  section,
+}: {
+  section: ValuePropsBlockSection;
+}) {
   const { t } = useDocsI18n();
 
   return (
@@ -105,7 +119,7 @@ export function ValuePropsBlock({ section }: { section: ValuePropsBlockSection }
                 </mark>
               ) : (
                 <span key={i}>{word} </span>
-              )
+              ),
             )}
         </h2>
       </div>

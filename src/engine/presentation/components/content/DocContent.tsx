@@ -25,7 +25,14 @@ import { LandingHeroBlock } from "./LandingHeroBlock";
 import { StatsStripBlock } from "./StatsStripBlock";
 import { ValuePropsBlock } from "./ValuePropsBlock";
 import { CtaBannerBlock } from "./CtaBannerBlock";
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@core/ui/table";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@core/ui/table";
 import Image from "next/image";
 
 interface DocContentProps {
@@ -46,11 +53,14 @@ export function DocContent({ sections }: DocContentProps) {
 
         switch (section.type) {
           case "heading": {
-            const id = section.id || section.titleKey.split(".").pop() || `h-${idx}`;
+            const id =
+              section.id || section.titleKey.split(".").pop() || `h-${idx}`;
             const Tag = `h${section.level}` as "h2" | "h3" | "h4";
             const className = `docs-h${section.level} group relative flex items-center`;
 
-            const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+            const handleAnchorClick = (
+              e: React.MouseEvent<HTMLAnchorElement>,
+            ) => {
               e.preventDefault();
               const url = `${window.location.origin}${window.location.pathname}#${id}`;
               navigator.clipboard
@@ -147,7 +157,10 @@ export function DocContent({ sections }: DocContentProps) {
 
           case "table":
             return (
-              <div key={key} className="mb-6 overflow-hidden rounded-nx-md border border-nx-line">
+              <div
+                key={key}
+                className="mb-6 overflow-hidden rounded-nx-md border border-nx-line"
+              >
                 <Table dir={direction}>
                   <TableHeader className="bg-nx-raised">
                     <TableRow>
@@ -196,7 +209,10 @@ export function DocContent({ sections }: DocContentProps) {
                   width={800}
                   height={450}
                   unoptimized
-                  style={{ maxWidth: "100%", borderRadius: "var(--nx-radius-lg)" }}
+                  style={{
+                    maxWidth: "100%",
+                    borderRadius: "var(--nx-radius-lg)",
+                  }}
                 />
                 {section.caption && (
                   <figcaption
@@ -217,15 +233,31 @@ export function DocContent({ sections }: DocContentProps) {
             return <ComparisonBlock key={key} columns={section.columns} />;
 
           case "feature-grid":
-            return <FeatureGrid key={key} items={section.items} columns={section.columns} />;
+            return (
+              <FeatureGrid
+                key={key}
+                items={section.items}
+                columns={section.columns}
+              />
+            );
 
           case "interactive-terminal":
             return (
-              <InteractiveTerminal key={key} tabs={section.tabs} titleKey={section.titleKey} />
+              <InteractiveTerminal
+                key={key}
+                tabs={section.tabs}
+                titleKey={section.titleKey}
+              />
             );
 
           case "file-explorer":
-            return <FileExplorer key={key} moduleName={section.moduleName} files={section.files} />;
+            return (
+              <FileExplorer
+                key={key}
+                moduleName={section.moduleName}
+                files={section.files}
+              />
+            );
 
           case "interactive-diagram":
             return (
@@ -241,7 +273,13 @@ export function DocContent({ sections }: DocContentProps) {
             return <BilingualGlossary key={key} terms={section.terms} />;
 
           case "compatibility-matrix":
-            return <CompatibilityMatrix key={key} headers={section.headers} rows={section.rows} />;
+            return (
+              <CompatibilityMatrix
+                key={key}
+                headers={section.headers}
+                rows={section.rows}
+              />
+            );
 
           case "pipeline-simulator":
             return (
@@ -257,14 +295,24 @@ export function DocContent({ sections }: DocContentProps) {
 
           case "schema-visualizer":
             return (
-              <SchemaVisualizer key={key} tables={section.tables} titleKey={section.titleKey} />
+              <SchemaVisualizer
+                key={key}
+                tables={section.tables}
+                titleKey={section.titleKey}
+              />
             );
 
           case "cli-simulator":
             return <CliSimulator key={key} titleKey={section.titleKey} />;
 
           case "lifecycle-tracer":
-            return <LifecycleTracer key={key} steps={section.steps} titleKey={section.titleKey} />;
+            return (
+              <LifecycleTracer
+                key={key}
+                steps={section.steps}
+                titleKey={section.titleKey}
+              />
+            );
 
           case "persona-selector":
             return <PersonaSelector key={key} />;

@@ -3,7 +3,14 @@
 import { useDocsI18n } from "../../providers/DocsI18nProvider";
 import type { MatrixCell } from "../../../domain/entities/DocSection";
 import { MatrixCellBadge } from "../ui/MatrixCellBadge";
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@core/ui/table";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@core/ui/table";
 
 interface CompatibilityMatrixProps {
   headers: string[];
@@ -13,7 +20,10 @@ interface CompatibilityMatrixProps {
 /**
  * Documentation for module export
  */
-export function CompatibilityMatrix({ headers, rows }: CompatibilityMatrixProps) {
+export function CompatibilityMatrix({
+  headers,
+  rows,
+}: CompatibilityMatrixProps) {
   const { t, direction } = useDocsI18n();
   return (
     <div className="mb-8 overflow-hidden rounded-nx-lg border border-nx-line bg-nx-surface">
@@ -29,7 +39,9 @@ export function CompatibilityMatrix({ headers, rows }: CompatibilityMatrixProps)
         <TableBody>
           {rows.map((row, ri) => (
             <TableRow key={ri}>
-              <TableCell className="font-semibold text-nx-ink">{t(row.nameKey)}</TableCell>
+              <TableCell className="font-semibold text-nx-ink">
+                {t(row.nameKey)}
+              </TableCell>
               {row.cells.map((cell, ci) => (
                 <TableCell key={ci}>
                   <MatrixCellBadge cell={cell} />

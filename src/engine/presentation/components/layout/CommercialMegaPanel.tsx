@@ -9,7 +9,11 @@
 import { type CSSProperties, type RefObject, type KeyboardEvent } from "react";
 import Link from "next/link";
 import { SECTION_ICONS } from "./CommercialHeaderIcons";
-import { MEGA_PANEL_ID, sectionItemKey, type NavSection } from "./CommercialNavData";
+import {
+  MEGA_PANEL_ID,
+  sectionItemKey,
+  type NavSection,
+} from "./CommercialNavData";
 
 /**
  * Properties for the CommercialMegaPanel component.
@@ -70,7 +74,13 @@ export function CommercialMegaPanel({
         <div className="com-mega-panel-inner">
           {/* Panel Header */}
           <div className="com-mega-panel-header">
-            <span style={{ color: "var(--com-violet)", display: "flex", alignItems: "center" }}>
+            <span
+              style={{
+                color: "var(--com-violet)",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               {SECTION_ICONS[activeData.id]}
             </span>
             <span className="com-mega-panel-label">{activeLabel}</span>
@@ -105,7 +115,13 @@ export function CommercialMegaPanel({
       </div>
 
       {/* Backdrop overlay to close on outside click */}
-      {panelVisible && <div className="com-mega-backdrop" onClick={onClose} aria-hidden="true" />}
+      {panelVisible && (
+        <div
+          className="com-mega-backdrop"
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
     </>
   );
 }

@@ -4,7 +4,13 @@ import { useState } from "react";
 import { useDocsI18n } from "../../providers/DocsI18nProvider";
 import type { SchemaTable } from "../../../domain/entities/DocSection";
 import { SchemaColumnRow } from "../ui/SchemaColumnRow";
-import { Table, TableHeader, TableBody, TableRow, TableHead } from "@core/ui/table";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+} from "@core/ui/table";
 import { Button } from "@core/ui/button";
 
 interface SchemaVisualizerProps {

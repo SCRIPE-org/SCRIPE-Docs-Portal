@@ -164,7 +164,8 @@ export function CliSimulator({ titleKey }: CliSimulatorProps) {
         </div>
         <div className="docs-terminal-body min-h-40 overflow-y-auto">
           <div className="docs-terminal-line">
-            <span className="prompt">$</span> <span className="cmd">{activeCmd}</span>
+            <span className="prompt">$</span>{" "}
+            <span className="cmd">{activeCmd}</span>
           </div>
           <div className="mt-3">
             {logs.map((log, i) => (
@@ -172,9 +173,11 @@ export function CliSimulator({ titleKey }: CliSimulatorProps) {
                 key={i}
                 className={cn(
                   "docs-terminal-output",
-                  (log.startsWith("✨") || log.startsWith("🎉") || log.startsWith("✅")) &&
+                  (log.startsWith("✨") ||
+                    log.startsWith("🎉") ||
+                    log.startsWith("✅")) &&
                     "text-success",
-                  log.startsWith("$") && "text-nx-accent"
+                  log.startsWith("$") && "text-nx-accent",
                 )}
               >
                 {log}

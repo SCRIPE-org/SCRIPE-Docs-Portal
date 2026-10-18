@@ -7,7 +7,10 @@ interface ComparisonBlockProps {
   columns: ComparisonColumn[];
 }
 
-const variantConfig: Record<ComparisonColumn["variant"], { icon: string; className: string }> = {
+const variantConfig: Record<
+  ComparisonColumn["variant"],
+  { icon: string; className: string }
+> = {
   positive: {
     icon: "✅",
     className: "docs-comparison-positive",
@@ -45,7 +48,10 @@ export function ComparisonBlock({ columns }: ComparisonBlockProps) {
       {columns.map((col, colIdx) => {
         const config = variantConfig[col.variant];
         return (
-          <li key={colIdx} className={`docs-comparison-column ${config.className}`}>
+          <li
+            key={colIdx}
+            className={`docs-comparison-column ${config.className}`}
+          >
             <div className="docs-comparison-header">
               {/* The heading already states the verdict — the glyph is a
                   restatement, and the list markers repeat it a third time. */}

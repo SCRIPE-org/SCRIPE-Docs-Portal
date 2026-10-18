@@ -29,10 +29,14 @@ export function SchemaColumnRow({ column }: SchemaColumnRowProps) {
               <span className="docs-sr-only">{t("schema.foreignKey")}</span>
             </>
           )}
-          <span className={column.isPrimaryKey ? "font-bold" : "font-normal"}>{column.name}</span>
+          <span className={column.isPrimaryKey ? "font-bold" : "font-normal"}>
+            {column.name}
+          </span>
         </span>
       </TableCell>
-      <TableCell className="font-mono text-xs text-nx-accent">{column.type}</TableCell>
+      <TableCell className="font-mono text-xs text-nx-accent">
+        {column.type}
+      </TableCell>
       <TableCell className="text-xs text-nx-ink-2">
         {column.nullable ? "NULL" : "NOT NULL"}
       </TableCell>

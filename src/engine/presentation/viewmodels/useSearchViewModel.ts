@@ -6,7 +6,9 @@ import type { SearchResult } from "../../domain/interfaces/IDocsRepository";
 /**
  * Search ViewModel — handles Cmd+K modal state.
  */
-export function useSearchViewModel(searchFn: (query: string) => SearchResult[]) {
+export function useSearchViewModel(
+  searchFn: (query: string) => SearchResult[],
+) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const openSearch = useCallback(() => setIsSearchOpen(true), []);

@@ -6,7 +6,8 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: {
     template: "%s | SCRIPE Docs Portal",
-    default: "SCRIPE Docs Portal — Technical Architecture & Commercial Operations",
+    default:
+      "SCRIPE Docs Portal — Technical Architecture & Commercial Operations",
   },
   description:
     "Comprehensive technical and commercial documentation for the SCRIPE Sports Operations OS (Venue, Academy, Football Intelligence).",
@@ -31,11 +32,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-screen bg-[#050506] text-[#f7f8f5] font-sans antialiased selection:bg-[#c6ff00]/30 selection:text-white">
+      <body className="min-h-screen bg-background text-foreground font-sans antialiased transition-colors duration-200 selection:bg-primary/20 selection:text-foreground">
         <ThemeProvider>
-          <DocsI18nProvider scope="technical">
-            {children}
-          </DocsI18nProvider>
+          <DocsI18nProvider scope="technical">{children}</DocsI18nProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -6,7 +6,13 @@ import { useRouter } from "next/navigation";
 import { useDocsI18n } from "../../providers/DocsI18nProvider";
 import type { SearchResult } from "../../../domain/interfaces/IDocsRepository";
 import { Dialog, DialogContent, DialogTitle } from "@core/ui/dialog";
-import { Command, CommandInput, CommandList, CommandEmpty, CommandItem } from "@core/ui/command";
+import {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandItem,
+} from "@core/ui/command";
 
 interface DocsSearchProps {
   isOpen: boolean;
@@ -29,7 +35,12 @@ interface DocsSearchProps {
  * palette open, registered once for the lifetime of the docs view regardless
  * of whether this component's own dialog is currently open.
  */
-export function DocsSearch({ isOpen, onClose, onSearch, basePath = "/docs" }: DocsSearchProps) {
+export function DocsSearch({
+  isOpen,
+  onClose,
+  onSearch,
+  basePath = "/docs",
+}: DocsSearchProps) {
   const { t } = useDocsI18n();
   const router = useRouter();
   const [query, setQuery] = useState("");
@@ -57,12 +68,14 @@ export function DocsSearch({ isOpen, onClose, onSearch, basePath = "/docs" }: Do
     (result: SearchResult) => {
       const isComm = result.slug.startsWith("commercial/");
       const targetBase = isComm ? "/commercial" : "/technical";
-      const cleanSlug = result.slug.replace(/^commercial\//, "").replace(/^technical\//, "");
+      const cleanSlug = result.slug
+        .replace(/^commercial\//, "")
+        .replace(/^technical\//, "");
       const hash = result.sectionId ? `#${result.sectionId}` : "";
       router.push(`${targetBase}/${cleanSlug}${hash}`);
       onClose();
     },
-    [router, onClose]
+    [router, onClose],
   );
 
   return (
@@ -97,7 +110,9 @@ export function DocsSearch({ isOpen, onClose, onSearch, basePath = "/docs" }: Do
             placeholder={t("common.searchPlaceholder")}
           />
           <CommandList className="max-h-[400px]">
-            {query.trim() !== "" && <CommandEmpty>{t("common.searchNoResults")}</CommandEmpty>}
+            {query.trim() !== "" && (
+              <CommandEmpty>{t("common.searchNoResults")}</CommandEmpty>
+            )}
             {results.map((result, idx) => (
               <CommandItem
                 key={`${result.slug}-${result.sectionId || idx}`}
@@ -105,10 +120,13 @@ export function DocsSearch({ isOpen, onClose, onSearch, basePath = "/docs" }: Do
                 onSelect={() => navigateToResult(result)}
                 className="flex-col items-start gap-0.5"
               >
-                <span className="text-sm text-nx-ink">{t(result.titleKey)}</span>
+                <span className="text-sm text-nx-ink">
+                  {t(result.titleKey)}
+                </span>
                 <span className="text-xs text-nx-ink-3">
                   {result.category}
-                  {result.matchedHeadingKey && ` → ${t(result.matchedHeadingKey)}`}
+                  {result.matchedHeadingKey &&
+                    ` → ${t(result.matchedHeadingKey)}`}
                 </span>
                 {result.snippet && (
                   <span className="line-clamp-1 text-xs text-nx-ink-2">
@@ -163,7 +181,9 @@ function highlightSnippet(snippet: string, query: string) {
   return (
     <>
       {before}
-      <mark className="rounded-nx-sm bg-nx-accent-wash text-nx-accent">{match}</mark>
+      <mark className="rounded-nx-sm bg-nx-accent-wash text-nx-accent">
+        {match}
+      </mark>
       {after}
     </>
   );

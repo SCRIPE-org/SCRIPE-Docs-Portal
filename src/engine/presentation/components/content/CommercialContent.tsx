@@ -92,7 +92,7 @@ export function CommercialContent({
   const { t } = useDocsI18n();
 
   const headings = sections.filter(
-    (s): s is Extract<DocSection, { type: "heading" }> => s.type === "heading"
+    (s): s is Extract<DocSection, { type: "heading" }> => s.type === "heading",
   );
 
   const signal = CATEGORY_SIGNALS[categoryInfo?.id ?? ""] ?? DEFAULT_SIGNAL;
@@ -127,7 +127,9 @@ export function CommercialContent({
                 {categoryInfo ? t(categoryInfo.titleKey) : "Commercial"}
               </span>
               <span className="com-page-hero-tag">Decision memo</span>
-              {lastUpdated && <span className="com-page-hero-tag">Updated {lastUpdated}</span>}
+              {lastUpdated && (
+                <span className="com-page-hero-tag">Updated {lastUpdated}</span>
+              )}
             </motion.div>
 
             {/* Title */}
@@ -174,7 +176,12 @@ export function CommercialContent({
                 <div
                   key={i}
                   className="com-signal-bar"
-                  style={{ "--bar": `${bar}%`, "--delay": `${i * 80}ms` } as CSSProperties}
+                  style={
+                    {
+                      "--bar": `${bar}%`,
+                      "--delay": `${i * 80}ms`,
+                    } as CSSProperties
+                  }
                 />
               ))}
             </div>
@@ -192,11 +199,18 @@ export function CommercialContent({
       <div className="com-content-area">
         {/* TOC Rail */}
         {headings.length > 0 && (
-          <aside className="com-content-rail" aria-label="On this page" style={{ order: 2 }}>
+          <aside
+            className="com-content-rail"
+            aria-label="On this page"
+            style={{ order: 2 }}
+          >
             <span>On this page</span>
             <nav aria-label="Table of contents">
               {headings.slice(0, 10).map((heading) => {
-                const id = heading.id || heading.titleKey.split(".").pop() || heading.titleKey;
+                const id =
+                  heading.id ||
+                  heading.titleKey.split(".").pop() ||
+                  heading.titleKey;
                 return (
                   <a key={id} href={`#${id}`}>
                     {t(heading.titleKey)}

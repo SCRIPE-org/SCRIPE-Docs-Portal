@@ -9,12 +9,10 @@ const buttonVariants = cva(
       variant: {
         default:
           "bg-scripe-signal text-scripe-ink hover:bg-[#b0e600] font-semibold shadow-sm",
-        destructive:
-          "bg-red-600 text-white hover:bg-red-700",
+        destructive: "bg-red-600 text-white hover:bg-red-700",
         outline:
           "border border-white/10 bg-transparent hover:bg-white/5 hover:text-white text-white/90",
-        secondary:
-          "bg-white/10 text-white hover:bg-white/15",
+        secondary: "bg-white/10 text-white hover:bg-white/15",
         ghost: "hover:bg-white/5 hover:text-white text-white/80",
         link: "text-scripe-signal underline-offset-4 hover:underline",
       },
@@ -29,11 +27,12 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }
@@ -43,7 +42,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     if (asChild && React.isValidElement(children)) {
       const child = children as React.ReactElement<{ className?: string }>;
       return React.cloneElement(child, {
-        className: cn(buttonVariants({ variant, size, className }), child.props?.className),
+        className: cn(
+          buttonVariants({ variant, size, className }),
+          child.props?.className,
+        ),
         ...props,
       });
     }
@@ -57,7 +59,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {children}
       </button>
     );
-  }
+  },
 );
 Button.displayName = "Button";
 

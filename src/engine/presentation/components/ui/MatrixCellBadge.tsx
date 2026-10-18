@@ -17,7 +17,10 @@ const statusLabels = {
  */
 export function MatrixCellBadge({ cell }: MatrixCellBadgeProps) {
   return (
-    <span className={`docs-matrix-badge badge-${cell.status}`} title={cell.value}>
+    <span
+      className={`docs-matrix-badge badge-${cell.status}`}
+      title={cell.value}
+    >
       {statusLabels[cell.status]} {cell.value}
     </span>
   );

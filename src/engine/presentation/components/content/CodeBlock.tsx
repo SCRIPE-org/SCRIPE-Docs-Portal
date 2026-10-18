@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-vars */
 // FILE-EXCEPTION: file length
 // UI-EXCEPTION: compact studio layout
 "use client";
@@ -17,7 +16,10 @@ interface CodeBlockProps {
  * Minimal syntax tokenizer — covers keywords, strings, comments, types, functions.
  * No external dependency like Prism.js needed.
  */
-function tokenize(code: string, language: string): { text: string; className: string }[][] {
+function tokenize(
+  code: string,
+  language: string,
+): { text: string; className: string }[][] {
   const lines = code.split("\n");
 
   // Language-specific keyword sets
@@ -280,7 +282,10 @@ function tokenize(code: string, language: string): { text: string; className: st
       }
 
       // Decorators / Attributes
-      if (line[i] === "@" || (line[i] === "[" && /^[A-Z]/.test(line[i + 1] || ""))) {
+      if (
+        line[i] === "@" ||
+        (line[i] === "[" && /^[A-Z]/.test(line[i + 1] || ""))
+      ) {
         let end = i + 1;
         while (end < line.length && /[\w.]/.test(line[end])) end++;
         if (line[end] === "]") end++;
@@ -374,7 +379,12 @@ const LANG_LABELS: Record<string, string> = {
 /**
  * Documentation for module export
  */
-export function CodeBlock({ code, language, filename, highlightLines }: CodeBlockProps) {
+export function CodeBlock({
+  code,
+  language,
+  filename,
+  highlightLines,
+}: CodeBlockProps) {
   const { t } = useDocsI18n();
   const [copied, setCopied] = useState(false);
 
@@ -388,7 +398,8 @@ export function CodeBlock({ code, language, filename, highlightLines }: CodeBloc
     }
   }, [code]);
 
-  const langLabel = LANG_LABELS[language?.toLowerCase() ?? ""] ?? language ?? "Code";
+  const langLabel =
+    LANG_LABELS[language?.toLowerCase() ?? ""] ?? language ?? "Code";
   const tokenizedLines = tokenize(code.trim(), language);
   const highlightSet = new Set(highlightLines || []);
 
@@ -444,7 +455,12 @@ export function CodeBlock({ code, language, filename, highlightLines }: CodeBloc
       </div>
       {/* A horizontally scrollable region must be reachable by keyboard, or a
           long line is simply unreadable without a mouse. */}
-      <pre className="docs-code-pre" tabIndex={0} role="region" aria-label={sampleName}>
+      <pre
+        className="docs-code-pre"
+        tabIndex={0}
+        role="region"
+        aria-label={sampleName}
+      >
         <code>
           {tokenizedLines.map((lineTokens, lineIdx) => {
             const isHighlighted = highlightSet.has(lineIdx + 1);
@@ -457,7 +473,9 @@ export function CodeBlock({ code, language, filename, highlightLines }: CodeBloc
             return (
               <span
                 key={lineIdx}
-                className={isHighlighted ? "docs-code-line-highlight" : undefined}
+                className={
+                  isHighlighted ? "docs-code-line-highlight" : undefined
+                }
               >
                 {lineContent}
                 {lineIdx < tokenizedLines.length - 1 ? "\n" : ""}

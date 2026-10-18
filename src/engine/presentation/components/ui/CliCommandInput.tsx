@@ -17,7 +17,10 @@ interface CliCommandInputProps {
  * reachable and operable without a mouse (it was a plain `<li onClick>`,
  * unreachable by Tab and silent to a screen reader).
  */
-export function CliCommandInput({ commands, onSelectCommand }: CliCommandInputProps) {
+export function CliCommandInput({
+  commands,
+  onSelectCommand,
+}: CliCommandInputProps) {
   const { t } = useDocsI18n();
   const [val, setVal] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -29,7 +32,9 @@ export function CliCommandInput({ commands, onSelectCommand }: CliCommandInputPr
       setSuggestions([]);
       return;
     }
-    setSuggestions(commands.filter((c) => c.toLowerCase().includes(text.toLowerCase())));
+    setSuggestions(
+      commands.filter((c) => c.toLowerCase().includes(text.toLowerCase())),
+    );
   };
 
   const handleSelect = (cmd: string) => {
@@ -52,7 +57,7 @@ export function CliCommandInput({ commands, onSelectCommand }: CliCommandInputPr
         className={cn(
           "h-10 w-full rounded-nx-control border border-nx-line bg-nx-ground px-3 py-2 text-sm text-nx-ink placeholder:text-nx-ink-3",
           "transition-[color,border-color,background-color,box-shadow] duration-nx-micro ease-nx-enter motion-reduce:transition-none",
-          "hover:border-nx-line-hi focus-visible:border-nx-accent focus-visible:shadow-nx-focus focus-visible:outline-none"
+          "hover:border-nx-line-hi focus-visible:border-nx-accent focus-visible:shadow-nx-focus focus-visible:outline-none",
         )}
       />
       {suggestions.length > 0 && (
@@ -70,7 +75,7 @@ export function CliCommandInput({ commands, onSelectCommand }: CliCommandInputPr
                 className={cn(
                   "h-auto w-full justify-start rounded-none px-3 py-1.5 text-start font-mono text-xs text-nx-ink",
                   "transition-colors duration-nx-micro ease-nx-enter motion-reduce:transition-none",
-                  "hover:bg-nx-hover focus-visible:bg-nx-hover focus-visible:outline-none"
+                  "hover:bg-nx-hover focus-visible:bg-nx-hover focus-visible:outline-none",
                 )}
               >
                 {s}

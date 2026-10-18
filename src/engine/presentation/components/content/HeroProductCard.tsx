@@ -13,12 +13,27 @@ const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
  * Product module descriptor tiles displaying curated platform capabilities and telemetry metrics.
  */
 export const PLATFORM_MODULES = [
-  { id: "identity", icon: "ID", name: "Identity", color: "oklch(0.91 0.24 128)" },
+  {
+    id: "identity",
+    icon: "ID",
+    name: "Identity",
+    color: "oklch(0.91 0.24 128)",
+  },
   { id: "tenants", icon: "TN", name: "Tenants", color: "oklch(0.75 0.02 128)" },
   { id: "billing", icon: "BI", name: "Billing", color: "oklch(0.79 0.17 160)" },
-  { id: "marketplace", icon: "MK", name: "Marketplace", color: "oklch(0.82 0.155 80)" },
+  {
+    id: "marketplace",
+    icon: "MK",
+    name: "Marketplace",
+    color: "oklch(0.82 0.155 80)",
+  },
   { id: "docs", icon: "DC", name: "Docs", color: "oklch(0.65 0.22 20)" },
-  { id: "entitlement", icon: "EN", name: "Entitlements", color: "oklch(0.55 0.02 128)" },
+  {
+    id: "entitlement",
+    icon: "EN",
+    name: "Entitlements",
+    color: "oklch(0.55 0.02 128)",
+  },
 ] as const;
 
 /**
@@ -43,7 +58,13 @@ export interface FloatBadgeProps {
  * @param props Badge configuration attributes.
  * @returns Rendered floating badge element.
  */
-export function FloatBadge({ value, label, color, delay = 0, style }: FloatBadgeProps) {
+export function FloatBadge({
+  value,
+  label,
+  color,
+  delay = 0,
+  style,
+}: FloatBadgeProps) {
   return (
     <motion.div
       className="com-float-badge"
@@ -100,7 +121,12 @@ export function HeroProductCard({ cardY, stats }: HeroProductCardProps) {
         label="Modules"
         color="oklch(0.91 0.24 128)"
         delay={1.1}
-        style={{ position: "absolute", bottom: "40px", left: "-20px", zIndex: 3 }}
+        style={{
+          position: "absolute",
+          bottom: "40px",
+          left: "12px",
+          zIndex: 3,
+        }}
       />
 
       <div className="com-product-card">
@@ -111,7 +137,9 @@ export function HeroProductCard({ cardY, stats }: HeroProductCardProps) {
             <div className="com-product-dot" />
             <div className="com-product-dot" />
           </div>
-          <span className="com-product-bar-title">scripe · commercial-os · live</span>
+          <span className="com-product-bar-title">
+            scripe · commercial-os · live
+          </span>
           <span className="com-product-bar-status">
             <span className="com-product-bar-pulse" />
             Running
@@ -135,12 +163,21 @@ export function HeroProductCard({ cardY, stats }: HeroProductCardProps) {
                   border: `1px solid color-mix(in oklch, ${mod.color} 30%, transparent)`,
                 }}
               >
-                <span style={{ color: mod.color, fontSize: "0.6rem", fontWeight: 900 }}>
+                <span
+                  style={{
+                    color: mod.color,
+                    fontSize: "0.6rem",
+                    fontWeight: 900,
+                  }}
+                >
                   {mod.icon}
                 </span>
               </div>
               <span className="com-product-module-name">{mod.name}</span>
-              <span className="com-product-module-val" style={{ color: mod.color }}>
+              <span
+                className="com-product-module-val"
+                style={{ color: mod.color }}
+              >
                 {mod.id === "tenants"
                   ? stats
                     ? stats.activeTenants.toLocaleString()
@@ -166,9 +203,12 @@ export function HeroProductCard({ cardY, stats }: HeroProductCardProps) {
         <div className="com-product-footer">
           <span className="com-product-footer-modules">
             <span className="com-product-footer-dot" />
-            {stats ? stats.activeModules : PLATFORM_MODULES.length} modules active
+            {stats ? stats.activeModules : PLATFORM_MODULES.length} modules
+            active
           </span>
-          <span className="com-product-footer-growth">{stats?.uptimeSla ?? "99.9%"} uptime</span>
+          <span className="com-product-footer-growth">
+            {stats?.uptimeSla ?? "99.9%"} uptime
+          </span>
         </div>
       </div>
     </motion.div>

@@ -14,7 +14,11 @@ interface DocsBreadcrumbProps {
  * Presentation UI component rendering the docs breadcrumb.
  * Arranges layout boundaries and accessibility targets (WCAG, tab index) using the core design library (@core/ui/*).
  */
-export function DocsBreadcrumb({ categoryTitleKey, pageTitleKey, basePath = "/technical" }: DocsBreadcrumbProps) {
+export function DocsBreadcrumb({
+  categoryTitleKey,
+  pageTitleKey,
+  basePath = "/technical",
+}: DocsBreadcrumbProps) {
   const { t } = useDocsI18n();
 
   return (

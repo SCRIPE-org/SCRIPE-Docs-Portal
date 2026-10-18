@@ -20,7 +20,9 @@ export function useTocViewModel(headingIds: string[]) {
           visibleHeadings.set(entry.target.id, entry.isIntersecting);
         }
 
-        const firstVisibleId = headingIds.find((id) => visibleHeadings.get(id) === true);
+        const firstVisibleId = headingIds.find(
+          (id) => visibleHeadings.get(id) === true,
+        );
 
         if (firstVisibleId) {
           setActiveId(firstVisibleId);
@@ -29,7 +31,7 @@ export function useTocViewModel(headingIds: string[]) {
       {
         rootMargin: "-80px 0px -60% 0px",
         threshold: 0,
-      }
+      },
     );
 
     for (const id of headingIds) {

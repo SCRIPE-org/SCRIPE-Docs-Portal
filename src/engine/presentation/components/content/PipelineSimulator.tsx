@@ -75,7 +75,10 @@ export function PipelineSimulator({ titleKey }: PipelineSimulatorProps) {
       }, 1500);
     } else if (activeStep >= pipelineStageKeys.length) {
       completeTimeout = setTimeout(() => {
-        setLogs((prev) => [...prev, `[System] ${t("widgets.pipelineSimulator.completeMessage")}`]);
+        setLogs((prev) => [
+          ...prev,
+          `[System] ${t("widgets.pipelineSimulator.completeMessage")}`,
+        ]);
         setIsRunning(false);
         setActiveStep(-1);
       }, 0);
@@ -114,7 +117,12 @@ export function PipelineSimulator({ titleKey }: PipelineSimulatorProps) {
       </div>
 
       <div className="mb-6 mt-6 flex gap-4">
-        <Button type="button" onClick={startSimulator} disabled={isRunning} aria-busy={isRunning}>
+        <Button
+          type="button"
+          onClick={startSimulator}
+          disabled={isRunning}
+          aria-busy={isRunning}
+        >
           {isRunning ? t("widgets.pipelineSimulator.running") : t("common.run")}
         </Button>
         <Button
@@ -138,7 +146,10 @@ export function PipelineSimulator({ titleKey }: PipelineSimulatorProps) {
             {t("widgets.pipelineSimulator.consoleLabel")}
           </span>
         </div>
-        <div className="docs-terminal-body h-40 min-h-[120px] overflow-y-auto" aria-live="polite">
+        <div
+          className="docs-terminal-body h-40 min-h-[120px] overflow-y-auto"
+          aria-live="polite"
+        >
           {logs.map((log, i) => (
             <div
               key={i}
@@ -152,7 +163,9 @@ export function PipelineSimulator({ titleKey }: PipelineSimulatorProps) {
             </div>
           ))}
           {logs.length === 0 && (
-            <div className="text-nx-ink-3">{t("widgets.pipelineSimulator.emptyHint")}</div>
+            <div className="text-nx-ink-3">
+              {t("widgets.pipelineSimulator.emptyHint")}
+            </div>
           )}
         </div>
       </div>

@@ -14,7 +14,8 @@ export function ReadingProgress() {
       const winHeight = window.innerHeight;
       const docHeight = document.documentElement.scrollHeight - winHeight;
       const scrolled = window.scrollY;
-      const pct = docHeight > 0 ? Math.min((scrolled / docHeight) * 100, 100) : 0;
+      const pct =
+        docHeight > 0 ? Math.min((scrolled / docHeight) * 100, 100) : 0;
       setProgress(pct);
     };
 
@@ -27,7 +28,10 @@ export function ReadingProgress() {
   // every scroll tick and drown out the page.
   return (
     <div className="docs-reading-progress" aria-hidden="true">
-      <div className="docs-reading-progress-bar" style={{ width: `${progress}%` }} />
+      <div
+        className="docs-reading-progress-bar"
+        style={{ width: `${progress}%` }}
+      />
     </div>
   );
 }

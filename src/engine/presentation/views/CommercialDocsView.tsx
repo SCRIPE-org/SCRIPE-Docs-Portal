@@ -88,7 +88,8 @@ function CommercialFooter() {
         },
         {
           href: "/commercial/investor-overview",
-          labelKey: "commercialMegaMenu.commercial.items.investorOverview.title",
+          labelKey:
+            "commercialMegaMenu.commercial.items.investorOverview.title",
         },
         {
           href: "/commercial/partner-journey",
@@ -111,7 +112,9 @@ function CommercialFooter() {
             <Link
               href="/commercial"
               className="com-footer-logo"
-              aria-label={t("commercialHeader.logoAria", { brand: BRAND.namePascal })}
+              aria-label={t("commercialHeader.logoAria", {
+                brand: BRAND.namePascal,
+              })}
             >
               <Image
                 src="/brand/app-logo-1024.png"
@@ -122,7 +125,9 @@ function CommercialFooter() {
               />
               <span>{BRAND.nameUpper}</span>
             </Link>
-            <p className="com-footer-tagline">{t("commercialFooter.tagline")}</p>
+            <p className="com-footer-tagline">
+              {t("commercialFooter.tagline")}
+            </p>
           </div>
 
           {/* Link columns */}
@@ -132,7 +137,11 @@ function CommercialFooter() {
               <ul className="com-footer-links" role="list">
                 {col.links.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} prefetch={false} className="com-footer-link">
+                    <Link
+                      href={link.href}
+                      prefetch={false}
+                      className="com-footer-link"
+                    >
                       {t(link.labelKey)}
                     </Link>
                   </li>
@@ -195,7 +204,11 @@ export function CommercialDocsView({ slug }: CommercialDocsViewProps) {
         <div className="commercial-page">
           <div className="com-404" role="main">
             <h1>{t("commercialNotFound.title")}</h1>
-            <p>{t("commercialNotFound.message", { slug: slug.replace("commercial/", "") })}</p>
+            <p>
+              {t("commercialNotFound.message", {
+                slug: slug.replace("commercial/", ""),
+              })}
+            </p>
             <Link
               href="/commercial"
               prefetch={false}

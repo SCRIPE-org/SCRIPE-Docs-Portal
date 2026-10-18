@@ -28,7 +28,13 @@ const PERSONA_COLORS: Record<Persona, string> = {
 
 const personaKeys: Record<
   Persona,
-  { title: string; desc: string; benefits: string[]; label: string; href: string }
+  {
+    title: string;
+    desc: string;
+    benefits: string[];
+    label: string;
+    href: string;
+  }
 > = {
   investor: {
     label: "Capital thesis",
@@ -76,7 +82,10 @@ export function PersonaSelector() {
   const current = personaKeys[selected];
 
   return (
-    <section className="com-landing-persona" aria-labelledby="commercial-persona-title">
+    <section
+      className="com-landing-persona"
+      aria-labelledby="commercial-persona-title"
+    >
       {/* Section header */}
       <motion.div
         className="com-landing-section-head"
@@ -100,7 +109,11 @@ export function PersonaSelector() {
         transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
       >
         {/* Left: tab list */}
-        <div className="com-persona-tabs" role="tablist" aria-label="Commercial audience paths">
+        <div
+          className="com-persona-tabs"
+          role="tablist"
+          aria-label="Commercial audience paths"
+        >
           {PERSONAS.map((persona, idx) => {
             const content = personaKeys[persona];
             const isSelected = selected === persona;
@@ -119,7 +132,9 @@ export function PersonaSelector() {
                 <span
                   className="com-persona-tab-icon"
                   aria-hidden="true"
-                  style={{ "--accent": PERSONA_COLORS[persona] } as CSSProperties}
+                  style={
+                    { "--accent": PERSONA_COLORS[persona] } as CSSProperties
+                  }
                 >
                   {PERSONA_ICONS[persona]}
                 </span>
@@ -127,7 +142,9 @@ export function PersonaSelector() {
                   <strong>{t(content.title)}</strong>
                   <small>{content.label}</small>
                 </span>
-                <span className="com-persona-tab-num">{String(idx + 1).padStart(2, "0")}</span>
+                <span className="com-persona-tab-num">
+                  {String(idx + 1).padStart(2, "0")}
+                </span>
               </Button>
             );
           })}
@@ -185,7 +202,9 @@ export function PersonaSelector() {
               <a
                 href={current.href}
                 className="com-btn com-btn--primary"
-                style={{ "--accent": PERSONA_COLORS[selected] } as CSSProperties}
+                style={
+                  { "--accent": PERSONA_COLORS[selected] } as CSSProperties
+                }
               >
                 {t("commercial.investorOverview.personaSelectorLearnMore")}
                 <svg
