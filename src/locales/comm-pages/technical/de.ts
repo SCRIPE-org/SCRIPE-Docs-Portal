@@ -16,7 +16,7 @@ export const de = {
         "Transparente, reale Leistungsmetriken, Optimierungsstrategien und Fähigkeiten zur horizontalen Skalierung.",
       frontendTitle: "Next.js Rendering-Engine",
       intro:
-        "SCRIPE ist nicht nur skalierbar, es ist explosiv schnell. Durch die Nutzung der neuesten Leistungsverbesserungen von .NET 9 und aggressives verteiltes Caching bewältigt die Plattform massive gleichzeitige Lasten mit Effizienz auf Hardware-Niveau.",
+        "SCRIPE ist nicht nur skalierbar, es ist explosiv schnell. Durch die Nutzung der neuesten Leistungsverbesserungen von .NET 10 und aggressives verteiltes Caching bewältigt die Plattform massive gleichzeitige Lasten mit Effizienz auf Hardware-Niveau.",
       scaleTitle: "Unendliche horizontale Skalierung",
       tip: "Performance-Hinweis: Die enthaltenen mehrstufigen Dockerfiles garantieren die absolut kleinsten Container-Footprints, wodurch Instanz-Cluster in Millisekunden automatisch skalieren können.",
       title: "Performance Benchmarks",

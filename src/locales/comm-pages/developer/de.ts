@@ -136,7 +136,7 @@ export const de = {
       prereqTitle: "Systemvoraussetzungen",
       quickStartTitle: "Der 15-Minuten Quick Start",
       step1Content:
-        "Stellen Sie sicher, dass das .NET 9 SDK, Node.js 20+ und Ihre bevorzugte Docker-Engine installiert und global auf Ihrem Entwicklungsrechner zugänglich sind.",
+        "Stellen Sie sicher, dass das .NET 10 SDK, Node.js 20+ und Ihre bevorzugte Docker-Engine installiert und global auf Ihrem Entwicklungsrechner zugänglich sind.",
       step1Title: "1. Verifizierung der Toolchain",
       step2Content:
         "Führen Sie das proprietäre SCRIPE-Initialisierungsskript aus. Dies stellt automatisch lokale Entwicklungszertifikate bereit, führt anfängliche EF Core-Migrationen aus und generiert den Root-SuperAdmin-Mandanten.",

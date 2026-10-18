@@ -246,7 +246,7 @@ export const zh = {
         "架构说明：SCRIPE 刻意避开了处于“Alpha”阶段的激进前沿框架。所选择的每项技术背后都有庞大的企业级支持，从而确保未来 15 年的可用性。",
       infraTitle: "DevOps 与部署基础架构",
       intro:
-        "我们不重新发明轮子。SCRIPE 充当终极的架构粘合剂，无缝地将绝对同类最佳的、经过实战检验的现代框架（.NET 9、Next.js 15、React 19）整合为一个单一且凝聚的企业级愿景。",
+        "我们不重新发明轮子。SCRIPE 充当终极的架构粘合剂，无缝地将绝对同类最佳的、经过实战检验的现代框架（.NET 10、Next.js 15、React 19）整合为一个单一且凝聚的企业级愿景。",
       title: "企业级技术栈",
       tblBackHeader1: "技术",
       tblBackHeader2: "版本",

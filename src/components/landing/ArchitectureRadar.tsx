@@ -28,7 +28,7 @@ const NODES: NodeData[] = [
     id: "backend",
     name: "SCRIPE Backend",
     role: "Core Modular Monolith & CQRS",
-    tech: ".NET 9, AstraFlow, EF Core",
+    tech: ".NET 10, AstraFlow, EF Core",
     protocol: "Result<T>, Outbox Pattern, PBAC",
     icon: Server,
     x: 50,

@@ -129,7 +129,7 @@ export const ar = {
       prereqTitle: "متطلبات النظام",
       quickStartTitle: "البدء السريع في 15 دقيقة",
       step1Content:
-        "تأكد من تثبيت وتوفر .NET 9 SDK، و Node.js 20+، ومحرك Docker المفضل لديك بشكل عام على جهاز التطوير الخاص بك.",
+        "تأكد من تثبيت وتوفر .NET 10 SDK، و Node.js 20+، ومحرك Docker المفضل لديك بشكل عام على جهاز التطوير الخاص بك.",
       step1Title: "1. التحقق من سلسلة الأدوات (Toolchain)",
       step2Content:
         "قم بتشغيل نص التهيئة الخاص بـ SCRIPE. سيقوم تلقائياً بتوفير شهادات تطوير محلية (Certificates)، وتنفيذ عمليات ترحيل (Migrations) أولية لـ EF Core، وبذر (Seed) وحدة (SuperAdmin) الجذري.",

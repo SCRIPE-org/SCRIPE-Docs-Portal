@@ -45,7 +45,7 @@ scripe db update -m Venue --all-providers
 scripe check --quick`,
     output: [
       "[INFO] Resolving environment: development",
-      "[BE]   Kestrel (.NET 9) Host listening on https://localhost:5001",
+      "[BE]   Kestrel (.NET 10) Host listening on https://localhost:5001",
       "[FE]   Next.js 16 Web Portal ready on http://localhost:3000",
       "[DOCS] Next.js Docs Portal ready on http://localhost:3002",
       "[SYS]  Dual-Mode schema isolation: active (venue.*)",

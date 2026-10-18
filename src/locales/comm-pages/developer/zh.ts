@@ -119,7 +119,7 @@ export const zh = {
       prereqTitle: "系统前置要求",
       quickStartTitle: "15 分钟快速入门",
       step1Content:
-        "确保您的开发机器上已安装并可全局访问 .NET 9 SDK、Node.js 20+ 以及您首选的 Docker 引擎。",
+        "确保您的开发机器上已安装并可全局访问 .NET 10 SDK、Node.js 20+ 以及您首选的 Docker 引擎。",
       step1Title: "1. 工具链验证",
       step2Content:
         "执行专有的 SCRIPE 初始化脚本。这会自动配置本地开发证书、执行初始的 EF Core 迁移并生成根超级管理员 (SuperAdmin) 租户。",

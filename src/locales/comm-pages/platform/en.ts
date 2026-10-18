@@ -257,7 +257,7 @@ export const en = {
         "Architecture Note: SCRIPE deliberately avoids bleeding-edge alpha frameworks. Every technology chosen has a massive enterprise backing, ensuring support for the next 15 years.",
       infraTitle: "DevOps & Deployment Infrastructure",
       intro:
-        "We don't reinvent the wheel. SCRIPE acts as the ultimate architectural glue, seamlessly integrating the absolute best-in-class, battle-tested modern frameworks (.NET 9, Next.js 15, React 19) into a singular, cohesive enterprise vision.",
+        "We don't reinvent the wheel. SCRIPE acts as the ultimate architectural glue, seamlessly integrating the absolute best-in-class, battle-tested modern frameworks (.NET 10, Next.js 15, React 19) into a singular, cohesive enterprise vision.",
       title: "The Enterprise Technology Stack",
       tblBackHeader1: "Technology",
       tblBackHeader2: "Version",

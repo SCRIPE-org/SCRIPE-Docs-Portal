@@ -19,8 +19,6 @@ import {
   BookOpen,
   Boxes,
   Repeat,
-  Copy,
-  Check,
   Cpu,
   Lock,
   Globe2,
@@ -34,22 +32,11 @@ import { docsContainer } from "@/di";
 export default function DocsLandingHub() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [copiedCli, setCopiedCli] = useState<string | null>(null);
   const shouldReduceMotion = useReducedMotion();
 
   // Search handler using repository
   const handleSearch = (query: string) => {
     return docsContainer.docsRepository.search(query);
-  };
-
-  const copyQuickCommand = async (cmd: string) => {
-    try {
-      await navigator.clipboard.writeText(cmd);
-      setCopiedCli(cmd);
-      setTimeout(() => setCopiedCli(null), 2000);
-    } catch {
-      // fallback
-    }
   };
 
   // Easing curve (Emil Kowalski style spring physics)
@@ -176,42 +163,6 @@ export default function DocsLandingHub() {
               </kbd>
             </button>
           </motion.div>
-
-          {/* Quickstart Action Command Bar */}
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-wrap items-center justify-center gap-2.5 text-xs font-mono"
-          >
-            <span className="text-muted-foreground font-medium">
-              Quickstart:
-            </span>
-            {[
-              { cmd: "scripe dev docs", label: "dev docs" },
-              { cmd: "scripe build docs", label: "build docs" },
-              { cmd: "scripe check", label: "check gate" },
-            ].map(({ cmd, label }) => {
-              const isCopied = copiedCli === cmd;
-              return (
-                <button
-                  key={cmd}
-                  onClick={() => copyQuickCommand(cmd)}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-muted/40 hover:bg-muted text-foreground transition-all hover:border-primary/40 group cursor-pointer shadow-2xs"
-                  title={`Copy "${cmd}" to clipboard`}
-                >
-                  <span className="text-primary font-bold">$</span>
-                  <span>{cmd}</span>
-                  {isCopied ? (
-                    <Check size={12} className="text-emerald-500" />
-                  ) : (
-                    <Copy
-                      size={12}
-                      className="text-muted-foreground group-hover:text-foreground transition-colors"
-                    />
-                  )}
-                </button>
-              );
-            })}
-          </motion.div>
         </motion.div>
 
         {/* ── Signature Dual Portal Gateway Bento ───────────────────── */}
@@ -254,7 +205,7 @@ export default function DocsLandingHub() {
                 <div className="flex flex-wrap gap-2 mb-8">
                   {[
                     "AstraFlow CQRS",
-                    ".NET 9 Host",
+                    ".NET 10 Host",
                     "Multi-DB (SQL/PG/Oracle)",
                     "Result<T>",
                     "PBAC Security",

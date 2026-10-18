@@ -140,7 +140,7 @@ export const es = {
       prereqTitle: "Requisitos del Sistema",
       quickStartTitle: "El Inicio Rápido de 15 Minutos",
       step1Content:
-        "Asegúrese de que el SDK de .NET 9, Node.js 20+ y su motor de Docker preferido estén instalados y sean accesibles a nivel global en su máquina de desarrollo.",
+        "Asegúrese de que el SDK de .NET 10, Node.js 20+ y su motor de Docker preferido estén instalados y sean accesibles a nivel global en su máquina de desarrollo.",
       step1Title: "1. Verificación del Conjunto de Herramientas (Toolchain)",
       step2Content:
         "Ejecute el script de inicialización propietario de SCRIPE. Esto proporciona automáticamente certificados de desarrollo local, ejecuta las migraciones iniciales de EF Core y siembra (seeds) al inquilino raíz SuperAdmin.",

@@ -16,7 +16,7 @@ export const fr = {
         "Des métriques de performances réelles et transparentes, des stratégies d'optimisation et des capacités de mise à l'échelle horizontale.",
       frontendTitle: "Moteur de Rendu Next.js",
       intro:
-        "SCRIPE n'est pas seulement évolutif ; il est explosivement rapide. En utilisant les dernières améliorations de performances de .NET 9 et une mise en cache distribuée agressive, la plateforme gère des charges simultanées massives avec une efficacité de niveau matériel.",
+        "SCRIPE n'est pas seulement évolutif ; il est explosivement rapide. En utilisant les dernières améliorations de performances de .NET 10 et une mise en cache distribuée agressive, la plateforme gère des charges simultanées massives avec une efficacité de niveau matériel.",
       scaleTitle: "Échelle Horizontale Infinie",
       tip: "Note de performance : Les Dockerfiles multi-étapes inclus garantissent les empreintes de conteneur les plus réduites possibles, permettant aux clusters d'instances de s'adapter automatiquement en quelques millisecondes.",
       title: "Benchmarks de Performances",

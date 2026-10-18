@@ -448,7 +448,7 @@ export const en = {
       aHowLongSetup:
         "Getting started with SCRIPE is effortless. Sign up online, and our onboarding team will set up your workspace within 24 hours. Your platform comes pre-configured with all selected modules, user management, and security settings ready to go. Most teams are fully productive from day one.",
       q4: "What technology stack does SCRIPE use?",
-      a4: "The backend is built on ASP.NET Core (.NET 9) with Entity Framework Core, SCRIPE mediator (CQRS), and FluentValidation. The frontend uses Next.js 15 with TypeScript, TanStack Query, Zustand, and a custom design system built on Radix UI. Real-time features are powered by SignalR WebSockets, and the platform supports Docker containerization for deployment.",
+      a4: "The backend is built on ASP.NET Core (.NET 10) with Entity Framework Core, SCRIPE mediator (CQRS), and FluentValidation. The frontend uses Next.js 15 with TypeScript, TanStack Query, Zustand, and a custom design system built on Radix UI. Real-time features are powered by SignalR WebSockets, and the platform supports Docker containerization for deployment.",
       q5: "Can SCRIPE scale from monolith to microservices?",
       a5: "Yes — this is a core design principle. SCRIPE uses strict module boundaries with no cross-module imports. Each module follows Clean Architecture with its own domain, data, and presentation layers. You can start as a monolith for simplicity, move to a gateway topology to separate frontend/backend, and eventually extract individual modules into independent microservices — all without refactoring your code.",
       q6: "What databases are supported?",

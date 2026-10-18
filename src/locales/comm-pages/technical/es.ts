@@ -16,7 +16,7 @@ export const es = {
         "Métricas de rendimiento transparentes en el mundo real, estrategias de optimización y capacidades de escalado horizontal.",
       frontendTitle: "Motor de Renderizado Next.js",
       intro:
-        "SCRIPE no es solo escalable; es explosivamente rápida. Al utilizar las últimas mejoras de rendimiento de .NET 9 y el agresivo almacenamiento en caché distribuido, la plataforma maneja cargas concurrentes masivas con eficiencia a nivel de hardware.",
+        "SCRIPE no es solo escalable; es explosivamente rápida. Al utilizar las últimas mejoras de rendimiento de .NET 10 y el agresivo almacenamiento en caché distribuido, la plataforma maneja cargas concurrentes masivas con eficiencia a nivel de hardware.",
       scaleTitle: "Escala Horizontal Infinita",
       tip: "Nota de rendimiento: Los Dockerfiles de múltiples etapas incluidos garantizan la huella de contenedor absolutamente más pequeña, permitiendo que los clústeres de instancias se escalen automáticamente en milisegundos.",
       title: "Métricas de Rendimiento",

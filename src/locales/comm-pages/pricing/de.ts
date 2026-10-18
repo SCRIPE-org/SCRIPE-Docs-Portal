@@ -422,7 +422,7 @@ export const de = {
     },
     faq: {
       q1: "Was ist SCRIPE?",
-      a1: "SCRIPE ist eine modulare Enterprise-ERP-Plattform, basierend auf .NET 9 und Next.js 15. Sie bietet ein produktionsreifes Fundament mit Clean Architecture, Mandantenfähigkeit, rollenbasierter Zugriffskontrolle (RBAC), Echtzeitfunktionen und einem wachsenden Katalog an Geschäftsmodulen – alles aus einer einzigen Codebasis, die Monolith-, Gateway- und Microservice-Deployments unterstützt.",
+      a1: "SCRIPE ist eine modulare Enterprise-ERP-Plattform, basierend auf .NET 10 und Next.js 15. Sie bietet ein produktionsreifes Fundament mit Clean Architecture, Mandantenfähigkeit, rollenbasierter Zugriffskontrolle (RBAC), Echtzeitfunktionen und einem wachsenden Katalog an Geschäftsmodulen – alles aus einer einzigen Codebasis, die Monolith-, Gateway- und Microservice-Deployments unterstützt.",
       q2: "Für wen ist SCRIPE konzipiert?",
       a2: "SCRIPE wurde für Entwicklungsteams und Organisationen entwickelt, die Unternehmensanwendungen schnell auf den Markt bringen müssen, ohne die architektonische Qualität zu opfern. Egal, ob Sie ein Startup sind, das eine skalierbare Grundlage sucht, ein Softwarehaus, das Kundenprojekte liefert, oder ein Unternehmen, das Legacy-Systeme modernisiert – SCRIPE eliminiert Monate an Boilerplate-Arbeit, sodass Sie sich auf die Geschäftslogik konzentrieren können.",
       q3: "Wie unterscheidet sich SCRIPE von anderen ERP-Plattformen?",
@@ -434,7 +434,7 @@ export const de = {
       aHowLongSetup:
         "Sie können SCRIPE lokal in unter 15 Minuten ausführen. Klonen Sie das Repository, konfigurieren Sie Ihre Datenbankverbindung (SQL Server, Oracle, PostgreSQL oder SQLite), führen Sie die Migrationen aus und starten Sie den Entwicklungsserver. Das scripe-cli Tool beschleunigt die Entwicklung weiter, indem es neue Module, Entitäten und Boilerplate-Code in Sekunden generiert (Scaffolding). Die meisten Teams sind bereits am ersten Tag produktiv.",
       q4: "Welchen Technologie-Stack verwendet SCRIPE?",
-      a4: "Das Backend basiert auf ASP.NET Core (.NET 9) mit Entity Framework Core, SCRIPE mediator (CQRS) und FluentValidation. Das Frontend nutzt Next.js 15 mit TypeScript, TanStack Query, Zustand und einem benutzerdefinierten Designsystem auf Basis von Radix UI. Echtzeitfunktionen werden von SignalR WebSockets betrieben, und die Plattform unterstützt die Docker-Containerisierung für Deployments.",
+      a4: "Das Backend basiert auf ASP.NET Core (.NET 10) mit Entity Framework Core, SCRIPE mediator (CQRS) und FluentValidation. Das Frontend nutzt Next.js 15 mit TypeScript, TanStack Query, Zustand und einem benutzerdefinierten Designsystem auf Basis von Radix UI. Echtzeitfunktionen werden von SignalR WebSockets betrieben, und die Plattform unterstützt die Docker-Containerisierung für Deployments.",
       q5: "Kann SCRIPE vom Monolithen zu Microservices skalieren?",
       a5: "Ja – das ist ein zentrales Designprinzip. SCRIPE verwendet strikte Modulgrenzen ohne modulübergreifende Imports. Jedes Modul folgt der Clean Architecture mit eigenen Domain-, Daten- und Präsentationsschichten. Sie können der Einfachheit halber als Monolith beginnen, zu einer Gateway-Topologie wechseln, um Frontend/Backend zu trennen, und schließlich einzelne Module zu unabhängigen Microservices extrahieren – alles ohne Refactoring Ihres Codes.",
       q6: "Welche Datenbanken werden unterstützt?",

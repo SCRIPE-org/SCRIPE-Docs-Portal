@@ -257,7 +257,7 @@ export const es = {
         "Nota de Arquitectura: SCRIPE evita deliberadamente frameworks en fase 'alfa' o de vanguardia experimental. Cada tecnología elegida tiene un respaldo corporativo masivo, asegurando soporte para los próximos 15 años.",
       infraTitle: "DevOps e Infraestructura de Despliegue",
       intro:
-        "No reinventamos la rueda. SCRIPE actúa como el pegamento arquitectónico definitivo, integrando a la perfección los mejores frameworks modernos probados en batalla (.NET 9, Next.js 15, React 19) en una visión empresarial única y cohesiva.",
+        "No reinventamos la rueda. SCRIPE actúa como el pegamento arquitectónico definitivo, integrando a la perfección los mejores frameworks modernos probados en batalla (.NET 10, Next.js 15, React 19) en una visión empresarial única y cohesiva.",
       title: "El Stack Tecnológico Empresarial",
       tblBackHeader1: "Tecnología",
       tblBackHeader2: "Versión",
