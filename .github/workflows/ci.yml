@@ -39,10 +39,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Check code formatting (Prettier)
-        run: pnpm exec prettier --check src/
-
-      - name: Lint codebase (ESLint)
+      - name: Lint codebase (oxlint)
         run: pnpm run lint
 
       - name: Run test suite (Vitest)
