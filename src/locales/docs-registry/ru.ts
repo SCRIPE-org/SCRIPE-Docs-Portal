@@ -13,6 +13,7 @@ import { ru as frontend } from "../pages/frontend/ru";
 import { ru as infrastructure } from "../pages/infrastructure/ru";
 import { ru as tutorials } from "../pages/tutorials/ru";
 import { ru as apiReference } from "../pages/api-reference/ru";
+import { ru as devTools } from "../pages/dev-tools/ru";
 
 import { ru as commWhyScripe } from "../comm-pages/why-scripe/ru";
 import { ru as commPlatform } from "../comm-pages/platform/ru";
@@ -85,5 +86,6 @@ export const allDocsRu: Record<string, any> = mergeAll(
   pageWebhooks,
   pageMarketplace,
   pageEcosystemRecycleBin,
-  pageCustomFields
+  pageCustomFields,
+  devTools
 );

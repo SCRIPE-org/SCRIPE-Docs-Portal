@@ -13,6 +13,7 @@ import { fr as frontend } from "../pages/frontend/fr";
 import { fr as infrastructure } from "../pages/infrastructure/fr";
 import { fr as tutorials } from "../pages/tutorials/fr";
 import { fr as apiReference } from "../pages/api-reference/fr";
+import { fr as devTools } from "../pages/dev-tools/fr";
 
 import { fr as commWhyScripe } from "../comm-pages/why-scripe/fr";
 import { fr as commPlatform } from "../comm-pages/platform/fr";
@@ -85,5 +86,6 @@ export const allDocsFr: Record<string, any> = mergeAll(
   pageWebhooks,
   pageMarketplace,
   pageEcosystemRecycleBin,
-  pageCustomFields
+  pageCustomFields,
+  devTools
 );

@@ -68,6 +68,7 @@ export const ru = {
     security: "Безопасность",
     apiReference: "Справочник API",
     infrastructure: "Инфраструктура",
+    devTools: "Инструменты разработки и Studio",
     commercialWhyScripe: "Почему SCRIPE",
     commercialPlatform: "Обзор платформы",
     commercialEnterprise: "Возможности Enterprise",

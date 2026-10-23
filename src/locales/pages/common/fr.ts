@@ -68,6 +68,7 @@ export const fr = {
     security: "Sécurité",
     apiReference: "Référence API",
     infrastructure: "Infrastructure",
+    devTools: "Outils de Développement & Studio",
     commercialWhyScripe: "Pourquoi SCRIPE",
     commercialPlatform: "Aperçu de la Plateforme",
     commercialEnterprise: "Fonctionnalités Enterprise",

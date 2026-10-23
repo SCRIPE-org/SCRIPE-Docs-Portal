@@ -66,6 +66,7 @@ export const de = {
     security: "Sicherheit",
     apiReference: "API-Referenz",
     infrastructure: "Infrastruktur",
+    devTools: "Entwickler-Tools & Studio",
     modules: "Module",
     entitlements: "Berechtigungen",
     commercialWhyScripe: "Warum SCRIPE",

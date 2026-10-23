@@ -32,18 +32,37 @@ export function DocsMobileNav({
 }: DocsMobileNavProps) {
   const { t } = useDocsI18n();
 
+  function getAllItemSlugs(item: DocNavItem): string[] {
+    const slugs: string[] = [];
+    if (item.slug) slugs.push(item.slug);
+    if (item.children) {
+      for (const c of item.children) {
+        slugs.push(...getAllItemSlugs(c));
+      }
+    }
+    return slugs;
+  }
+
+  function collectSubGroupStates(
+    items: DocNavItem[],
+    active: string,
+    out: Record<string, boolean>
+  ) {
+    for (const item of items) {
+      if (item.children && item.children.length > 0) {
+        const childSlugs = getAllItemSlugs(item);
+        out[item.id] = childSlugs.includes(active);
+        collectSubGroupStates(item.children, active, out);
+      }
+    }
+  }
+
   // Track which sub-groups are expanded
   const [subExpanded, setSubExpanded] = useState<Record<string, boolean>>(
     () => {
       const initial: Record<string, boolean> = {};
       for (const cat of categories) {
-        for (const item of cat.items) {
-          if (item.children) {
-            const childSlugs = item.children.map((c) => c.slug).filter(Boolean);
-            const hasActive = childSlugs.includes(activeSlug);
-            initial[item.id] = hasActive;
-          }
-        }
+        collectSubGroupStates(cat.items, activeSlug, initial);
       }
       return initial;
     },
@@ -56,14 +75,7 @@ export function DocsMobileNav({
     setSubExpanded((prev) => {
       const next = { ...prev };
       for (const cat of categories) {
-        for (const item of cat.items) {
-          if (item.children) {
-            const childSlugs = item.children.map((c) => c.slug).filter(Boolean);
-            if (childSlugs.includes(activeSlug)) {
-              next[item.id] = true;
-            }
-          }
-        }
+        collectSubGroupStates(cat.items, activeSlug, next);
       }
       return next;
     });
@@ -80,51 +92,29 @@ export function DocsMobileNav({
     return `${basePath}/${cleanSlug}`;
   };
 
-  const renderItem = (item: DocNavItem) => {
+  const renderItem = (item: DocNavItem, depth = 1) => {
     // ─── Sub-group with children ─────────────────────────────
     if (item.children && item.children.length > 0) {
       const isSubOpen = subExpanded[item.id] ?? false;
-      const subItemsHeight = isSubOpen
-        ? `${item.children.length * 36}px`
-        : "0px";
+      const padStart = depth === 1 ? "2rem" : `${1.75 + (depth - 1) * 0.75}rem`;
 
       return (
         <div key={item.id} className="docs-sidebar-subgroup">
           <button
             className="docs-sidebar-subgroup-btn"
+            style={{ paddingInlineStart: padStart }}
             onClick={() => toggleSubGroup(item.id)}
             data-expanded={isSubOpen}
           >
-            {item.icon ? (docsIcons[item.icon]?.({ size: 16 }) ?? null) : null}
-            <span style={{ flex: 1 }}>{t(item.titleKey)}</span>
+            {item.icon ? (docsIcons[item.icon]?.({ size: Math.max(13, 16 - (depth - 1) * 2) }) ?? null) : null}
+            <span style={{ flex: 1, fontWeight: depth === 1 ? 600 : 500 }}>{t(item.titleKey)}</span>
             <ChevronRight size={14} aria-hidden="true" />
           </button>
           <div
             className="docs-sidebar-subgroup-items"
-            style={{ maxHeight: subItemsHeight }}
+            style={{ maxHeight: isSubOpen ? "3000px" : "0px", overflow: "hidden" }}
           >
-            {item.children.map((child) => {
-              if (!child.slug) return null;
-              const isActive = child.slug === activeSlug;
-              return (
-                <Link
-                  key={child.id}
-                  href={resolveHref(child.slug)}
-                  prefetch={false}
-                  className="docs-sidebar-item docs-sidebar-item--nested"
-                  data-active={isActive}
-                  onClick={onClose}
-                >
-                  {child.icon
-                    ? (docsIcons[child.icon]?.({
-                        size: 14,
-                        className: "docs-sidebar-item-icon",
-                      }) ?? null)
-                    : null}
-                  <span>{t(child.titleKey)}</span>
-                </Link>
-              );
-            })}
+            {item.children.map((child) => renderItem(child, depth + 1))}
           </div>
         </div>
       );
@@ -138,7 +128,8 @@ export function DocsMobileNav({
         key={item.id}
         href={resolveHref(item.slug)}
         prefetch={false}
-        className="docs-sidebar-item"
+        className={`docs-sidebar-item ${depth > 1 ? "docs-sidebar-item--nested" : ""}`}
+        style={depth > 1 ? { paddingInlineStart: `${2.25 + (depth - 1) * 0.85}rem` } : undefined}
         data-active={isActive}
         onClick={onClose}
       >

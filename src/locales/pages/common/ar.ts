@@ -187,6 +187,7 @@ export const ar = {
     security: "الأمان",
     apiReference: "مرجع واجهة برمجة التطبيقات (API)",
     infrastructure: "البنية التحتية",
+    devTools: "أدوات التطوير والاستوديو",
     commercialWhyScripe: "لماذا SCRIPE",
     commercialPlatform: "نظرة عامة على المنصة",
     commercialEnterprise: "ميزات الشركات",

@@ -13,7 +13,7 @@ export interface DocNavItem {
   /** Icon name (for top-level categories) */
   icon?: string;
   /** Sort order */
-  order: number;
+  order?: number;
   /** Child items (sub-categories or pages) */
   children?: DocNavItem[];
 }

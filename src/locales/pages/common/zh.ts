@@ -68,6 +68,7 @@ export const zh = {
     security: "安全",
     apiReference: "API 参考",
     infrastructure: "基础设施",
+    devTools: "开发者工具与工作台",
     commercialWhyScripe: "为什么选择 SCRIPE",
     commercialPlatform: "平台概述",
     commercialEnterprise: "企业级特性",

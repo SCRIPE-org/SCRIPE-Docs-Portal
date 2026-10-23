@@ -89,6 +89,7 @@ describe("Deep Audit of All Page Content Keys Across All 7 Languages", () => {
         "architecture.",
         "tutorials.",
         "frontend.",
+        "devTools.",
       ];
       return prefixes.some((p) => str.startsWith(p));
     }

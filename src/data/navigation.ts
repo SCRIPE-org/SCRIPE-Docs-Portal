@@ -1246,70 +1246,517 @@ export const navigationData: DocCategoryData[] = [
         order: 5,
       },
       {
-        id: "infra-scripe-cli",
-        titleKey: "infrastructure.scripeCli.title",
-        slug: "infrastructure/scripe-cli",
-        icon: "terminal",
-        order: 6,
-      },
-      {
         id: "infra-health",
         titleKey: "infrastructure.healthChecks.title",
         slug: "infrastructure/health-checks",
         icon: "activity",
-        order: 7,
+        order: 6,
       },
       {
         id: "infra-observability",
         titleKey: "infrastructure.observability.title",
         slug: "infrastructure/observability",
         icon: "bar-chart",
-        order: 8,
+        order: 7,
       },
       {
         id: "infra-audit-trail",
         titleKey: "infrastructure.auditTrail.title",
         slug: "infrastructure/audit-trail",
         icon: "file-text",
-        order: 9,
+        order: 8,
       },
       {
         id: "infra-load-testing",
         titleKey: "infrastructure.loadTesting.title",
         slug: "infrastructure/load-testing",
         icon: "cpu",
-        order: 10,
+        order: 9,
       },
       {
         id: "infra-cache-invalidation",
         titleKey: "infrastructure.cacheInvalidation.title",
         slug: "infrastructure/cache-invalidation",
         icon: "rotate-ccw",
-        order: 11,
+        order: 10,
       },
       {
         id: "infra-outbox-pattern",
         titleKey: "infrastructure.outboxPattern.title",
         slug: "infrastructure/outbox-pattern",
         icon: "mail",
-        order: 12,
+        order: 11,
       },
       {
         id: "infra-shared-foundations",
         titleKey: "infrastructure.sharedFoundations.title",
         slug: "infrastructure/shared-foundations",
         icon: "layers",
-        order: 13,
+        order: 12,
       },
     ],
   },
 
-  // ─── 24. Frontend System ────────────────────────────────────
+  // ─── 24. Dev Tools ──────────────────────────────────────────
+  {
+    id: "dev-tools",
+    titleKey: "nav.devTools",
+    icon: "terminal",
+    order: 24,
+    items: [
+      {
+        id: "dt-cli",
+        titleKey: "devTools.cli.title",
+        icon: "terminal",
+        order: 1,
+        children: [
+          {
+            id: "dt-cli-scaffolding",
+            titleKey: "devTools.cli.scaffoldingGroup.title",
+            icon: "boxes",
+            children: [
+              {
+                id: "scaffolding-module",
+                titleKey: "devTools.cli.scaffModule.title",
+                slug: "dev-tools/cli/scaffolding-module",
+                icon: "boxes",
+                order: 1,
+              },
+              {
+                id: "scaffolding-blueprint",
+                titleKey: "devTools.cli.scaffBlueprint.title",
+                slug: "dev-tools/cli/scaffolding-blueprint",
+                icon: "file-code",
+                order: 2,
+              },
+            ],
+          },
+          {
+            id: "dt-cli-codegen",
+            titleKey: "devTools.cli.codegenGroup.title",
+            icon: "code",
+            children: [
+              {
+                id: "codegen-domain",
+                titleKey: "devTools.cli.codeDomain.title",
+                slug: "dev-tools/cli/codegen-domain",
+                icon: "code",
+                order: 1,
+              },
+              {
+                id: "codegen-application",
+                titleKey: "devTools.cli.codeApp.title",
+                slug: "dev-tools/cli/codegen-application",
+                icon: "workflow",
+                order: 2,
+              },
+              {
+                id: "codegen-ui",
+                titleKey: "devTools.cli.codeUi.title",
+                slug: "dev-tools/cli/codegen-ui",
+                icon: "monitor",
+                order: 3,
+              },
+            ],
+          },
+          {
+            id: "dt-cli-database",
+            titleKey: "devTools.cli.dbGroup.title",
+            icon: "database",
+            children: [
+              {
+                id: "db-migrations",
+                titleKey: "devTools.cli.dbMigrations.title",
+                slug: "dev-tools/cli/db-migrations",
+                icon: "database",
+                order: 1,
+              },
+              {
+                id: "db-operations",
+                titleKey: "devTools.cli.dbOps.title",
+                slug: "dev-tools/cli/db-operations",
+                icon: "hard-drive",
+                order: 2,
+              },
+            ],
+          },
+          {
+            id: "dt-cli-build-dev",
+            titleKey: "devTools.cli.buildDevGroup.title",
+            icon: "cpu",
+            children: [
+              {
+                id: "build-servers",
+                titleKey: "devTools.cli.buildServers.title",
+                slug: "dev-tools/cli/build-servers",
+                icon: "server",
+                order: 1,
+              },
+              {
+                id: "packages-env",
+                titleKey: "devTools.cli.packagesEnv.title",
+                slug: "dev-tools/cli/packages-env",
+                icon: "package",
+                order: 2,
+              },
+            ],
+          },
+          {
+            id: "dt-cli-quality",
+            titleKey: "devTools.cli.qualityGroup.title",
+            icon: "shield-check",
+            children: [
+              {
+                id: "quality-check",
+                titleKey: "devTools.cli.qualityCheck.title",
+                slug: "dev-tools/cli/quality-check",
+                icon: "check-square",
+                order: 1,
+              },
+              {
+                id: "quality-tests",
+                titleKey: "devTools.cli.qualityTests.title",
+                slug: "dev-tools/cli/quality-tests",
+                icon: "shield-check",
+                order: 2,
+              },
+            ],
+          },
+          {
+            id: "dt-cli-docker",
+            titleKey: "devTools.cli.dockerGroup.title",
+            icon: "hard-drive",
+            children: [
+              {
+                id: "docker-compose",
+                titleKey: "devTools.cli.dockerCompose.title",
+                slug: "dev-tools/cli/docker-compose",
+                icon: "hard-drive",
+                order: 1,
+              },
+            ],
+          },
+          {
+            id: "dt-cli-security",
+            titleKey: "devTools.cli.secGroup.title",
+            icon: "lock",
+            children: [
+              {
+                id: "crypto-envelope",
+                titleKey: "devTools.cli.cryptoEnvelope.title",
+                slug: "dev-tools/cli/crypto-envelope",
+                icon: "key",
+                order: 1,
+              },
+              {
+                id: "security-audit",
+                titleKey: "devTools.cli.secAudit.title",
+                slug: "dev-tools/cli/security-audit",
+                icon: "lock",
+                order: 2,
+              },
+            ],
+          },
+          {
+            id: "dt-cli-tenants",
+            titleKey: "devTools.cli.tenantsGroup.title",
+            icon: "building-2",
+            children: [
+              {
+                id: "tenant-management",
+                titleKey: "devTools.cli.tenantMgmt.title",
+                slug: "dev-tools/cli/tenant-management",
+                icon: "building-2",
+                order: 1,
+              },
+              {
+                id: "cache-features",
+                titleKey: "devTools.cli.cacheFeat.title",
+                slug: "dev-tools/cli/cache-features",
+                icon: "zap",
+                order: 2,
+              },
+            ],
+          },
+          {
+            id: "dt-cli-locales",
+            titleKey: "devTools.cli.localesGroup.title",
+            icon: "globe",
+            children: [
+              {
+                id: "localization-engine",
+                titleKey: "devTools.cli.locEngine.title",
+                slug: "dev-tools/cli/localization-engine",
+                icon: "globe",
+                order: 1,
+              },
+            ],
+          },
+          {
+            id: "dt-cli-env",
+            titleKey: "devTools.cli.envGroup.title",
+            icon: "settings",
+            children: [
+              {
+                id: "environment-config",
+                titleKey: "devTools.cli.envConfig.title",
+                slug: "dev-tools/cli/environment-config",
+                icon: "settings",
+                order: 1,
+              },
+            ],
+          },
+          {
+            id: "dt-cli-diagnostics",
+            titleKey: "devTools.cli.diagGroup.title",
+            icon: "activity",
+            children: [
+              {
+                id: "platform-diagnostics",
+                titleKey: "devTools.cli.platDiag.title",
+                slug: "dev-tools/cli/platform-diagnostics",
+                icon: "activity",
+                order: 1,
+              },
+              {
+                id: "arch-intelligence",
+                titleKey: "devTools.cli.archIntel.title",
+                slug: "dev-tools/cli/arch-intelligence",
+                icon: "compass",
+                order: 2,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "dt-studio",
+        titleKey: "devTools.studio.title",
+        icon: "layout",
+        order: 2,
+        children: [
+          {
+            id: "dt-studio-core",
+            titleKey: "devTools.studio.coreGroup.title",
+            icon: "compass",
+            children: [
+              {
+                id: "studio-overview",
+                titleKey: "devTools.studio.overview.title",
+                slug: "dev-tools/studio/overview",
+                icon: "compass",
+                order: 1,
+              },
+              {
+                id: "studio-dashboard",
+                titleKey: "devTools.studio.dashboard.title",
+                slug: "dev-tools/studio/dashboard",
+                icon: "monitor",
+                order: 2,
+              },
+            ],
+          },
+          {
+            id: "dt-studio-design",
+            titleKey: "devTools.studio.designGroup.title",
+            icon: "layout-grid",
+            children: [
+              {
+                id: "studio-modules",
+                titleKey: "devTools.studio.modules.title",
+                slug: "dev-tools/studio/modules",
+                icon: "boxes",
+                order: 1,
+              },
+              {
+                id: "studio-schema-designer",
+                titleKey: "devTools.studio.schemaDesigner.title",
+                slug: "dev-tools/studio/schema-designer",
+                icon: "database",
+                order: 2,
+              },
+              {
+                id: "studio-property-builder",
+                titleKey: "devTools.studio.propBuilder.title",
+                slug: "dev-tools/studio/property-builder",
+                icon: "sliders",
+                order: 3,
+              },
+              {
+                id: "studio-live-ide",
+                titleKey: "devTools.studio.liveIde.title",
+                slug: "dev-tools/studio/live-ide",
+                icon: "code",
+                order: 4,
+              },
+            ],
+          },
+          {
+            id: "dt-studio-codegen",
+            titleKey: "devTools.studio.codegenGroup.title",
+            icon: "code",
+            children: [
+              {
+                id: "studio-generators",
+                titleKey: "devTools.studio.generators.title",
+                slug: "dev-tools/studio/generators",
+                icon: "code",
+                order: 1,
+              },
+            ],
+          },
+          {
+            id: "dt-studio-persistence",
+            titleKey: "devTools.studio.persistGroup.title",
+            icon: "database",
+            children: [
+              {
+                id: "studio-database",
+                titleKey: "devTools.studio.database.title",
+                slug: "dev-tools/studio/database",
+                icon: "database",
+                order: 1,
+              },
+            ],
+          },
+          {
+            id: "dt-studio-ops",
+            titleKey: "devTools.studio.opsGroup.title",
+            icon: "server",
+            children: [
+              {
+                id: "studio-servers",
+                titleKey: "devTools.studio.servers.title",
+                slug: "dev-tools/studio/servers",
+                icon: "server",
+                order: 1,
+              },
+              {
+                id: "studio-docker",
+                titleKey: "devTools.studio.docker.title",
+                slug: "dev-tools/studio/docker",
+                icon: "hard-drive",
+                order: 2,
+              },
+            ],
+          },
+          {
+            id: "dt-studio-config",
+            titleKey: "devTools.studio.configGroup.title",
+            icon: "settings",
+            children: [
+              {
+                id: "studio-environment",
+                titleKey: "devTools.studio.environment.title",
+                slug: "dev-tools/studio/environment",
+                icon: "settings",
+                order: 1,
+              },
+              {
+                id: "studio-packages",
+                titleKey: "devTools.studio.packages.title",
+                slug: "dev-tools/studio/packages",
+                icon: "package",
+                order: 2,
+              },
+            ],
+          },
+          {
+            id: "dt-studio-quality",
+            titleKey: "devTools.studio.qualityGroup.title",
+            icon: "shield-check",
+            children: [
+              {
+                id: "studio-quality-arch",
+                titleKey: "devTools.studio.qualityArch.title",
+                slug: "dev-tools/studio/quality-arch",
+                icon: "shield-check",
+                order: 1,
+              },
+              {
+                id: "studio-testing",
+                titleKey: "devTools.studio.testing.title",
+                slug: "dev-tools/studio/testing",
+                icon: "check-square",
+                order: 2,
+              },
+            ],
+          },
+          {
+            id: "dt-studio-security",
+            titleKey: "devTools.studio.secGroup.title",
+            icon: "lock",
+            children: [
+              {
+                id: "studio-localization",
+                titleKey: "devTools.studio.localization.title",
+                slug: "dev-tools/studio/localization",
+                icon: "globe",
+                order: 1,
+              },
+              {
+                id: "studio-enterprise-crypto",
+                titleKey: "devTools.studio.enterpriseCrypto.title",
+                slug: "dev-tools/studio/enterprise-crypto",
+                icon: "key",
+                order: 2,
+              },
+              {
+                id: "studio-security-tenants",
+                titleKey: "devTools.studio.secTenants.title",
+                slug: "dev-tools/studio/security-tenants",
+                icon: "lock",
+                order: 3,
+              },
+            ],
+          },
+          {
+            id: "dt-studio-terminal",
+            titleKey: "devTools.studio.terminalGroup.title",
+            icon: "terminal",
+            children: [
+              {
+                id: "studio-terminal-palette",
+                titleKey: "devTools.studio.termPalette.title",
+                slug: "dev-tools/studio/terminal-palette",
+                icon: "terminal",
+                order: 1,
+              },
+              {
+                id: "studio-monitoring",
+                titleKey: "devTools.studio.monitoring.title",
+                slug: "dev-tools/studio/monitoring",
+                icon: "activity",
+                order: 2,
+              },
+            ],
+          },
+          {
+            id: "dt-studio-internals",
+            titleKey: "devTools.studio.internalsGroup.title",
+            icon: "workflow",
+            children: [
+              {
+                id: "studio-engine-api",
+                titleKey: "devTools.studio.engineApi.title",
+                slug: "dev-tools/studio/engine-api",
+                icon: "workflow",
+                order: 1,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+
+
+  // ─── 25. Frontend System ────────────────────────────────────
   {
     id: "frontend",
     titleKey: "nav.frontend",
     icon: "code",
-    order: 24,
+    order: 25,
     items: [
       {
         id: "fe-crud",
@@ -1356,12 +1803,12 @@ export const navigationData: DocCategoryData[] = [
     ],
   },
 
-  // ─── 25. REST API Reference ─────────────────────────────────
+  // ─── 26. REST API Reference ─────────────────────────────────
   {
     id: "api-reference",
     titleKey: "nav.apiReference",
     icon: "file-code",
-    order: 25,
+    order: 26,
     items: [
       {
         id: "api-overview",
@@ -1429,71 +1876,131 @@ export const navigationData: DocCategoryData[] = [
     ],
   },
 
-  // ─── 26. Tutorials & Guides ─────────────────────────────────
+  // ─── 27. Tutorials & Guides ─────────────────────────────────
   {
     id: "tutorials",
     titleKey: "nav.tutorials",
-    icon: "book-open",
-    order: 26,
+    icon: "book",
+    order: 27,
     items: [
       {
-        id: "tut-frontend",
-        titleKey: "tutorials.addModule.title",
-        slug: "tutorials/add-module",
-        icon: "monitor",
-        order: 1,
-      },
-      {
-        id: "tut-backend",
-        titleKey: "tutorials.addBackendModule.title",
-        slug: "tutorials/add-backend-module",
-        icon: "server",
-        order: 2,
-      },
-      {
-        id: "tut-uj-getting-started",
-        titleKey: "tutorials.ujGettingStarted.title",
-        slug: "tutorials/user-journey-getting-started",
+        id: "tut-foundations",
+        titleKey: "tutorials.foundationsGroup.title",
         icon: "rocket",
+        order: 1,
+        children: [
+          {
+            id: "tut-frontend",
+            titleKey: "tutorials.addModule.title",
+            slug: "tutorials/add-module",
+            icon: "monitor",
+            order: 1,
+          },
+          {
+            id: "tut-backend",
+            titleKey: "tutorials.addBackendModule.title",
+            slug: "tutorials/add-backend-module",
+            icon: "server",
+            order: 2,
+          },
+        ],
+      },
+      {
+        id: "tut-user-journeys",
+        titleKey: "tutorials.userJourneysGroup.title",
+        icon: "compass",
+        order: 2,
+        children: [
+          {
+            id: "tut-uj-getting-started",
+            titleKey: "tutorials.ujGettingStarted.title",
+            slug: "tutorials/user-journey-getting-started",
+            icon: "rocket",
+            order: 1,
+          },
+          {
+            id: "tut-uj-venue-booking",
+            titleKey: "tutorials.ujVenueBooking.title",
+            slug: "tutorials/user-journey-venue-booking",
+            icon: "calendar",
+            order: 2,
+          },
+          {
+            id: "tut-uj-pricing-finance",
+            titleKey: "tutorials.ujPricingFinance.title",
+            slug: "tutorials/user-journey-pricing-finance",
+            icon: "dollar-sign",
+            order: 3,
+          },
+          {
+            id: "tut-uj-workforce-crm",
+            titleKey: "tutorials.ujWorkforceCrm.title",
+            slug: "tutorials/user-journey-workforce-crm",
+            icon: "users",
+            order: 4,
+          },
+          {
+            id: "tut-uj-custom-fields-plugins",
+            titleKey: "tutorials.ujCustomFieldsPlugins.title",
+            slug: "tutorials/user-journey-custom-fields-plugins",
+            icon: "puzzle",
+            order: 5,
+          },
+          {
+            id: "tut-uj-compliance-governance",
+            titleKey: "tutorials.ujComplianceGovernance.title",
+            slug: "tutorials/user-journey-compliance-governance",
+            icon: "shield-check",
+            order: 6,
+          },
+        ],
+      },
+      {
+        id: "tut-masterclass",
+        titleKey: "tutorials.masterClassGroup.title",
+        icon: "award",
         order: 3,
-      },
-      {
-        id: "tut-uj-venue-booking",
-        titleKey: "tutorials.ujVenueBooking.title",
-        slug: "tutorials/user-journey-venue-booking",
-        icon: "building",
-        order: 4,
-      },
-      {
-        id: "tut-uj-pricing-finance",
-        titleKey: "tutorials.ujPricingFinance.title",
-        slug: "tutorials/user-journey-pricing-finance",
-        icon: "dollar-sign",
-        order: 5,
-      },
-      {
-        id: "tut-uj-workforce-crm",
-        titleKey: "tutorials.ujWorkforceCrm.title",
-        slug: "tutorials/user-journey-workforce-crm",
-        icon: "users",
-        order: 6,
-      },
-      {
-        id: "tut-uj-custom-fields-plugins",
-        titleKey: "tutorials.ujCustomFieldsPlugins.title",
-        slug: "tutorials/user-journey-custom-fields-plugins",
-        icon: "puzzle",
-        order: 7,
-      },
-      {
-        id: "tut-uj-compliance-governance",
-        titleKey: "tutorials.ujComplianceGovernance.title",
-        slug: "tutorials/user-journey-compliance-governance",
-        icon: "shield-check",
-        order: 8,
+        children: [
+          {
+            id: "tut-master-module-generation",
+            titleKey: "tutorials.masterModuleGen.title",
+            slug: "tutorials/master-module-generation",
+            icon: "boxes",
+            order: 1,
+          },
+          {
+            id: "tut-database-crypto-migrations",
+            titleKey: "tutorials.dbCryptoMig.title",
+            slug: "tutorials/database-crypto-migrations",
+            icon: "database",
+            order: 2,
+          },
+          {
+            id: "tut-studio-schema-canvas",
+            titleKey: "tutorials.studioSchemaCanvas.title",
+            slug: "tutorials/studio-schema-canvas",
+            icon: "layout",
+            order: 3,
+          },
+          {
+            id: "tut-quality-prepush-gate",
+            titleKey: "tutorials.qualityGate.title",
+            slug: "tutorials/quality-prepush-gate",
+            icon: "shield-check",
+            order: 4,
+          },
+          {
+            id: "tut-cross-module-contracts",
+            titleKey: "tutorials.crossModContracts.title",
+            slug: "tutorials/cross-module-contracts",
+            icon: "workflow",
+            order: 5,
+          },
+        ],
       },
     ],
   },
+
 
   // ═══════════════════════════════════════════════════════════
   //  COMMERCIAL DOCUMENTATION

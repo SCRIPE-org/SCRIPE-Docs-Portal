@@ -68,6 +68,7 @@ export const es = {
     security: "Seguridad",
     apiReference: "Referencia de API",
     infrastructure: "Infraestructura",
+    devTools: "Herramientas de Desarrollador y Studio",
     commercialWhyScripe: "Por qué SCRIPE",
     commercialPlatform: "Visión general de la Plataforma",
     commercialEnterprise: "Características Enterprise",

@@ -13,6 +13,7 @@ import { zh as frontend } from "../pages/frontend/zh";
 import { zh as infrastructure } from "../pages/infrastructure/zh";
 import { zh as tutorials } from "../pages/tutorials/zh";
 import { zh as apiReference } from "../pages/api-reference/zh";
+import { zh as devTools } from "../pages/dev-tools/zh";
 
 import { zh as commWhyScripe } from "../comm-pages/why-scripe/zh";
 import { zh as commPlatform } from "../comm-pages/platform/zh";
@@ -85,5 +86,6 @@ export const allDocsZh: Record<string, any> = mergeAll(
   pageWebhooks,
   pageMarketplace,
   pageEcosystemRecycleBin,
-  pageCustomFields
+  pageCustomFields,
+  devTools
 );

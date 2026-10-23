@@ -4,6 +4,57 @@
  * to ensure all pages are available.
  */
 
+// Developer Tools — CLI Suite (20 Deep Pages)
+import "./dev-tools/cli/scaffolding-module";
+import "./dev-tools/cli/scaffolding-blueprint";
+import "./dev-tools/cli/codegen-domain";
+import "./dev-tools/cli/codegen-application";
+import "./dev-tools/cli/codegen-ui";
+import "./dev-tools/cli/db-migrations";
+import "./dev-tools/cli/db-operations";
+import "./dev-tools/cli/build-servers";
+import "./dev-tools/cli/packages-env";
+import "./dev-tools/cli/quality-check";
+import "./dev-tools/cli/quality-tests";
+import "./dev-tools/cli/docker-compose";
+import "./dev-tools/cli/crypto-envelope";
+import "./dev-tools/cli/security-audit";
+import "./dev-tools/cli/tenant-management";
+import "./dev-tools/cli/cache-features";
+import "./dev-tools/cli/localization-engine";
+import "./dev-tools/cli/environment-config";
+import "./dev-tools/cli/platform-diagnostics";
+import "./dev-tools/cli/arch-intelligence";
+
+// Developer Tools — SCRIPE Studio Suite (20 Deep Pages)
+import "./dev-tools/studio/overview";
+import "./dev-tools/studio/dashboard";
+import "./dev-tools/studio/modules";
+import "./dev-tools/studio/schema-designer";
+import "./dev-tools/studio/property-builder";
+import "./dev-tools/studio/live-ide";
+import "./dev-tools/studio/generators";
+import "./dev-tools/studio/database";
+import "./dev-tools/studio/servers";
+import "./dev-tools/studio/docker";
+import "./dev-tools/studio/environment";
+import "./dev-tools/studio/packages";
+import "./dev-tools/studio/quality-arch";
+import "./dev-tools/studio/testing";
+import "./dev-tools/studio/localization";
+import "./dev-tools/studio/enterprise-crypto";
+import "./dev-tools/studio/security-tenants";
+import "./dev-tools/studio/terminal-palette";
+import "./dev-tools/studio/monitoring";
+import "./dev-tools/studio/engine-api";
+
+// Master Class Tutorials (5 Pages)
+import "./tutorials/master-module-generation";
+import "./tutorials/database-crypto-migrations";
+import "./tutorials/studio-schema-canvas";
+import "./tutorials/quality-prepush-gate";
+import "./tutorials/cross-module-contracts";
+
 // Get Started
 import "./get-started/overview";
 import "./get-started/prerequisites";
@@ -220,7 +271,6 @@ import "./infrastructure/file-storage";
 import "./infrastructure/resilience";
 import "./infrastructure/gateway-deployment";
 import "./infrastructure/database-migrations";
-import "./infrastructure/scripe-cli";
 import "./infrastructure/health-checks";
 import "./infrastructure/observability";
 import "./infrastructure/audit-trail";
@@ -231,6 +281,10 @@ import "./infrastructure/shared-foundations";
 import "./infrastructure/communication";
 import "./infrastructure/integrations";
 import "./infrastructure/media";
+
+// Dev Tools (CLI)
+
+// Dev Tools (Studio)
 
 // Tutorials
 import "./tutorials/add-module";

@@ -187,6 +187,7 @@ export const en = {
     security: "Security",
     apiReference: "API Reference",
     infrastructure: "Infrastructure",
+    devTools: "Developer Tools & Studio",
     commercialWhyScripe: "Why SCRIPE",
     commercialPlatform: "Platform Overview",
     commercialEnterprise: "Enterprise Features",

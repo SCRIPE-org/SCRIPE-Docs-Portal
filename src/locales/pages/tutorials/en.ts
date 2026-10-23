@@ -1,243 +1,211 @@
 /**
  * Docs page locale — EN
- * Auto-generated from monolithic doc locale. Do not edit the generation source.
+ * Tutorials & Developer Master Class Documentation
  */
 export const en = {
-  tutorials: {
-    addModule: {
-      title: "Add a Frontend Module",
-      description:
-        "Step-by-step guide to creating a new frontend module following SOLID View/ViewModel pattern.",
-      intro:
-        "This tutorial walks you through creating a complete frontend module from scratch, following the SOLID View/ViewModel pattern. You'll set up the module structure, create domain entities, build the data layer, implement ViewModels, and wire everything together.",
-      prerequisitesTitle: "Prerequisites",
-      stepsTitle: "Step-by-Step Guide",
-      step1Title: "1. Create Module Structure",
-      step1Desc:
-        "Set up the standard module directory structure with domain, data, and presentation layers.",
-      step2Title: "2. Define Domain Entity",
-      step2Desc: "Create a Zod schema for your entity with validation rules.",
-      step3Title: "3. Create Repository",
-      step3Desc: "Implement the data layer with API calls and response mapping.",
-      step4Title: "4. Set Up DI Container",
-      step4Desc: "Register your repository in the module's dependency injection container.",
-      step5Title: "5. Build ViewModel",
-      step5Desc:
-        "Create the main ViewModel that orchestrates CRUD operations using useCrudViewModel.",
-      step6Title: "6. Create View",
-      step6Desc: "Build the pure UI View component that consumes the ViewModel (max ~200 lines).",
-      step7Title: "7. Add Route & Navigation",
-      step7Desc: "Create the Next.js page connector and add navigation entries.",
-      structureTitle: "Module Structure",
-      entityTitle: "Domain Entity",
-      repoTitle: "Repository",
-      diTitle: "DI Container",
-      viewModelTitle: "ViewModel",
-      viewTitle: "View Component",
-      routeTitle: "Route & Navigation",
-      checklist:
-        "Before submitting, verify:  Module follows SOLID pattern,  View is under 200 lines,  No cross-module imports,  Translations added to dictionaries,  Navigation entry added.",
+  "tutorials": {
+    "crossModContracts": {
+      "title": "Master Class: Cross-Module Contracts & AstraFlow Events",
+      "description": "Autonomous microservice architecture: Decoupling modules with logical GUIDs, transactional outbox messages, and idempotent event consumers.",
+      "intro": "Physical foreign keys across modular monolith boundaries destroy autonomy and prevent future microservice extraction. In this masterclass, you will learn how to connect autonomous modules using logical GUID references, publish transactional domain events into AstraFlow's outbox table, and build idempotent consumers."
     },
-    addBackendModule: {
-      title: "Add a Backend Module",
-      description:
-        "Step-by-step guide to creating a new backend module with Clean Architecture and CQRS.",
-      intro:
-        "This tutorial covers creating a complete backend module using Clean Architecture with CQRS. You'll define the entity, create commands and queries, implement the repository, register with DI, add the controller, and configure module registration.",
-      prerequisitesTitle: "Prerequisites",
-      stepsTitle: "Step-by-Step Guide",
-      step1Title: "1. Create Project Structure",
-      step1Desc:
-        "Set up the module's class library projects following Clean Architecture layers (Domain, Application, Infrastructure, API).",
-      step2Title: "2. Define Domain Entity",
-      step2Desc: "Create the entity class inheriting from AuditableEntity with proper validation.",
-      step3Title: "3. Create Commands",
-      step3Desc:
-        "Implement Create, Update, and Delete commands with FluentValidation and handlers.",
-      step4Title: "4. Create Queries",
-      step4Desc: "Implement GetById and GetPaged queries with response DTOs.",
-      step5Title: "5. Implement Repository",
-      step5Desc: "Create the EF Core repository with the generic repository base class.",
-      step6Title: "6. Register with DI",
-      step6Desc:
-        "Configure dependency injection for the module's services, repositories, and SCRIPE request handlers.",
-      step7Title: "7. Add Controller",
-      step7Desc:
-        "Create the API controller with RESTful endpoints, Swagger docs, and authorization attributes.",
-      step8Title: "8. Module Registration",
-      step8Desc:
-        "Register the module in the gateway and add database migration for the new entity.",
-      structureTitle: "Project Structure",
-      entityTitle: "Domain Entity",
-      commandTitle: "Commands & Handlers",
-      diTitle: "Dependency Injection",
-      controllerTitle: "API Controller",
-      registerTitle: "Module Registration",
-      migrationNote:
-        "After creating your entity configuration, run 'scripe db add-migration AddYourEntity -m Inventory' to generate the database migration. Test with 'scripe db update -m Inventory' before committing.",
+    "dbCryptoMig": {
+      "title": "Master Class: Multi-DB Migrations & Envelope Encryption",
+      "description": "Architectural guide: Managing multi-database migrations across PostgreSQL, SQL Server, and Oracle with field-level envelope encryption.",
+      "intro": "Enterprise sports platforms require military-grade cryptographic protection for payment credentials and personal athlete telemetry. In this tutorial, you will master SCRIPE's multi-database provider architecture and implement field-level envelope encryption (DEK/KEK) with zero-downtime keyring rotation."
     },
-    ujGettingStarted: {
-      title: "Developer Setup to Enterprise Onboarding",
-      description:
-        "Complete walkthrough from running SCRIPE CLI and developer tools to first tenant configuration and corporate branding.",
-      intro:
-        "Welcome to SCRIPE's developer-to-production journey. This tutorial walks you through setting up your local environment, inspecting OpenAPI definitions, booting the platform, and configuring your first tenant.",
-      infoTitle: "Enterprise Developer Stack",
-      infoContent:
-        "All SCRIPE services adhere to strict multi-tenancy, zero-trust authorization, and append-only auditing out of the box.",
-      step1Title: "Step 1: Developer CLI & Local Platform Boot",
-      step1Desc:
-        "Initialize local infrastructure with Docker, seed initial tenant records, and start frontend and backend services.",
-      step2Title: "Step 2: Exploring Swagger, API Playground & CLI Tools",
-      step2Desc:
-        "Leverage developer utilities including Swagger documentation, OpenAPI schemas, and health check endpoints.",
-      toolCli: "Developer CLI",
-      toolCliDesc: "Rich command-line tool for migrations, seeding, and tenant inspection.",
-      toolSwagger: "Swagger UI",
-      toolSwaggerDesc: "Interactive OpenAPI 3.0 documentation for all REST endpoints.",
-      toolHealth: "Health Checks",
-      toolHealthDesc: "Deep liveness and readiness probes across PostgreSQL, Redis, and RabbitMQ.",
-      step3Title: "Step 3: First Super-Admin Login & MFA Setup",
-      step3Desc:
-        "Authenticate with the default super-admin credentials and configure mandatory multi-factor authentication.",
-      mfaNoticeTitle: "Security Requirement",
-      mfaNoticeContent:
-        "Super-admin accounts require TOTP hardware or authenticator app registration before accessing tenant settings.",
-      stepEditionsTitle: "Prerequisite: Create Commercial Editions & Feature Matrix",
-      stepEditionsDesc:
-        "Before provisioning any tenant, the Entitlements module requires at least one Edition definition. An Edition establishes the contractual feature flags, quota clamps, and billing prices that govern tenant capabilities. A tenant cannot exist without an Edition reference.",
-      step4Title: "Step 4: Provisioning Your First Organization & Tenant",
-      step4Desc:
-        "Create your root tenant, configure slug routing, set custom domains, and establish tenant isolation boundaries.",
-      step5Title: "Step 5: Customizing Themes, Portal Branding & Login Builder",
-      step5Desc:
-        "Apply corporate logos, color palettes, custom CSS tokens, and configure custom login layouts using the built-in builder.",
-
-      stepOrgCoreTitle: "Step 5: Establishing the 5-Tier Organizational Hierarchy",
-      stepOrgCoreDesc:
-        "Structure the tenant's operational governance into Organization, Business Units, Departments, Cost Centers, and Teams using the Organization Core module.",
-      step6Title: "Step 6: Visual Branding & Studio Login Customization",
-      step6Desc:
-        "Apply corporate logos, custom color tokens, and publish customized login page layouts via the built-in Studio Theme Builder.",
+    "foundationsGroup": {
+      "title": "Foundational Guides"
     },
-    ujVenueBooking: {
-      title: "Venue Hierarchy & Concurrent Booking",
-      description:
-        "End-to-end journey configuring physical sports facilities, schedulable resources, operating schedules, and 2-phase booking holds.",
-      intro:
-        "Learn how to set up multi-site facilities, manage schedulable resources, define blackout windows, and process high-concurrency bookings.",
-      infoTitle: "Concurrency Control",
-      infoContent:
-        "SCRIPE's 2-phase hold engine prevents race conditions and double bookings through distributed Redis mutex locks.",
-      step1Title: "Step 1: Structuring Multi-Campus Facilities",
-      step1Desc:
-        "Define geographic sites, buildings, and athletic zones with geo-coordinates and amenity tags.",
-      step2Title: "Step 2: Creating Schedulable Resources & Hierarchies",
-      step2Desc:
-        "Configure pitches, courts, and equipment as atomic or composite schedulable assets with capacity limits.",
-      step3Title: "Step 3: Configuring Operating Hours & Blackout Windows",
-      step3Desc:
-        "Set weekly recurring schedules, holiday exceptions, and maintenance closure intervals.",
-      step4Title: "Step 4: The 2-Phase Concurrency Hold Engine",
-      step4Desc:
-        "Acquire atomic 15-minute reservations during checkout, ensuring instant lock acquisition with automatic TTL expiration.",
-      step5Title: "Step 5: Operations Calendar & Reservation 360",
-      step5Desc:
-        "Manage the dispatch grid, review reservation lifecycles, and handle operational alterations.",
+    "masterClassGroup": {
+      "title": "Developer Tools Master Class"
     },
-    ujPricingFinance: {
-      title: "Dynamic Pricing & Double-Entry Accounting",
-      description:
-        "User journey configuring rate cards, peak-hour surcharges, cryptographic quotes, and balanced ledger settlements.",
-      intro:
-        "Connect your catalog items to dynamic pricing algorithms, generate tamper-proof quotes, and settle balances in a double-entry ledger.",
-      infoTitle: "Financial Integrity",
-      infoContent:
-        "Invariable debits-equal-credits balancing ensures total auditing compliance across all financial transactions.",
-      step1Title: "Step 1: Creating Rate Cards & Multi-Currency Price Books",
-      step1Desc:
-        "Define base hourly rates, currency books, and tier structures for all bookable resources and services.",
-      step2Title: "Step 2: Dynamic Rules & Peak-Hour Surcharges",
-      step2Desc:
-        "Apply conditional pricing rules based on time of day, customer tier, advance booking window, and seasonal demand.",
-      step3Title: "Step 3: Cryptographic Price Quotes & Checkouts",
-      step3Desc:
-        "Generate HMAC-SHA256 signed price quotes that lock down rates during customer checkout to prevent price tampering.",
-      step4Title: "Step 4: Double-Entry Ledger & Chart of Accounts",
-      step4Desc:
-        "Post transactional debits and credits into segregated general ledger accounts with automated balancing checks.",
-      step5Title: "Step 5: Invoicing, Payments & Multi-Party Settlements",
-      step5Desc:
-        "Generate compliant VAT invoices, collect payment gateway receipts, and execute automated partner splits.",
+    "masterModuleGen": {
+      "title": "Master Class: End-to-End Module Generation",
+      "description": "Step-by-step masterclass: Building a production-ready Invoicing module with CQRS handlers, multi-DB migrations, and Next.js MVVM frontend in 15 minutes.",
+      "intro": "In this comprehensive masterclass, you will build a complete, production-grade Invoicing capability for the SCRIPE sports operations platform. Following strict DDD and Clean Architecture guidelines, you will scaffold the backend project stack, add domain entities, configure multi-database migrations, wire AstraFlow domain events, implement Next.js MVVM submodules, and pass the universal verification gate."
     },
-    ujWorkforceCrm: {
-      title: "Workforce Rostering & Customer 360",
-      description:
-        "Guide to managing staff competencies, shift scheduling, customer relationship graphs, and deduplication.",
-      intro:
-        "Master human resource allocation and customer relationship management across all branches of your enterprise.",
-      infoTitle: "Unified Identity",
-      infoContent:
-        "Polymorphic party architecture allows entities to act simultaneously as customers, coaches, or corporate contacts.",
-      step1Title: "Step 1: Building the Staff Directory & Competencies",
-      step1Desc:
-        "Onboard staff members, track certifications, assign roles, and record coaching credentials.",
-      step2Title: "Step 2: Roster Scheduling & Availability Matrices",
-      step2Desc:
-        "Create recurring shift templates, manage time-off requests, and prevent over-allocation.",
-      step3Title: "Step 3: Customer 360 & Polymorphic Parties",
-      step3Desc:
-        "Consolidate person profiles, company accounts, communication logs, and booking histories into a single view.",
-      step4Title: "Step 4: Relationship Graphs & Account Hierarchies",
-      step4Desc:
-        "Model complex parent-child, corporate sponsor, and family guardian relationships between parties.",
-      step5Title: "Step 5: Automated Deduplication & Merging",
-      step5Desc:
-        "Detect duplicate customer profiles using phonetic fuzzy matching and safely merge histories without data loss.",
+    "qualityGate": {
+      "title": "Master Class: Universal 5-Stage Verification Gate",
+      "description": "Zero-defect engineering: Enforcing the ironclad verification battery spanning lint, format, backend compilation, frontend build, and 7-language parity.",
+      "intro": "In SCRIPE's enterprise delivery lifecycle, no pull request may merge without passing the Universal Verification Gate. In this tutorial, you will walk through the 5 stages of the gate: linting with Oxlint, Prettier formatting checks, .NET 9 compilation with zero warnings, Next.js 15 Turbopack builds, and deep 7-language localization parity auditing."
     },
-    ujCustomFieldsPlugins: {
-      title: "Extending SCRIPE: Custom Fields & Marketplace Plugins",
-      description:
-        "Walkthrough extending entity schemas with custom fields and installing sandboxed marketplace plugins.",
-      intro:
-        "Customize your platform without modifying backend code by using EAV custom fields and installing third-party marketplace plugins.",
-      infoTitle: "Zero-Downtime Extensibility",
-      infoContent:
-        "Custom field changes take effect immediately across UI and API without requiring database migrations.",
-      step1Title: "Step 1: Defining Custom Field Groups & Data Types",
-      step1Desc:
-        "Attach custom text, numeric, date, or lookup fields to core platform entities like reservations and parties.",
-      step2Title: "Step 2: Field Validation & AES-256 Encryption",
-      step2Desc:
-        "Configure regex pattern matching, required flags, and secure sensitive fields with field-level encryption.",
-      step3Title: "Step 3: Discovering & Installing Marketplace Plugins",
-      step3Desc:
-        "Browse the plugin directory, review security permissions, and install extensions in a single click.",
-      step4Title: "Step 4: Webhook Integration & Event Subscriptions",
-      step4Desc:
-        "Connect external applications by subscribing to real-time webhook events with HMAC signature verification.",
+    "studioSchemaCanvas": {
+      "title": "Master Class: Visual Relational Modeling on Studio Canvas",
+      "description": "Mastering complex schema design: Visualizing 1:1, 1:N, and N:N relations, 4-sided port routing, Crow's foot notation, and soft-delete indexes.",
+      "intro": "Visualizing entity relationships eliminates cognitive overhead and prevents cyclic dependency bugs. In this hands-on tutorial, you will design a multi-tiered Tournament Management System featuring Tournaments, Teams, Matches, and ScoreSheets on the SCRIPE Studio Relations Canvas."
     },
-    ujComplianceGovernance: {
-      title: "Enterprise Governance, Compliance & Analytics",
-      description:
-        "Journey covering real-time security alerts, tamper-evident audit logs, GDPR data subject rights, and BI dashboards.",
-      intro:
-        "Ensure strict compliance with global privacy regulations, monitor system access, and generate executive business intelligence reports.",
-      infoTitle: "Regulatory Readiness",
-      infoContent:
-        "Automated retention rules and cryptographic audit trails help maintain continuous SOC2, ISO 27001, and GDPR readiness.",
-      step1Title: "Step 1: Real-Time Security Monitoring & Alerts",
-      step1Desc:
-        "Configure alerts for suspicious logins, privilege escalations, and unusual data access patterns.",
-      step2Title: "Step 2: Tamper-Evident Audit Trails & Forensics",
-      step2Desc:
-        "Search immutable activity logs capturing user identity, IP address, timestamp, and full diff of altered data.",
-      step3Title: "Step 3: Executing GDPR Data Subject Requests (DSR)",
-      step3Desc:
-        "Process automated user data exports, consent revocations, and cryptographic right-to-be-forgotten erasures.",
-      step4Title: "Step 4: Executive BI Dashboards & Operational Metrics",
-      step4Desc:
-        "Visualize venue utilization rates, financial revenue velocity, and staff productivity metrics in real-time.",
+    "userJourneysGroup": {
+      "title": "User Journey Scenarios"
     },
-  },
+        "addModule": {
+          "title": "Frontend Module Slices & MVVM",
+          "description": "Step-by-step master class on scaffolding, structuring, and integrating frontend sub-modules using Clean Architecture and MVVM patterns.",
+          "intro": "Complete developer guide for creating robust, maintainable frontend sub-modules in SCRIPE, following strict Layer boundaries and MVVM state flows.",
+          "prerequisitesTitle": "Prerequisites",
+          "stepsTitle": "Step-by-Step Implementation Guide",
+          "structureTitle": "Step 1: Directory Structure & File Hierarchy",
+          "entityTitle": "Step 2: Domain Entity & Contracts",
+          "repoTitle": "Step 3: Service, Mapper & Repository Layer",
+          "viewModelTitle": "Step 4: ViewModel Hook & State Logic",
+          "viewTitle": "Step 5: Presentation View & UI Components",
+          "diTitle": "Step 6: Dependency Injection Container Registration",
+          "routeTitle": "Step 7: App Router Page Binding",
+          "checklist": "Ensure all files are typed, strict linting passes, and zero circular dependencies are introduced before committing.",
+          "step1Title": "Step 1: Scaffolding Directory Structure",
+          "step1Desc": "Organize your sub-module into domain, data, and presentation folders under src/modules/{module-name}/{sub-module}/.",
+          "step2Title": "Step 2: Defining Domain Entity & Contracts",
+          "step2Desc": "Create rich domain models with immutable updates and repository interfaces in the domain layer.",
+          "step3Title": "Step 3: Implementing Data Service & Repository",
+          "step3Desc": "Implement data transfer objects, HTTP services with IApiService, mappers, and repository implementations.",
+          "step4Title": "Step 4: Crafting the ViewModel Hook",
+          "step4Desc": "Leverage useCrudViewModel with TanStack Query to manage pagination, sorting, search, and mutations.",
+          "step5Title": "Step 5: Building UI Presentation Components",
+          "step5Desc": "Construct Views using @core/ui design system components, strictly avoiding raw HTML form controls.",
+          "step6Title": "Step 6: Registering in the DI Container",
+          "step6Desc": "Wire the new service and repository into the module di.ts container with lazy getters.",
+          "step7Title": "Step 7: Next.js Route Page Integration",
+          "step7Desc": "Expose the feature via Next.js App Router under src/app/(modules)/{route}/page.tsx with appropriate metadata."
+    },
+        "addBackendModule": {
+          "title": "Backend Clean Architecture & CQRS",
+          "description": "Comprehensive tutorial on building backend modules in .NET 10 with AstraFlow CQRS, EF Core multi-tenancy, and outbox event dispatching.",
+          "intro": "Deep dive into creating enterprise-grade backend modules adhering to SCRIPE DDD principles, Result pattern, and isolated schema persistence.",
+          "prerequisitesTitle": "Prerequisites",
+          "stepsTitle": "Step-by-Step Architecture Guide",
+          "structureTitle": "Step 1: Solution Architecture & Project Structure",
+          "entityTitle": "Step 2: Domain Modeling & Auditable Entities",
+          "commandTitle": "Step 3: AstraFlow Commands, Handlers & Validators",
+          "diTitle": "Step 4: Infrastructure & EF Core Persistence",
+          "controllerTitle": "Step 5: ASP.NET Core Web API Controllers",
+          "registerTitle": "Step 6: Monolith Module Bootstrapping & DI Wiring",
+          "migrationNote": "Step 7: Generating & Executing Database Migrations",
+          "step1Title": "Step 1: Module Solution Scaffolding",
+          "step1Desc": "Create Domain, Application, and Infrastructure projects adhering to Clean Architecture boundary rules.",
+          "step2Title": "Step 2: Domain Entity Construction",
+          "step2Desc": "Derive entities from AuditableEntity with Guid identity, optimistic concurrency tokens, and domain events.",
+          "step3Title": "Step 3: CQRS Commands and Queries",
+          "step3Desc": "Build AstraFlow request handlers returning Result<T> alongside FluentValidation input validation rules.",
+          "step4Title": "Step 4: Persistence & Entity Configurations",
+          "step4Desc": "Configure isolated PostgreSQL/SQL Server schemas, entity mappings, indexes, and outbox tables in EF Core.",
+          "step5Title": "Step 5: API Controller Exposure",
+          "step5Desc": "Expose versioned REST endpoints returning RFC 7807 compliant error envelopes and Result unwrap responses.",
+          "step6Title": "Step 6: Dependency Injection Assembly",
+          "step6Desc": "Register services, AstraFlow handlers, and background workers in the module service collection extension.",
+          "step7Title": "Step 7: Multi-DB Migration Generation",
+          "step7Desc": "Generate provider-specific EF Core migrations using the scripe db CLI with schema verification.",
+          "step8Title": "Step 8: Automated Testing & Verification",
+          "step8Desc": "Write unit and integration tests verifying handler behavior, database transactions, and authorization rules."
+    },
+        "ujGettingStarted": {
+          "title": "Getting Started Journey",
+          "description": "End-to-end journey from initial repository clone to spinning up multi-tenant infrastructure and logging into SCRIPE Studio.",
+          "intro": "Experience a comprehensive walkthrough bootstrapping the complete SCRIPE ecosystem, verifying health checks, and provisioning your first tenant.",
+          "infoTitle": "Quick Start Note",
+          "infoContent": "Ensure Docker Desktop is running before launching developer infrastructure services.",
+          "step1Title": "Step 1: Developer CLI & Local Platform Boot",
+          "step1Desc": "Clone the repository, boot PostgreSQL, Redis, MinIO, RabbitMQ, and launch development servers.",
+          "step2Title": "Step 2: Exploring Swagger, API Playground & CLI Tools",
+          "step2Desc": "Access Swagger documentation, verify cluster readiness probes, and interact with the CLI tool suite.",
+          "toolCli": "SCRIPE CLI",
+          "toolCliDesc": "Powerful command-line tooling for module generation, migrations, and developer workflows.",
+          "toolSwagger": "Swagger & OpenAPI",
+          "toolSwaggerDesc": "Interactive REST API explorer detailing endpoints, authentication, and request schemas.",
+          "toolHealth": "Readiness Probes",
+          "toolHealthDesc": "Live health checking monitoring PostgreSQL, Redis, RabbitMQ, and MinIO availability.",
+          "step3Title": "Step 3: Super-Admin First Login & Security Setup",
+          "step3Desc": "Create or authenticate the root platform super-administrator account with mandatory two-factor authentication.",
+          "mfaNoticeTitle": "MFA Security Requirement",
+          "mfaNoticeContent": "Platform SuperAdmin roles strictly require time-based one-time password (TOTP) verification for all write actions.",
+          "stepEditionsTitle": "Prerequisite: Defining Editions & Entitlements",
+          "stepEditionsDesc": "Establish commercial editions, feature gates, and resource quota constraints via the Entitlements module.",
+          "step4Title": "Step 4: Multi-Tenant Provisioning & Domain Binding",
+          "step4Desc": "Provision tenant organizations, assign commercial tiers, configure custom subdomains, and isolate data schemas.",
+          "stepOrgCoreTitle": "Step 5: 5-Tier Organizational Hierarchy",
+          "stepOrgCoreDesc": "Model business units, regional branches, departments, cost centers, and teams in the Organization Core.",
+          "step6Title": "Step 6: Visual Branding & Studio Login Customization",
+          "step6Desc": "Customize color palettes, typography, organization logos, and authentication split-panel layouts."
+    },
+        "ujVenueBooking": {
+          "title": "Venue Booking Journey",
+          "description": "Comprehensive walkthrough of campus venue setup, real-time availability slot locking, and booking lifecycle workflows.",
+          "intro": "Explore the complete sports facility operations workflow from court creation to reservation check-in and automated notifications.",
+          "infoTitle": "Concurrency Guard",
+          "infoContent": "Redis distributed locking prevents double-booking across concurrent customer reservation attempts.",
+          "step1Title": "Step 1: Campus & Facility Configuration",
+          "step1Desc": "Define sports campuses, indoor arenas, outdoor fields, surface types, and operating hours.",
+          "step2Title": "Step 2: Real-Time Availability & Slot Locking",
+          "step2Desc": "Query dynamic court schedules and acquire transient distributed locks on selected reservation slots.",
+          "step3Title": "Step 3: Customer Reservation & Checkout Flow",
+          "step3Desc": "Submit booking details, calculate dynamic pricing, and transition status from Pending to Reserved.",
+          "step4Title": "Step 4: Equipment & Coach Add-On Allocation",
+          "step4Desc": "Attach rental gear, lighting packages, and certified coaching sessions to active court reservations.",
+          "step5Title": "Step 5: QR Code Check-In & Access Control",
+          "step5Desc": "Generate encrypted time-sensitive QR passes for turnstile hardware verification and patron entry."
+    },
+        "ujPricingFinance": {
+          "title": "Pricing & Finance Journey",
+          "description": "Master class in configuring dynamic surge pricing matrices, payment gateway processing, and double-entry ledger bookkeeping.",
+          "intro": "Follow financial operations from demand-driven tariff rate calculations to reconciliation across multi-currency chart of accounts.",
+          "infoTitle": "Double-Entry Guarantee",
+          "infoContent": "Every ledger transaction strictly enforces debits equaling credits with zero round-off floating point errors.",
+          "step1Title": "Step 1: Dynamic Rate Rules & Surge Configuration",
+          "step1Desc": "Establish peak-hour multipliers, weekend surcharge tables, and member discount tiers.",
+          "step2Title": "Step 2: Checkout & Payment Intent Creation",
+          "step2Desc": "Initiate secure payment sessions via Stripe, Fawry, or HyperPay with cryptographic signature verification.",
+          "step3Title": "Step 3: Webhook Ingestion & Transaction Confirmation",
+          "step3Desc": "Handle asynchronous payment provider webhooks idempotently using the transactional outbox pattern.",
+          "step4Title": "Step 4: Double-Entry Ledger Posting",
+          "step4Desc": "Automatically post balanced debit and credit journal entries to revenue, tax, and accounts receivable accounts.",
+          "step5Title": "Step 5: Automated Invoicing & VAT Compliance",
+          "step5Desc": "Emit ZATCA-compliant electronic tax invoices with embedded QR cryptographic digests and audit tracking."
+    },
+        "ujWorkforceCrm": {
+          "title": "Workforce CRM Journey",
+          "description": "In-depth guide covering employee onboarding, coach scheduling rosters, payroll calculation, and patron CRM relationship records.",
+          "intro": "Streamline athletic staff administration, trainer certification tracking, shift rosters, and customer CRM interactions.",
+          "infoTitle": "Role-Based Access Control",
+          "infoContent": "Workforce profiles and sensitive compensation data are strictly guarded by granular PBAC permissions.",
+          "step1Title": "Step 1: Staff Onboarding & Profile Setup",
+          "step1Desc": "Create staff records, assign employment contracts, record national IDs, and configure permission groups.",
+          "step2Title": "Step 2: Coach Skill & Certification Matrix",
+          "step2Desc": "Track CPR certifications, coaching badges, license expiry dates, and automated renewal reminders.",
+          "step3Title": "Step 3: Shift Rostering & Availability Calendars",
+          "step3Desc": "Build weekly staff rosters, handle swap requests, and manage facility coverage requirements.",
+          "step4Title": "Step 4: Patron CRM 360 & Loyalty Profiles",
+          "step4Desc": "Maintain unified customer records with booking history, membership tiers, preferences, and support tickets.",
+          "step5Title": "Step 5: Payroll & Hourly Commission Computation",
+          "step5Desc": "Calculate monthly staff disbursements based on logged court hours, private lessons, and sales commissions."
+    },
+        "ujCustomFieldsPlugins": {
+          "title": "Custom Fields & Plugins Journey",
+          "description": "Comprehensive tutorial on extending platform entities with dynamic encrypted custom fields and registering sandbox plugins.",
+          "intro": "Learn how to dynamically alter data models at runtime with zero database downtime and package modular plugin extensions.",
+          "infoTitle": "Schema Safety Guard",
+          "infoContent": "Dynamic custom field values are stored in encrypted JSON documents with JSON Schema schema validation.",
+          "step1Title": "Step 1: Defining Custom Field Metadata",
+          "step1Desc": "Create custom field definitions with data types, validation rules, encryption flags, and tenant visibility.",
+          "step2Title": "Step 2: Entity Schema Extension & Dynamic Form Rendering",
+          "step2Desc": "Bind custom attributes to core entities like Venue or Booking, auto-rendering interactive UI inputs in Studio.",
+          "step3Title": "Step 3: Plugin Architecture & Sandbox Registration",
+          "step3Desc": "Author standalone plugin packages exposing extension points, UI widgets, and AstraFlow event hooks.",
+          "step4Title": "Step 4: Lifecycle Hooks & Secure WebAssembly Execution",
+          "step4Desc": "Execute plugin business logic safely in an isolated WebAssembly sandbox with restricted system capabilities."
+    },
+        "ujComplianceGovernance": {
+          "title": "Compliance & Governance Journey",
+          "description": "Operational master class for data protection officers covering GDPR right-to-erasure, audit forensics, and SOC2 evidence logging.",
+          "intro": "Ensure ironclad compliance with international privacy mandates, immutable audit logging, and automated forensic data export.",
+          "infoTitle": "Immutable Audit Record",
+          "infoContent": "Audit entries are cryptographically chained and persisted in append-only storage to guarantee non-repudiation.",
+          "step1Title": "Step 1: Real-Time Security Incident Monitoring",
+          "step1Desc": "Monitor authentication failures, rate limit spikes, and unauthorized permission escalation attempts in real-time.",
+          "step2Title": "Step 2: System Audit Log Forensics",
+          "step2Desc": "Query structured audit trails with tenant filtering, actor attribution, affected entity IDs, and before/after diffs.",
+          "step3Title": "Step 3: GDPR Data Subject Rights (DSR) Erasure Request",
+          "step3Desc": "Execute automated data subject right-to-erasure requests with cascading anonymization across all modular schemas.",
+          "step4Title": "Step 4: Executive BI Dashboards & Event Streaming",
+          "step4Desc": "Stream compliance and performance telemetry to ClickHouse and visualize governance KPIs on executive dashboards."
+    },
+  }
 };

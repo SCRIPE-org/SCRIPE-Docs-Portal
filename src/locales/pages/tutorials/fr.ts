@@ -1,252 +1,211 @@
 /**
  * Docs page locale — FR
- * Auto-generated from monolithic doc locale. Do not edit the generation source.
+ * Tutorials & Developer Master Class Documentation
  */
 export const fr = {
-  tutorials: {
-    addModule: {
-      title: "Ajouter un Module Frontend",
-      description:
-        "Guide étape par étape pour créer un nouveau module frontend suivant le modèle SOLID View/ViewModel.",
-      intro:
-        "Ce tutoriel vous accompagne dans la création d'un module complet en assurant une qualité conforme aux architectures de la plateforme.",
-      prerequisitesTitle: "Prérequis",
-      stepsTitle: "Guide Étape par Étape",
-      step1Title: "1. Créer la Structure du Module",
-      step1Desc:
-        "Préparez les répertoires standards avec les couches Domaine, Données et Présentation.",
-      step2Title: "2. Définir l'Entité de Domaine",
-      step2Desc: "Créez un schéma Zod couplé avec le typage statique TypeScript de votre entité.",
-      step3Title: "3. Créer le Référentiel (Repository)",
-      step3Desc:
-        "Implémentez la couche d'appel réseau et interceptez les données API via TanStack.",
-      step4Title: "4. Configurer le Conteneur DI",
-      step4Desc: "Enregistrez votre référentiel au sein de l'injection de dépendances React.",
-      step5Title: "5. Construire le ViewModel",
-      step5Desc:
-        "Construisez le chef d'orchestre principal des opérations CRUD en appelant useCrudViewModel.",
-      step6Title: "6. Créer la Vue (View)",
-      step6Desc:
-        "Construisez le composant visuel de pure interface utilisateur consommant le ViewModel (moins de 60 lignes de code).",
-      step7Title: "7. Ajouter la Route et la Navigation",
-      step7Desc:
-        "Déclarez la page connectrice (page.tsx) de Next.js pour brancher le visuel à l'arborescence URL.",
-      structureTitle: "Structure du Module",
-      entityTitle: "Entité du Domaine",
-      repoTitle: "Couche Référentiel",
-      diTitle: "Conteneur DI",
-      viewModelTitle: "Modèle de Vue (ViewModel)",
-      viewTitle: "Composant de la Vue",
-      routeTitle: "Routage et Navigation",
-      checklist:
-        "Avant la soumission du code (Pull Request), vérifiez la règle des 60 lignes et l'absence totale d'importations interdites inter-modules.",
+  "tutorials": {
+    "crossModContracts": {
+      "title": "Master Class : Contrats Inter-modules et Événements AstraFlow",
+      "description": "Architecture de microservices autonome : découplage des modules avec des GUID logiques, des messages d'outbox transactionnels et des consommateurs idempotents.",
+      "intro": "Les clés étrangères physiques entre modules détruisent l'autonomie. Apprenez à connecter des modules autonomes à l'aide de GUID logiques et d'événements outbox AstraFlow."
     },
-    addBackendModule: {
-      title: "Ajouter un Module Backend",
-      description:
-        "Guide complet pour créer un module de microservice C# avec Clean Architecture et CQRS.",
-      intro:
-        "Ce guide expose comment déployer une API complète de la base de données au contrôleur REST public en respectant les standards de l'entreprise.",
-      prerequisitesTitle: "Prérequis",
-      stepsTitle: "Guide Étape par Étape",
-      step1Title: "1. Créer la Structure du Projet",
-      step1Desc: "Générez les bibliothèques de classes C# conformes aux couches du DDD.",
-      step2Title: "2. Définir l'Entité de Domaine",
-      step2Desc:
-        "Héritez de la classe de base AuditableEntity et fixez les règles de validation du modèle.",
-      step3Title: "3. Créer les Commandes (Commands)",
-      step3Desc:
-        "Prodscripeez les modèles de requête de mutation (Créer, Mettre à jour, Supprimer) et couvrez-les par FluentValidation.",
-      step4Title: "4. Créer les Requêtes (Queries)",
-      step4Desc:
-        "Prodscripeez les modèles de lecture (GetById, GetPaged) avec mapping rapide et sécurisé DTO.",
-      step5Title: "5. Implémenter le Référentiel",
-      step5Desc:
-        "Appuyez-vous sur les classes de base génériques de EF Core au sein de la couche infrastructure.",
-      step6Title: "6. Enregistrement des Dépendances (DI)",
-      step6Desc:
-        "Ajoutez la signature dans l'extension du Module DI pour informer le serveur de son existence.",
-      step7Title: "7. Ajouter le Contrôleur d'API",
-      step7Desc:
-        "Instanciez le contrôleur RESTful, décorez-le avec les exigences de permissions et documentez le Swagger XML.",
-      step8Title: "8. Enregistrement du Déploiement",
-      step8Desc:
-        "Vérifiez que le YARP Gateway l'intègre, et générez la migration finale vers le DbContext.",
-      structureTitle: "Architecture des Projets",
-      entityTitle: "Entités Flexibles",
-      commandTitle: "Silos de Commandes CQRS",
-      diTitle: "Cblage des Injections",
-      controllerTitle: "Sortie Contrôleur de l'API",
-      registerTitle: "Branchement et Compilation",
-      migrationNote:
-        "Vérifiez méticuleusement que vous avez exécuté 'scripe db add-migration AddYourEntity -m Inventory' et 'scripe db update -m Inventory' en local avant de pousser vos changements.",
+    "dbCryptoMig": {
+      "title": "Master Class : Migrations Multi-BD et Chiffrement d'Enveloppe",
+      "description": "Guide architectural : gestion des migrations multi-bases de données sur PostgreSQL, SQL Server et Oracle avec chiffrement d'enveloppe au niveau du champ.",
+      "intro": "Les plateformes sportives d'entreprise nécessitent une protection cryptographique militaire pour les identifiants de paiement. Maîtrisez l'architecture multi-base de données de SCRIPE."
     },
-    ujGettingStarted: {
-      title: "Configuration Développeur à l'Intégration Entreprise",
-      description:
-        "Guide complet depuis l'utilisation de SCRIPE CLI et des outils dev jusqu'à la configuration du premier tenant et de la marque.",
-      intro:
-        "Bienvenue dans l'aventure SCRIPE du développement à la production. Ce tutoriel détaille la configuration locale, l'exploration OpenAPI et l'initialisation de votre premier tenant.",
-      infoTitle: "Stack Développeur Entreprise",
-      infoContent:
-        "Tous les services SCRIPE intègrent nativement le multi-tenant strict, l'autorisation zero-trust et l'audit immuable.",
-      step1Title: "Étape 1 : CLI Développeur & Lancement Local",
-      step1Desc:
-        "Initialisez l'infrastructure locale avec Docker, injectez les données de test et démarrez les services frontend et backend.",
-      step2Title: "Étape 2 : Swagger, API Playground & Outils CLI",
-      step2Desc:
-        "Exploitez les outils de développement : documentation Swagger, schémas OpenAPI et sondes de santé.",
-      toolCli: "CLI Développeur",
-      toolCliDesc:
-        "Outil en ligne de commande pour les migrations, le seeding et l'inspection des tenants.",
-      toolSwagger: "Swagger UI",
-      toolSwaggerDesc:
-        "Documentation interactive OpenAPI 3.0 pour l'ensemble des points d'accès REST.",
-      toolHealth: "Sondes de Santé",
-      toolHealthDesc:
-        "Vérifications approfondies de disponibilité pour PostgreSQL, Redis et RabbitMQ.",
-      step3Title: "Étape 3 : Première Connexion Super-Admin & MFA",
-      step3Desc:
-        "Connectez-vous avec les identifiants par défaut et configurez l'authentification multifacteur obligatoire.",
-      mfaNoticeTitle: "Exigence de Sécurité",
-      mfaNoticeContent:
-        "Les comptes super-administrateur requièrent impérativement un enregistrement TOTP avant d'accéder aux paramètres du tenant.",
-      stepEditionsTitle:
-        "Prérequis : Créer les Éditions Commerciales et la Matrice de Fonctionnalités",
-      stepEditionsDesc:
-        "Avant d'allouer un locataire, le module Entitlements requiert au moins une définition d'Édition. Une Édition établit les fonctionnalités contractuelles, les limites de quotas et la tarification. Un locataire ne peut exister sans rattachement à une Édition.",
-      step4Title: "Étape 4 : Déploiement de l'Organisation & du Tenant",
-      step4Desc:
-        "Créez votre tenant racine, configurez les slugs d'URL, les domaines personnalisés et les frontières d'isolation.",
-      step5Title: "Étape 5 : Thèmes, Marque du Portail & Créateur de Login",
-      step5Desc:
-        "Définissez les logos d'entreprise, les palettes de couleurs et concevez des interfaces de connexion sur mesure.",
-
-      stepOrgCoreTitle: "Étape 5 : Mise en Place de la Hiérarchie Organisationnelle à 5 Niveaux",
-      stepOrgCoreDesc:
-        "Structurez la gouvernance opérationnelle du locataire en Organisation, Unités Commerciales, Départements, Centres de Coûts et Équipes via le module Organization Core.",
-      step6Title: "Étape 6: Personnalisation Graphique et Studio de Connexion",
-      step6Desc:
-        "Appliquez les logos de l'entreprise, les palettes de couleurs et publiez des mises en page de connexion personnalisées grâce au générateur Studio.",
+    "foundationsGroup": {
+      "title": "Guides Fondamentaux"
     },
-    ujVenueBooking: {
-      title: "Hiérarchie des Complexes & Réservations Parallèles",
-      description:
-        "Parcours complet de configuration des infrastructures sportives, ressources réservables, plannings et verrous 2-phases.",
-      intro:
-        "Apprenez à structurer des complexes multisites, gérer les ressources réservables, définir les plages de maintenance et traiter les réservations concurrentes.",
-      infoTitle: "Contrôle de Concurrence",
-      infoContent:
-        "Le moteur de réservation en 2 phases de SCRIPE prévient les doubles réservations grâce aux verrous mutex distribués sous Redis.",
-      step1Title: "Étape 1 : Structuration des Complexes Multisites",
-      step1Desc:
-        "Définissez les sites géographiques, bâtiments et zones sportives avec coordonnées GPS et équipements.",
-      step2Title: "Étape 2 : Création des Ressources Réservables",
-      step2Desc:
-        "Configurez terrains, courts et matériels comme actifs atomiques ou composites avec limites de capacité.",
-      step3Title: "Étape 3 : Horaires d'Ouverture & Fermetures",
-      step3Desc:
-        "Paramétrez les horaires hebdomadaires récurrents, jours fériés et créneaux de maintenance.",
-      step4Title: "Étape 4 : Moteur de Verrouillage Concurrentiel en 2 Phases",
-      step4Desc:
-        "Posez une option de réservation atomique de 15 minutes durant le paiement avec expiration TTL automatique.",
-      step5Title: "Étape 5 : Planning Opérationnel & Vue Réservation 360",
-      step5Desc:
-        "Pilotez le tableau de bord de répartition, suivez les cycles de vie des réservations et traitez les modifications.",
+    "masterClassGroup": {
+      "title": "Master Class Outils Développeur"
     },
-    ujPricingFinance: {
-      title: "Tarification Dynamique & Comptabilité en Partie Double",
-      description:
-        "Guide pour configurer grilles tarifaires, suppléments d'heures de pointe, devis cryptographiques et règlements du grand livre.",
-      intro:
-        "Reliez votre catalogue aux algorithmes de tarification dynamique, générez des devis infalsifiables et équilibrez vos comptes.",
-      infoTitle: "Intégrité Financière",
-      infoContent:
-        "L'équilibre invariable débit-crédit garantit une conformité d'audit totale sur toutes les écritures comptables.",
-      step1Title: "Étape 1 : Grilles Tarifaires & Livres Multi-Devises",
-      step1Desc:
-        "Définissez les tarifs horaires de base, devises régionales et paliers pour vos espaces et prestations.",
-      step2Title: "Étape 2 : Règles Dynamiques & Heures Pleines",
-      step2Desc:
-        "Appliquez des majorations ou remises conditionnelles selon l'heure, le statut client et l'anticipation.",
-      step3Title: "Étape 3 : Devis Cryptographiques & Paiement",
-      step3Desc:
-        "Générez des devis scellés par signature HMAC-SHA256 protégeant les tarifs contre toute falsification pendant l'achat.",
-      step4Title: "Étape 4 : Grand Livre & Plan Comptable",
-      step4Desc:
-        "Enregistrez les débits et crédits dans des comptes généraux ségrégués avec contrôle d'équilibre automatique.",
-      step5Title: "Étape 5 : Facturation, Encaissements & Reversements",
-      step5Desc:
-        "Émettez des factures fiscales certifiées, encaissez les paiements et procédez au partage de revenus automatisé.",
+    "masterModuleGen": {
+      "title": "Master Class : Génération de Modules de Bout en Bout",
+      "description": "Master class étape par étape : création d'un module de facturation prêt pour la production avec gestionnaires CQRS, migrations multi-BD et frontend Next.js MVVM.",
+      "intro": "Dans cette master class complète, vous construirez une capacité de facturation complète pour la plateforme SCRIPE en suivant les directives strictes de DDD et Clean Architecture."
     },
-    ujWorkforceCrm: {
-      title: "Gestion du Personnel & Fiche Client 360",
-      description:
-        "Guide pour administrer compétences du personnel, plannings de vacations, graphes relationnels et déduplication.",
-      intro:
-        "Optimisez l'allocation de vos ressources humaines et la relation client à travers toutes les filiales de votre réseau.",
-      infoTitle: "Identité Polymorphe",
-      infoContent:
-        "L'architecture polymorphe permet à une entité d'agir simultanément comme client, coach sportif ou contact d'entreprise.",
-      step1Title: "Étape 1 : Répertoire du Personnel & Compétences",
-      step1Desc:
-        "Intégrez vos collaborateurs, suivez leurs certifications, rôles et diplômes d'encadrement.",
-      step2Title: "Étape 2 : Plannings de Vacations & Disponibilités",
-      step2Desc:
-        "Créez des modèles de rotation, gérez les absences et évitez les dépassements de temps de travail.",
-      step3Title: "Étape 3 : Fiche Client 360 & Tiers Polymorphes",
-      step3Desc:
-        "Rassemblez fiches personnelles, comptes d'entreprises, échanges et historiques de réservations dans une vue unifiée.",
-      step4Title: "Étape 4 : Graphe Relationnel & Comptes B2B",
-      step4Desc:
-        "Modélisez les liens familiaux, tuteurs légaux et rattachements d'entreprises partenaires.",
-      step5Title: "Étape 5 : Déduplication Automatisée & Fusion",
-      step5Desc:
-        "Identifiez les doublons par correspondance phonétique et fusionnez les dossiers en toute sécurité sans perte de données.",
+    "qualityGate": {
+      "title": "Master Class : Porte de Vérification Universelle en 5 Étapes",
+      "description": "Ingénierie zéro défaut : application de la stricte batterie de vérification comprenant lint, format, compilation backend, frontend et parité en 7 langues.",
+      "intro": "Dans le cycle de livraison de SCRIPE, aucune pull request ne peut être fusionnée sans passer la Porte de Vérification Universelle."
     },
-    ujCustomFieldsPlugins: {
-      title: "Étendre SCRIPE : Champs Personnalisés & Plugins",
-      description:
-        "Extension des schémas d'entités avec des champs EAV et installation d'extensions isolées du marketplace.",
-      intro:
-        "Personnalisez la plateforme sans modifier le code source grâce au moteur de champs EAV et aux extensions certifiées.",
-      infoTitle: "Extensibilité Sans Interruption",
-      infoContent:
-        "Les modifications de champs s'appliquent instantanément sur l'UI et les API sans migration de base de données.",
-      step1Title: "Étape 1 : Groupes de Champs & Types de Données",
-      step1Desc:
-        "Associez des champs texte, numériques, dates ou sélecteurs aux réservations et fiches clients.",
-      step2Title: "Étape 2 : Validation & Chiffrement AES-256",
-      step2Desc:
-        "Configurez expressions régulières, champs obligatoires et chiffrez les données sensibles au niveau champ.",
-      step3Title: "Étape 3 : Découverte & Installation de Plugins",
-      step3Desc:
-        "Parcourez le catalogue d'extensions, vérifiez les autorisations de sécurité et installez en un clic.",
-      step4Title: "Étape 4 : Intégration Webhooks & Événements",
-      step4Desc:
-        "Interconnectez vos applications externes en souscrivant aux événements temps réel vérifiés par signature HMAC.",
+    "studioSchemaCanvas": {
+      "title": "Master Class : Modélisation Relationnelle Visuelle sur le Canevas Studio",
+      "description": "Maîtrise de la conception de schémas complexes : visualisation des relations 1:1, 1:N et N:N, notation en patte de corbeau et index de suppression réversible.",
+      "intro": "La visualisation des relations entre entités élimine la surcharge cognitive et évite les dépendances cycliques. Concevez un système de tournoi sur le Canevas Studio."
     },
-    ujComplianceGovernance: {
-      title: "Gouvernance d'Entreprise, Conformité & BI",
-      description:
-        "Alertes de sécurité temps réel, journaux d'audit immuables, droits RGPD et tableaux de bord analytiques.",
-      intro:
-        "Assurez la conformité réglementaire internationale, surveillez les accès au système et pilotez vos indicateurs clés.",
-      infoTitle: "Conformité Réglementaire",
-      infoContent:
-        "Les purges automatisées et pistes d'audit cryptographiques garantissent votre préparation aux audits SOC2, ISO 27001 et RGPD.",
-      step1Title: "Étape 1 : Surveillance Sécurité & Alertes Temps Réel",
-      step1Desc:
-        "Paramétrez des notifications lors de connexions suspectes ou d'élévations de privilèges imprévues.",
-      step2Title: "Étape 2 : Pistes d'Audit Infalsifiables",
-      step2Desc:
-        "Consultez les journaux d'activité immuables consignant identifiant utilisateur, adresse IP, horodatage et diffs.",
-      step3Title: "Étape 3 : Traitement des Demandes RGPD (DSR)",
-      step3Desc:
-        "Automatisez les exports de données personnelles, révocations de consentement et suppressions pour droit à l'oubli.",
-      step4Title: "Étape 4 : Tableaux de Bord Décisionnels & Métriques",
-      step4Desc:
-        "Suivez en direct les taux d'occupation des terrains, la vélocité financière et l'efficacité opérationnelle des équipes.",
+    "userJourneysGroup": {
+      "title": "Scénarios de Parcours Utilisateur"
     },
-  },
+        "addModule": {
+          "title": "Slices de Modules Frontend & MVVM",
+          "description": "Masterclass étape par étape sur la création, la structuration et l'intégration de sous-modules frontend via Clean Architecture et MVVM.",
+          "intro": "Guide complet pour concevoir des sous-modules frontend robustes et maintenables dans SCRIPE, respectant les frontières de couches et le flux d'état MVVM.",
+          "prerequisitesTitle": "Prérequis",
+          "stepsTitle": "Guide d'implémentation étape par étape",
+          "structureTitle": "Étape 1 : Structure des répertoires et hiérarchie des fichiers",
+          "entityTitle": "Étape 2 : Entité de domaine et contrats",
+          "repoTitle": "Étape 3 : Service de données, mapper et dépôt",
+          "viewModelTitle": "Étape 4 : Hook ViewModel et logique d'état",
+          "viewTitle": "Étape 5 : Vue de présentation et composants d'interface",
+          "diTitle": "Étape 6 : Enregistrement dans le conteneur d'injection de dépendances",
+          "routeTitle": "Étape 7 : Liaison de page dans App Router",
+          "checklist": "Assurez-vous que tous les fichiers sont typés, valident le linter strict et ne créent aucune dépendance circulaire avant de valider.",
+          "step1Title": "Étape 1 : Génération de l'arborescence des dossiers",
+          "step1Desc": "Organisez votre sous-module en dossiers domain, data et presentation sous src/modules/{module-name}/{sub-module}/.",
+          "step2Title": "Étape 2 : Définition de l'entité de domaine et des contrats",
+          "step2Desc": "Créez des modèles de domaine riches avec mises à jour immuables et interfaces de dépôt dans la couche domaine.",
+          "step3Title": "Étape 3 : Implémentation du service de données et du dépôt",
+          "step3Desc": "Implémentez les objets de transfert de données, services HTTP avec IApiService, mappers et implémentations de dépôt.",
+          "step4Title": "Étape 4 : Conception du hook ViewModel",
+          "step4Desc": "Tirez parti de useCrudViewModel avec TanStack Query pour gérer la pagination, le tri, la recherche et les mutations.",
+          "step5Title": "Étape 5 : Construction des composants de présentation UI",
+          "step5Desc": "Construisez les vues à l'aide des composants du système de design @core/ui, en évitant les éléments de formulaire HTML natifs.",
+          "step6Title": "Étape 6 : Enregistrement dans le conteneur DI",
+          "step6Desc": "Raccordez le nouveau service et dépôt dans le conteneur di.ts du module avec des accesseurs différés.",
+          "step7Title": "Étape 7 : Intégration de la page de routage Next.js",
+          "step7Desc": "Exposez la fonctionnalité via Next.js App Router sous src/app/(modules)/{route}/page.tsx avec les métadonnées requises."
+    },
+        "addBackendModule": {
+          "title": "Clean Architecture Backend & CQRS",
+          "description": "Tutoriel complet sur la création de modules backend en .NET 10 avec AstraFlow CQRS, EF Core multi-tenant et boîte d'envoi outbox.",
+          "intro": "Plongez dans la création de modules backend professionnels respectant les principes SCRIPE DDD, le modèle Result et des schémas de base isolés.",
+          "prerequisitesTitle": "Prérequis",
+          "stepsTitle": "Guide d'architecture étape par étape",
+          "structureTitle": "Étape 1 : Architecture de la solution et structure du projet",
+          "entityTitle": "Étape 2 : Modélisation du domaine et entités auditables",
+          "commandTitle": "Étape 3 : Commandes, gestionnaires et validateurs AstraFlow",
+          "diTitle": "Étape 4 : Infrastructure et persistance EF Core",
+          "controllerTitle": "Étape 5 : Contrôleurs Web API ASP.NET Core",
+          "registerTitle": "Étape 6 : Démarrage du module monolithique et câblage DI",
+          "migrationNote": "Étape 7 : Génération et exécution des migrations de base de données",
+          "step1Title": "Étape 1 : Création de la solution du module",
+          "step1Desc": "Créez les projets Domain, Application et Infrastructure en respectant les frontières de Clean Architecture.",
+          "step2Title": "Étape 2 : Construction de l'entité de domaine",
+          "step2Desc": "Dérivez les entités de AuditableEntity avec identifiant Guid, jetons d'accès concurrentiel et événements de domaine.",
+          "step3Title": "Étape 3 : Commandes et requêtes CQRS",
+          "step3Desc": "Construisez des gestionnaires AstraFlow retournant Result<T> avec des règles de validation FluentValidation.",
+          "step4Title": "Étape 4 : Persistance et configurations d'entités",
+          "step4Desc": "Configurez des schémas PostgreSQL/SQL Server isolés, mappages d'entités, index et tables outbox dans EF Core.",
+          "step5Title": "Étape 5 : Exposition des contrôleurs d'API",
+          "step5Desc": "Exposez des points de terminaison REST versionnés renvoyant des enveloppes d'erreur RFC 7807 et des réponses Result.",
+          "step6Title": "Étape 6 : Assemblage de l'injection de dépendances",
+          "step6Desc": "Enregistrez services, gestionnaires AstraFlow et tâches d'arrière-plan dans l'extension de collection de services.",
+          "step7Title": "Étape 7 : Génération de migrations multi-bases de données",
+          "step7Desc": "Générez des migrations EF Core propres au fournisseur via la CLI scripe db avec validation de schéma.",
+          "step8Title": "Étape 8 : Tests automatisés et vérification",
+          "step8Desc": "Rédigez des tests unitaires et d'intégration pour valider le comportement des gestionnaires et les transactions."
+    },
+        "ujGettingStarted": {
+          "title": "Parcours de Démarrage",
+          "description": "Parcours de bout en bout depuis le clonage initial du dépôt jusqu'au démarrage de l'infrastructure multi-tenant et la connexion à SCRIPE Studio.",
+          "intro": "Découvrez un guide pas à pas complet pour démarrer l'écosystème SCRIPE, vérifier les sondes de santé et provisionner votre premier locataire.",
+          "infoTitle": "Note de démarrage rapide",
+          "infoContent": "Assurez-vous que Docker Desktop fonctionne avant de lancer les services d'infrastructure de développement.",
+          "step1Title": "Étape 1 : CLI de développement et démarrage local",
+          "step1Desc": "Clonez le dépôt, démarrez PostgreSQL, Redis, MinIO, RabbitMQ et lancez les serveurs de développement.",
+          "step2Title": "Étape 2 : Découverte de Swagger, du Playground API et de la CLI",
+          "step2Desc": "Consultez la documentation Swagger, vérifiez les sondes de préparation du cluster et utilisez les outils de la CLI.",
+          "toolCli": "CLI SCRIPE",
+          "toolCliDesc": "Outils puissants en ligne de commande pour la génération de modules, migrations et flux de travail.",
+          "toolSwagger": "Swagger & OpenAPI",
+          "toolSwaggerDesc": "Explorateur d'API REST interactif détaillant les endpoints, l'authentification et les schémas de requête.",
+          "toolHealth": "Sondes de préparation",
+          "toolHealthDesc": "Surveillance de l'état de santé en temps réel de PostgreSQL, Redis, RabbitMQ et MinIO.",
+          "step3Title": "Étape 3 : Première connexion Super-Admin et sécurité",
+          "step3Desc": "Créez ou authentifiez le compte super-administrateur racine avec authentification à deux facteurs obligatoire.",
+          "mfaNoticeTitle": "Exigence de sécurité MFA",
+          "mfaNoticeContent": "Les rôles SuperAdmin nécessitent obligatoirement la validation par mot de passe à usage unique (TOTP) pour les écritures.",
+          "stepEditionsTitle": "Prérequis : Définition des éditions et des droits",
+          "stepEditionsDesc": "Définissez des éditions commerciales, restrictions de fonctionnalités et quotas via le module Entitlements.",
+          "step4Title": "Étape 4 : Provisionnement multi-tenant et domaine personnalisé",
+          "step4Desc": "Provisionnez des organisations locataires, attribuez des niveaux commerciaux, configurez les sous-domaines et isolez les schémas.",
+          "stepOrgCoreTitle": "Étape 5 : Hiérarchie organisationnelle à 5 niveaux",
+          "stepOrgCoreDesc": "Modélisez unités opérationnelles, agences régionales, départements, centres de coûts et équipes dans Organization Core.",
+          "step6Title": "Étape 6 : Personnalisation visuelle et écran de connexion Studio",
+          "step6Desc": "Personnalisez palettes de couleurs, typographie, logos d'organisation et mises en page divisées d'authentification."
+    },
+        "ujVenueBooking": {
+          "title": "Parcours Réservation de Terrains",
+          "description": "Visite complète de la configuration des complexes sportifs, du verrouillage de créneaux en temps réel et du cycle de vie des réservations.",
+          "intro": "Découvrez l'ensemble des opérations d'installations sportives de la création des terrains à l'enregistrement des joueurs.",
+          "infoTitle": "Garde de concurrence",
+          "infoContent": "Le verrouillage distribué Redis empêche les doubles réservations lors de tentatives simultanées de clients.",
+          "step1Title": "Étape 1 : Configuration du campus et des installations",
+          "step1Desc": "Définissez campus sportifs, gymnases couverts, terrains extérieurs, types de surfaces et horaires d'ouverture.",
+          "step2Title": "Étape 2 : Disponibilité en temps réel et verrouillage de créneaux",
+          "step2Desc": "Consultez les plannings dynamiques des terrains et appliquez des verrous temporaires sur les créneaux sélectionnés.",
+          "step3Title": "Étape 3 : Réservation client et flux de paiement",
+          "step3Desc": "Soumettez les informations de réservation, calculez la tarification dynamique et passez du statut En attente à Réservé.",
+          "step4Title": "Étape 4 : Attribution d'équipements et d'entraîneurs",
+          "step4Desc": "Ajoutez matériel de location, éclairage et séances de coaching certifié aux réservations de terrains actives.",
+          "step5Title": "Étape 5 : Enregistrement par code QR et contrôle d'accès",
+          "step5Desc": "Générez des laissez-passer QR chiffrés et temporaires pour la validation matérielle des tourniquets et l'accès des usagers."
+    },
+        "ujPricingFinance": {
+          "title": "Parcours Tarification & Finances",
+          "description": "Masterclass sur la configuration de matrices de prix dynamiques, traitement des passerelles de paiement et comptabilité en partie double.",
+          "intro": "Suivez les opérations financières du calcul des tarifs selon la demande jusqu'au rapprochement dans le plan comptable multidevise.",
+          "infoTitle": "Garantie de partie double",
+          "infoContent": "Chaque transaction du grand livre impose rigoureusement l'égalité débits/crédits sans aucune erreur d'arrondi.",
+          "step1Title": "Étape 1 : Règles tarifaires dynamiques et heures de pointe",
+          "step1Desc": "Définissez coefficients d'heures de pointe, majorations de week-end et remises pour abonnés.",
+          "step2Title": "Étape 2 : Paiement et création de l'intention de paiement",
+          "step2Desc": "Initiez des sessions de paiement sécurisées via Stripe, Fawry ou HyperPay avec vérification de signature cryptographique.",
+          "step3Title": "Étape 3 : Ingestion des webhooks et confirmation",
+          "step3Desc": "Traitez les webhooks asynchrones de prestataires de paiement de manière idempotente avec le pattern outbox transactionnel.",
+          "step4Title": "Étape 4 : Écriture au grand livre en partie double",
+          "step4Desc": "Comptabilisez automatiquement les écritures équilibrées de débit et crédit dans les comptes de produits, taxes et créances.",
+          "step5Title": "Étape 5 : Facturation automatisée et conformité TVA",
+          "step5Desc": "Émettez des factures fiscales électroniques conformes avec empreinte cryptographique QR intégrée et suivi d'audit."
+    },
+        "ujWorkforceCrm": {
+          "title": "Parcours Gestion du Personnel & CRM",
+          "description": "Guide approfondi couvrant l'accueil des employés, plannings d'entraîneurs, calcul des salaires et dossiers clients CRM.",
+          "intro": "Simplifiez l'administration du personnel sportif, le suivi des certifications d'entraîneurs, les plannings d'équipes et le CRM.",
+          "infoTitle": "Contrôle d'accès basé sur les rôles",
+          "infoContent": "Les profils du personnel et les données salariales sensibles sont strictement protégés par des permissions PBAC granulaires.",
+          "step1Title": "Étape 1 : Accueil du personnel et création du profil",
+          "step1Desc": "Créez les fiches du personnel, attribuez contrats de travail, pièces d'identité et configurez les groupes d'autorisations.",
+          "step2Title": "Étape 2 : Matrice de compétences et certifications des entraîneurs",
+          "step2Desc": "Suivez certifications de secourisme, diplômes d'entraîneur, dates d'expiration et rappels automatiques de renouvellement.",
+          "step3Title": "Étape 3 : Gestion des plannings et calendriers de disponibilité",
+          "step3Desc": "Établissez les plannings hebdomadaires, gérez les demandes d'échange et couvrez les besoins d'encadrement des installations.",
+          "step4Title": "Étape 4 : Vue client 360 et profils de fidélité",
+          "step4Desc": "Maintenez des dossiers clients unifiés avec historique des réservations, niveaux d'abonnement, préférences et tickets.",
+          "step5Title": "Étape 5 : Paie et calcul des commissions horaires",
+          "step5Desc": "Calculez les rémunérations mensuelles du personnel d'après les heures de terrain consignées, cours particuliers et commissions."
+    },
+        "ujCustomFieldsPlugins": {
+          "title": "Parcours Champs Personnalisés & Plugins",
+          "description": "Tutoriel complet sur l'extension des entités de la plateforme par champs personnalisés chiffrés et enregistrement de plugins en bac à sable.",
+          "intro": "Apprenez à modifier dynamiquement les modèles de données à l'exécution sans interruption de base de données.",
+          "infoTitle": "Garantie de sécurité du schéma",
+          "infoContent": "Les valeurs des champs personnalisés dynamiques sont stockées dans des documents JSON chiffrés validés par JSON Schema.",
+          "step1Title": "Étape 1 : Définition des métadonnées de champs personnalisés",
+          "step1Desc": "Créez des définitions de champs avec types de données, règles de validation, indicateurs de chiffrement et visibilité locataire.",
+          "step2Title": "Étape 2 : Extension de schéma et rendu dynamique de formulaires",
+          "step2Desc": "Liez des attributs personnalisés aux entités principales comme Lieu ou Réservation avec génération automatique dans Studio.",
+          "step3Title": "Étape 3 : Architecture de plugins et enregistrement en sandbox",
+          "step3Desc": "Concevez des packages de plugins autonomes exposant points d'extension, widgets d'interface et hooks d'événements AstraFlow.",
+          "step4Title": "Étape 4 : Hooks de cycle de vie et exécution WebAssembly sécurisée",
+          "step4Desc": "Exécutez la logique métier des plugins en toute sécurité dans un bac à sable WebAssembly isolé avec permissions restreintes."
+    },
+        "ujComplianceGovernance": {
+          "title": "Parcours Conformité & Gouvernance",
+          "description": "Masterclass opérationnelle pour délégués à la protection des données sur le droit à l'oubli RGPD, l'analyse légale et les audits SOC2.",
+          "intro": "Garantissez une conformité stricte aux exigences internationales de confidentialité, journalisation d'audit immuable et export légal.",
+          "infoTitle": "Registre d'audit immuable",
+          "infoContent": "Les écritures d'audit sont cryptographiquement chaînées dans un stockage en ajout seul pour garantir la non-répudiation.",
+          "step1Title": "Étape 1 : Surveillance en temps réel des incidents de sécurité",
+          "step1Desc": "Surveillez échecs d'authentification, dépassements de quotas d'appels et tentatives d'élévation de privilèges en temps réel.",
+          "step2Title": "Étape 2 : Analyse médico-légale des journaux d'audit",
+          "step2Desc": "Interrogez les pistes d'audit structurées avec filtrage par locataire, attribution des auteurs et diffs avant/après.",
+          "step3Title": "Étape 3 : Demande d'effacement des données RGPD (DSR)",
+          "step3Desc": "Exécutez des demandes automatisées de droit à l'effacement avec anonymisation en cascade sur tous les schémas modulaires.",
+          "step4Title": "Étape 4 : Tableaux de bord décisionnels BI et streaming d'événements",
+          "step4Desc": "Diffusez la télémétrie de conformité et de performance vers ClickHouse et visualisez les KPI sur tableaux de bord exécutifs."
+    },
+  }
 };

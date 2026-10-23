@@ -13,6 +13,7 @@ import { ar as frontend } from "../pages/frontend/ar";
 import { ar as infrastructure } from "../pages/infrastructure/ar";
 import { ar as tutorials } from "../pages/tutorials/ar";
 import { ar as apiReference } from "../pages/api-reference/ar";
+import { ar as devTools } from "../pages/dev-tools/ar";
 
 import { ar as commWhyScripe } from "../comm-pages/why-scripe/ar";
 import { ar as commPlatform } from "../comm-pages/platform/ar";
@@ -85,5 +86,6 @@ export const allDocsAr: Record<string, any> = mergeAll(
   pageWebhooks,
   pageMarketplace,
   pageEcosystemRecycleBin,
-  pageCustomFields
+  pageCustomFields,
+  devTools
 );
