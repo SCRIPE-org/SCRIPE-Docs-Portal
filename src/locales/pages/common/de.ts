@@ -109,6 +109,7 @@ export const de = {
     commercialWorkManagement: "Arbeitsverwaltung",
     commercialAnalytics: "Analytik & Event-Stream",
     identityModule: "Identität & Zugriff",
+    crmModule: "Kommerzielles CRM & Deals",
     venueModule: "Anlagenbetrieb",
     catalogPricingModule: "Katalog & Preisgestaltung",
     financeModule: "Finanzen & Abrechnung",

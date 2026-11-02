@@ -227,6 +227,7 @@ export const en = {
     commercialWorkManagement: "Work Management",
     commercialAnalytics: "Analytics & Event Stream",
     identityModule: "Identity & Access",
+    crmModule: "Commercial CRM & Deals",
     venueModule: "Venue Operations",
     catalogPricingModule: "Catalog & Pricing",
     financeModule: "Finance & Settlement",

@@ -109,6 +109,7 @@ export const es = {
     commercialWorkManagement: "Gestión de Trabajo",
     commercialAnalytics: "Analítica y Flujo de Eventos",
     identityModule: "Identidad y Acceso",
+    crmModule: "CRM Comercial y Acuerdos",
     venueModule: "Operaciones de Sedes",
     catalogPricingModule: "Catálogo y Precios",
     financeModule: "Finanzas y Liquidaciones",

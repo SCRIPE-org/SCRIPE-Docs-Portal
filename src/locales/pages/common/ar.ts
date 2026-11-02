@@ -227,6 +227,7 @@ export const ar = {
     commercialWorkManagement: "إدارة العمل والمهام",
     commercialAnalytics: "التحليلات وتدفق الأحداث",
     identityModule: "الهوية والوصول",
+    crmModule: "إدارة علاقات العملاء والصفقات التجارية",
     venueModule: "عمليات المنشآت",
     catalogPricingModule: "الكتالوج والتسعير",
     financeModule: "المالية والتسويات",

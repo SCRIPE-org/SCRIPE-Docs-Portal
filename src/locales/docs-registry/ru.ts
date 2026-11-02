@@ -43,6 +43,7 @@ import { ru as pageWebhooks } from "../pages/webhooks/ru";
 import { ru as pageMarketplace } from "../pages/marketplace/ru";
 import { ru as pageEcosystemRecycleBin } from "../pages/ecosystem-recycle-bin/ru";
 import { ru as pageCustomFields } from "../pages/custom-fields/ru";
+import { ru as pageCrm } from "../pages/crm/ru";
 
 import { mergeAll } from "./utils";
 
@@ -87,5 +88,6 @@ export const allDocsRu: Record<string, any> = mergeAll(
   pageMarketplace,
   pageEcosystemRecycleBin,
   pageCustomFields,
+  pageCrm,
   devTools
 );

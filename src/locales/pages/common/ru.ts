@@ -109,6 +109,7 @@ export const ru = {
     commercialWorkManagement: "Управление работой",
     commercialAnalytics: "Аналитика и поток событий",
     identityModule: "Идентификация и доступ",
+    crmModule: "Коммерческая CRM и сделки",
     venueModule: "Управление площадками",
     catalogPricingModule: "Каталог и ценообразование",
     financeModule: "Финансы и расчеты",

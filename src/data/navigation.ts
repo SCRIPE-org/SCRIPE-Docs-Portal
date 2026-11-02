@@ -309,6 +309,65 @@ export const navigationData: DocCategoryData[] = [
     ],
   },
 
+  // ─── Commercial CRM & Revenue Engine Module ─────────────────
+  {
+    id: "module-crm",
+    titleKey: "nav.crmModule",
+    icon: "briefcase",
+    order: 4.5,
+    items: [
+      {
+        id: "mod-crm-overview",
+        titleKey: "modules.crm.overview.title",
+        slug: "modules/crm-overview",
+        icon: "layout",
+        order: 1,
+      },
+      {
+        id: "mod-crm-accounts",
+        titleKey: "modules.crm.accounts.title",
+        slug: "modules/crm/accounts-360",
+        icon: "building",
+        order: 2,
+      },
+      {
+        id: "mod-crm-contacts",
+        titleKey: "modules.crm.contacts.title",
+        slug: "modules/crm/contacts-context",
+        icon: "users",
+        order: 3,
+      },
+      {
+        id: "mod-crm-leads",
+        titleKey: "modules.crm.leads.title",
+        slug: "modules/crm/leads-qualification",
+        icon: "user-plus",
+        order: 4,
+      },
+      {
+        id: "mod-crm-opportunities",
+        titleKey: "modules.crm.opportunities.title",
+        slug: "modules/crm/opportunities-kanban",
+        icon: "trending-up",
+        order: 5,
+      },
+      {
+        id: "mod-crm-pipeline",
+        titleKey: "modules.crm.pipeline.title",
+        slug: "modules/crm/pipeline-admin",
+        icon: "sliders",
+        order: 6,
+      },
+      {
+        id: "mod-crm-activities",
+        titleKey: "modules.crm.activities.title",
+        slug: "modules/crm/sales-activities",
+        icon: "activity",
+        order: 7,
+      },
+    ],
+  },
+
   // ─── 5. Venue Operations & Facilities Module ────────────────
   {
     id: "module-venue",

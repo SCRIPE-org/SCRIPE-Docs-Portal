@@ -43,6 +43,7 @@ import { zh as pageWebhooks } from "../pages/webhooks/zh";
 import { zh as pageMarketplace } from "../pages/marketplace/zh";
 import { zh as pageEcosystemRecycleBin } from "../pages/ecosystem-recycle-bin/zh";
 import { zh as pageCustomFields } from "../pages/custom-fields/zh";
+import { zh as pageCrm } from "../pages/crm/zh";
 
 import { mergeAll } from "./utils";
 
@@ -87,5 +88,6 @@ export const allDocsZh: Record<string, any> = mergeAll(
   pageMarketplace,
   pageEcosystemRecycleBin,
   pageCustomFields,
+  pageCrm,
   devTools
 );
