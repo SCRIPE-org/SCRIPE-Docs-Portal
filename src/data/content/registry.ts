@@ -236,6 +236,8 @@ import "./modules/crm/contacts-context";
 import "./modules/crm/leads-qualification";
 import "./modules/crm/opportunities-kanban";
 import "./modules/crm/pipeline-admin";
+import "./modules/crm/workflow-studio-2d";
+import "./modules/crm/settings-governance";
 import "./modules/crm/sales-activities";
 
 // Modules (Identity — Entity Deep Dives)

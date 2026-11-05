@@ -51,6 +51,16 @@ const sections: DocSection[] = [
         descriptionKey: "modules.crm.overview.featurePipelineDesc",
       },
       {
+        icon: "Network",
+        titleKey: "modules.crm.overview.featureWorkflowStudio",
+        descriptionKey: "modules.crm.overview.featureWorkflowStudioDesc",
+      },
+      {
+        icon: "DollarSign",
+        titleKey: "modules.crm.overview.featureSettings",
+        descriptionKey: "modules.crm.overview.featureSettingsDesc",
+      },
+      {
         icon: "Activity",
         titleKey: "modules.crm.overview.featureActivities",
         descriptionKey: "modules.crm.overview.featureActivitiesDesc",
@@ -185,7 +195,9 @@ registerPage({
     "modules/crm/leads-qualification",
     "modules/crm/opportunities-kanban",
     "modules/crm/pipeline-admin",
+    "modules/crm/workflow-studio-2d",
+    "modules/crm/settings-governance",
     "modules/crm/sales-activities",
   ],
-  lastUpdated: "2026-11-02",
+  lastUpdated: "2026-11-05",
 });

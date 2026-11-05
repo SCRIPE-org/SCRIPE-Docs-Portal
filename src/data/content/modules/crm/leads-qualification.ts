@@ -58,59 +58,73 @@ const sections: DocSection[] = [
     type: "heading",
     level: 2,
     titleKey: "modules.crm.leads.conversionTitle",
-    id: "dual-conversion-pathways",
+    id: "dual-conversion-and-governance",
   },
   {
     type: "paragraph",
     contentKey: "modules.crm.leads.conversionIntro",
   },
   {
+    type: "table",
+    headers: ["Conversion Policy", "Configuration Mode", "System Behavior"],
+    rows: [
+      [
+        "Configurable Deal Creation",
+        "Tenant Setting (Auto vs Manual)",
+        "Converting a lead marks status as Converted. Opportunity generation can be automatic or initiated manually by the sales rep.",
+      ],
+      [
+        "Rollback Lock Protection",
+        "Pipeline Governance Rule",
+        "Converted leads are locked from accidental regression unless explicitly authorized by a Commercial Manager grant.",
+      ],
+      [
+        "Tenant Provisioning Saga",
+        "SaaS Self-Serve Pathway",
+        "Triggers the atomic TenantProvisioner saga to instantiate an operational tenant workspace, admin user, and edition plan.",
+      ],
+    ],
+  },
+  {
     type: "code",
     language: "csharp",
     filename: "src/Modules/CRM/CRM.Application/Leads/Commands/ConvertLeadToOpportunityCommandHandler.cs",
-    code: `// Pathway B: Commercial Deal Conversion
-public async Task<Result<ConvertLeadToOpportunityResult>> Handle(
-    ConvertLeadToOpportunityCommand request,
-    CancellationToken ct)
+    code: `// Lead to Opportunity Conversion with PartyKernel Linkage
+public async Task<Result<Guid>> Handle(ConvertLeadToOpportunityCommand request, CancellationToken ct)
 {
-    var lead = await _leadRepo.GetByIdAsync(request.LeadId, ct);
-    if (lead == null || lead.Status == LeadStatus.Converted)
-        return Result.Fail("lead_invalid_or_already_converted");
+    var lead = await _db.Leads.FirstOrDefaultAsync(l => l.Id == request.LeadId, ct);
+    if (lead == null) return Result.Fail("lead_not_found");
+    if (lead.Status == LeadStatus.Converted) return Result.Fail("lead_already_converted");
 
-    // 1. Resolve or create Commercial Account in CRM
-    var accountId = request.AccountId ?? await ResolveOrCreateAccountAsync(lead, ct);
+    // 1. Resolve or establish Party identity
+    var partyId = await _partyContract.EnsurePartyAsync(lead.CompanyName, lead.Email, ct);
 
-    // 2. Instantiate new Opportunity with PD-1 validated PartyId
-    var opportunity = new CrmOpportunity
+    // 2. Instantiate commercial opportunity
+    var opp = new CrmOpportunity
     {
         Id = Guid.NewGuid(),
         TenantId = lead.TenantId,
-        Title = request.DealTitle ?? $"Deal: {lead.CompanyName ?? lead.ContactName}",
         LeadId = lead.Id,
-        AccountId = accountId,
-        PartyId = lead.VerifiedPartyId,
-        EstimatedAmount = lead.EstimatedValue ?? 0,
-        CurrencyCode = lead.Currency ?? "SAR",
-        PipelineId = defaultPipeline.Id,
-        StageId = initialStage.Id,
-        StageKey = initialStage.Key,
-        OwnerUserId = request.OwnerUserId ?? lead.OwnerUserId,
-        Status = OpportunityStatus.Open
+        PartyId = partyId,
+        Title = $"Deal -- {lead.CompanyName}",
+        EstimatedAmount = request.EstimatedAmount ?? 0m,
+        CurrencyCode = request.CurrencyCode ?? "SAR",
+        StageKey = "discovery"
     };
 
-    // 3. Mark Lead Converted
     lead.Status = LeadStatus.Converted;
-    lead.ConvertedOpportunityId = opportunity.Id;
+    lead.ConvertedAtUtc = DateTime.UtcNow;
 
-    await _unitOfWork.SaveChangesAsync(ct);
-    return Result.Ok(new ConvertLeadToOpportunityResult(opportunity.Id, accountId));
+    _db.Opportunities.Add(opp);
+    await _db.SaveChangesAsync(ct);
+    return Result.Ok(opp.Id);
 }`,
   },
   {
     type: "heading",
     level: 2,
     titleKey: "modules.crm.leads.apiTitle",
-    id: "api-endpoints-leads",
+    id: "leads-api-endpoints",
   },
   {
     type: "paragraph",
@@ -120,12 +134,12 @@ public async Task<Result<ConvertLeadToOpportunityResult>> Handle(
     type: "table",
     headers: ["Method", "Endpoint Route", "Required Permission", "Description"],
     rows: [
-      ["POST", "/api/v1/crm/leads", "crm.leads.create", "Admin or sales-rep creation of an inbound commercial prospect lead"],
-      ["GET", "/api/v1/crm/leads", "crm.leads.read", "List leads with pagination, status filters, and assigned owner scope under D4/B"],
-      ["GET", "/api/v1/crm/leads/{id}", "crm.leads.read", "Get full lead dossier including discovery notes, team size, and interest metadata"],
-      ["PUT", "/api/v1/crm/leads/{id}/qualify", "crm.leads.qualify", "Transition lead state to Qualified with captured qualification notes and party verification"],
-      ["POST", "/api/v1/crm/leads/{id}/convert-opportunity", "crm.leads.convert", "Convert qualified lead into an active CRM Opportunity and linked Commercial Account"],
-      ["POST", "/api/v1/crm/leads/{id}/convert-tenant", "crm.leads.convert", "Execute atomic TenantProvisioner saga creating operational tenant, admin role, and edition"],
+      ["GET", "/api/v1/crm/leads", "crm.leads.read", "List leads with status filter, ABM hierarchy, and contact metadata"],
+      ["POST", "/api/v1/crm/leads", "crm.leads.create", "Create inbound lead via sales rep entry or CRM API"],
+      ["POST", "/api/v1/crm/leads/{id}/qualify", "crm.leads.qualify", "Advance lead to Qualified stage with qualification notes"],
+      ["POST", "/api/v1/crm/leads/{id}/convert/opportunity", "crm.leads.convert", "Convert qualified lead into commercial opportunity"],
+      ["POST", "/api/v1/crm/leads/{id}/convert/tenant", "crm.leads.convert", "Convert qualified lead into fully provisioned SCRIPE tenant"],
+      ["POST", "/api/v1/crm/leads/{id}/disqualify", "crm.leads.qualify", "Disqualify lead with structured reason code"],
     ],
   },
 ];
@@ -141,7 +155,7 @@ registerPage({
     "modules/crm-overview",
     "modules/crm/opportunities-kanban",
     "modules/crm/accounts-360",
-    "features/multi-tenancy",
+    "modules/crm/contacts-context",
   ],
-  lastUpdated: "2026-11-02",
+  lastUpdated: "2026-11-05",
 });

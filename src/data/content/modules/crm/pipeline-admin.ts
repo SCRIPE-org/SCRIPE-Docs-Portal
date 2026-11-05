@@ -10,7 +10,7 @@ const sections: DocSection[] = [
     type: "heading",
     level: 2,
     titleKey: "modules.crm.pipeline.governanceTitle",
-    id: "single-default-pipeline-law",
+    id: "dynamic-pipeline-stages-and-governance",
   },
   {
     type: "paragraph",
@@ -22,9 +22,10 @@ const sections: DocSection[] = [
     rows: [
       ["discovery", "Discovery / الاستكشاف", "10%", "Initial lead qualification & needs analysis"],
       ["qualification", "Qualification / التأهيل", "30%", "BANT confirmation & stakeholder engagement"],
-      ["proposal", "Proposal / تقديم العرض", "60%", "Commercial terms transmittal (Requires verified PartyId)"],
-      ["negotiation", "Negotiation / التفاوض", "80%", "Contract legal review & procurement"],
-      ["closing", "Closing / الإغلاق", "90%", "Final signatory execution"],
+      ["solution_fit", "Solution Fit / ملاءمة الحل", "50%", "Technical evaluation & requirements alignment"],
+      ["proposal", "Proposal / تقديم العرض", "70%", "Commercial terms transmittal (Requires verified PartyId)"],
+      ["negotiation", "Negotiation / التفاوض", "85%", "Contract legal review & procurement negotiations"],
+      ["closing", "Closing / الإغلاق", "95%", "Final signatory execution & fulfillment handoff"],
     ],
   },
   {
@@ -41,22 +42,29 @@ const sections: DocSection[] = [
     type: "code",
     language: "csharp",
     filename: "src/Modules/CRM/CRM.Application/Pipelines/Commands/UpdateDefaultPipelineCommandHandler.cs",
-    code: `// Validation 1: Canonical 5-Stage Set Immutability
-var expectedKeys = new HashSet<string> { "discovery", "qualification", "proposal", "negotiation", "closing" };
-var incomingKeys = request.Stages.Select(s => s.Key).ToHashSet();
-if (!expectedKeys.SetEquals(incomingKeys))
-    return Result.Fail("pipeline_stages_canonical_set_immutable");
-
-// Validation 2: Contiguous 1..5 Permutation Sort Order
+    code: `// Validation 1: Contiguous Permutation Sort Order (1..N)
 var sortOrders = request.Stages.Select(s => s.SortOrder).OrderBy(x => x).ToList();
-if (!sortOrders.SequenceEqual(new[] { 1, 2, 3, 4, 5 }))
+var expectedContiguous = Enumerable.Range(1, request.Stages.Count).ToList();
+if (!sortOrders.SequenceEqual(expectedContiguous))
     return Result.Fail("pipeline_stages_order_must_be_contiguous_permutation");
 
+// Validation 2: Transition Integrity & Reachability
+var stageKeySet = request.Stages.Select(s => s.Key).ToHashSet();
+foreach (var transition in request.Transitions)
+{
+    if (!stageKeySet.Contains(transition.FromStageKey) || !stageKeySet.Contains(transition.ToStageKey))
+        return Result.Fail("pipeline_transition_references_unknown_stage");
+}
+
 // Validation 3: Pre-Proposal Reachability Gate
-var proposalOrder = request.Stages.First(s => s.Key == "proposal").SortOrder;
-var precedingStages = request.Stages.Where(s => s.SortOrder < proposalOrder).Select(s => s.Key);
-if (!precedingStages.Any(k => k is "discovery" or "qualification"))
-    return Result.Fail("pipeline_proposal_must_be_preceded_by_qualification");`,
+var proposalStage = request.Stages.FirstOrDefault(s => s.Key == "proposal");
+if (proposalStage != null)
+{
+    var hasPrecedingDiscoveryOrQualification = request.Stages
+        .Any(s => s.SortOrder < proposalStage.SortOrder && s.Key is "discovery" or "qualification" or "solution_fit");
+    if (!hasPrecedingDiscoveryOrQualification)
+        return Result.Fail("pipeline_proposal_must_be_preceded_by_qualification");
+}`,
   },
   {
     type: "heading",
@@ -72,8 +80,9 @@ if (!precedingStages.Any(k => k is "discovery" or "qualification"))
     type: "table",
     headers: ["Method", "Endpoint Route", "Required Permission", "Description"],
     rows: [
-      ["GET", "/api/v1/crm/pipelines/default", "crm.pipelines.read", "Retrieve tenant's single default commercial pipeline definition with all 5 active stages"],
-      ["PUT", "/api/v1/crm/pipelines/default", "crm.pipelines.manage", "Update default commercial pipeline labels, stage ordering, and win probabilities in PostgreSQL"],
+      ["GET", "/api/v1/crm/pipelines/default", "crm.pipelines.read", "Retrieve tenant's default commercial pipeline definition with all active stages, transitions, and column mappings"],
+      ["PUT", "/api/v1/crm/pipelines/default", "crm.pipelines.manage", "Update default commercial pipeline labels, stage ordering, win probabilities, and exit validators"],
+      ["POST", "/api/v1/crm/pipelines/validate", "crm.pipelines.manage", "Validate pipeline graph consistency, directed edge connectivity, and gate rules prior to commit"],
     ],
   },
 ];
@@ -87,7 +96,9 @@ registerPage({
   sections,
   relatedSlugs: [
     "modules/crm-overview",
+    "modules/crm/workflow-studio-2d",
     "modules/crm/opportunities-kanban",
+    "modules/crm/settings-governance",
   ],
-  lastUpdated: "2026-11-02",
+  lastUpdated: "2026-11-05",
 });
