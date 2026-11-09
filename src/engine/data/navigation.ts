@@ -1437,6 +1437,20 @@ export const navigationData: DocCategoryData[] = [
             ],
           },
           {
+            id: "dt-cli-astraflow",
+            titleKey: "devTools.cli.astraflow.groupTitle",
+            icon: "workflow",
+            children: [
+              {
+                id: "astraflow-cli",
+                titleKey: "devTools.cli.astraflow.title",
+                slug: "dev-tools/cli/astraflow",
+                icon: "workflow",
+                order: 1,
+              },
+            ],
+          },
+          {
             id: "dt-cli-security",
             titleKey: "devTools.cli.secGroup.title",
             icon: "lock",
@@ -1707,6 +1721,20 @@ export const navigationData: DocCategoryData[] = [
                 slug: "dev-tools/studio/security-tenants",
                 icon: "lock",
                 order: 3,
+              },
+            ],
+          },
+          {
+            id: "dt-studio-astraflow",
+            titleKey: "devTools.studio.astraflow.groupTitle",
+            icon: "workflow",
+            children: [
+              {
+                id: "studio-astraflow",
+                titleKey: "devTools.studio.astraflow.title",
+                slug: "dev-tools/studio/astraflow",
+                icon: "workflow",
+                order: 1,
               },
             ],
           },

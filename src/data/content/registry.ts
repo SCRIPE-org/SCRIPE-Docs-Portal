@@ -25,6 +25,7 @@ import "./dev-tools/cli/localization-engine";
 import "./dev-tools/cli/environment-config";
 import "./dev-tools/cli/platform-diagnostics";
 import "./dev-tools/cli/arch-intelligence";
+import "./dev-tools/cli/astraflow";
 
 // Developer Tools — SCRIPE Studio Suite (20 Deep Pages)
 import "./dev-tools/studio/overview";
@@ -47,6 +48,7 @@ import "./dev-tools/studio/security-tenants";
 import "./dev-tools/studio/terminal-palette";
 import "./dev-tools/studio/monitoring";
 import "./dev-tools/studio/engine-api";
+import "./dev-tools/studio/astraflow";
 
 // Master Class Tutorials (5 Pages)
 import "./tutorials/master-module-generation";
