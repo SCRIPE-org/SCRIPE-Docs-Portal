@@ -82,7 +82,7 @@ export const es = {
       },
       "codeApp": {
         "cmdNewCtrl": "Comando NewCtrl",
-        "cmdNewCtrlDesc": "Genera un controlador API de ASP.NET Core con verbos REST CRUD, atributos de autorización PBAC y despacho MediatR.",
+        "cmdNewCtrlDesc": "Genera un controlador API de ASP.NET Core con verbos REST CRUD, atributos de autorización PBAC y despacho AstraFlow.",
         "cmdNewDto": "Comando NewDto",
         "cmdNewDtoDesc": "Genera registros DTO de solicitud y respuesta con atributos System.Text.Json y garantías de inmutabilidad.",
         "cmdNewJob": "Comando NewJob",
@@ -493,7 +493,7 @@ export const es = {
         "cmdAddBgService": "Comando AddBgService",
         "cmdAddBgServiceDesc": "Agrega un servicio en segundo plano IAutoRegisteredJob de limpieza de eliminación suave a un módulo existente.",
         "cmdNewFeature": "Comando NewFeature",
-        "cmdNewFeatureDesc": "Genera un slice CRUD vertical completo: Entidad, Repositorio, manejadores MediatR CQRS, Controlador y Vista Next.js.",
+        "cmdNewFeatureDesc": "Genera un slice CRUD vertical completo: Entidad, Repositorio, manejadores AstraFlow CQRS, Controlador y Vista Next.js.",
         "cmdNewModule": "Comando NewModule",
         "cmdNewModuleDesc": "Genera un módulo completo de Arquitectura Limpia: Dominio, Aplicación, Infraestructura, WebAPI y submódulo Next.js.",
         "cmdRemoveBgService": "Comando RemoveBgService",

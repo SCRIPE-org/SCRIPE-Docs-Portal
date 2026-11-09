@@ -15,7 +15,7 @@ const sections: DocSection[] = [
   { type: "paragraph", contentKey: "architecture.cqrsPipeline.overviewIntro" },
   {
     type: "flowchart",
-    title: "AstraFlow mediator Pipeline — Request Lifecycle",
+    title: "AstraFlow Pipeline — Request Lifecycle",
     direction: "horizontal",
     nodes: [
       { id: "controller", label: "Controller", type: "default", description: "API endpoint entry" },
@@ -181,7 +181,7 @@ public async Task<IActionResult> GetAdmin(string id)
     language: "csharp",
     filename: "Core.Application/Behaviors/ValidationBehavior.cs",
     code: `/// <summary>
-/// AstraFlow mediator pipeline behavior that runs FluentValidation validators
+/// AstraFlow pipeline behavior that runs FluentValidation validators
 /// BEFORE the request handler executes.
 /// If validation fails, returns Result.Failure without hitting the handler.
 /// </summary>
@@ -323,7 +323,7 @@ public class ValidationBehavior<TRequest, TResponse>
     language: "csharp",
     filename: "Core.Application/Behaviors/LoggingBehavior.cs",
     code: `/// <summary>
-/// Pipeline behavior that logs every AstraFlow mediator request with timing.
+/// Pipeline behavior that logs every AstraFlow request with timing.
 /// Logs: request type, user ID, tenant ID, execution time, and outcome.
 /// Warns if execution exceeds 500ms threshold.
 /// </summary>
@@ -848,6 +848,97 @@ public class OutboxCleanupJob : RecurringJobBase
             await dbContext.SaveChangesAsync(ct);
         }
     }
+}`,
+  },
+
+  // ─── Concurrency Safety & Notification Publishing Strategy ──────
+  {
+    type: "heading",
+    level: 2,
+    titleKey: "architecture.cqrsPipeline.concurrencySafetyTitle",
+    id: "concurrency-safety",
+  },
+  {
+    type: "paragraph",
+    contentKey: "architecture.cqrsPipeline.concurrencySafetyIntro",
+  },
+  {
+    type: "code",
+    language: "csharp",
+    filename: "Core.Application/DependencyInjection.cs — Sequential Notification Dispatch",
+    code: `// Core.Application/DependencyInjection.cs
+services.Configure<NotificationPublishOptions>(opts =>
+{
+    // Sequential execution ensures scoped EF Core DbContext is accessed single-threaded
+    opts.PublishStrategy = NotificationPublishStrategy.Sequential;
+    // Continue policy guarantees all handlers execute even if one fails
+    opts.FailurePolicy = NotificationFailurePolicy.Continue;
+});`,
+  },
+  {
+    type: "comparison",
+    columns: [
+      {
+        titleKey: "architecture.cqrsPipeline.sequentialStrategyTitle",
+        variant: "positive",
+        items: [
+          "Guarantees thread-safe access to scoped EF Core DbContext instances",
+          "Eliminates InvalidOperationException from concurrent DB operations",
+          "Deterministic execution order preserving transactional integrity",
+          "NotificationFailurePolicy.Continue executes remaining handlers on error",
+        ],
+      },
+      {
+        titleKey: "architecture.cqrsPipeline.parallelStrategyTitle",
+        variant: "warning",
+        items: [
+          "Unsafe with scoped DbContext without manual scope factory isolation",
+          "High risk of multi-threading race conditions on entity change tracking",
+          "Non-deterministic execution ordering and unpredictable rollback behavior",
+          "Only suitable for purely stateless or fire-and-forget background notifications",
+        ],
+      },
+    ],
+  },
+
+  // ─── AstraFlow Testing Doubles ──────────────────────────────
+  {
+    type: "heading",
+    level: 2,
+    titleKey: "architecture.cqrsPipeline.testingDoublesTitle",
+    id: "testing-doubles",
+  },
+  {
+    type: "paragraph",
+    contentKey: "architecture.cqrsPipeline.testingDoublesIntro",
+  },
+  {
+    type: "table",
+    headers: ["Test Double", "Purpose", "Verification API"],
+    rows: [
+      ["FakeSender", "In-memory replacement for ISender", ".RespondWith<TReq, TRes>(), .AssertSingleRequest<TReq>(), .Requests"],
+      ["FakePublisher", "In-memory replacement for IPublisher", ".ShouldHavePublished<T>(), .SinglePublished<T>(), .Notifications"],
+      ["FakeMediator", "Combined test double implementing ISender + IPublisher", "Full mediator simulation with zero mock setup overhead"],
+      ["HandlerTestHarness", "Isolated handler execution harness", "Executes handler through real pipeline behaviors in tests"],
+    ],
+  },
+  {
+    type: "code",
+    language: "csharp",
+    filename: "CourtHandlerTests.cs — AstraFlow.Testing Doubles",
+    code: `[Fact]
+public async Task CreateCourt_DispatchesDomainEvent_AndReturnsSuccess()
+{
+    var fakeSender = new FakeSender();
+    var fakePublisher = new FakePublisher();
+    fakeSender.RespondWith<CheckQuotaCommand, Result<bool>>(Result.Success(true));
+
+    var handler = new CreateCourtCommandHandler(fakeSender, fakePublisher, _courtRepository);
+    var result = await handler.Handle(new CreateCourtCommand("Center Court", 75m), CancellationToken.None);
+
+    result.IsSuccess.Should().BeTrue();
+    fakeSender.AssertSingleRequest<CheckQuotaCommand>();
+    fakePublisher.Notifications.ShouldHavePublished<CourtCreatedEvent>();
 }`,
   },
 ];

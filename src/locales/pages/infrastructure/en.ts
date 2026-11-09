@@ -407,7 +407,13 @@ export const en = {
         "The /metrics endpoint exposes OpenTelemetry metrics in Prometheus text format. Prometheus scrapes this endpoint at 15-second intervals, collecting HTTP request durations (histogram), active requests (gauge), GC collections, CPU time, and working set memory. In monolith mode, a single scrape target is needed. In microservice mode, configure one scrape job per module service.",
       loggingTitle: "Centralized Logging (Serilog + Loki)",
       loggingIntro:
-        "Serilog enriches every log entry with machine name, environment, correlation ID, tenant ID, and module tag. When Loki is configured (Loki:Url is set), logs are pushed in real-time via the GrafanaLoki sink. When Loki:Url is empty, logging falls back to console only — this is the default in Development. The 'Application' label is always set to 'SCRIPE' to distingscripeh from other services in a shared Loki instance.",
+        "Serilog enriches every log entry with machine name, environment, correlation ID, tenant ID, and module tag. When Loki is configured (Loki:Url is set), logs are pushed in real-time via the GrafanaLoki sink. When Loki:Url is empty, logging falls back to console only — this is the default in Development. The 'Application' label is always set to 'SCRIPE' to distinguish from other services in a shared Loki instance.",
+      securityRedactionTitle: "Sensitive Data Redaction (AstraFlow.Security)",
+      securityRedactionIntro:
+        "AstraFlow.Security automatically enforces 19 property pattern redaction rules. Sensitive values (passwords, tokens, API keys, connection strings) are masked with [redacted] across all exported trace tags and metrics to prevent credential leakage into monitoring backends.",
+      correlationTitle: "Distributed Trace Correlation Across Outbox & Inbox",
+      correlationIntro:
+        "Distributed correlation preserves end-to-end trace contexts across asynchronous messaging boundaries. The W3C traceparent header and CorrelationId are persisted in the transactional Outbox and automatically rehydrated when events are processed.",
       alertsTitle: "Alert Rules",
       alertsIntro:
         "Pre-configured Prometheus alert rules detect critical and warning conditions. Critical alerts fire immediately for high error rates, database outages, and extreme latency. Warning alerts track P95 degradation, auth anomalies, memory pressure, CPU spikes, and disk space. Alert rules are stored in infrastructure/monitoring/prometheus/alerts/ and auto-loaded by Prometheus.",

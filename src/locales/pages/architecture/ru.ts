@@ -87,6 +87,13 @@ export const ru = {
       validationBehaviorTitle: "Поведение валидации (Validation Behavior)",
       commandExampleTitle: "Пример команды",
       queryExampleTitle: "Пример запроса",
+      sourceGenMappingTitle: "Движок Маппинга на Этапе Компиляции Roslyn",
+      sourceGenMappingIntro:
+        "AstraFlow 2.2.0 представляет инкрементальный генератор исходного кода Roslyn ([AstraGenerateMapping]), заменяющий рефлексию во время выполнения статически скомпилированными скалярными присваиваниями. Тесты BenchmarkDotNet подтверждают 11-кратное ускорение (11.98 нс против 133.82 нс) и снижение потребления памяти на 88% (32 Б против 264 Б).",
+      conventionMappingTitle: "Профиль Маппинга по Соглашениям",
+      mappingChoiceTitle: "Маппинг во Время Компиляции против Соглашений",
+      afm001Tip:
+        "Безопасность во Время Компиляции (AFM001): Анализатор Roslyn требует наличия конструкторов без параметров, совпадающих типов свойств и публичных сеттеров у целевых DTO. Любое несоответствие выявляется на этапе сборки.",
       cachingTip:
         "Запросы могут использовать серверное кэширование, чтобы избежать обращений к базе данных при каждом запросе. Ключ кэша должен включать все параметры запроса для обеспечения уникальности. Кэш автоматически инвалидируется при успешном выполнении связанных команд.",
     },
@@ -357,6 +364,14 @@ export const ru = {
       featureCheckMarkerTitle: "Маркер IRequireFeature",
       featureCheckMarkerIntro:
         "Команды подключают контроль функций, реализуя интерфейс IRequireFeature со свойством RequiredFeatureName. Когда модуль Entitlements не развернут, NoOpFeatureChecker возвращает true для всех проверок, превращая это поведение в прозрачный проход.",
+      concurrencySafetyTitle: "Стратегия Публикации Уведомлений и Безопасность Параллелизма",
+      concurrencySafetyIntro:
+        "Внутрипроцессные события домена взаимодействуют с контекстами EF Core DbContext со временем жизни scoped. Поскольку DbContext не является потокобезопасным, параллельная публикация приводит к фатальным ошибкам. AstraFlow 2.2.0 принудительно использует NotificationPublishStrategy.Sequential для гарантии потокобезопасной работы с БД.",
+      sequentialStrategyTitle: "Последовательная Стратегия (По Умолчанию)",
+      parallelStrategyTitle: "Параллельная / BoundedParallel Стратегия",
+      testingDoublesTitle: "Модульное и Интеграционное Тестирование с AstraFlow.Testing",
+      testingDoublesIntro:
+        "AstraFlow.Testing предоставляет нативные тестовые дублеры (FakeMediator, FakeSender, FakePublisher), устраняющие необходимость в громоздких моках и обеспечивающие удобные утверждения для команд и уведомлений.",
     },
     dependencyInjection: {
       title: "Внедрение зависимостей (DI)",

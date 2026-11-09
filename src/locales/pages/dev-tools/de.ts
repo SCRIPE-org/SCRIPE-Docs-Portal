@@ -82,7 +82,7 @@ export const de = {
       },
       "codeApp": {
         "cmdNewCtrl": "NewCtrl-Befehl",
-        "cmdNewCtrlDesc": "Erstellt einen ASP.NET Core API-Controller mit REST-CRUD-Verben, PBAC-Autorisierungsattributen und MediatR-Dispatch.",
+        "cmdNewCtrlDesc": "Erstellt einen ASP.NET Core API-Controller mit REST-CRUD-Verben, PBAC-Autorisierungsattributen und AstraFlow-Dispatch.",
         "cmdNewDto": "NewDto-Befehl",
         "cmdNewDtoDesc": "Generiert DTO-Records für Anfragen und Antworten mit System.Text.Json-Attributen und Unveränderlichkeitsgarantien.",
         "cmdNewJob": "NewJob-Befehl",
@@ -493,7 +493,7 @@ export const de = {
         "cmdAddBgService": "AddBgService-Befehl",
         "cmdAddBgServiceDesc": "Fügt einen IAutoRegisteredJob Soft-Delete-Bereinigungshintergrunddienst zu einem Modul hinzu.",
         "cmdNewFeature": "NewFeature-Befehl",
-        "cmdNewFeatureDesc": "Erstellt einen vollständigen vertikalen CRUD-Slice: Entity, Repository, MediatR CQRS-Handler, Controller und Next.js-View.",
+        "cmdNewFeatureDesc": "Erstellt einen vollständigen vertikalen CRUD-Slice: Entity, Repository, AstraFlow CQRS-Handler, Controller und Next.js-View.",
         "cmdNewModule": "NewModule-Befehl",
         "cmdNewModuleDesc": "Generiert ein vollständiges Clean Architecture-Modul: Domain, Application, Infrastructure, WebAPI und Next.js-Submodul.",
         "cmdRemoveBgService": "RemoveBgService-Befehl",

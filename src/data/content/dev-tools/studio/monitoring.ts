@@ -66,7 +66,7 @@ const sections: DocSection[] = [
             "OpenTelemetry Waterfall Viewer",
             "Click Trace",
             "Distributed Trace",
-            "Visualizes request spans across API gateway, MediatR handlers, and SQL queries"
+            "Visualizes request spans across API gateway, AstraFlow handlers, and SQL queries"
       ],
       [
             "Response Latency Histograms",

@@ -87,6 +87,13 @@ export const en = {
       validationBehaviorTitle: "Validation Behavior",
       commandExampleTitle: "Command Example",
       queryExampleTitle: "Query Example",
+      sourceGenMappingTitle: "Roslyn Compile-Time Mapping Engine",
+      sourceGenMappingIntro:
+        "AstraFlow 2.2.0 introduces an executable Roslyn incremental source generator ([AstraGenerateMapping]) that replaces runtime reflection with statically compiled scalar assignments. BenchmarkDotNet testing confirms an 11x execution speedup (11.98 ns vs 133.82 ns) and an 88% reduction in memory allocations (32 B vs 264 B).",
+      conventionMappingTitle: "Convention Mapping Profile",
+      mappingChoiceTitle: "Compile-Time vs Convention Mapping",
+      afm001Tip:
+        "Compile-Time Safety (AFM001): The Roslyn analyzer enforces that destination DTOs have parameterless constructors, matching property types, and public setters. Any property mismatch is caught at compile-time rather than failing at runtime.",
       cachingTip:
         "Queries can use server-side caching to avoid hitting the database on every request. The cache key should include all query parameters to ensure uniqueness. Cache is automatically invalidated when related commands succeed.",
     },
@@ -359,6 +366,14 @@ export const en = {
       featureCheckMarkerTitle: "IRequireFeature Marker",
       featureCheckMarkerIntro:
         "Commands opt-in to feature gating by implementing the IRequireFeature interface with a RequiredFeatureName property. When the Entitlements module is not deployed, NoOpFeatureChecker returns true for all checks — making this behavior a silent pass-through.",
+      concurrencySafetyTitle: "Notification Publishing Strategy & Concurrency Safety",
+      concurrencySafetyIntro:
+        "In-process domain events interact with scoped EF Core DbContext instances. Because DbContext is not thread-safe, concurrent notification dispatch (such as Task.WhenAll) triggers fatal concurrency exceptions. AstraFlow 2.2.0 enforces NotificationPublishStrategy.Sequential to guarantee thread-safe database operations within the request scope.",
+      sequentialStrategyTitle: "Sequential Strategy (Default)",
+      parallelStrategyTitle: "Parallel / BoundedParallel Strategy",
+      testingDoublesTitle: "Unit & Integration Testing with AstraFlow.Testing",
+      testingDoublesIntro:
+        "AstraFlow.Testing provides native test doubles (FakeMediator, FakeSender, FakePublisher) that eliminate brittle mock setup and enable fluent behavioral assertions on sent commands and published domain notifications.",
     },
     dependencyInjection: {
       title: "Dependency Injection",

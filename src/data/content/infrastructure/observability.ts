@@ -44,60 +44,77 @@ const sections: DocSection[] = [
   {
     type: "code",
     language: "csharp",
-    filename: "TracingBehavior.cs — AstraFlow mediator Pipeline Tracing",
-    code: `/// <summary>
-/// Creates an OpenTelemetry span for every SCRIPE request handler.
-/// Auto-detects the module from the handler's namespace.
-/// Pipeline order: Exception → Validation → Auth → FeatureCheck →
-///                 Cache → TRACING → Audit → Handler
-/// </summary>
-public class TracingBehavior<TRequest, TResponse>
-    : IPipelineBehavior<TRequest, TResponse>
+    filename: "Host/API/Extensions/CoreServiceRegistration.cs — Native AstraFlow OpenTelemetry",
+    code: `// Host/API/Extensions/CoreServiceRegistration.cs
+builder.Services.AddAstraFlowOpenTelemetry(options =>
 {
-    private static readonly ActivitySource Source = new("SCRIPE.Mediator");
+    options.Enabled = true;
+    // Suppress generic type names to protect Prometheus from high-cardinality label explosion
+    options.IncludeOperationTypeNames = false;
+    options.IncludeExceptionTypeNames = true;
+});
 
-    public async Task<TResponse> Handle(
-        TRequest request, RequestHandlerDelegate<TResponse> next,
-        CancellationToken ct)
-    {
-        var requestName = typeof(TRequest).Name;
-        var kind = requestName.EndsWith("Query")
-            ? "Query" : "Command";
-        var module = DetectModule(typeof(TRequest).Namespace);
-
-        using var activity = Source.StartActivity(
-            $"AstraFlow mediator {kind}: {requestName}",
-            ActivityKind.Internal);
-
-        activity?.SetTag("mediatr.request_type", requestName);
-        activity?.SetTag("mediatr.kind", kind);
-        activity?.SetTag("mediatr.module", module);
-
-        try
-        {
-            var response = await next();
-            activity?.SetStatus(ActivityStatusCode.Ok);
-            return response;
-        }
-        catch (Exception ex)
-        {
-            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
-            activity?.RecordException(ex);
-            throw;
-        }
-    }
-}`,
+// Telemetry Publisher wraps domain events in distributed trace spans
+builder.Services.AddScoped<IPublisher, AstraFlowTelemetryPublisher>();`,
+  },
+  {
+    type: "table",
+    headers: ["ActivitySource / Meter", "Name", "Instrumentation Purpose"],
+    rows: [
+      ["ActivitySource", "AstraFlow", "Distributed tracing across commands, queries, and notification handlers"],
+      ["Meter", "AstraFlow", "Real-time metrics: request rates, execution duration, and active handler counts"],
+    ],
   },
   {
     type: "table",
     headers: ["Span Tag", "Example Value", "Purpose"],
     rows: [
-      ["mediatr.request_type", "GetAdminsQuery", "Identify the handler being executed"],
-      ["mediatr.kind", "Query / Command", "Distingscripeh read vs write operations"],
-      ["mediatr.module", "Identity / Entitlements", "Filter traces by module in Jaeger UI"],
-      ["mediatr.duration_ms", "45", "Performance profiling and SLA monitoring"],
+      ["astraflow.request_type", "GetAdminsQuery", "Identify the handler being executed"],
+      ["astraflow.kind", "Query / Command", "Distinguish read vs write operations"],
+      ["astraflow.module", "Identity / Entitlements", "Filter traces by module in Jaeger UI"],
+      ["astraflow.duration_ms", "45", "Performance profiling and SLA monitoring"],
       ["otel.status_code", "OK / ERROR", "Error attribution and alert triggering"],
     ],
+  },
+  {
+    type: "table",
+    headers: ["Metric Name", "Instrument", "Description & Unit"],
+    rows: [
+      ["astraflow.requests.duration", "Histogram", "Request execution duration in milliseconds"],
+      ["astraflow.requests.total", "Counter", "Total requests handled, tagged by kind and status"],
+      ["astraflow.requests.active", "UpDownCounter", "Currently active in-flight mediator requests"],
+      ["astraflow.notifications.published", "Counter", "Total in-process domain notifications published"],
+    ],
+  },
+  {
+    type: "heading",
+    level: 2,
+    titleKey: "infrastructure.observability.securityRedactionTitle",
+    id: "security-redaction",
+  },
+  {
+    type: "paragraph",
+    contentKey: "infrastructure.observability.securityRedactionIntro",
+  },
+  {
+    type: "table",
+    headers: ["Pattern", "Sensitivity Category", "Redaction Behavior"],
+    rows: [
+      ["Password / Secret / Hash", "Credentials & Secrets", "Automatically replaced with [redacted] in spans and metrics"],
+      ["ApiKey / Token / PrivateKey", "Access Keys & Tokens", "Masked at tracer boundary before export to Jaeger/OTLP"],
+      ["ConnectionString / Dsn", "Infrastructure Secrets", "Sanitized to prevent connection leak in distributed traces"],
+      ["Email / Phone / Ssn", "Personally Identifiable Information", "Obfuscated in audit and telemetry tags to satisfy GDPR/SOC 2"],
+    ],
+  },
+  {
+    type: "heading",
+    level: 2,
+    titleKey: "infrastructure.observability.correlationTitle",
+    id: "trace-correlation",
+  },
+  {
+    type: "paragraph",
+    contentKey: "infrastructure.observability.correlationIntro",
   },
 
   // ─── Prometheus Metrics ────────────────────────────────────
@@ -204,7 +221,7 @@ scrape_configs:
       [
         "EnvironmentName",
         "ASPNETCORE_ENVIRONMENT",
-        "Distingscripeh Development/Staging/Production logs",
+        "Distinguish Development/Staging/Production logs",
       ],
       [
         "CorrelationId",
@@ -224,7 +241,7 @@ scrape_configs:
       [
         "Application",
         "Static enrichment",
-        "Fixed label 'SCRIPE' — distingscripeh from other apps in shared Loki",
+        "Fixed label 'SCRIPE' — distinguish from other apps in shared Loki",
       ],
     ],
   },

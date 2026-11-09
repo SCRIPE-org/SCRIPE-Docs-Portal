@@ -408,7 +408,7 @@ export const en = {
         "For Numeric features, use -1 to represent 'unlimited'. The FeatureCheckBehavior recognizes -1 as a special value and never blocks requests for features with an unlimited quota.",
       systemVsCustomTitle: "System vs Custom Features",
       systemVsCustomIntro:
-        "SCRIPE distingscripehes between system features (seeded at startup, read-only) and custom features (created by admins via API):",
+        "SCRIPE distinguishes between system features (seeded at startup, read-only) and custom features (created by admins via API):",
       cacheTitle: "Feature Cache",
       cacheIntro:
         "Resolved feature values are cached in the IFeatureCache to avoid database queries on every request. The cache is invalidated whenever an edition's features change, a subscription is modified, or an override is set/removed. In microservice deployments without the Entitlements module, a NoOpFeatureCache treats all features as enabled.",
@@ -876,7 +876,7 @@ export const en = {
         descUpsert:
           "Materializes current state in ConsentSnapshot cache for high-performance permission checks.",
         nodeEvents: "Domain Events",
-        descEvents: "Publishes ConsentGrantedEvent or ConsentWithdrawnEvent via MediatR.",
+        descEvents: "Publishes ConsentGrantedEvent or ConsentWithdrawnEvent via AstraFlow.",
         nodeExpiry: "ConsentExpiryJob",
         descExpiry:
           "Weekly background job scans version mismatches and flags stale records for re-consent.",
@@ -913,7 +913,7 @@ export const en = {
         dontTitle: "Anti-Patterns to Avoid",
         do1: "Verify the purpose key matches lowercase alphanumeric regex constraints.",
         do2: "Always run the weekly ConsentExpiryJob to enforce re-consent on version updates.",
-        do3: "Consume MediatR ConsentWithdrawnEvents to restrict downstream data processing.",
+        do3: "Consume AstraFlow ConsentWithdrawnEvents to restrict downstream data processing.",
         dont1: "Never bypass the append-only ledger by modifying ConsentRecord rows directly.",
         dont2:
           "Never execute direct database queries against ConsentRecord for frontend permission checks; always read ConsentSnapshot.",

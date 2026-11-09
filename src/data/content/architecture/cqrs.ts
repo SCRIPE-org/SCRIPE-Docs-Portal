@@ -45,15 +45,16 @@ const sections: DocSection[] = [
   },
   {
     type: "flowchart",
-    title: "AstraFlow mediator Pipeline (5 Behaviors)",
+    title: "AstraFlow Pipeline (6 Core Behaviors)",
     direction: "vertical",
     nodes: [
       { id: "send", label: "ISender.Send(command)", type: "primary" },
       { id: "logging", label: "1. LoggingBehavior", type: "info" },
       { id: "validation", label: "2. ValidationBehavior", type: "warning" },
       { id: "feature", label: "3. FeatureCheckBehavior", type: "warning" },
-      { id: "webhook", label: "4. WebhookDispatchBehavior", type: "info" },
-      { id: "cache", label: "5. CachingBehavior", type: "success" },
+      { id: "security", label: "4. FieldRestrictionEnforcementBehavior", type: "warning" },
+      { id: "webhook", label: "5. WebhookDispatchBehavior", type: "info" },
+      { id: "cache", label: "6. CachingBehavior (Idempotency)", type: "success" },
       { id: "handler", label: "CommandHandler.Handle()", type: "success" },
       { id: "result", label: "Result<T>", type: "primary" },
     ],
@@ -61,7 +62,8 @@ const sections: DocSection[] = [
       { from: "send", to: "logging" },
       { from: "logging", to: "validation" },
       { from: "validation", to: "feature", label: "Valid" },
-      { from: "feature", to: "webhook", label: "Allowed" },
+      { from: "feature", to: "security", label: "Active" },
+      { from: "security", to: "webhook", label: "Authorized" },
       { from: "webhook", to: "cache" },
       { from: "cache", to: "handler", label: "Cache miss / mutation" },
       { from: "handler", to: "result" },
@@ -224,6 +226,101 @@ public class GetAdminByIdQueryHandler
     }
 }`,
     highlightLines: [15, 16, 17, 24],
+  },
+  {
+    type: "heading",
+    level: 2,
+    titleKey: "architecture.cqrs.sourceGenMappingTitle",
+    id: "source-gen-mapping",
+  },
+  {
+    type: "paragraph",
+    contentKey: "architecture.cqrs.sourceGenMappingIntro",
+  },
+  {
+    type: "table",
+    headers: ["Mapping Strategy", "Execution Time", "Heap Allocation", "Gen 0 Collections", "Native AOT Safe"],
+    rows: [
+      ["Manual Hand-Written", "10.84 ns", "32 B", "0.0051", "Yes"],
+      ["AstraFlow Generated ([AstraGenerateMapping])", "11.98 ns", "32 B", "0.0051", "Yes (Verified)"],
+      ["AstraFlow Convention (Runtime Reflection)", "133.82 ns", "264 B", "0.0417", "No (Reflection Warning)"],
+      ["AutoMapper 13.0", "187.40 ns", "312 B", "0.0496", "No"],
+    ],
+  },
+  {
+    type: "code",
+    language: "csharp",
+    filename: "CourtMaps.cs — Roslyn Compile-Time Mapping",
+    code: `using AstraFlow.Mapper;
+using Venue.Application.DTOs;
+using Venue.Domain.Entities;
+
+namespace Venue.Application.Mapping;
+
+public static partial class CourtMaps
+{
+    [AstraGenerateMapping]
+    public static partial CourtDto ToDto(this Court court);
+
+    [AstraGenerateMapping]
+    public static partial CourtResponse ToResponse(this Court court);
+}`,
+  },
+  {
+    type: "code",
+    language: "csharp",
+    filename: "GetCourtByIdQueryHandler.cs — Zero-Reflection Query Execution",
+    code: `public class GetCourtByIdQueryHandler : IQueryHandler<GetCourtByIdQuery, CourtResponse>
+{
+    private readonly ICourtRepository _repo;
+
+    public async Task<Result<CourtResponse>> Handle(GetCourtByIdQuery request, CancellationToken ct)
+    {
+        var court = await _repo.GetByIdAsync(request.Id, ct);
+        if (court is null)
+            return Result<CourtResponse>.Failure(CourtErrors.NotFound(request.Id));
+
+        // Direct static scalar assignment generated at compile time — zero IMapper reflection
+        return Result<CourtResponse>.Success(court.ToResponse());
+    }
+}`,
+  },
+  {
+    type: "heading",
+    level: 2,
+    titleKey: "architecture.cqrs.mappingChoiceTitle",
+    id: "mapping-comparison",
+  },
+  {
+    type: "comparison",
+    columns: [
+      {
+        titleKey: "architecture.cqrs.sourceGenMappingTitle",
+        variant: "positive",
+        items: [
+          "11x faster execution (11.98 ns vs 133.82 ns)",
+          "88% memory reduction (32 B vs 264 B destination-only alloc)",
+          "Zero runtime reflection — 100% Native AOT trim safe",
+          "Compile-time Roslyn diagnostic AFM001 prevents invalid mappings",
+          "No IMapper dependency injection required in query handlers",
+        ],
+      },
+      {
+        titleKey: "architecture.cqrs.conventionMappingTitle",
+        variant: "neutral",
+        items: [
+          "Dynamic member resolution & ID encryption (SecureIdEncryptResolver)",
+          "Parameterless instantiation eliminates ASP0000 startup reflection",
+          "AstraFlow.Security automatic protection against 19 sensitive property patterns",
+          "Ideal for complex entity graphs requiring tenant/user encryption codecs",
+        ],
+      },
+    ],
+  },
+  {
+    type: "info",
+    variant: "tip",
+    contentKey: "architecture.cqrs.afm001Tip",
   },
   {
     type: "info",

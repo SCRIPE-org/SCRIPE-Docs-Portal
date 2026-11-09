@@ -87,6 +87,13 @@ export const fr = {
       validationBehaviorTitle: "Comportement de Validation",
       commandExampleTitle: "Exemple de Commande",
       queryExampleTitle: "Exemple de Requête",
+      sourceGenMappingTitle: "Moteur de Mappage à la Compilation Roslyn",
+      sourceGenMappingIntro:
+        "AstraFlow 2.2.0 introduit un générateur de code source incrémental Roslyn ([AstraGenerateMapping]) remplaçant la réflexion à l'exécution par des assignations scalaires compilées. Les tests BenchmarkDotNet confirment une accélération de 11x (11,98 ns vs 133,82 ns) et une réduction de 88% des allocations mémoire (32 B vs 264 B).",
+      conventionMappingTitle: "Profil de Mappage par Convention",
+      mappingChoiceTitle: "Mappage à la Compilation vs Convention",
+      afm001Tip:
+        "Sécurité à la Compilation (AFM001) : L'analyseur Roslyn impose des constructeurs sans paramètres, des types concordants et des setters publics pour les DTO cibles. Tout écart est détecté dès la compilation.",
       cachingTip:
         "Les requêtes peuvent utiliser la mise en cache côté serveur pour éviter d'interroger la base de données à chaque demande. La clé de cache doit inclure tous les paramètres de requête pour garantir son unicité. Le cache est automatiquement invalidé lorsque les commandes associées réussissent.",
     },
@@ -357,6 +364,14 @@ export const fr = {
       featureCheckMarkerTitle: "Marqueur IRequireFeature",
       featureCheckMarkerIntro:
         "Les commandes optent pour le contrôle des fonctionnalités en implémentant l'interface IRequireFeature avec une propriété RequiredFeatureName. Lorsque le module Entitlements n'est pas déployé, NoOpFeatureChecker renvoie true pour toutes les vérifications, rendant ce comportement transparent.",
+      concurrencySafetyTitle: "Stratégie de Publication et Sécurité de Concurrence",
+      concurrencySafetyIntro:
+        "Les événements de domaine en cours d'exécution interagissent avec des instances DbContext EF Core de portée scoped. Comme DbContext n'est pas thread-safe, la publication concurrente déclenche des exceptions fatales. AstraFlow 2.2.0 impose NotificationPublishStrategy.Sequential pour garantir des opérations thread-safe.",
+      sequentialStrategyTitle: "Stratégie Séquentielle (Par Défaut)",
+      parallelStrategyTitle: "Stratégie Parallèle / BoundedParallel",
+      testingDoublesTitle: "Tests Unitaires & d'Intégration avec AstraFlow.Testing",
+      testingDoublesIntro:
+        "AstraFlow.Testing fournit des doublures de test natives (FakeMediator, FakeSender, FakePublisher) éliminant la complexité des mocks et permettant des assertions comportementales fluides sur les commandes et événements.",
     },
     dependencyInjection: {
       title: "Injection de Dépendances (DI)",

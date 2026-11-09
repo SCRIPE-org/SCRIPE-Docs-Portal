@@ -82,7 +82,7 @@ export const zh = {
       },
       "codeApp": {
         "cmdNewCtrl": "NewCtrl 指令",
-        "cmdNewCtrlDesc": "生成具备 REST CRUD 动词、PBAC 授权特性及 MediatR 分发的 ASP.NET Core API 控制器。",
+        "cmdNewCtrlDesc": "生成具备 REST CRUD 动词、PBAC 授权特性及 AstraFlow 分发的 ASP.NET Core API 控制器。",
         "cmdNewDto": "NewDto 指令",
         "cmdNewDtoDesc": "生成带有 System.Text.Json 序列化特性与不可变性保证的请求及响应 DTO 记录类型。",
         "cmdNewJob": "NewJob 指令",
@@ -493,7 +493,7 @@ export const zh = {
         "cmdAddBgService": "AddBgService 指令",
         "cmdAddBgServiceDesc": "将 IAutoRegisteredJob 软删除清理后台工作服务添加到现有模块中并自动绑定 DI。",
         "cmdNewFeature": "NewFeature 指令",
-        "cmdNewFeatureDesc": "生成完整垂直 CRUD 切片：包含 Entity 实体、Repository 仓储、MediatR CQRS 处理程序、Controller 控制器及 Next.js 视图。",
+        "cmdNewFeatureDesc": "生成完整垂直 CRUD 切片：包含 Entity 实体、Repository 仓储、AstraFlow CQRS 处理程序、Controller 控制器及 Next.js 视图。",
         "cmdNewModule": "NewModule 指令",
         "cmdNewModuleDesc": "生成完整整洁架构模块：包含 Domain、Application、Infrastructure、WebAPI 工程及 Next.js 前端子模块。",
         "cmdRemoveBgService": "RemoveBgService 指令",

@@ -87,6 +87,13 @@ export const ar = {
       validationBehaviorTitle: "سلوك التحقق",
       commandExampleTitle: "مثال على أمر (Command)",
       queryExampleTitle: "مثال على استعلام (Query)",
+      sourceGenMappingTitle: "محرك التعيين البرمجي أثناء الترجمة عبر Roslyn",
+      sourceGenMappingIntro:
+        "يقدم AstraFlow 2.2.0 مولد كود تزايدي مبني على Roslyn ([AstraGenerateMapping]) يستبدل الانعكاس الديناميكي بتعيينات خاصية قياسية مترجمة وثابتة. تؤكد اختبارات الأداء تسريع التنفيذ بمقدار 11 ضعفاً (11.98 نانوثانية مقابل 133.82 نانوثانية) وتقليل استهلاك الذاكرة بنسبة 88% (32 بايت مقابل 264 بايت).",
+      conventionMappingTitle: "ملف التعيين القائم على الأعراف",
+      mappingChoiceTitle: "التعيين أثناء الترجمة مقابل التعيين القائم على الأعراف",
+      afm001Tip:
+        "أمان وقت الترجمة (AFM001): يفرض محلل Roslyn أن تحتوي كائنات DTO الهدف على مشيدات بدون معلمات، وأنواع خصائص متطابقة، ومحددات وصول عامة. يتم اكتشاف أي عدم تطابق في الخصائص أثناء تجميع الكود بدلاً من الفشل أثناء التشغيل.",
       cachingTip:
         "يمكن للاستعلامات استخدام التخزين المؤقت من جانب الخادم لتجنب ضرب قاعدة البيانات في كل طلب. يجب أن يتضمن مفتاح التخزين المؤقت جميع معلمات الاستعلام لضمان التفرد. يتم إبطال ذاكرة التخزين المؤقت تلقائياً عندما تنجح الأوامر ذات الصلة.",
     },
@@ -352,6 +359,14 @@ export const ar = {
       featureCheckMarkerTitle: "واجهة IRequireFeature",
       featureCheckMarkerIntro:
         "تختار الأوامر بوابة الميزات عبر تطبيق واجهة IRequireFeature مع خاصية RequiredFeatureName. عندما لا تكون وحدة الاستحقاقات (Entitlements) منشورة، يُرجع NoOpFeatureChecker القيمة true لجميع الفحوصات.",
+      concurrencySafetyTitle: "استراتيجية نشر الإشعارات وأمان التزامن",
+      concurrencySafetyIntro:
+        "تتفاعل أحداث المجال المتزامنة مع سياقات DbContext الخاصة بـ EF Core. ونظراً لأن DbContext غير آمن للتعامل المتزامن عبر سلاسل العمليات المتعددة، فإن نشر الإشعارات المتوازي يتسبب في استثناءات تشغيلية قاتلة. يفرض AstraFlow 2.2.0 استراتيجية NotificationPublishStrategy.Sequential لضمان تنفيذ عمليات قاعدة البيانات بسلاسة وأمان تام.",
+      sequentialStrategyTitle: "الاستراتيجية المتسلسلة (الافتراضية)",
+      parallelStrategyTitle: "الاستراتيجية المتوازية / المتوازية المقيدة",
+      testingDoublesTitle: "اختبارات الوحدة والتكامل عبر AstraFlow.Testing",
+      testingDoublesIntro:
+        "يوفر AstraFlow.Testing بدائل اختبار مدمجة (FakeMediator و FakeSender و FakePublisher) تقضي تماماً على تعقيدات المحاكاة الوهمية وتمكن من التحقق السلوكي الصريح من الأوامر المرسلة وإشعارات المجال المنشورة.",
     },
     dependencyInjection: {
       title: "حقن التبعيات (Dependency Injection)",

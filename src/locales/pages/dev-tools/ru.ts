@@ -82,7 +82,7 @@ export const ru = {
       },
       "codeApp": {
         "cmdNewCtrl": "Команда NewCtrl",
-        "cmdNewCtrlDesc": "Генерирует API-контроллер ASP.NET Core с REST CRUD глаголами, атрибутами авторизации PBAC и диспетчеризацией MediatR.",
+        "cmdNewCtrlDesc": "Генерирует API-контроллер ASP.NET Core с REST CRUD глаголами, атрибутами авторизации PBAC и диспетчеризацией AstraFlow.",
         "cmdNewDto": "Команда NewDto",
         "cmdNewDtoDesc": "Генерирует записи DTO запросов и ответов с атрибутами System.Text.Json и гарантией неизменяемости.",
         "cmdNewJob": "Команда NewJob",
@@ -493,7 +493,7 @@ export const ru = {
         "cmdAddBgService": "Команда AddBgService",
         "cmdAddBgServiceDesc": "Добавляет фоновую службу очистки IAutoRegisteredJob в существующий модуль.",
         "cmdNewFeature": "Команда NewFeature",
-        "cmdNewFeatureDesc": "Создает полный вертикальный срез CRUD: сущность, репозиторий, обработчики MediatR CQRS, контроллер и представление Next.js.",
+        "cmdNewFeatureDesc": "Создает полный вертикальный срез CRUD: сущность, репозиторий, обработчики AstraFlow CQRS, контроллер и представление Next.js.",
         "cmdNewModule": "Команда NewModule",
         "cmdNewModuleDesc": "Генерирует полный модуль Чистой Архитектуры: Domain, Application, Infrastructure, WebAPI и субмодуль Next.js.",
         "cmdRemoveBgService": "Команда RemoveBgService",

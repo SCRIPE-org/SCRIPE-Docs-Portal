@@ -34,7 +34,7 @@ const sections: DocSection[] = [
         id: "core-app",
         label: "AddCoreApplication()",
         type: "info",
-        description: "AstraFlow mediator, behaviors, validators",
+        description: "AstraFlow, behaviors, validators",
       },
       {
         id: "identity",
@@ -422,7 +422,7 @@ public static class GatewayConfiguration
       "Use IServiceScopeFactory in Singleton services that need Scoped dependencies",
       "Keep DependencyInjection.cs in each module as the single registration point",
       "Use MODULE_NAME environment variable to control which modules are loaded",
-      "Register AstraFlow mediator assemblies from each active module for handler discovery",
+      "Register AstraFlow assemblies from each active module for handler discovery",
       "Use [BelongsToModule] on every controller for microservice compatibility",
       "Test DI registration at startup to catch missing dependencies early",
     ],

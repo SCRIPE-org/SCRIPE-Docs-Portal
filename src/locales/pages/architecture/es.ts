@@ -87,6 +87,13 @@ export const es = {
       validationBehaviorTitle: "Comportamiento de Validación",
       commandExampleTitle: "Ejemplo de Comando",
       queryExampleTitle: "Ejemplo de Consulta",
+      sourceGenMappingTitle: "Motor de Mapeo en Tiempo de Compilación Roslyn",
+      sourceGenMappingIntro:
+        "AstraFlow 2.2.0 introduce un generador de código fuente incremental de Roslyn ([AstraGenerateMapping]) que reemplaza la reflexión en tiempo de ejecución con asignaciones escalares estáticamente compiladas. Pruebas de BenchmarkDotNet confirman una aceleración de 11x (11.98 ns vs 133.82 ns) y una reducción del 88% en memoria (32 B vs 264 B).",
+      conventionMappingTitle: "Perfil de Mapeo por Convención",
+      mappingChoiceTitle: "Mapeo en Compilación vs Convención",
+      afm001Tip:
+        "Seguridad en Tiempo de Compilación (AFM001): El analizador Roslyn exige constructores sin parámetros, tipos coincidentes y setters públicos en los DTO destino. Cualquier discrepancia se detecta en tiempo de compilación.",
       cachingTip:
         "Las consultas pueden usar caché del lado del servidor para evitar consultar la base de datos en cada solicitud. La clave de la caché debe incluir todos los parámetros de la consulta para garantizar su unicidad. La caché se invalida automáticamente cuando los comandos relacionados tienen éxito.",
     },
@@ -359,6 +366,14 @@ export const es = {
       featureCheckMarkerTitle: "Marcador IRequireFeature",
       featureCheckMarkerIntro:
         "Los comandos optan por el control de funcionalidades implementando la interfaz IRequireFeature con una propiedad RequiredFeatureName. Cuando el módulo de Entitlements no está desplegado, NoOpFeatureChecker devuelve true para todas las verificaciones, convirtiendo este comportamiento en un paso silencioso.",
+      concurrencySafetyTitle: "Estrategia de Publicación y Seguridad de Concurrencia",
+      concurrencySafetyIntro:
+        "Los eventos de dominio en proceso interactúan con instancias DbContext de EF Core con ámbito scoped. Dado que DbContext no es seguro para subprocesos, la publicación concurrente provoca excepciones graves. AstraFlow 2.2.0 impone NotificationPublishStrategy.Sequential para garantizar operaciones seguras en base de datos.",
+      sequentialStrategyTitle: "Estrategia Secuencial (Predeterminada)",
+      parallelStrategyTitle: "Estrategia Paralela / BoundedParallel",
+      testingDoublesTitle: "Pruebas Unitarias e Integración con AstraFlow.Testing",
+      testingDoublesIntro:
+        "AstraFlow.Testing proporciona dobles de prueba nativos (FakeMediator, FakeSender, FakePublisher) que eliminan la complejidad de mocks y permiten aserciones fluidas sobre comandos enviados y eventos publicados.",
     },
     dependencyInjection: {
       title: "Inyección de Dependencias (DI)",

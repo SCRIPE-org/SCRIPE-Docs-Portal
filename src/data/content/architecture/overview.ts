@@ -54,7 +54,7 @@ const sections: DocSection[] = [
       [
         "Application",
         "Use cases, orchestration, validation",
-        "AstraFlow mediator, FluentValidation, explicit DTO mapping",
+        "AstraFlow, FluentValidation, explicit DTO mapping",
         "→ Domain only",
       ],
       [
@@ -86,7 +86,7 @@ const sections: DocSection[] = [
       { id: "request", label: "HTTP Request", type: "default" },
       { id: "middleware", label: "Middleware Stack", type: "info" },
       { id: "controller", label: "Controller", type: "primary" },
-      { id: "mediatr", label: "AstraFlow mediator Send", type: "success" },
+      { id: "astraflow", label: "AstraFlow Send", type: "success" },
       { id: "validation", label: "Validation", type: "warning" },
       { id: "audit", label: "Audit Behavior", type: "info" },
       { id: "handler", label: "CQRS Handler", type: "success" },
@@ -95,8 +95,8 @@ const sections: DocSection[] = [
     connections: [
       { from: "request", to: "middleware" },
       { from: "middleware", to: "controller" },
-      { from: "controller", to: "mediatr" },
-      { from: "mediatr", to: "validation" },
+      { from: "controller", to: "astraflow" },
+      { from: "astraflow", to: "validation" },
       { from: "validation", to: "audit" },
       { from: "audit", to: "handler" },
       { from: "handler", to: "response" },

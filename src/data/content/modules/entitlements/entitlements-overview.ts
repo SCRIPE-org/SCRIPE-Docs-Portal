@@ -96,7 +96,7 @@ const sections: DocSection[] = [
       {
         id: "pipe",
         label: "FeatureCheckBehavior",
-        description: "AstraFlow mediator pipeline gate",
+        description: "AstraFlow pipeline gate",
       },
     ],
     connections: [
@@ -390,7 +390,7 @@ public async Task<bool> TryReserveSlotAsync(Guid tenantId, string resourceType, 
         services.AddScoped<IOverflowPolicyExecutor, OverflowPolicyExecutor>();
         services.AddScoped<IQuotaCounterProvisioner, QuotaCounterProvisioner>();
         
-        // AstraFlow mediator pipeline behavior
+        // AstraFlow pipeline behavior
         services.AddTransient(typeof(IPipelineBehavior<,>), 
             typeof(FeatureCheckBehavior<,>));
         

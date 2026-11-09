@@ -82,7 +82,7 @@ export const ar = {
       },
       "codeApp": {
         "cmdNewCtrl": "أمر NewCtrl",
-        "cmdNewCtrlDesc": "ينشئ متحكم ASP.NET Core API مع أفعال REST CRUD وسمات ترخيص PBAC وتوجيه MediatR.",
+        "cmdNewCtrlDesc": "ينشئ متحكم ASP.NET Core API مع أفعال REST CRUD وسمات ترخيص PBAC وتوجيه AstraFlow.",
         "cmdNewDto": "أمر NewDto",
         "cmdNewDtoDesc": "يولد سجلات DTO للطلب والاستجابة مع سمات System.Text.Json وضمانات عدم القابلية للتغيير.",
         "cmdNewJob": "أمر NewJob",
@@ -493,7 +493,7 @@ export const ar = {
         "cmdAddBgService": "أمر AddBgService",
         "cmdAddBgServiceDesc": "إضافة خدمة تنظيف خلفية IAutoRegisteredJob إلى وحدة نمطية موجودة وربطها بحاوية التبعيات.",
         "cmdNewFeature": "أمر NewFeature",
-        "cmdNewFeatureDesc": "ينشئ شريحة CRUD عمودية متكاملة: الكيان، والمستودع، ومعالجات MediatR CQRS، والمتحكم، وواجهة Next.js.",
+        "cmdNewFeatureDesc": "ينشئ شريحة CRUD عمودية متكاملة: الكيان، والمستودع، ومعالجات AstraFlow CQRS، والمتحكم، وواجهة Next.js.",
         "cmdNewModule": "أمر NewModule",
         "cmdNewModuleDesc": "يولد وحدة هندسة نظيفة كاملة: النطاق، والتطبيق، والبنية التحتية، وWebAPI، والوحدة الفرعية لـ Next.js.",
         "cmdRemoveBgService": "أمر RemoveBgService",
