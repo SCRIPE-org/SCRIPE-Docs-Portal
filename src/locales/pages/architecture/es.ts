@@ -89,7 +89,7 @@ export const es = {
       queryExampleTitle: "Ejemplo de Consulta",
       sourceGenMappingTitle: "Motor de Mapeo en Tiempo de Compilación Roslyn",
       sourceGenMappingIntro:
-        "AstraFlow 2.2.0 introduce un generador de código fuente incremental de Roslyn ([AstraGenerateMapping]) que reemplaza la reflexión en tiempo de ejecución con asignaciones escalares estáticamente compiladas. Pruebas de BenchmarkDotNet confirman una aceleración de 11x (11.98 ns vs 133.82 ns) y una reducción del 88% en memoria (32 B vs 264 B).",
+        "AstraFlow 2.3.0 introduce un generador de código fuente incremental de Roslyn ([AstraGenerateMapping]) que reemplaza la reflexión en tiempo de ejecución con asignaciones escalares estáticamente compiladas. Pruebas de BenchmarkDotNet confirman una aceleración de 11x (11.98 ns vs 133.82 ns) y una reducción del 88% en memoria (32 B vs 264 B).",
       conventionMappingTitle: "Perfil de Mapeo por Convención",
       mappingChoiceTitle: "Mapeo en Compilación vs Convención",
       afm001Tip:
@@ -368,7 +368,7 @@ export const es = {
         "Los comandos optan por el control de funcionalidades implementando la interfaz IRequireFeature con una propiedad RequiredFeatureName. Cuando el módulo de Entitlements no está desplegado, NoOpFeatureChecker devuelve true para todas las verificaciones, convirtiendo este comportamiento en un paso silencioso.",
       concurrencySafetyTitle: "Estrategia de Publicación y Seguridad de Concurrencia",
       concurrencySafetyIntro:
-        "Los eventos de dominio en proceso interactúan con instancias DbContext de EF Core con ámbito scoped. Dado que DbContext no es seguro para subprocesos, la publicación concurrente provoca excepciones graves. AstraFlow 2.2.0 impone NotificationPublishStrategy.Sequential para garantizar operaciones seguras en base de datos.",
+        "Los eventos de dominio en proceso interactúan con instancias DbContext de EF Core con ámbito scoped. Dado que DbContext no es seguro para subprocesos, la publicación concurrente provoca excepciones graves. AstraFlow 2.3.0 impone NotificationPublishStrategy.Sequential para garantizar operaciones seguras en base de datos.",
       sequentialStrategyTitle: "Estrategia Secuencial (Predeterminada)",
       parallelStrategyTitle: "Estrategia Paralela / BoundedParallel",
       testingDoublesTitle: "Pruebas Unitarias e Integración con AstraFlow.Testing",

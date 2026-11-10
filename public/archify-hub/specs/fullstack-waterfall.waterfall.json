@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "diagram_type": "waterfall",
+  "meta": {
+    "title": "Full-Stack Command Execution & Outbox Telemetry Waterfall",
+    "subtitle": "OpenTelemetry Activity trace for POST /api/v1/venue/reservations across Next.js 16 and .NET 10 (ms).",
+    "output": "public/archify-hub/fullstack-waterfall.html",
+    "evidence": "illustrative",
+    "unit": "ms",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "ffc972a40a448abee3f41b394bd3e823457fc346"
+    }
+  },
+  "spans": [
+    {
+      "id": "e2e_total",
+      "name": "Full-Stack Reservation Mutation & Live Sync",
+      "service": "scripe-fullstack",
+      "start": 0,
+      "end": 115,
+      "detail": "End-to-end trace from React 19 button click to HTTP 200 (88ms) and async SignalR push (115ms).",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 68,
+          "end_line": 115,
+          "label": "Full-Stack Architecture"
+        }
+      ]
+    },
+    {
+      "id": "fe_prep",
+      "name": "ViewModel + Repository + ApiService Headers",
+      "service": "scripe-frontend",
+      "start": 0,
+      "duration": 8,
+      "parent": "e2e_total",
+      "detail": "Zod validation, UUIDv4 X-Idempotency-Key generation, and Bearer JWT header injection.",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 95,
+          "end_line": 110,
+          "label": "Frontend MVVM Pipeline"
+        }
+      ]
+    },
+    {
+      "id": "mw_gate",
+      "name": "29-Stage Security, Blacklist, Replay & PBAC Gate",
+      "service": "api-host",
+      "start": 8,
+      "duration": 14,
+      "parent": "e2e_total",
+      "detail": "Validates Cloudflare origin, Redis JWT revocation, CSRF, replay nonce, TenantId, and PBAC policy.",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 139,
+          "end_line": 152,
+          "label": "5-Layer Security"
+        }
+      ]
+    },
+    {
+      "id": "af_val_tx1",
+      "name": "AstraFlow Validation + TX-1 Idempotency Claim",
+      "service": "astraflow-pipeline",
+      "start": 22,
+      "duration": 16,
+      "parent": "e2e_total",
+      "detail": "Runs FluentValidation and commits InProgress receipt in module_idempotency_receipts.",
+      "sources": [
+        {
+          "path": ".agents/rules/astraflow-ecosystem-and-evolution.md",
+          "line": 13,
+          "end_line": 34,
+          "label": "AstraFlow Pipeline"
+        }
+      ]
+    },
+    {
+      "id": "domain_quote",
+      "name": "Conflict Engine & Commercial Quote Verification",
+      "service": "venue-pricing",
+      "start": 38,
+      "duration": 18,
+      "parent": "e2e_total",
+      "detail": "Verifies zero pitch slot overlap and validates frozen PriceQuote snapshot.",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 69,
+          "end_line": 80,
+          "label": "Domain Execution"
+        }
+      ]
+    },
+    {
+      "id": "db_tx2",
+      "name": "TX-2: BaseDbContext SaveChanges (Entity + Audit + Outbox)",
+      "service": "postgres-db",
+      "start": 56,
+      "duration": 20,
+      "parent": "e2e_total",
+      "detail": "Atomic commit of venue.reservations, core.audit_logs, and venue.outbox_messages.",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 81,
+          "end_line": 94,
+          "label": "Dual-Mode Persistence"
+        }
+      ]
+    },
+    {
+      "id": "db_tx3_resp",
+      "name": "TX-3: Seal AES-GCM Receipt & Map DTO ([AstraGenerateMapping])",
+      "service": "astraflow-pipeline",
+      "start": 76,
+      "duration": 12,
+      "parent": "e2e_total",
+      "detail": "Updates receipt to Completed, caches in Redis L1, and returns HTTP 200 Result<T>.",
+      "sources": [
+        {
+          "path": ".agents/rules/astraflow-ecosystem-and-evolution.md",
+          "line": 38,
+          "end_line": 56,
+          "label": "Compile-Time Mapping"
+        }
+      ]
+    },
+    {
+      "id": "fe_cache",
+      "name": "Client Envelope Unwrap & TanStack Query Invalidation",
+      "service": "scripe-frontend",
+      "start": 88,
+      "duration": 10,
+      "parent": "e2e_total",
+      "detail": "Updates React 19 calendar state and renders localized semantic toast.",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 95,
+          "end_line": 125,
+          "label": "Frontend Hydration"
+        }
+      ]
+    },
+    {
+      "id": "outbox_push",
+      "name": "Async Outbox Poll, Inbox Dedup & SignalR Broadcast",
+      "service": "outbox-worker",
+      "start": 78,
+      "duration": 37,
+      "parent": "e2e_total",
+      "detail": "Polls venue.outbox_messages in background and pushes live update over SignalR.",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 85,
+          "end_line": 91,
+          "label": "Transactional Outbox"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,354 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "SCRIPE-Backend 29-Stage Zero-Trust HTTP Security Pipeline",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "public/archify-hub/backend-middleware-workflow.html",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Backend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "f941b1500a9ef98b0f81bdb473d1306f554d6526"
+    }
+  },
+  "lanes": [
+    {
+      "id": "ingress",
+      "label": "1. Network & Telemetry"
+    },
+    {
+      "id": "auth_gate",
+      "label": "2. JWT, CSRF & Replay Gate"
+    },
+    {
+      "id": "reject_lane",
+      "label": "3. Fail-Closed Rejection",
+      "variant": "exception"
+    },
+    {
+      "id": "pbac_cqrs",
+      "label": "4. Tenant, PBAC & AstraFlow"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p_net",
+      "label": "Ingress & Quota",
+      "fromCol": 0,
+      "toCol": 1
+    },
+    {
+      "id": "p_sec",
+      "label": "Auth & Replay",
+      "fromCol": 2,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "p_exec",
+      "label": "PBAC & CQRS",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "groups": [
+    {
+      "id": "g_auth",
+      "label": "Zero-Trust Token Gate",
+      "lane": "auth_gate",
+      "fromCol": 2,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "g_reject",
+      "label": "RFC 7807 ProblemDetails Stops",
+      "lane": "reject_lane",
+      "fromCol": 1,
+      "toCol": 4,
+      "variant": "security"
+    },
+    {
+      "id": "g_dispatch",
+      "label": "Authorized Domain Execution",
+      "lane": "pbac_cqrs",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "mainPath": [
+    "req_in",
+    "rate_lim",
+    "jwt_rev",
+    "csrf_rep",
+    "tenant_pbac",
+    "astraflow_ok"
+  ],
+  "nodes": [
+    {
+      "id": "req_in",
+      "lane": "ingress",
+      "col": 0,
+      "type": "external",
+      "label": "HTTPS Ingress",
+      "sublabel": "TLS + Trace",
+      "tag": "TLS 1.3",
+      "width": 112,
+      "sources": [
+        {
+          "path": "src/Host/API/Extensions/MiddlewarePipeline.cs",
+          "line": 48,
+          "end_line": 104,
+          "label": "Early Middleware"
+        }
+      ]
+    },
+    {
+      "id": "rate_lim",
+      "lane": "ingress",
+      "col": 1,
+      "type": "security",
+      "label": "Rate Limiter",
+      "sublabel": "Quota guard",
+      "width": 112,
+      "sources": [
+        {
+          "path": "src/Host/API/Extensions/MiddlewarePipeline.cs",
+          "line": 160,
+          "end_line": 215,
+          "label": "Origin & Rate Limiting"
+        }
+      ]
+    },
+    {
+      "id": "err_429",
+      "lane": "reject_lane",
+      "col": 1,
+      "type": "security",
+      "label": "429 Stop",
+      "sublabel": "Quota limit",
+      "width": 112,
+      "sources": [
+        {
+          "path": "src/Host/API/Extensions/MiddlewarePipeline.cs",
+          "line": 196,
+          "end_line": 215,
+          "label": "429 Reject"
+        }
+      ]
+    },
+    {
+      "id": "jwt_rev",
+      "lane": "auth_gate",
+      "col": 2,
+      "type": "security",
+      "label": "JWT & Revoke",
+      "sublabel": "Redis cache",
+      "tag": "Fail-Closed",
+      "width": 112,
+      "sources": [
+        {
+          "path": "src/Core/Core.Infrastructure/DependencyInjection.cs",
+          "line": 544,
+          "end_line": 652,
+          "label": "JWT Revocation"
+        }
+      ]
+    },
+    {
+      "id": "err_401",
+      "lane": "reject_lane",
+      "col": 2,
+      "type": "security",
+      "label": "401 Stop",
+      "sublabel": "Revoked JWT",
+      "width": 112,
+      "sources": [
+        {
+          "path": "src/Core/Core.Infrastructure/DependencyInjection.cs",
+          "line": 590,
+          "end_line": 650,
+          "label": "401 Reject"
+        }
+      ]
+    },
+    {
+      "id": "csrf_rep",
+      "lane": "auth_gate",
+      "col": 3,
+      "type": "security",
+      "label": "CSRF & Replay",
+      "sublabel": "Nonce gate",
+      "width": 112,
+      "sources": [
+        {
+          "path": "src/Host/API/Extensions/MiddlewarePipeline.cs",
+          "line": 230,
+          "end_line": 275,
+          "label": "CSRF & Replay"
+        }
+      ]
+    },
+    {
+      "id": "err_409",
+      "lane": "reject_lane",
+      "col": 3,
+      "type": "security",
+      "label": "409 Stop",
+      "sublabel": "Replay nonce",
+      "width": 112,
+      "sources": [
+        {
+          "path": "src/Host/API/Extensions/MiddlewarePipeline.cs",
+          "line": 245,
+          "end_line": 275,
+          "label": "409 Reject"
+        }
+      ]
+    },
+    {
+      "id": "tenant_pbac",
+      "lane": "pbac_cqrs",
+      "col": 4,
+      "type": "backend",
+      "label": "Tenant & PBAC",
+      "sublabel": "Policy gate",
+      "tag": "RBAC+ABAC",
+      "width": 112,
+      "sources": [
+        {
+          "path": "src/Host/API/Extensions/MiddlewarePipeline.cs",
+          "line": 266,
+          "end_line": 293,
+          "label": "Tenant & PBAC"
+        }
+      ]
+    },
+    {
+      "id": "err_403",
+      "lane": "reject_lane",
+      "col": 4,
+      "type": "security",
+      "label": "403 Stop",
+      "sublabel": "PBAC denied",
+      "width": 112,
+      "sources": [
+        {
+          "path": "src/Host/API/Extensions/MiddlewarePipeline.cs",
+          "line": 280,
+          "end_line": 293,
+          "label": "403 Reject"
+        }
+      ]
+    },
+    {
+      "id": "astraflow_ok",
+      "lane": "pbac_cqrs",
+      "col": 5,
+      "type": "messagebus",
+      "label": "AstraFlow",
+      "sublabel": "3-TX + Outbox",
+      "tag": "Result<T>",
+      "width": 112,
+      "sources": [
+        {
+          "path": "src/Core/Core.Application/DependencyInjection.cs",
+          "line": 59,
+          "end_line": 117,
+          "label": "AstraFlow Mediator"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "bwe1",
+      "from": "req_in",
+      "to": "rate_lim",
+      "variant": "default"
+    },
+    {
+      "id": "bwe2",
+      "from": "rate_lim",
+      "to": "jwt_rev",
+      "label": "ok",
+      "variant": "emphasis"
+    },
+    {
+      "id": "bwe3",
+      "from": "rate_lim",
+      "to": "err_429",
+      "label": "429",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "bwe4",
+      "from": "jwt_rev",
+      "to": "csrf_rep",
+      "label": "valid",
+      "variant": "emphasis"
+    },
+    {
+      "id": "bwe5",
+      "from": "jwt_rev",
+      "to": "err_401",
+      "label": "401",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "bwe6",
+      "from": "csrf_rep",
+      "to": "tenant_pbac",
+      "label": "fresh",
+      "variant": "emphasis"
+    },
+    {
+      "id": "bwe7",
+      "from": "csrf_rep",
+      "to": "err_409",
+      "label": "409",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "bwe8",
+      "from": "tenant_pbac",
+      "to": "astraflow_ok",
+      "label": "allow",
+      "variant": "emphasis"
+    },
+    {
+      "id": "bwe9",
+      "from": "tenant_pbac",
+      "to": "err_403",
+      "label": "403",
+      "variant": "security",
+      "role": "error"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Fail-Closed Security Ordering",
+      "items": [
+        "Every stage in MiddlewarePipeline.cs is strictly ordered so unauthenticated or replayed traffic never reaches controllers.",
+        "Revoked JWTs are rejected immediately via Redis IAccountRevocationCache."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Tenant & PBAC Enforcement",
+      "items": [
+        "TenantContextValidation binds ICurrentUser.TenantId before PBAC policy evaluation.",
+        "All rejections emit standardized RFC 7807 ProblemDetails with X-Correlation-ID."
+      ]
+    }
+  ]
+}

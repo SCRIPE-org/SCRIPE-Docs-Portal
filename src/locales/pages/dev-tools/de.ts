@@ -86,7 +86,7 @@ export const de = {
         "h_update": "scripe astraflow update",
         "h_validate": "scripe astraflow validate",
         "h_versions": "scripe astraflow versions",
-        "intro": "AstraFlow liefert ein dotnet-Tool, AstraFlow.Cli (Befehl astraflow, Version 2.2.0), das den Code statisch auf AstraFlow-Handler, Benachrichtigungen, Mapping-Regeln und Projektionen untersucht. SCRIPE kapselt es als scripe astraflow: Die Tool-Version bleibt an das Backend gebunden, jeder Befehl nutzt standardmäßig SCRIPE-Backend, und Ergebnisse lassen sich speichern, vergleichen und exportieren.",
+        "intro": "AstraFlow liefert ein dotnet-Tool, AstraFlow.Cli (Befehl astraflow, Version 2.3.0), das den Code statisch auf AstraFlow-Handler, Benachrichtigungen, Mapping-Regeln und Projektionen untersucht. SCRIPE kapselt es als scripe astraflow: Die Tool-Version bleibt an das Backend gebunden, jeder Befehl nutzt standardmäßig SCRIPE-Backend, und Ergebnisse lassen sich speichern, vergleichen und exportieren.",
         "intro2": "Es gibt drei Befehlsfamilien: Lebenszyklus (install, update, uninstall, status, versions), Passthrough (inspect, validate, report, diff, graph, scan, run) und SCRIPE-Workflows (baseline, baselines, compare, export, doctor). Alles ist zusätzlich visuell in SCRIPE Studio auf der Seite AstraFlow verfügbar.",
         "jsonIntro": "Jeder JSON-Report der AstraFlow-CLI hat dieselbe Struktur; darauf bauen baseline, compare und die Studio-Ergebnisansicht auf. diff vergleicht die Element-IDs als <section>:<id>-Mengen.",
         "kLifecycle": "Lebenszyklus",

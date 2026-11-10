@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "diagram_type": "class",
+  "meta": {
+    "title": "SCRIPE-Backend Core Domain, Application & Infrastructure Class Model",
+    "subtitle": "AggregateRoot inherits AuditableEntity and raises IDomainEvent; BaseDbContext and IdempotencyBehavior guard persistence.",
+    "output": "public/archify-hub/backend-class.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Backend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "f941b1500a9ef98b0f81bdb473d1306f554d6526"
+    }
+  },
+  "layout": {
+    "mode": "grid"
+  },
+  "types": [
+    {
+      "id": "auditable_entity",
+      "label": "AuditableEntity",
+      "kind": "abstract",
+      "sublabel": "GUID PK, UTC audit, IsDeleted & RowVersion",
+      "row": 0,
+      "col": 0,
+      "sources": [
+        {
+          "path": "src/Core/Core.Domain/Primitives/AuditableEntity.cs",
+          "line": 1,
+          "end_line": 14,
+          "label": "AuditableEntity.cs"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Id",
+          "type": "Guid",
+          "visibility": "public"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "DateTime",
+          "visibility": "public"
+        },
+        {
+          "name": "IsDeleted",
+          "type": "bool",
+          "visibility": "public"
+        },
+        {
+          "name": "RowVersion",
+          "type": "byte[]",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "aggregate_root",
+      "label": "AggregateRoot",
+      "kind": "abstract",
+      "sublabel": "Collects uncommitted domain events for Outbox",
+      "row": 0,
+      "col": 1,
+      "sources": [
+        {
+          "path": "src/Core/Core.Domain/Primitives/AggregateRoot.cs",
+          "line": 1,
+          "end_line": 29,
+          "label": "AggregateRoot.cs"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "DomainEvents",
+          "type": "IReadOnlyCollection<IDomainEvent>",
+          "visibility": "public"
+        }
+      ],
+      "methods": [
+        {
+          "name": "RaiseDomainEvent",
+          "parameters": "evt: IDomainEvent",
+          "returns": "void",
+          "visibility": "protected"
+        },
+        {
+          "name": "ClearDomainEvents",
+          "returns": "void",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "idomain_event",
+      "label": "IDomainEvent",
+      "kind": "interface",
+      "sublabel": "Extends AstraFlow.Contracts.INotification",
+      "row": 0,
+      "col": 2,
+      "sources": [
+        {
+          "path": "src/Core/Core.Domain/Events/IDomainEvent.cs",
+          "line": 1,
+          "end_line": 45,
+          "label": "IDomainEvent.cs"
+        }
+      ],
+      "methods": [
+        {
+          "name": "OccurredOnUtc",
+          "returns": "DateTime",
+          "visibility": "public",
+          "abstract": true
+        }
+      ]
+    },
+    {
+      "id": "reservation",
+      "label": "Reservation",
+      "kind": "class",
+      "sublabel": "Venue booking aggregate root (venue.reservations)",
+      "row": 1,
+      "col": 0,
+      "sources": [
+        {
+          "path": "src/Modules/Venue/Venue.Domain/Entities/Reservation.cs",
+          "line": 1,
+          "end_line": 90,
+          "label": "Reservation.cs"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "TenantId",
+          "type": "Guid",
+          "visibility": "public"
+        },
+        {
+          "name": "ResourceId",
+          "type": "Guid",
+          "visibility": "public"
+        },
+        {
+          "name": "PriceQuoteId",
+          "type": "Guid?",
+          "visibility": "public"
+        },
+        {
+          "name": "Status",
+          "type": "ReservationStatus",
+          "visibility": "public"
+        }
+      ],
+      "methods": [
+        {
+          "name": "Confirm",
+          "parameters": "quoteId: Guid",
+          "returns": "Result",
+          "visibility": "public"
+        },
+        {
+          "name": "Cancel",
+          "parameters": "reason: string",
+          "returns": "Result",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "price_quote",
+      "label": "PriceQuote",
+      "kind": "class",
+      "sublabel": "Frozen commercial calculation snapshot",
+      "row": 1,
+      "col": 1,
+      "sources": [
+        {
+          "path": "src/Modules/CatalogPricing/CatalogPricing.Domain/Entities/PriceQuote.cs",
+          "line": 1,
+          "end_line": 70,
+          "label": "PriceQuote.cs"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "TenantId",
+          "type": "Guid",
+          "visibility": "public"
+        },
+        {
+          "name": "TotalAmount",
+          "type": "decimal",
+          "visibility": "public"
+        },
+        {
+          "name": "ExpiresAtUtc",
+          "type": "DateTime",
+          "visibility": "public"
+        }
+      ],
+      "methods": [
+        {
+          "name": "LockQuote",
+          "parameters": "bookingId: Guid",
+          "returns": "Result",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "base_dbcontext",
+      "label": "BaseDbContext",
+      "kind": "abstract",
+      "sublabel": "Enforces schema, TenantId filter, Audit & Outbox",
+      "row": 1,
+      "col": 2,
+      "sources": [
+        {
+          "path": "src/Core/Core.Infrastructure/Database/BaseDbContext.cs",
+          "line": 280,
+          "end_line": 361,
+          "label": "BaseDbContext.cs"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "OutboxMessages",
+          "type": "DbSet<OutboxMessage>",
+          "visibility": "public"
+        },
+        {
+          "name": "IdempotencyReceipts",
+          "type": "DbSet<ModuleIdempotencyReceipt>",
+          "visibility": "public"
+        }
+      ],
+      "methods": [
+        {
+          "name": "SaveChangesAsync",
+          "parameters": "ct: CancellationToken",
+          "returns": "Task<int>",
+          "visibility": "public"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "agg_inherits_audit",
+      "from": "aggregate_root",
+      "to": "auditable_entity",
+      "kind": "inheritance"
+    },
+    {
+      "id": "agg_raises_event",
+      "from": "aggregate_root",
+      "to": "idomain_event",
+      "kind": "aggregation",
+      "label": "raises"
+    },
+    {
+      "id": "res_inherits_agg",
+      "from": "reservation",
+      "to": "aggregate_root",
+      "kind": "inheritance"
+    },
+    {
+      "id": "quote_inherits_agg",
+      "from": "price_quote",
+      "to": "aggregate_root",
+      "kind": "inheritance"
+    },
+    {
+      "id": "res_links_quote",
+      "from": "reservation",
+      "to": "price_quote",
+      "kind": "dependency",
+      "label": "PriceQuoteId"
+    },
+    {
+      "id": "db_persists_agg",
+      "from": "base_dbcontext",
+      "to": "aggregate_root",
+      "kind": "dependency",
+      "label": "extracts Outbox"
+    }
+  ]
+}

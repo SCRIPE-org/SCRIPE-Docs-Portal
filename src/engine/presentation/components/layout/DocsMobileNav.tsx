@@ -157,6 +157,45 @@ export function DocsMobileNav({
         </button>
 
         <div className="pt-8">
+          <div className="px-4 pb-3 mb-2 border-b border-nx-line flex flex-col gap-1.5">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-nx-ink-3 font-semibold">
+              Portal Modes
+            </span>
+            <div className="grid grid-cols-2 gap-1.5 text-xs">
+              <Link
+                href="/technical"
+                prefetch={false}
+                onClick={onClose}
+                className="px-2.5 py-1.5 rounded border border-nx-line bg-nx-raised text-nx-ink font-medium"
+              >
+                Technical Docs
+              </Link>
+              <Link
+                href="/commercial"
+                prefetch={false}
+                onClick={onClose}
+                className="px-2.5 py-1.5 rounded border border-nx-line bg-nx-raised text-nx-ink font-medium"
+              >
+                Commercial Ops
+              </Link>
+              <Link
+                href="/understand"
+                prefetch={false}
+                onClick={onClose}
+                className="px-2.5 py-1.5 rounded border border-nx-accent/30 bg-nx-accent-wash text-nx-accent font-semibold"
+              >
+                Understand Hub
+              </Link>
+              <Link
+                href="/archify"
+                prefetch={false}
+                onClick={onClose}
+                className="px-2.5 py-1.5 rounded border border-nx-accent/40 bg-nx-accent-wash text-nx-accent font-semibold"
+              >
+                Archify SSOT (23)
+              </Link>
+            </div>
+          </div>
           {categories.map((cat) => (
             <div key={cat.id} className="docs-sidebar-category">
               <div className="docs-sidebar-category-btn cursor-default">

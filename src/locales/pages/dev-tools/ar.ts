@@ -86,7 +86,7 @@ export const ar = {
         "h_update": "scripe astraflow update",
         "h_validate": "scripe astraflow validate",
         "h_versions": "scripe astraflow versions",
-        "intro": "تأتي AstraFlow بأداة dotnet اسمها AstraFlow.Cli (الأمر astraflow، الإصدار 2.2.0) تفحص الشيفرة بشكل ساكن بحثاً عن معالجات AstraFlow والإشعارات وقواعد التعيين والإسقاطات. تغلّفها SCRIPE في الأمر scripe astraflow ليبقى إصدار الأداة مثبّتاً مع الواجهة الخلفية، وتعمل كل الأوامر افتراضياً على SCRIPE-Backend، ويمكن حفظ النتائج ومقارنتها وتصديرها.",
+        "intro": "تأتي AstraFlow بأداة dotnet اسمها AstraFlow.Cli (الأمر astraflow، الإصدار 2.3.0) تفحص الشيفرة بشكل ساكن بحثاً عن معالجات AstraFlow والإشعارات وقواعد التعيين والإسقاطات. تغلّفها SCRIPE في الأمر scripe astraflow ليبقى إصدار الأداة مثبّتاً مع الواجهة الخلفية، وتعمل كل الأوامر افتراضياً على SCRIPE-Backend، ويمكن حفظ النتائج ومقارنتها وتصديرها.",
         "intro2": "هناك ثلاث عائلات من الأوامر: دورة الحياة (install وupdate وuninstall وstatus وversions)، والتمرير المباشر (inspect وvalidate وreport وdiff وgraph وscan وrun)، وسير عمل SCRIPE (baseline وbaselines وcompare وexport وdoctor). كما يتوفر كل ذلك بصرياً في SCRIPE Studio ضمن صفحة AstraFlow.",
         "jsonIntro": "لكل تقرير JSON من AstraFlow CLI البنية نفسها، وعليها تعتمد baseline وcompare وعرض النتائج في Studio. معرّفات العناصر هي ما يقارنه diff كمجموعات <section>:<id>.",
         "kLifecycle": "دورة الحياة",

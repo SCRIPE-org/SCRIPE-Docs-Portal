@@ -89,7 +89,7 @@ export const fr = {
       queryExampleTitle: "Exemple de Requête",
       sourceGenMappingTitle: "Moteur de Mappage à la Compilation Roslyn",
       sourceGenMappingIntro:
-        "AstraFlow 2.2.0 introduit un générateur de code source incrémental Roslyn ([AstraGenerateMapping]) remplaçant la réflexion à l'exécution par des assignations scalaires compilées. Les tests BenchmarkDotNet confirment une accélération de 11x (11,98 ns vs 133,82 ns) et une réduction de 88% des allocations mémoire (32 B vs 264 B).",
+        "AstraFlow 2.3.0 introduit un générateur de code source incrémental Roslyn ([AstraGenerateMapping]) remplaçant la réflexion à l'exécution par des assignations scalaires compilées. Les tests BenchmarkDotNet confirment une accélération de 11x (11,98 ns vs 133,82 ns) et une réduction de 88% des allocations mémoire (32 B vs 264 B).",
       conventionMappingTitle: "Profil de Mappage par Convention",
       mappingChoiceTitle: "Mappage à la Compilation vs Convention",
       afm001Tip:
@@ -366,7 +366,7 @@ export const fr = {
         "Les commandes optent pour le contrôle des fonctionnalités en implémentant l'interface IRequireFeature avec une propriété RequiredFeatureName. Lorsque le module Entitlements n'est pas déployé, NoOpFeatureChecker renvoie true pour toutes les vérifications, rendant ce comportement transparent.",
       concurrencySafetyTitle: "Stratégie de Publication et Sécurité de Concurrence",
       concurrencySafetyIntro:
-        "Les événements de domaine en cours d'exécution interagissent avec des instances DbContext EF Core de portée scoped. Comme DbContext n'est pas thread-safe, la publication concurrente déclenche des exceptions fatales. AstraFlow 2.2.0 impose NotificationPublishStrategy.Sequential pour garantir des opérations thread-safe.",
+        "Les événements de domaine en cours d'exécution interagissent avec des instances DbContext EF Core de portée scoped. Comme DbContext n'est pas thread-safe, la publication concurrente déclenche des exceptions fatales. AstraFlow 2.3.0 impose NotificationPublishStrategy.Sequential pour garantir des opérations thread-safe.",
       sequentialStrategyTitle: "Stratégie Séquentielle (Par Défaut)",
       parallelStrategyTitle: "Stratégie Parallèle / BoundedParallel",
       testingDoublesTitle: "Tests Unitaires & d'Intégration avec AstraFlow.Testing",

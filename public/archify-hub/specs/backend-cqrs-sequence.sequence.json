@@ -1,0 +1,298 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "AstraFlow 3-Transaction Command Idempotency & Outbox Sequence",
+    "output": "public/archify-hub/backend-cqrs-sequence.html",
+    "column_fit": "spread",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Backend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "f941b1500a9ef98b0f81bdb473d1306f554d6526"
+    }
+  },
+  "participants": [
+    {
+      "id": "ctrl",
+      "type": "backend",
+      "label": "QuotesCtrl",
+      "sublabel": "REST API",
+      "sources": [
+        {
+          "path": "src/Host/API/Controllers/CatalogPricing/PriceQuotesController.cs",
+          "line": 16,
+          "end_line": 58,
+          "label": "PriceQuotesController"
+        }
+      ]
+    },
+    {
+      "id": "idem",
+      "type": "security",
+      "label": "Idempotency",
+      "sublabel": "3-TX Guard",
+      "sources": [
+        {
+          "path": "src/Core/Core.Application/Behaviors/IdempotencyBehavior.cs",
+          "line": 61,
+          "end_line": 133,
+          "label": "IdempotencyBehavior"
+        }
+      ]
+    },
+    {
+      "id": "redis",
+      "type": "database",
+      "label": "Redis L1",
+      "sublabel": "Fast Cache",
+      "sources": [
+        {
+          "path": "src/Core/Core.Application/Behaviors/IdempotencyBehavior.cs",
+          "line": 61,
+          "end_line": 133,
+          "label": "L1 Receipt Cache"
+        }
+      ]
+    },
+    {
+      "id": "handler",
+      "type": "backend",
+      "label": "QuoteHandler",
+      "sublabel": "Domain CQRS",
+      "sources": [
+        {
+          "path": "src/Modules/CatalogPricing/CatalogPricing.Application/Commands/CalculatePriceQuoteCommandHandler.cs",
+          "line": 86,
+          "end_line": 166,
+          "label": "CalculatePriceQuoteCommandHandler"
+        }
+      ]
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "BaseDbContext",
+      "sublabel": "Schema + Outbox",
+      "sources": [
+        {
+          "path": "src/Core/Core.Infrastructure/Database/BaseDbContext.cs",
+          "line": 280,
+          "end_line": 361,
+          "label": "BaseDbContext SaveChanges"
+        }
+      ]
+    },
+    {
+      "id": "outbox",
+      "type": "messagebus",
+      "label": "OutboxWorker",
+      "sublabel": "Event Poll",
+      "sources": [
+        {
+          "path": "src/Core/Core.Infrastructure/Outbox/OutboxProcessor.cs",
+          "line": 55,
+          "end_line": 176,
+          "label": "OutboxProcessorJob"
+        }
+      ]
+    }
+  ],
+  "segments": [
+    {
+      "from": 145,
+      "to": 315,
+      "label": "1. L1 Check & TX-1 InProgress Claim"
+    },
+    {
+      "from": 330,
+      "to": 535,
+      "label": "2. TX-2 Domain + Outbox & TX-3 Encrypted Receipt"
+    },
+    {
+      "from": 550,
+      "to": 650,
+      "label": "3. Async Outbox Poll & Inbox Delivery"
+    }
+  ],
+  "messages": [
+    {
+      "id": "bm1",
+      "from": "ctrl",
+      "to": "idem",
+      "y": 160,
+      "label": "Send(CalculatePriceQuoteCommand)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "bm2",
+      "from": "idem",
+      "to": "redis",
+      "y": 194,
+      "label": "GET idempotency:receipt:key",
+      "variant": "default"
+    },
+    {
+      "id": "bm3",
+      "from": "redis",
+      "to": "idem",
+      "y": 228,
+      "label": "L1 cache miss",
+      "variant": "return"
+    },
+    {
+      "id": "bm4",
+      "from": "idem",
+      "to": "db",
+      "y": 264,
+      "label": "TX-1: INSERT InProgress receipt (2m lease)",
+      "variant": "security"
+    },
+    {
+      "id": "bm5",
+      "from": "db",
+      "to": "idem",
+      "y": 300,
+      "label": "unique key lock acquired",
+      "variant": "return"
+    },
+    {
+      "id": "bm6",
+      "from": "idem",
+      "to": "handler",
+      "y": 346,
+      "label": "next() -> Handle(command)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "bm7",
+      "from": "handler",
+      "to": "db",
+      "y": 382,
+      "label": "TX-2: Save PriceQuote + AuditLog + OutboxMessage",
+      "variant": "emphasis"
+    },
+    {
+      "id": "bm8",
+      "from": "db",
+      "to": "handler",
+      "y": 418,
+      "label": "committed -> map DTO [AstraGenerateMapping]",
+      "variant": "return"
+    },
+    {
+      "id": "bm9",
+      "from": "handler",
+      "to": "idem",
+      "y": 452,
+      "label": "Result.Success(PriceQuoteResponse)",
+      "variant": "return"
+    },
+    {
+      "id": "bm10",
+      "from": "idem",
+      "to": "db",
+      "y": 486,
+      "label": "TX-3: UPDATE receipt Completed (AES-GCM)",
+      "variant": "security"
+    },
+    {
+      "id": "bm11",
+      "from": "idem",
+      "to": "redis",
+      "y": 522,
+      "label": "SET L1 receipt cache (24h TTL)",
+      "variant": "dashed"
+    },
+    {
+      "id": "bm12",
+      "from": "idem",
+      "to": "ctrl",
+      "y": 566,
+      "label": "201 Created Result<PriceQuoteResponse>",
+      "variant": "return"
+    },
+    {
+      "id": "bm13",
+      "from": "outbox",
+      "to": "db",
+      "y": 602,
+      "label": "poll unprocessed pricing.outbox_messages",
+      "variant": "dashed"
+    },
+    {
+      "id": "bm14",
+      "from": "db",
+      "to": "outbox",
+      "y": 636,
+      "label": "dispatch batch -> mark ProcessedOnUtc",
+      "variant": "return"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "ctrl",
+      "from": 155,
+      "to": 575,
+      "type": "backend"
+    },
+    {
+      "participant": "idem",
+      "from": 160,
+      "to": 570,
+      "type": "security"
+    },
+    {
+      "participant": "redis",
+      "from": 188,
+      "to": 235,
+      "type": "database"
+    },
+    {
+      "participant": "handler",
+      "from": 340,
+      "to": 458,
+      "type": "backend"
+    },
+    {
+      "participant": "db",
+      "from": 258,
+      "to": 494,
+      "type": "database"
+    },
+    {
+      "participant": "outbox",
+      "from": 596,
+      "to": 644,
+      "type": "messagebus"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "TX-1 Autonomous Lease Claim",
+      "items": [
+        "TX-1 commits an InProgress receipt row before handler execution.",
+        "Concurrent duplicate requests hit the unique index and receive 409 Conflict immediately."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "TX-2 Atomic Domain + Outbox",
+      "items": [
+        "BaseDbContext extracts AggregateRoot.DomainEvents into schema-local outbox_messages in the same transaction.",
+        "AuditLog diffs and UTC timestamps are stamped automatically."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "TX-3 AES-GCM Receipt & L1 Replay",
+      "items": [
+        "Completed response payloads are encrypted with AES-GCM in idempotency_receipts and cached in Redis L1.",
+        "Safe retries replay the exact Result<T> response without re-running business logic."
+      ]
+    }
+  ]
+}

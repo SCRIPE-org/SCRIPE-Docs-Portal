@@ -320,6 +320,34 @@ export function DocsSidebar({
 
   return (
     <aside className="docs-sidebar">
+      <div className="px-3 pt-3 pb-2 space-y-2">
+        <Link
+          href="/archify"
+          prefetch={false}
+          className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg border border-primary/40 bg-primary/10 hover:bg-primary/20 text-foreground text-xs font-semibold transition-all"
+        >
+          <span className="flex items-center gap-2">
+            <Sparkles size={14} className="text-primary" aria-hidden="true" />
+            <span>Archify SSOT Atlas</span>
+          </span>
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-primary text-primary-foreground font-bold">
+            23 PAGES
+          </span>
+        </Link>
+        <Link
+          href="/understand"
+          prefetch={false}
+          className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg border border-border bg-card hover:border-sky-500/40 text-foreground text-xs font-semibold transition-all"
+        >
+          <span className="flex items-center gap-2">
+            <Cpu size={14} className="text-sky-400" aria-hidden="true" />
+            <span>Understand Super Hub</span>
+          </span>
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-400 border border-sky-500/30 font-bold">
+            9 TABS
+          </span>
+        </Link>
+      </div>
       {categories.map((cat) => {
         return (
           <div key={cat.id} className="docs-sidebar-category">

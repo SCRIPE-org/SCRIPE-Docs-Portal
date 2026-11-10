@@ -1,0 +1,541 @@
+{
+  "schema_version": 1,
+  "diagram_type": "erd",
+  "meta": {
+    "title": "SCRIPE-Backend Multi-Schema Physical Data Model (ERD)",
+    "locale": "en",
+    "output": "public/archify-hub/backend-erd.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Backend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "f941b1500a9ef98b0f81bdb473d1306f554d6526"
+    },
+    "views": [
+      {
+        "id": "identity_venue",
+        "label": "1. Identity & Venue Core",
+        "focus": [
+          "identity_tenants",
+          "identity_users",
+          "venue_resources",
+          "venue_reservations"
+        ],
+        "note": "Tenant and user roots in identity.* linked logically to schedulable resources and reservations in venue.*."
+      },
+      {
+        "id": "commercial_settlement",
+        "label": "2. Pricing, Finance & CRM",
+        "focus": [
+          "venue_reservations",
+          "pricing_quotes",
+          "finance_invoices",
+          "crm_opportunities"
+        ],
+        "note": "Commercial quote snapshots in catalog_pricing.* link logically to reservations, invoices, and CRM opportunities."
+      },
+      {
+        "id": "outbox_idempotency",
+        "label": "3. Per-Schema Outbox & Receipts",
+        "focus": [
+          "venue_reservations",
+          "pricing_quotes",
+          "module_outbox",
+          "module_receipts"
+        ],
+        "note": "Every module schema owns dedicated outbox_messages and idempotency_receipts tables committed in the same transaction."
+      }
+    ]
+  },
+  "layout": {
+    "mode": "grid",
+    "gapY": 40,
+    "gapX": 76
+  },
+  "entities": [
+    {
+      "id": "identity_tenants",
+      "label": "identity.tenants",
+      "tag": "identity",
+      "row": 0,
+      "col": 0,
+      "width": 250,
+      "sources": [
+        {
+          "path": "src/Modules/Identity/Identity.Domain/Entities/Tenant.cs",
+          "line": 1,
+          "end_line": 70,
+          "label": "Tenant Entity"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "key": "pk"
+        },
+        {
+          "name": "identifier",
+          "type": "varchar(80)",
+          "key": "uk"
+        },
+        {
+          "name": "name_en",
+          "type": "varchar(200)"
+        },
+        {
+          "name": "edition_id",
+          "type": "uuid"
+        },
+        {
+          "name": "is_active",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "identity_users",
+      "label": "identity.users",
+      "tag": "identity",
+      "row": 1,
+      "col": 0,
+      "width": 250,
+      "sources": [
+        {
+          "path": "src/Modules/Identity/Identity.Domain/Entities/User.cs",
+          "line": 1,
+          "end_line": 80,
+          "label": "User Entity"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "key": "pk"
+        },
+        {
+          "name": "tenant_id",
+          "type": "uuid",
+          "key": "fk",
+          "references": "identity_tenants.id"
+        },
+        {
+          "name": "email",
+          "type": "varchar(256)",
+          "key": "uk"
+        },
+        {
+          "name": "two_factor_enabled",
+          "type": "boolean"
+        },
+        {
+          "name": "row_version",
+          "type": "bytea"
+        }
+      ]
+    },
+    {
+      "id": "venue_resources",
+      "label": "venue.schedulable_resources",
+      "tag": "venue",
+      "row": 0,
+      "col": 1,
+      "width": 260,
+      "sources": [
+        {
+          "path": "src/Modules/Venue/Venue.Domain/Entities/SchedulableResource.cs",
+          "line": 1,
+          "end_line": 60,
+          "label": "SchedulableResource"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "key": "pk"
+        },
+        {
+          "name": "tenant_id",
+          "type": "uuid",
+          "key": "fk",
+          "references": "identity_tenants.id"
+        },
+        {
+          "name": "code",
+          "type": "varchar(64)",
+          "key": "uk"
+        },
+        {
+          "name": "resource_type",
+          "type": "varchar(40)"
+        },
+        {
+          "name": "is_active",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "venue_reservations",
+      "label": "venue.reservations",
+      "tag": "venue",
+      "row": 1,
+      "col": 1,
+      "width": 260,
+      "sources": [
+        {
+          "path": "src/Modules/Venue/Venue.Domain/Entities/Reservation.cs",
+          "line": 1,
+          "end_line": 90,
+          "label": "Reservation Aggregate"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "key": "pk"
+        },
+        {
+          "name": "tenant_id",
+          "type": "uuid",
+          "key": "fk",
+          "references": "identity_tenants.id"
+        },
+        {
+          "name": "resource_id",
+          "type": "uuid",
+          "key": "fk",
+          "references": "venue_resources.id"
+        },
+        {
+          "name": "price_quote_id",
+          "type": "uuid",
+          "key": "fk",
+          "references": "pricing_quotes.id"
+        },
+        {
+          "name": "start_time_utc",
+          "type": "timestamptz"
+        },
+        {
+          "name": "status",
+          "type": "varchar(32)"
+        }
+      ]
+    },
+    {
+      "id": "pricing_quotes",
+      "label": "catalog_pricing.price_quotes",
+      "tag": "pricing",
+      "row": 0,
+      "col": 2,
+      "width": 260,
+      "sources": [
+        {
+          "path": "src/Modules/CatalogPricing/CatalogPricing.Domain/Entities/PriceQuote.cs",
+          "line": 1,
+          "end_line": 70,
+          "label": "PriceQuote Snapshot"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "key": "pk"
+        },
+        {
+          "name": "tenant_id",
+          "type": "uuid",
+          "key": "fk",
+          "references": "identity_tenants.id"
+        },
+        {
+          "name": "quote_number",
+          "type": "varchar(48)",
+          "key": "uk"
+        },
+        {
+          "name": "total_amount",
+          "type": "numeric(18,2)"
+        },
+        {
+          "name": "expires_at_utc",
+          "type": "timestamptz"
+        }
+      ]
+    },
+    {
+      "id": "finance_invoices",
+      "label": "finance.customer_invoices",
+      "tag": "finance",
+      "row": 1,
+      "col": 2,
+      "width": 260,
+      "sources": [
+        {
+          "path": "src/Modules/Finance/Finance.Domain/Entities/CustomerInvoice.cs",
+          "line": 1,
+          "end_line": 60,
+          "label": "CustomerInvoice"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "key": "pk"
+        },
+        {
+          "name": "tenant_id",
+          "type": "uuid",
+          "key": "fk",
+          "references": "identity_tenants.id"
+        },
+        {
+          "name": "invoice_number",
+          "type": "varchar(48)",
+          "key": "uk"
+        },
+        {
+          "name": "reservation_id",
+          "type": "uuid",
+          "key": "fk",
+          "references": "venue_reservations.id"
+        },
+        {
+          "name": "total_due",
+          "type": "numeric(18,2)"
+        }
+      ]
+    },
+    {
+      "id": "crm_opportunities",
+      "label": "crm.opportunities",
+      "tag": "crm",
+      "row": 0,
+      "col": 3,
+      "width": 250,
+      "sources": [
+        {
+          "path": "src/Modules/CRM/CRM.Domain/Entities/CrmOpportunity.cs",
+          "line": 1,
+          "end_line": 90,
+          "label": "CrmOpportunity"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "key": "pk"
+        },
+        {
+          "name": "tenant_id",
+          "type": "uuid",
+          "key": "fk",
+          "references": "identity_tenants.id"
+        },
+        {
+          "name": "owner_user_id",
+          "type": "uuid",
+          "key": "fk",
+          "references": "identity_users.id"
+        },
+        {
+          "name": "expected_value",
+          "type": "numeric(18,2)"
+        },
+        {
+          "name": "status",
+          "type": "varchar(32)"
+        }
+      ]
+    },
+    {
+      "id": "module_outbox",
+      "label": "{schema}.outbox_messages",
+      "tag": "reliability",
+      "row": 1,
+      "col": 3,
+      "width": 250,
+      "sources": [
+        {
+          "path": "src/Core/Core.Infrastructure/Outbox/OutboxMessage.cs",
+          "line": 1,
+          "end_line": 44,
+          "label": "OutboxMessage"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "key": "pk"
+        },
+        {
+          "name": "tenant_id",
+          "type": "uuid"
+        },
+        {
+          "name": "event_type",
+          "type": "varchar(256)"
+        },
+        {
+          "name": "occurred_on_utc",
+          "type": "timestamptz"
+        },
+        {
+          "name": "processed_on_utc",
+          "type": "timestamptz"
+        }
+      ]
+    },
+    {
+      "id": "module_receipts",
+      "label": "{schema}.idempotency_receipts",
+      "tag": "reliability",
+      "row": 2,
+      "col": 3,
+      "width": 250,
+      "sources": [
+        {
+          "path": "src/Core/Core.Domain/Entities/ModuleIdempotencyReceipt.cs",
+          "line": 1,
+          "end_line": 75,
+          "label": "ModuleIdempotencyReceipt"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "key": "pk"
+        },
+        {
+          "name": "key_hash",
+          "type": "varchar(128)",
+          "key": "uk"
+        },
+        {
+          "name": "status",
+          "type": "varchar(24)"
+        },
+        {
+          "name": "response_cipher",
+          "type": "bytea"
+        },
+        {
+          "name": "expires_at_utc",
+          "type": "timestamptz"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "rel_user_tenant",
+      "from": "identity_users",
+      "to": "identity_tenants",
+      "label": "belongs to",
+      "fromCardinality": "many",
+      "toCardinality": "one"
+    },
+    {
+      "id": "rel_res_resource",
+      "from": "venue_reservations",
+      "to": "venue_resources",
+      "label": "books slot",
+      "fromCardinality": "many",
+      "toCardinality": "one"
+    },
+    {
+      "id": "rel_quote_resource",
+      "from": "pricing_quotes",
+      "to": "venue_resources",
+      "label": "prices resource",
+      "fromCardinality": "many",
+      "fromOptional": true,
+      "toCardinality": "one",
+      "identifying": false
+    },
+    {
+      "id": "rel_inv_res",
+      "from": "finance_invoices",
+      "to": "venue_reservations",
+      "label": "logical booking id",
+      "fromCardinality": "many",
+      "fromOptional": true,
+      "toCardinality": "one",
+      "identifying": false
+    },
+    {
+      "id": "rel_inv_quote",
+      "from": "finance_invoices",
+      "to": "pricing_quotes",
+      "label": "settles quote",
+      "fromCardinality": "many",
+      "fromOptional": true,
+      "toCardinality": "one",
+      "identifying": false
+    },
+    {
+      "id": "rel_opp_quote",
+      "from": "pricing_quotes",
+      "to": "crm_opportunities",
+      "label": "commercial offer",
+      "fromCardinality": "many",
+      "fromOptional": true,
+      "toCardinality": "one",
+      "identifying": false
+    },
+    {
+      "id": "rel_inv_outbox",
+      "from": "module_outbox",
+      "to": "finance_invoices",
+      "label": "same TX event",
+      "fromCardinality": "many",
+      "toCardinality": "one",
+      "identifying": false
+    },
+    {
+      "id": "rel_outbox_receipt",
+      "from": "module_receipts",
+      "to": "module_outbox",
+      "label": "3-TX receipt",
+      "fromCardinality": "one",
+      "toCardinality": "many",
+      "identifying": false
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Strict Schema Isolation",
+      "items": [
+        "Every module owns its isolated schema (identity.*, venue.*, catalog_pricing.*, finance.*, crm.*).",
+        "Physical foreign keys exist only within the same module schema."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Logical Cross-Module References",
+      "items": [
+        "Cross-module relationships (dashed) use logical UUID columns without physical DB foreign keys.",
+        "This allows Mode 2 to split any module onto its own physical database server with zero schema changes."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Per-Schema Outbox & Receipts",
+      "items": [
+        "Every module schema migrates its own outbox_messages, inbox_messages, and idempotency_receipts tables.",
+        "Domain state, audit logs, and outbox events commit in a single ACID transaction."
+      ]
+    }
+  ]
+}

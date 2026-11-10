@@ -1,0 +1,427 @@
+{
+  "generatedAt": "2026-11-10T18:35:53.751Z",
+  "version": "6.0-SSOT",
+  "totalArtifacts": 23,
+  "allPassedVerification": true,
+  "pillars": {
+    "fullstack": 7,
+    "backend": 8,
+    "frontend": 8
+  },
+  "items": [
+    {
+      "id": "fullstack-architecture",
+      "pillar": "fullstack",
+      "mode": "architecture",
+      "title": "SCRIPE v6.0 Full-Stack System Architecture (5 Guided Views)",
+      "subtitle": "Interactive Full-Stack Topology: Next.js 16 MVVM Portal -> 29-Stage Security Ingress -> AstraFlow 2.3.0 CQRS -> 18 Domain Modules -> Dual-Mode DB & SignalR",
+      "description": "Native Archify Architecture diagram with 5 Guided Views, live comet animations, Route Probe, Semantic Lens, and pinned monorepo provenance.",
+      "htmlUrl": "/archify-hub/fullstack-architecture.html",
+      "specUrl": "/archify-hub/specs/fullstack-architecture.architecture.json",
+      "sizeKb": 856.6,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "fullstack-master-explainer",
+      "pillar": "fullstack",
+      "mode": "explainer",
+      "title": "SCRIPE v6.0 Super Full-Stack Single Source of Truth",
+      "subtitle": "End-to-End Platform Architecture: Next.js 16 MVVM Portal + .NET 10 AstraFlow Modular Monolith + Dual-Mode Persistence + 193-Command CLI",
+      "description": "Interactive multi-panel Explainer Board uniting Frontend, Backend, Security, Persistence, Outbox Eventing, and DevOps into one authoritative Single Source of Truth.",
+      "htmlUrl": "/archify-hub/fullstack-master-explainer.html",
+      "specUrl": "/archify-hub/specs/fullstack-master-explainer.archify.md",
+      "sizeKb": 1611,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "fullstack-e2e-sequence",
+      "pillar": "fullstack",
+      "mode": "sequence",
+      "title": "Full-Stack End-to-End Mutation, 401 Refresh & Real-Time SignalR Sequence",
+      "subtitle": "7-Participant Call Trace: Next.js View -> ViewModel/Repo -> ApiService -> 29-Stage Pipeline -> AstraFlow 3-TX -> BaseDbContext -> SignalR",
+      "description": "Native Archify Sequence diagram capturing every synchronous and asynchronous hop of a full-stack SCRIPE transaction, including 401 token refresh recovery and Outbox dispatch.",
+      "htmlUrl": "/archify-hub/fullstack-e2e-sequence.html",
+      "specUrl": "/archify-hub/specs/fullstack-e2e-sequence.sequence.json",
+      "sizeKb": 840.8,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "fullstack-dataflow",
+      "pillar": "fullstack",
+      "mode": "dataflow",
+      "title": "Full-Stack Data Lineage, AES-GCM Encryption & Projection Pipeline",
+      "subtitle": "5-Stage Data Flow: Client Sources -> Zero-Trust Ingress -> AstraFlow CQRS & FLS -> Dual-Mode Schemas -> Read Projections & SignalR",
+      "description": "Native Archify Dataflow diagram tracing how payloads move from React 19 forms through security scrubbing, AES-GCM field encryption, isolated schemas, and compile-time projections.",
+      "htmlUrl": "/archify-hub/fullstack-dataflow.html",
+      "specUrl": "/archify-hub/specs/fullstack-dataflow.dataflow.json",
+      "sizeKb": 842.9,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "fullstack-waterfall",
+      "pillar": "fullstack",
+      "mode": "waterfall",
+      "title": "End-to-End Full-Stack Request Latency Waterfall (P95 Trace)",
+      "subtitle": "OpenTelemetry Distributed Span Breakdown: Client MVVM -> 29-Stage Security -> AstraFlow 3-TX -> BaseDbContext -> Async Outbox & SignalR",
+      "description": "Native Archify Waterfall diagram profiling the millisecond execution spans of a full-stack SCRIPE write transaction and asynchronous Outbox broadcast.",
+      "htmlUrl": "/archify-hub/fullstack-waterfall.html",
+      "specUrl": "/archify-hub/specs/fullstack-waterfall.waterfall.json",
+      "sizeKb": 839.9,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "fullstack-devops-workflow",
+      "pillar": "fullstack",
+      "mode": "workflow",
+      "title": "SCRIPE CLI Toolchain, Multi-DB Migration & 11-Point UAT Workflow",
+      "subtitle": "Swimlane Engineering Pipeline: scripe-cli (193 Commands) -> Arch-Check & Locales -> Multi-DB Seeding -> Live Playwright UAT -> Docs Portal SSOT",
+      "description": "Native Archify Workflow v2 diagram illustrating the mandatory CLI-First development lifecycle and 5-stage verification gate.",
+      "htmlUrl": "/archify-hub/fullstack-devops-workflow.html",
+      "specUrl": "/archify-hub/specs/fullstack-devops-workflow.workflow.json",
+      "sizeKb": 845.9,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "fullstack-timeline",
+      "pillar": "fullstack",
+      "mode": "timeline",
+      "title": "SCRIPE v6.0 Platform Architecture & Governance Timeline",
+      "subtitle": "Observed Repository Evolution across Backend Modular Monolith, AstraFlow 2.3.0, Frontend Nexus MVVM, CLI Toolchain & Archify SSOT",
+      "description": "Native Archify Timeline diagram tracking the major architectural milestones across the SCRIPE monorepo.",
+      "htmlUrl": "/archify-hub/fullstack-timeline.html",
+      "specUrl": "/archify-hub/specs/fullstack-timeline.timeline.json",
+      "sizeKb": 837.8,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "backend-architecture",
+      "pillar": "backend",
+      "mode": "architecture",
+      "title": "SCRIPE-Backend .NET 10 Modular Monolith Architecture (4 Guided Views)",
+      "subtitle": "Interactive C4 Container & Component Map: 29-Stage Security Pipeline, AstraFlow 2.3.0 Mediator, 18 Modules, BaseDbContext & OutboxProcessor",
+      "description": "Native Archify Architecture diagram for SCRIPE-Backend with 4 Guided Views, live comet animations, Route Probe, Semantic Lens, and pinned C# provenance.",
+      "htmlUrl": "/archify-hub/backend-architecture.html",
+      "specUrl": "/archify-hub/specs/backend-architecture.architecture.json",
+      "sizeKb": 865.2,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "backend-master-explainer",
+      "pillar": "backend",
+      "mode": "explainer",
+      "title": "SCRIPE-Backend Master Deep Dive: .NET 10 Modular Monolith & AstraFlow 2.3.0",
+      "subtitle": "18 Isolated 3-Project Domain Modules, 927+ AstraFlow CQRS Handlers, 3-Transaction Idempotency & Transactional Outbox",
+      "description": "Comprehensive interactive Explainer Board for SCRIPE-Backend covering Clean Architecture invariants, AstraFlow 2.3.0 pipeline behaviors, commercial pricing snapshots, and actual C# source code.",
+      "htmlUrl": "/archify-hub/backend-master-explainer.html",
+      "specUrl": "/archify-hub/specs/backend-master-explainer.archify.md",
+      "sizeKb": 1845.5,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "backend-security-persistence-explainer",
+      "pillar": "backend",
+      "mode": "explainer",
+      "title": "SCRIPE-Backend Deep Dive: 5-Layer Security, 29-Stage Middleware & Dual-Mode Persistence",
+      "subtitle": "PBAC Policy Engine, JWT Revocation, CSRF & Replay Defense, AES-GCM Field Encryption, SecureIdCodec & Multi-Database Schema Isolation",
+      "description": "Interactive Explainer Board dedicated to SCRIPE-Backend's defense-in-depth security architecture and dual-mode multi-database persistence engine (PostgreSQL, SQL Server, Oracle).",
+      "htmlUrl": "/archify-hub/backend-security-persistence-explainer.html",
+      "specUrl": "/archify-hub/specs/backend-security-persistence-explainer.archify.md",
+      "sizeKb": 1324.1,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "backend-middleware-workflow",
+      "pillar": "backend",
+      "mode": "workflow",
+      "title": "29-Stage Zero-Trust HTTP Security & PBAC Ingress Workflow",
+      "subtitle": "Exact Execution Flow of MiddlewarePipeline.cs: Network Hardening -> Auth & Blacklist -> Replay & CSRF -> Tenant & PBAC -> AstraFlow Dispatch",
+      "description": "Native Archify Workflow v2 diagram modeling every security gate in SCRIPE-Backend's MiddlewarePipeline.cs with failure rejection branches.",
+      "htmlUrl": "/archify-hub/backend-middleware-workflow.html",
+      "specUrl": "/archify-hub/specs/backend-middleware-workflow.workflow.json",
+      "sizeKb": 846.5,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "backend-cqrs-sequence",
+      "pillar": "backend",
+      "mode": "sequence",
+      "title": "AstraFlow 3-Transaction Idempotency & Cross-Module Outbox Sequence",
+      "subtitle": "Step-by-Step Execution Trace of IdempotencyBehavior.cs, CalculatePriceQuoteCommandHandler.cs, BaseDbContext.cs & OutboxProcessor.cs",
+      "description": "Native Archify Sequence diagram detailing how SCRIPE-Backend guarantees at-most-once command execution and at-least-once event delivery.",
+      "htmlUrl": "/archify-hub/backend-cqrs-sequence.html",
+      "specUrl": "/archify-hub/specs/backend-cqrs-sequence.sequence.json",
+      "sizeKb": 839.2,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "backend-erd",
+      "pillar": "backend",
+      "mode": "erd",
+      "title": "SCRIPE-Backend Multi-Schema Physical Entity-Relationship Model (ERD)",
+      "subtitle": "Table-First Physical Schema Model across identity.*, venue.*, catalog_pricing.*, finance.*, crm.* & Per-Schema Outbox/Receipts",
+      "description": "Native Archify ERD diagram with 3 Guided Views showing physical tables, primary/foreign/unique keys, logical cross-module GUID references, and schema bands.",
+      "htmlUrl": "/archify-hub/backend-erd.html",
+      "specUrl": "/archify-hub/specs/backend-erd.erd.json",
+      "sizeKb": 875.8,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "backend-class",
+      "pillar": "backend",
+      "mode": "class",
+      "title": "SCRIPE-Backend Clean Architecture & AstraFlow Class Hierarchy",
+      "subtitle": "C# Class & Contract Model: Entity -> AuditableEntity -> AggregateRoot, IDomainEvent, IdempotencyBehavior, BaseDbContext & Reservation",
+      "description": "Native Archify Class diagram illustrating the core C# abstractions, domain primitives, pipeline behaviors, and aggregate roots in SCRIPE-Backend.",
+      "htmlUrl": "/archify-hub/backend-class.html",
+      "specUrl": "/archify-hub/specs/backend-class.class.json",
+      "sizeKb": 849.4,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "backend-lifecycle",
+      "pillar": "backend",
+      "mode": "lifecycle",
+      "title": "Venue Reservation, Commercial Snapshot & Idempotency State Machine",
+      "subtitle": "Domain State Transitions from ReservationLifecycle.cs & PriceQuote.cs: SlotHold -> Quoted -> Confirmed -> CheckedIn -> Settled / Cancelled",
+      "description": "Native Archify Lifecycle v3 state machine diagram modeling the guarded transitions, invariants, and recovery paths of a Venue Reservation.",
+      "htmlUrl": "/archify-hub/backend-lifecycle.html",
+      "specUrl": "/archify-hub/specs/backend-lifecycle.lifecycle.json",
+      "sizeKb": 845,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "frontend-architecture",
+      "pillar": "frontend",
+      "mode": "architecture",
+      "title": "SCRIPE-Frontend Next.js 16 MVVM & Provider Topology (4 Guided Views)",
+      "subtitle": "Interactive Architecture Map: Edge Proxy, Provider Stack, 5-Layer MVVM Sub-Modules, Generic CRUD Engine, ApiService & SignalR",
+      "description": "Native Archify Architecture diagram for SCRIPE-Frontend with 4 Guided Views, live comet animations, Route Probe, Semantic Lens, and pinned TypeScript provenance.",
+      "htmlUrl": "/archify-hub/frontend-architecture.html",
+      "specUrl": "/archify-hub/specs/frontend-architecture.architecture.json",
+      "sizeKb": 863.7,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "frontend-master-explainer",
+      "pillar": "frontend",
+      "mode": "explainer",
+      "title": "SCRIPE-Frontend Master Deep Dive: Next.js 16 + React 19 SOLID MVVM Architecture",
+      "subtitle": "Sub-Module Isolation, 5-Layer MVVM Data Flow, Inversify DI, Generic CRUD Engine, TanStack Query + Zustand & Single-Flight 401 Mutex",
+      "description": "Interactive Explainer Board for SCRIPE-Frontend covering sub-module isolation, the 5-layer SOLID MVVM pipeline, ApiService 401 refresh queuing, and actual TypeScript source code.",
+      "htmlUrl": "/archify-hub/frontend-master-explainer.html",
+      "specUrl": "/archify-hub/specs/frontend-master-explainer.archify.md",
+      "sizeKb": 1294.2,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "frontend-design-i18n-explainer",
+      "pillar": "frontend",
+      "mode": "explainer",
+      "title": "SCRIPE-Frontend Deep Dive: Nexus Token System, @core/ui/* Mandate & Bilingual EN/AR i18n",
+      "subtitle": "Surface Hierarchy (--nx-ground, --nx-surface, --nx-raised), Signal Lime Contrast Law, Flat Matte Card Anatomy & Zero Inline Ternaries",
+      "description": "Interactive Explainer Board detailing SCRIPE's Nexus Design System tokens, mandatory @core/ui/* component library, and strict bilingual English/Arabic localization rules.",
+      "htmlUrl": "/archify-hub/frontend-design-i18n-explainer.html",
+      "specUrl": "/archify-hub/specs/frontend-design-i18n-explainer.archify.md",
+      "sizeKb": 768.8,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "frontend-mvvm-sequence",
+      "pillar": "frontend",
+      "mode": "sequence",
+      "title": "5-Layer MVVM Mutation, Optimistic Cache & 401 Refresh Mutex Sequence",
+      "subtitle": "Component-to-API Call Trace: BookingWorkspaceView -> useBookingWorkspaceViewModel -> BookingRepository -> BookingService -> ApiService",
+      "description": "Native Archify Sequence diagram tracing the exact runtime execution of a frontend mutation across all 5 MVVM layers and the single-flight 401 refresh queue.",
+      "htmlUrl": "/archify-hub/frontend-mvvm-sequence.html",
+      "specUrl": "/archify-hub/specs/frontend-mvvm-sequence.sequence.json",
+      "sizeKb": 838.5,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "frontend-routing-workflow",
+      "pillar": "frontend",
+      "mode": "workflow",
+      "title": "Next.js 16 Edge Proxy, PBAC RouteGuard, Feature Gate & RTL Hydration Workflow",
+      "subtitle": "Swimlane Security & Localization Pipeline: proxy.ts -> AppProvider -> RouteGuard -> PermissionGate -> UserFeatureGate -> I18nProvider",
+      "description": "Native Archify Workflow v2 diagram illustrating how SCRIPE-Frontend guards routes at the edge and client, enforces edition features, and hydrates LTR/RTL layouts.",
+      "htmlUrl": "/archify-hub/frontend-routing-workflow.html",
+      "specUrl": "/archify-hub/specs/frontend-routing-workflow.workflow.json",
+      "sizeKb": 846.2,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "frontend-class",
+      "pillar": "frontend",
+      "mode": "class",
+      "title": "SCRIPE-Frontend TypeScript SOLID MVVM & Inversify DI Class Model",
+      "subtitle": "Interface & Class Contracts: IApiService -> ApiService, ICrudRepository -> BookingRepository, BookingService & useCrudViewModel",
+      "description": "Native Archify Class diagram modeling the TypeScript interfaces, Inversify DI classes, generic CRUD contracts, and domain entities in SCRIPE-Frontend.",
+      "htmlUrl": "/archify-hub/frontend-class.html",
+      "specUrl": "/archify-hub/specs/frontend-class.class.json",
+      "sizeKb": 848.2,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "frontend-lifecycle",
+      "pillar": "frontend",
+      "mode": "lifecycle",
+      "title": "Frontend Booking Workspace, Optimistic Mutation & Session State Machine",
+      "subtitle": "UI & Query State Lifecycle: CalendarSynced -> SlotHold -> QuotePreview -> OptimisticPending -> ConfirmedSynced / Rollback",
+      "description": "Native Archify Lifecycle v3 diagram modeling the client-side state transitions of the Booking Workspace, TanStack Query optimistic updates, and SignalR sync.",
+      "htmlUrl": "/archify-hub/frontend-lifecycle.html",
+      "specUrl": "/archify-hub/specs/frontend-lifecycle.lifecycle.json",
+      "sizeKb": 845,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "frontend-tree",
+      "pillar": "frontend",
+      "mode": "tree",
+      "title": "SCRIPE-Frontend Workspace, Sub-Module & @core/ui/* Containment Tree",
+      "subtitle": "Hierarchical Decomposition of src/app, src/core (UI Primitives, CRUD Engine, Providers, Services) & 65+ Isolated Feature Sub-Modules",
+      "description": "Native Archify Tree diagram mapping the directory and architectural containment hierarchy of SCRIPE-Frontend.",
+      "htmlUrl": "/archify-hub/frontend-tree.html",
+      "specUrl": "/archify-hub/specs/frontend-tree.tree.json",
+      "sizeKb": 846.7,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    }
+  ]
+}

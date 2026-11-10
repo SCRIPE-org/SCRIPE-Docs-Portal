@@ -1,0 +1,290 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "SCRIPE-Frontend 5-Layer MVVM & Single-Flight 401 Refresh Sequence",
+    "output": "public/archify-hub/frontend-mvvm-sequence.html",
+    "column_fit": "spread",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Frontend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "f7d148d6630baadee15b5b41b1933cc4fdd9a75f"
+    }
+  },
+  "participants": [
+    {
+      "id": "view",
+      "type": "frontend",
+      "label": "BookingView",
+      "sublabel": "React 19 UI",
+      "sources": [
+        {
+          "path": "src/modules/venue/booking/src/presentation/views/BookingWorkspaceView.tsx",
+          "line": 1,
+          "end_line": 95,
+          "label": "BookingWorkspaceView.tsx"
+        }
+      ]
+    },
+    {
+      "id": "vm",
+      "type": "frontend",
+      "label": "ViewModel",
+      "sublabel": "TanStack Hook",
+      "sources": [
+        {
+          "path": "src/modules/venue/booking/src/presentation/viewmodels/useBookingWorkspaceViewModel.ts",
+          "line": 1,
+          "end_line": 95,
+          "label": "useBookingWorkspaceViewModel.ts"
+        }
+      ]
+    },
+    {
+      "id": "repo",
+      "type": "backend",
+      "label": "BookingRepo",
+      "sublabel": "DTO -> Entity",
+      "sources": [
+        {
+          "path": "src/modules/venue/booking/src/data/repositories/BookingRepository.ts",
+          "line": 1,
+          "end_line": 90,
+          "label": "BookingRepository.ts"
+        }
+      ]
+    },
+    {
+      "id": "svc",
+      "type": "backend",
+      "label": "BookingSvc",
+      "sublabel": "Endpoint API",
+      "sources": [
+        {
+          "path": "src/modules/venue/booking/src/data/services/BookingService.ts",
+          "line": 1,
+          "end_line": 90,
+          "label": "BookingService.ts"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "type": "security",
+      "label": "ApiService",
+      "sublabel": "401 Mutex",
+      "sources": [
+        {
+          "path": "src/core/services/api.service.ts",
+          "line": 200,
+          "end_line": 310,
+          "label": "ApiService 401 Mutex"
+        }
+      ]
+    },
+    {
+      "id": "srv",
+      "type": "external",
+      "label": "Backend API",
+      "sublabel": ".NET 10 Host",
+      "sources": [
+        {
+          "path": "src/core/interfaces/api.interface.ts",
+          "line": 1,
+          "end_line": 90,
+          "label": "IApiService Contract"
+        }
+      ]
+    }
+  ],
+  "segments": [
+    {
+      "from": 145,
+      "to": 315,
+      "label": "1. 5-Layer SOLID MVVM Forward Dispatch"
+    },
+    {
+      "from": 332,
+      "to": 500,
+      "label": "2. Single-Flight 401 Refresh Mutex & Replay"
+    },
+    {
+      "from": 518,
+      "to": 650,
+      "label": "3. DTO Unwrap, Domain Map & Query Invalidation"
+    }
+  ],
+  "messages": [
+    {
+      "id": "fm1",
+      "from": "view",
+      "to": "vm",
+      "y": 160,
+      "label": "onConfirmBooking(formValues)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fm2",
+      "from": "vm",
+      "to": "repo",
+      "y": 194,
+      "label": "repository.create(domainInput)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fm3",
+      "from": "repo",
+      "to": "svc",
+      "y": 228,
+      "label": "service.createReservation(dto)",
+      "variant": "default"
+    },
+    {
+      "id": "fm4",
+      "from": "svc",
+      "to": "api",
+      "y": 264,
+      "label": "apiService.post('/api/v1/venue/reservations')",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fm5",
+      "from": "api",
+      "to": "srv",
+      "y": 300,
+      "label": "POST + JWT + X-Tenant-Id + X-Idempotency-Key",
+      "variant": "security"
+    },
+    {
+      "id": "fm6",
+      "from": "srv",
+      "to": "api",
+      "y": 346,
+      "label": "401 Unauthorized (token expired)",
+      "variant": "return"
+    },
+    {
+      "id": "fm7",
+      "from": "api",
+      "to": "srv",
+      "y": 382,
+      "label": "lock isRefreshing -> POST /auth/refresh",
+      "variant": "security"
+    },
+    {
+      "id": "fm8",
+      "from": "srv",
+      "to": "api",
+      "y": 418,
+      "label": "new 15m JWT -> drain failedQueue",
+      "variant": "return"
+    },
+    {
+      "id": "fm9",
+      "from": "api",
+      "to": "srv",
+      "y": 452,
+      "label": "replay POST (same X-Idempotency-Key)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fm10",
+      "from": "srv",
+      "to": "api",
+      "y": 486,
+      "label": "200 OK Result<ReservationDto>",
+      "variant": "return"
+    },
+    {
+      "id": "fm11",
+      "from": "api",
+      "to": "svc",
+      "y": 532,
+      "label": "unwrapped ReservationDto",
+      "variant": "return"
+    },
+    {
+      "id": "fm12",
+      "from": "svc",
+      "to": "repo",
+      "y": 568,
+      "label": "return ReservationDto",
+      "variant": "return"
+    },
+    {
+      "id": "fm13",
+      "from": "repo",
+      "to": "vm",
+      "y": 602,
+      "label": "map to Booking domain entity",
+      "variant": "return"
+    },
+    {
+      "id": "fm14",
+      "from": "vm",
+      "to": "view",
+      "y": 636,
+      "label": "invalidate queries + localized toast",
+      "variant": "return"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "view",
+      "from": 155,
+      "to": 644,
+      "type": "frontend"
+    },
+    {
+      "participant": "vm",
+      "from": 160,
+      "to": 640,
+      "type": "frontend"
+    },
+    {
+      "participant": "repo",
+      "from": 190,
+      "to": 608,
+      "type": "backend"
+    },
+    {
+      "participant": "svc",
+      "from": 224,
+      "to": 574,
+      "type": "backend"
+    },
+    {
+      "participant": "api",
+      "from": 260,
+      "to": 538,
+      "type": "security"
+    },
+    {
+      "participant": "srv",
+      "from": 296,
+      "to": 492,
+      "type": "external"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Strict Layer Separation",
+      "items": [
+        "Views and ViewModels never import IApiService or wire DTOs.",
+        "BookingRepository isolates the presentation layer from backend wire schema changes."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Single-Flight 401 Mutex",
+      "items": [
+        "When an access token expires, only the first request calls /auth/refresh.",
+        "Concurrent requests wait in failedQueue and replay automatically with their original X-Idempotency-Key."
+      ]
+    }
+  ]
+}

@@ -10,7 +10,7 @@ interface PipelineSimulatorProps {
   samplePayloadKey: string;
 }
 
-// Demonstration pipeline for AstraFlow 2.2.0 CQRS request execution used to
+// Demonstration pipeline for AstraFlow 2.3.0 CQRS request execution used to
 // teach the request-middleware shape — unlike CliSimulator's transcript of a
 // real CLI tool's stdout, this narration is the widget's own documentation prose,
 // so every stage is a translation key rather than invariant literal text.

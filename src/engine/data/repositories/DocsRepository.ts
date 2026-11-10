@@ -10,6 +10,7 @@ import { DocPage, type DocPageData } from "../../domain/entities/DocPage";
 import { DocCategory } from "../../domain/entities/DocCategory";
 import type { IDocsRepository, SearchResult } from "../../domain/interfaces/IDocsRepository";
 import { navigationData } from "../navigation";
+import { ARCHIFY_ARTIFACTS } from "../../../data/archify-catalog";
 
 // ─── Content Registry ──────────────────────────────────────────
 // All content files register themselves here via registerPage()
@@ -147,6 +148,34 @@ export class DocsRepository implements IDocsRepository {
           sectionId: contentMatch?.sectionId ?? headingMatch?.id,
           snippet: contentMatch?.snippet,
         });
+      }
+    }
+
+    if (mode !== "commercial") {
+      for (const artifact of ARCHIFY_ARTIFACTS) {
+        const haystack = [
+          "archify",
+          artifact.id,
+          artifact.pillar,
+          artifact.mode,
+          artifact.modeLabel,
+          artifact.title,
+          artifact.subtitle,
+          artifact.description,
+          ...artifact.highlights,
+          ...artifact.keySources,
+        ]
+          .join(" ")
+          .toLowerCase();
+
+        if (haystack.includes(lowerQuery)) {
+          results.push({
+            slug: `archify/${artifact.id}`,
+            titleKey: `[Archify ${artifact.modeLabel}] ${artifact.title}`,
+            category: `Archify SSOT · ${artifact.pillar.toUpperCase()}`,
+            snippet: artifact.subtitle,
+          });
+        }
       }
     }
 

@@ -86,7 +86,7 @@ export const zh = {
         "h_update": "scripe astraflow update",
         "h_validate": "scripe astraflow validate",
         "h_versions": "scripe astraflow versions",
-        "intro": "AstraFlow 提供 dotnet 工具 AstraFlow.Cli（命令 astraflow，版本 2.2.0），可静态检查代码中的 AstraFlow 处理器、通知、映射规则与投影。SCRIPE 将其封装为 scripe astraflow：工具版本与后端锁定，所有命令默认针对 SCRIPE-Backend，结果可保存、对比与导出。",
+        "intro": "AstraFlow 提供 dotnet 工具 AstraFlow.Cli（命令 astraflow，版本 2.3.0），可静态检查代码中的 AstraFlow 处理器、通知、映射规则与投影。SCRIPE 将其封装为 scripe astraflow：工具版本与后端锁定，所有命令默认针对 SCRIPE-Backend，结果可保存、对比与导出。",
         "intro2": "命令分为三类：生命周期（install、update、uninstall、status、versions）、直通命令（inspect、validate、report、diff、graph、scan、run）以及 SCRIPE 工作流（baseline、baselines、compare、export、doctor）。这些功能也可在 SCRIPE Studio 的 AstraFlow 页面中可视化使用。",
         "jsonIntro": "AstraFlow CLI 的所有 JSON 报告结构相同，baseline、compare 与 Studio 结果视图均基于此。diff 将元素 id 作为 <section>:<id> 集合进行比较。",
         "kLifecycle": "生命周期",

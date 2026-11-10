@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "diagram_type": "timeline",
+  "meta": {
+    "title": "SCRIPE v6.0 Platform Architecture & Governance Timeline",
+    "subtitle": "Key engineering milestones across SCRIPE-Backend, SCRIPE-Frontend, scripe-cli, and SCRIPE-Docs-Portal.",
+    "output": "public/archify-hub/fullstack-timeline.html",
+    "evidence": "observed",
+    "timezone": "UTC",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "ffc972a40a448abee3f41b394bd3e823457fc346"
+    }
+  },
+  "layout": {
+    "width": 1400
+  },
+  "lanes": [
+    {
+      "id": "backend_lane",
+      "label": "SCRIPE-Backend (.NET 10)"
+    },
+    {
+      "id": "frontend_lane",
+      "label": "SCRIPE-Frontend (Next.js 16)"
+    },
+    {
+      "id": "gov_lane",
+      "label": "CLI & Docs Portal SSOT"
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_clean_arch",
+      "at": "2026-11-01T09:00:00Z",
+      "title": "18-Module 3-Project Clean Architecture",
+      "lane": "backend_lane",
+      "kind": "change",
+      "detail": "Domain, Application, and Infrastructure split with Result<T> pattern",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 69,
+          "end_line": 76,
+          "label": "Backend Invariants"
+        }
+      ]
+    },
+    {
+      "id": "ev_mvvm_sub",
+      "at": "2026-11-02T11:30:00Z",
+      "title": "65+ Sub-Module 5-Layer SOLID MVVM",
+      "lane": "frontend_lane",
+      "kind": "change",
+      "detail": "View -> ViewModel -> Repository -> Service -> IApiService isolation",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 95,
+          "end_line": 105,
+          "label": "Frontend MVVM"
+        }
+      ]
+    },
+    {
+      "id": "ev_dual_db",
+      "at": "2026-11-04T14:00:00Z",
+      "title": "Dual-Mode Persistence & Per-Schema Outbox",
+      "lane": "backend_lane",
+      "kind": "action",
+      "detail": "PostgreSQL, SQL Server, and Oracle support with 3-TX idempotency receipts",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 81,
+          "end_line": 94,
+          "label": "Dual-Mode DB"
+        }
+      ]
+    },
+    {
+      "id": "ev_nexus_i18n",
+      "at": "2026-11-06T16:15:00Z",
+      "title": "Nexus Token System & 100% EN/AR Parity",
+      "lane": "frontend_lane",
+      "kind": "change",
+      "detail": "Mandatory @core/ui/* primitives, flat matte hairline cards, and co-located locales",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 116,
+          "end_line": 130,
+          "label": "Nexus Tokens & i18n"
+        }
+      ]
+    },
+    {
+      "id": "ev_astraflow_23",
+      "at": "2026-11-08T10:00:00Z",
+      "title": "AstraFlow 2.3.0 Total Ecosystem Lock",
+      "lane": "backend_lane",
+      "kind": "change",
+      "detail": "15 in-house packages, 927+ CQRS handlers, and [AstraGenerateMapping]",
+      "sources": [
+        {
+          "path": ".agents/rules/astraflow-ecosystem-and-evolution.md",
+          "line": 13,
+          "end_line": 56,
+          "label": "AstraFlow 2.3.0 Lock"
+        }
+      ]
+    },
+    {
+      "id": "ev_cli_uat",
+      "at": "2026-11-09T15:00:00Z",
+      "title": "scripe-cli 193 Commands & 11-Point UAT Gate",
+      "lane": "gov_lane",
+      "kind": "action",
+      "detail": "Universal scripe check gate and mandatory live browser UAT protocol",
+      "sources": [
+        {
+          "path": ".agents/rules/uat-readiness-and-seeding.md",
+          "line": 89,
+          "end_line": 118,
+          "label": "11-Point DoD"
+        }
+      ]
+    },
+    {
+      "id": "ev_archify_ssot",
+      "at": "2026-11-10T12:00:00Z",
+      "title": "Archify Integrated SSOT Mode in Docs Portal",
+      "lane": "gov_lane",
+      "kind": "change",
+      "detail": "23 interactive Explainer Boards and Native Diagrams across Backend, Frontend & Full-Stack",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 1,
+          "end_line": 60,
+          "label": "AGENTS.md Constitution"
+        }
+      ]
+    }
+  ]
+}

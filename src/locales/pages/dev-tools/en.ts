@@ -86,7 +86,7 @@ export const en = {
         "h_update": "scripe astraflow update",
         "h_validate": "scripe astraflow validate",
         "h_versions": "scripe astraflow versions",
-        "intro": "AstraFlow ships a dotnet tool, AstraFlow.Cli (command astraflow, version 2.2.0), that statically inspects a codebase for AstraFlow handlers, notifications, mapping rules and projections. SCRIPE wraps it as scripe astraflow so that the tool version stays pinned to the backend, every command defaults to SCRIPE-Backend, and results can be saved, compared and exported.",
+        "intro": "AstraFlow ships a dotnet tool, AstraFlow.Cli (command astraflow, version 2.3.0), that statically inspects a codebase for AstraFlow handlers, notifications, mapping rules and projections. SCRIPE wraps it as scripe astraflow so that the tool version stays pinned to the backend, every command defaults to SCRIPE-Backend, and results can be saved, compared and exported.",
         "intro2": "Three command families exist: lifecycle (install, update, uninstall, status, versions), passthrough (inspect, validate, report, diff, graph, scan, run) and SCRIPE workflows (baseline, baselines, compare, export, doctor). Everything is also available visually in SCRIPE Studio on the AstraFlow page.",
         "jsonIntro": "Every JSON report from the AstraFlow CLI has the same shape, which is what baseline, compare and the Studio result view are built on. Item ids are what diff compares as <section>:<id> sets.",
         "kLifecycle": "Lifecycle",

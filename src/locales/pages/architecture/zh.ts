@@ -85,7 +85,7 @@ export const zh = {
       queryExampleTitle: "查询示例",
       sourceGenMappingTitle: "Roslyn 编译时映射引擎",
       sourceGenMappingIntro:
-        "AstraFlow 2.2.0 引入了基于 Roslyn 的增量源生成器 ([AstraGenerateMapping])，通过静态编译的标量赋值替代运行时反射。BenchmarkDotNet 测试确认执行速度提升 11 倍（11.98 ns 对比 133.82 ns），内存分配降低 88%（32 B 对比 264 B）。",
+        "AstraFlow 2.3.0 引入了基于 Roslyn 的增量源生成器 ([AstraGenerateMapping])，通过静态编译的标量赋值替代运行时反射。BenchmarkDotNet 测试确认执行速度提升 11 倍（11.98 ns 对比 133.82 ns），内存分配降低 88%（32 B 对比 264 B）。",
       conventionMappingTitle: "约定映射配置文件",
       mappingChoiceTitle: "编译时映射与约定映射对比",
       afm001Tip:
@@ -354,7 +354,7 @@ export const zh = {
         "命令通过实现 IRequireFeature 接口及其 RequiredFeatureName 属性来选择性地启用功能门控。当 Entitlements 模块未部署时，NoOpFeatureChecker 对所有检查返回 true —— 使此行为成为静默通过。",
       concurrencySafetyTitle: "通知发布策略与并发安全",
       concurrencySafetyIntro:
-        "进程内领域事件与限定范围 (Scoped) 的 EF Core DbContext 实例交互。由于 DbContext 非线程安全，并发通知分派会导致致命的并发异常。AstraFlow 2.2.0 强制执行 NotificationPublishStrategy.Sequential，以确保请求范围内的线程安全数据库操作。",
+        "进程内领域事件与限定范围 (Scoped) 的 EF Core DbContext 实例交互。由于 DbContext 非线程安全，并发通知分派会导致致命的并发异常。AstraFlow 2.3.0 强制执行 NotificationPublishStrategy.Sequential，以确保请求范围内的线程安全数据库操作。",
       sequentialStrategyTitle: "顺序策略（默认）",
       parallelStrategyTitle: "并行 / 有界并行策略",
       testingDoublesTitle: "使用 AstraFlow.Testing 进行单元与集成测试",

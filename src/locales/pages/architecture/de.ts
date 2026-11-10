@@ -89,7 +89,7 @@ export const de = {
       queryExampleTitle: "Abfrage-Beispiel (Query)",
       sourceGenMappingTitle: "Roslyn Compile-Time Mapping Engine",
       sourceGenMappingIntro:
-        "AstraFlow 2.2.0 führt einen inkrementellen Roslyn-Quellcodegenerator ([AstraGenerateMapping]) ein, der Laufzeit-Reflexion durch statisch kompilierte Zuweisungen ersetzt. BenchmarkDotNet-Tests bestätigen eine 11-fache Beschleunigung der Ausführung (11,98 ns vs. 133,82 ns) und eine Reduzierung der Speicherbelegung um 88 % (32 B vs. 264 B).",
+        "AstraFlow 2.3.0 führt einen inkrementellen Roslyn-Quellcodegenerator ([AstraGenerateMapping]) ein, der Laufzeit-Reflexion durch statisch kompilierte Zuweisungen ersetzt. BenchmarkDotNet-Tests bestätigen eine 11-fache Beschleunigung der Ausführung (11,98 ns vs. 133,82 ns) und eine Reduzierung der Speicherbelegung um 88 % (32 B vs. 264 B).",
       conventionMappingTitle: "Convention Mapping-Profil",
       mappingChoiceTitle: "Compile-Time vs. Convention Mapping",
       afm001Tip:
@@ -364,7 +364,7 @@ export const de = {
         "Commands aktivieren das Feature-Gating, indem sie das IRequireFeature-Interface mit einer RequiredFeatureName-Eigenschaft implementieren. Wenn das Entitlements-Modul nicht bereitgestellt ist, gibt NoOpFeatureChecker für alle Prüfungen true zurück — wodurch dieses Behavior zu einem stillen Durchlauf wird.",
       concurrencySafetyTitle: "Benachrichtigungs-Veröffentlichungsstrategie & Parallelitätssicherheit",
       concurrencySafetyIntro:
-        "In-Process-Domänenereignisse interagieren mit Scoped-EF Core-DbContext-Instanzen. Da DbContext nicht threadsicher ist, führt paralleler Versand zu Concurrency-Fehlern. AstraFlow 2.2.0 erzwingt NotificationPublishStrategy.Sequential, um threadsichere Datenbankoperationen im Request-Scope zu garantieren.",
+        "In-Process-Domänenereignisse interagieren mit Scoped-EF Core-DbContext-Instanzen. Da DbContext nicht threadsicher ist, führt paralleler Versand zu Concurrency-Fehlern. AstraFlow 2.3.0 erzwingt NotificationPublishStrategy.Sequential, um threadsichere Datenbankoperationen im Request-Scope zu garantieren.",
       sequentialStrategyTitle: "Sequenzielle Strategie (Standard)",
       parallelStrategyTitle: "Parallele / BoundedParallel-Strategie",
       testingDoublesTitle: "Unit- & Integrationstests mit AstraFlow.Testing",
