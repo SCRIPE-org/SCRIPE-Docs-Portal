@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "c683392c-4e50-440a-b35e-3373dfdba349",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\sovereign-account-security-architecture.archify.md",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\sovereign-account-security-architecture.html",
+  "specification": {
+    "sha256": "1f381d4bc1dd767f20ba33d217b7ca8403be79a55b36fdced9677c0cb09d4d53",
+    "bytes": 11473
+  },
+  "artifact": {
+    "sha256": "cdd1001e06a5ded1994f867b1a47d015cc93553b325edc54b221569dfe9e4f39",
+    "bytes": 1464909
+  },
+  "explainer": {
+    "preparedSha256": "c0b2076c3e05a81c0499b38106e3fa90ef6589f41eff85a16aba57e186ba551b",
+    "dependencies": [
+      {
+        "kind": "diagram-spec",
+        "id": "passkey-ceremony-seq",
+        "inline": true,
+        "sha256": "21339fd4aecdfae7e7317350d315d6c679c5bdb36440dbcbcbbb7ae172c7ef02",
+        "bytes": 3928
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "sso-federation-flow",
+        "inline": true,
+        "sha256": "88a1132beb5c0b4b757ba9b6c6201a32bd0cc676f59b52642e365919838aa824",
+        "bytes": 2073
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "perimeter-guard-seq",
+        "inline": true,
+        "sha256": "88f041e1f45451726916d03fddf86533ea4b4726b07e2475a671c2c6a559d6e4",
+        "bytes": 2310
+      }
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "141fa72c-d5b0-468d-a2c4-3a28eb41c777",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\crm-workflow-studio-and-kanban-architecture.archify.md",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-workflow-studio-and-kanban-architecture.html",
+  "specification": {
+    "sha256": "ea5de421e7227ed4ed9e799839ec380148a6ed9d10671d3a7686eee150bb8548",
+    "bytes": 19030
+  },
+  "artifact": {
+    "sha256": "0428c48fcc0e459ce8140ba4c412ed52d8eaa1834da8e8c128e82c2e9cd2972f",
+    "bytes": 1508393
+  },
+  "explainer": {
+    "preparedSha256": "d5305f015788d70cc074c0a12b120c33c16ed3113cc2d88397cc1adfd54c2989",
+    "dependencies": [
+      {
+        "kind": "diagram-spec",
+        "id": "workflow-studio-topology",
+        "inline": true,
+        "sha256": "2697f2f4b492b7003e2069f69a6f63535a3be3d848297a55b220f6dd57286b50",
+        "bytes": 1915
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "core-crud-tree",
+        "inline": true,
+        "sha256": "54e3bad7894174a62bbaf8d91989199224be6c4a2071d5ffc7896d8d55e42715",
+        "bytes": 1730
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "kanban-drop-sequence",
+        "inline": true,
+        "sha256": "9aeae875212301848f8f885b8967dd80f36f72c0d53e709995f6ea6b4bb8ba07",
+        "bytes": 2000
+      }
+    ]
+  }
+}

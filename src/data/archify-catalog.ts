@@ -51,7 +51,7 @@ export const ARCHIFY_PILLAR_META: Record<
     repoName: "SCRIPE-org/SCRIPE",
     commit: "ffc972a4",
     accentColor: "#B7FF00",
-    count: 7,
+    count: 9,
   },
   backend: {
     label: "SCRIPE-Backend Deep Dive (.NET 10 & AstraFlow 2.3.0)",
@@ -61,7 +61,7 @@ export const ARCHIFY_PILLAR_META: Record<
     repoName: "SCRIPE-org/SCRIPE-Backend",
     commit: "f941b150",
     accentColor: "#38BDF8",
-    count: 8,
+    count: 9,
   },
   frontend: {
     label: "SCRIPE-Frontend Deep Dive (Next.js 16 + React 19 MVVM)",
@@ -121,6 +121,65 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
       "AGENTS.md:65-135",
       "SCRIPE-Backend/src/Host/API/Extensions/MiddlewarePipeline.cs",
       "SCRIPE-Frontend/src/core/services/api.service.ts",
+    ],
+  },
+  {
+    id: "sovereign-account-security-architecture-fullstack",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "SOVEREIGN SECURITY",
+    title: "Sovereign Account Security & Passkey Architecture",
+    subtitle:
+      "W3C WebAuthn Level 3 Passkeys + Enterprise SSO Federation + CIDR Perimeter Allowlist & 15-Min Sudo Mode",
+    description:
+      "Comprehensive end-to-end explainer board covering W3C WebAuthn L3 passkey registration/authentication ceremonies, RFC 4648 §5 unpadded Base64Url normalization, FIDO2 AAGUID model resolution, Enterprise SSO dual-mode identity binding, and interactive CIDR perimeter allowlist with nuclear lockdown shield.",
+    htmlUrl: "/archify-hub/sovereign-account-security-architecture.html",
+    specUrl: "/archify-hub/specs/sovereign-account-security-architecture.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "ea66ecc5",
+    featured: true,
+    highlights: [
+      "W3C WebAuthn Level 3 Passkey ceremonies with asymmetric hardware keypairs",
+      "RFC 4648 §5 unpadded Base64Url normalization & FIDO2 AAGUID hardware registry",
+      "Enterprise SSO identity federation (OIDC / SAML 2.0) with dual-mode binding",
+      "Interactive CIDR perimeter allowlist manager with 15-min biometric sudo mode",
+    ],
+    keySources: [
+      "SCRIPE-Backend/src/Host/API/Controllers/Auth/PasskeyController.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Services/Fido2WebAuthnService.cs",
+      "SCRIPE-Frontend/src/modules/shared/profile/core/src/presentation/views/AccountSecurityView.tsx",
+    ],
+  },
+  {
+    id: "crm-workflow-studio-and-kanban-architecture-fullstack",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "CRM v3.0 SUITE",
+    title: "SCRIPE CRM v3.0 Suite: 13-Route Architecture & Workflow Studio",
+    subtitle:
+      "Managed @xyflow/react Canvas + 13-Route GenericCrudView + Jira Transition Screen + AstraFlow 2.3.0 Engine",
+    description:
+      "Comprehensive end-to-end explainer board and interactive diagrams covering the complete SCRIPE CRM v3.0 production suite: all 13 CRM routes on unified GenericCrudView, 2D Workflow Studio v3.0 with 12 magnetic ports and highway routing, dynamic Deal 360 and Lead 360 state progression, and backend AstraFlow 2.3.0 CQRS and UniversalWorkflowEngine precedence.",
+    htmlUrl: "/archify-hub/crm-workflow-studio-and-kanban-architecture.html",
+    specUrl: "/archify-hub/specs/crm-workflow-studio-and-kanban-architecture.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "ffc972a4",
+    featured: true,
+    highlights: [
+      "All 13 CRM routes unified on GenericCrudView (Leads, Deals, Accounts, Contacts, Activities)",
+      "2D Workflow Studio v3.0 with 12 perimeter ports, connected START node & Jira * ALL satellite stubs",
+      "Cycle-safe Dagre & ELK auto-layout with terminal Won/Lost alignment and zero-collision highway routing",
+      "Dynamic react-hook-form + zod Transition Screen with Deal 360 & Lead 360 parity",
+      "Total Backend AstraFlow 2.3.0 lock with [AstraGenerateMapping] and UniversalWorkflowEngine precedence",
+    ],
+    keySources: [
+      "SCRIPE-Frontend/src/modules/crm/opportunities/src/presentation/components/workflow/CrmWorkflowCanvas2D.tsx",
+      "SCRIPE-Frontend/src/modules/crm/opportunities/src/presentation/components/workflow/CrmStageFlowNode.tsx",
+      "SCRIPE-Frontend/src/core/crud/kanban/GenericWorkflowKanban.tsx",
+      "SCRIPE-Frontend/src/modules/crm/overview/src/presentation/components/CrmWorkflowTransitionDialog.tsx",
+      "SCRIPE-Frontend/src/modules/crm/opportunities/src/presentation/viewmodels/useOpportunitiesCrudConfig.tsx",
+      "SCRIPE-Backend/src/Modules/CRM/CRM.Application/Services/UniversalWorkflowEngine.cs",
+      "SCRIPE-Backend/src/Modules/CRM/CRM.Application/Commands/Opportunities/MoveOpportunityStageCommandHandler.cs",
     ],
   },
   {
@@ -326,6 +385,33 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
       "src/Host/API/Extensions/MiddlewarePipeline.cs",
       "src/Core/Core.Infrastructure/Persistence/DatabaseExtensions.cs",
       "src/Core/Core.Infrastructure/DependencyInjection.cs",
+    ],
+  },
+  {
+    id: "sovereign-account-security-architecture-backend",
+    pillar: "backend",
+    mode: "explainer",
+    badge: "WEBAUTHN L3 & SSO",
+    title: "Sovereign Account Security & Identity Federation Deep Dive",
+    subtitle:
+      "PasskeyController + Fido2WebAuthnService + Challenge Caching + Admin External Logins Binding",
+    description:
+      "Technical deep dive into backend cryptographic ceremonies: CBOR attestation parsing, COSE public key extraction, clone counter detection, RFC 4648 §5 challenge normalization, and tenant-isolated ExternalLogin persistence.",
+    htmlUrl: "/archify-hub/sovereign-account-security-architecture.html",
+    specUrl: "/archify-hub/specs/sovereign-account-security-architecture.archify.md",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "5f9290bc",
+    featured: true,
+    highlights: [
+      "Fido2WebAuthnService zero-dependency CBOR/COSE crypto verification",
+      "Triple-variation challenge cache lookup preventing padding mismatches",
+      "Monotonic signature counter validation for authenticator cloning defense",
+      "Dual-mode identity binding via /api/v1/auth/admin/external-logins",
+    ],
+    keySources: [
+      "SCRIPE-Backend/src/Host/API/Controllers/Auth/PasskeyController.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Services/Fido2WebAuthnService.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Application/Services/WebAuthnChallengeHelper.cs",
     ],
   },
   {
