@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "14461b9d-7721-4918-945d-eb98f8fb8c45",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\crm-kanban-auth-ux-architecture.archify.md",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-kanban-auth-ux-architecture.html",
+  "specification": {
+    "sha256": "609a87202b7d3d3b2e680a13f687fc9e2224cbee6cf4978e4c0467b1ae1a596b",
+    "bytes": 28006
+  },
+  "artifact": {
+    "sha256": "d2b35870e19960eed88457dab773fee828261e327bf3bacd20fce2d91c9c3ac9",
+    "bytes": 1889740
+  },
+  "explainer": {
+    "preparedSha256": "944a4c632174d1feaee556793f3705e52c8fe352f9bd3fe17e23195dda355f25",
+    "dependencies": [
+      {
+        "kind": "diagram-spec",
+        "id": "principal-refresh-seq",
+        "inline": true,
+        "sha256": "e9f46ef0ec67cfc88589e56823b0a4a479e9ba4d9cba670eb458863dab23de27",
+        "bytes": 2862
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "kanban-overlay-arch",
+        "inline": true,
+        "sha256": "636ca480a9da7521f48ad378f52c822e078294c1f723828100f11de1e3e72686",
+        "bytes": 1325
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "kanban-autodrop-flow",
+        "inline": true,
+        "sha256": "214b16f48ddbdf924ffb8af83fe82fb133133a399bb7e5789a0deb632cde0f7f",
+        "bytes": 1662
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "studio-12port-arch",
+        "inline": true,
+        "sha256": "27812f3ef6d10e529c6b268e5115b996e47324c9ea219122260351d2cf38078d",
+        "bytes": 1435
+      }
+    ]
+  }
+}
