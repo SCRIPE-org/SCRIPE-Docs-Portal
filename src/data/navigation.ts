@@ -1231,6 +1231,23 @@ export const navigationData: DocCategoryData[] = [
     ],
   },
 
+  // ─── 21.5. Data Transfer & Data Exchange Studio ──────────────
+  {
+    id: "module-data-transfer",
+    titleKey: "nav.dataTransfer",
+    icon: "database",
+    order: 21.5,
+    items: [
+      {
+        id: "mod-data-transfer-overview",
+        titleKey: "modules.dataTransfer.overview.title",
+        slug: "modules/data-transfer-overview",
+        icon: "database",
+        order: 1,
+      },
+    ],
+  },
+
   // ─── 22. Security & Governance ──────────────────────────────
   {
     id: "security",
@@ -1973,6 +1990,13 @@ export const navigationData: DocCategoryData[] = [
         slug: "api-reference/system-api",
         icon: "server",
         order: 9,
+      },
+      {
+        id: "api-data-transfer",
+        titleKey: "apiReference.dataTransferApi.title",
+        slug: "api-reference/data-transfer-api",
+        icon: "file-code",
+        order: 10,
       },
     ],
   },
@@ -2909,6 +2933,21 @@ export const navigationData: DocCategoryData[] = [
             titleKey: "commercial.analytics.title",
             slug: "commercial/analytics",
             icon: "bar-chart",
+            order: 1,
+          },
+        ],
+      },
+      {
+        id: "comm-mod-data-exchange",
+        titleKey: "nav.commercialDataExchange",
+        icon: "database",
+        order: 16,
+        children: [
+          {
+            id: "comm-mod-data-exchange-commercial",
+            titleKey: "commercial.dataExchangeStudio.title",
+            slug: "commercial/data-exchange-studio",
+            icon: "database",
             order: 1,
           },
         ],

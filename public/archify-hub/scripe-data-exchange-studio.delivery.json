@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "receiptId": "6e56dc94-45bc-4648-bb38-2a1155e77ffc",
+  "receiptId": "32a224da-7fde-4355-a0d3-1d842e52a524",
   "status": "current",
   "command": "deliver",
   "type": "explainer",
-  "input": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-data-exchange-studio.archify.md",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-data-exchange-studio\\candidate.archify.md",
   "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-studio.html",
   "specification": {
-    "sha256": "144375138be02801ff0c0f942f2d4716e0e1c13de6231de50dfe721cfc49f00c",
-    "bytes": 16108
+    "sha256": "f16c40683b5e53f1ddf4519d4d842a9c9c1ed019ab7565666106210550bf9199",
+    "bytes": 20521
   },
   "artifact": {
-    "sha256": "47917f06272bf94ed3d452a30bee743bdf688c857a4e96970828cee2ba80dc52",
-    "bytes": 1435611
+    "sha256": "bcc4fcd1fd4e546bc166192b5df5b7a04f14547b46e25df350fcfc494fceb394",
+    "bytes": 1463410
   },
   "explainer": {
-    "preparedSha256": "5bb58b23b1dfb03dbec6def1741624e9e6e6b252f01243b7694bca3ee2f8f1ca",
+    "preparedSha256": "395aa2f79250acef747417e1a93041281e0eb73659e3bb134016946940fe2cac",
     "dependencies": [
       {
         "kind": "diagram-spec",

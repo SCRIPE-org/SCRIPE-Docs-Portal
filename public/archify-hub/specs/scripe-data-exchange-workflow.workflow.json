@@ -63,8 +63,8 @@
       "col": 0,
       "type": "frontend",
       "label": "1-Button & ⋯ Menus",
-      "sublabel": "8 Unified Views + CardGrid",
-      "tag": "PBAC + /admins"
+      "sublabel": "GenericCrudView entityTypeKey",
+      "tag": "@core/data-exchange"
     },
     {
       "id": "step1_template",
@@ -140,9 +140,9 @@
       "lane": "guard_lane",
       "col": 5,
       "type": "security",
-      "label": "Concurrency Cancel",
-      "sublabel": "Reload RowVersion & Lease",
-      "tag": "Lease Freed"
+      "label": "Cooperative Cancel",
+      "sublabel": "ReconcileLease + DetachOutbox",
+      "tag": "No Global Undo"
     },
     {
       "id": "ephemeral_vault",
@@ -242,26 +242,26 @@
   "cards": [
     {
       "dot": "cyan",
-      "title": "Full-Viewport Portal Studio (z-900) & Unsaved-Progress Exit Guard",
+      "title": "Zero-Coupling @core/data-exchange, Portal Studio (z-900) & Exit Guard",
       "items": [
-        "DataExchangeStudioOverlay splits into <= 250-line studio sub-components mounted via createPortal(studioEl, document.body) at z-[900] with body scroll lock.",
+        "GenericCrudView entityTypeKey auto-mounts DataExchangeToolbarActions and z-[900] DataExchangeStudioOverlay without importing @modules/admin/data-transfer; DataExchangeTenantRequiredCard guides Platform Super Admins when TenantRequired hits.",
         "StudioConfirmExitDialog (z-[960]) guards Close, Escape, Step 2 -> Step 1 Back, Replace File, and un-dismissed credentials while keeping Step 3 -> Step 2 Back prompt-free."
       ]
     },
     {
       "dot": "amber",
-      "title": "17-Rule Scrollable Smart Normalizer, Error Tooltips & 5-Sheet DAG",
+      "title": "9-Stage / 17-Rule Normalizer, cf:* Fields & 4 DAG Unlock Gates",
       "items": [
-        "ColumnNormalizationPopover (z-[950], overflow-y-auto overscroll-contain) exposes all 17 DataExchangeTransformRule toggles including dateFormat and sourceTimeZoneId with 1-click Smart Presets.",
-        "Step 2 row tooltips, jump-to-row error pills, and topological DAG tabs guide 5-sheet CRM migrations (Account -> Contact -> Lead -> Opportunity -> Activity)."
+        "ColumnNormalizationPopover (z-[950], overflow-y-auto overscroll-contain) runs all 17 DataExchangeTransformRule toggles (Alef/ى/ک, Tashkeel/Tatweel, E.164, DateFormat, UTC) with live preview and dynamic /custom-fields (cf:*).",
+        "useDataExchangeToolbarViewModel enables Multi-Sheet Migration automatically when all 4 gates pass: datatransfer.migrations.execute, DataTransfer.MultiSheetMigration, supportsImport, and >= 2 relatedMultiSheetEntityKeys."
       ]
     },
     {
       "dot": "emerald",
-      "title": "Unified ⋯ CRUD Actions, Flat Matte CardGrid Slabs & Sileo Morphing",
+      "title": "Read-Only Catalog, Jobs/Presets Lifecycle, Outbox & Sileo Morphing",
       "items": [
-        "All 8 Data Transfer, CRM, and Party views adopt GenericCrudView getActions sticky w-16 ⋯ menus and shadow-free Nexus CardGrid slabs (EntityCatalogCard, JobExecutionCard, MappingPresetCard, CrudCardGridSection).",
-        "Every toast passes id: 'dx-job-' + job.id with localized entity display names so sileo-toast morphs Queued -> Running -> Completed/Failed/Cancelled in place."
+        "/admin/data-exchange Entity Catalog is DI + Edition read-only; /jobs records module toolbar + Launch Studio runs; /presets saves Step 2 mappings (initialPresetId & POST /presets/{id}/default); no destructive post-completion global rollback job exists.",
+        "Jobs emit DataExchangeJobCompletedEvent to datatransfer.outbox_messages (retracted via DetachPendingOutboxMessages on cancel) and morph single id: 'dx-job-' + job.id Sileo toasts with localized entity display names."
       ]
     }
   ]

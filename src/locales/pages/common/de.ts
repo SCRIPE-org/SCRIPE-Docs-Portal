@@ -123,5 +123,7 @@ export const de = {
     crosscuttingModule: "Kommunikation & Dateien",
     marketplace: "Marktplatz",
     recycleBin: "System-Papierkorb",
+    dataTransfer: "Data Exchange Studio",
+    commercialDataExchange: "Data Exchange Studio",
   },
 };

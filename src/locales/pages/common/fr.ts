@@ -123,5 +123,7 @@ export const fr = {
     crosscuttingModule: "Communication et Fichiers",
     marketplace: "Place de Marché",
     recycleBin: "Corbeille de l'Écosystème",
+    dataTransfer: "Studio d'Échange de Données",
+    commercialDataExchange: "Studio d'Échange de Données",
   },
 };

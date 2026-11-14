@@ -44,6 +44,7 @@ import { ar as pageMarketplace } from "../pages/marketplace/ar";
 import { ar as pageEcosystemRecycleBin } from "../pages/ecosystem-recycle-bin/ar";
 import { ar as pageCustomFields } from "../pages/custom-fields/ar";
 import { ar as pageCrm } from "../pages/crm/ar";
+import { ar as pageDataTransfer } from "../pages/data-transfer/ar";
 
 import { mergeAll } from "./utils";
 
@@ -89,5 +90,6 @@ export const allDocsAr: Record<string, any> = mergeAll(
   pageEcosystemRecycleBin,
   pageCustomFields,
   pageCrm,
+  pageDataTransfer,
   devTools
 );

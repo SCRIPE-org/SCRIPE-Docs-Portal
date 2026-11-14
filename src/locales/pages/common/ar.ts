@@ -241,6 +241,8 @@ export const ar = {
     crosscuttingModule: "الاتصالات وملفات النظام",
     marketplace: "المتجر والتطبيقات",
     recycleBin: "سلة المحذوفات العالمية",
+    dataTransfer: "استوديو تبادل البيانات",
+    commercialDataExchange: "استوديو تبادل البيانات",
   },
   // Commercial header mega-menu — 4 sections x (label + N items x title/desc).
   commercialMegaMenu: {

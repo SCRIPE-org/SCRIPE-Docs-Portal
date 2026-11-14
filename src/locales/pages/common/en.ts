@@ -241,6 +241,8 @@ export const en = {
     crosscuttingModule: "Communication & Files",
     marketplace: "Marketplace",
     recycleBin: "Recycle Bin",
+    dataTransfer: "Data Exchange Studio",
+    commercialDataExchange: "Data Exchange Studio",
   },
   // Commercial header mega-menu — 4 sections x (label + N items x title/desc).
   commercialMegaMenu: {

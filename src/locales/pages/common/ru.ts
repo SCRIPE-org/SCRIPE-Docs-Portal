@@ -123,5 +123,7 @@ export const ru = {
     crosscuttingModule: "Коммуникации и файлы",
     marketplace: "Маркетплейс",
     recycleBin: "Корзина Экосистемы",
+    dataTransfer: "Студия обмена данными",
+    commercialDataExchange: "Студия обмена данными",
   },
 };

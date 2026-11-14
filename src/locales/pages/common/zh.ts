@@ -123,5 +123,7 @@ export const zh = {
     crosscuttingModule: "系统通信与文件服务",
     marketplace: "应用市场",
     recycleBin: "生态回收站",
+    dataTransfer: "数据交换工作室",
+    commercialDataExchange: "数据交换工作室",
   },
 };

@@ -7,7 +7,7 @@ SCRIPE Data Exchange Studio unifies **full-viewport portal UX**, 17-rule MENA no
 - `DataExchangeOrchestrator` executes 5-sheet CRM topological DAG imports (`Account -> Contact -> Lead -> Opportunity -> Activity`) while `sileo-toast` morphs `dx-job-{id}` states in place.[](source:dx_orchestrator)
 - All 8 Admin, CRM, and Party views standardize on `GenericCrudView` `getActions` `⋯` dropdowns and flat matte Nexus `CardGrid` slabs.[](source:dx_admin_mvvm)
 
-@answer scope="Portal Studio z-900 · 17-Rule Normalizer · 5-Sheet DAG · Unified CRUD"
+@answer scope="16 PBAC Endpoints · Portal Studio z-900 · 17-Rule Normalizer · 5-Sheet DAG · 7-Lang Docs"
 @meta locale=en style=editorial quality_profile=showcase
 @source dx_overview title="SCRIPE Data Exchange Studio Architecture Overview" url=https://docs.scripe.org/architecture/data-exchange-studio
 @source dx_studio_ui title="Full-Viewport Portal Studio & StudioConfirmExitDialog" url=https://docs.scripe.org/frontend/data-exchange-studio-overlay
@@ -17,6 +17,7 @@ SCRIPE Data Exchange Studio unifies **full-viewport portal UX**, 17-rule MENA no
 @source dx_owasp title="OWASP Spreadsheet Security & Formula Neutralization" url=https://docs.scripe.org/security/owasp-spreadsheet-validator
 @source dx_admin_mvvm title="Unified GenericCrudView Actions & Executive Nexus CardGrid" url=https://docs.scripe.org/frontend/admin-data-transfer-module
 @source dx_sileo title="Idiomatic sileo-toast ID-Morphing & Localized Entity Names" url=https://docs.scripe.org/frontend/data-exchange-sileo-lifecycle
+@source dx_docs title="7-Language SCRIPE Docs Portal (EN/AR/DE/ES/FR/RU/ZH) Parity" url=https://docs.scripe.org/technical/modules/data-transfer-overview
 
 ## How does the Full-Viewport Portal Studio (`z-[900]`) coordinate validation, worker execution, and Sileo morphing? {#portal-studio-pipeline}
 
@@ -58,7 +59,7 @@ Decomposing the monolithic overlay into eight focused sub-components under `pres
 | `StudioDryRunStep` {#st-s3} | Step 3 body (`flex-1`) | Localized `sheetSummaries`, cell diagnostics, and finite edition quota guardrails | {good:Pre-commit certainty} |
 | `StudioResultsStep` {#st-s4} | Step 4 body (`flex-1`) | Partial commit counters, rejected `.xlsx` download, and one-time credential vault | {good:Self-service recovery} |
 | `StudioFooter` {#st-ftr} | Sticky bottom (`shrink-0`) | Guards disabled `Run Dry-Run` CTA with blocker tooltip and handles `Back` routing | {good:Explicit blocker count} |
-| `StudioConfirmExitDialog` {#st-exit} | `@core/ui/alert-dialog` (`z-[960]`) | Intercepts destructive exits with `Keep Editing` vs `Discard & Exit` actions | {good:Zero accidental loss} |
+| `StudioConfirmExitDialog` {#st-exit} | `@core/ui/confirmation-dialog` (`z-[960]`) | Canonical destructive confirmation shared with `CancelJobDialog` and `DeletePresetDialog` | {good:Zero accidental loss} |
 
 ## How do `StudioConfirmExitDialog` and the 17-Rule `ColumnNormalizationPopover` protect operator mappings? {#exit-guard-and-normalizer}
 
@@ -92,7 +93,7 @@ Inside Step 2, `ColumnNormalizationPopover` (`w-[440px]`, `max-h-[min(600px,82vh
 | Sticky Header & Preview {#norm-sticky} | Target type `<Badge>`, `Reset to Defaults`, and live `rawSample -> transformedSample` box | Simulates all 17 active rules instantaneously in TypeScript before dry-run |
 | Context-Smart Priority {#norm-smart} | Dynamic top section with `Recommended` badge and 1-click `Apply Smart Preset` action | Prioritizes Temporal, Numeric, Phone, Email, or Arabic rules per column |
 | Whitespace, Unicode & Nulls {#norm-core} | `trim`, `collapseWhitespace`, `normalizeUnicodeCompatibility`, `canonicalizeNullTokens`, `caseMode` (`uppercase`/`lowercase`), `defaultValue` | Converts `N/A`, `غير متاح`, NBSP, and zero-width chars deterministically in `O(n)` |
-| MENA Arabic Script {#norm-mena} | `stripArabicDiacritics` (Tashkeel `\u064B-\u065F`) and `normalizeArabicLetters` (Alef/Teh-Marbuta/Tatweel) | Normalizes Arabic names and lookup tokens with zero user-supplied regexes |
+| MENA Arabic Script {#norm-mena} | `stripArabicDiacritics` (Tashkeel `\u064B-\u065F`, `\u0670`, Tatweel `\u0640`) and `normalizeArabicLetters` (Alef `أ/إ/آ/ٱ → ا`, `ى/ی → ي`, Persian `ک → ك`) | Normalizes Arabic names and lookup tokens deterministically across all 9 pipeline stages with zero user-supplied regexes |
 | Currency & Accounting {#norm-num} | `stripCurrencyAndGrouping` (`SAR`, `EGP`, `AED`, `USD`, `EUR`, `%`) and `convertAccountingNegatives` | Parses `(1,250.50)` and `1.250,50` while rejecting formula strings |
 | Contact, Temporal & Lists {#norm-date} | `normalizeEmailAddress`, `defaultCountryDialCode`, `dateFormat`, `sourceTimeZoneId`, `multiValueDelimiter` | Canonicalizes E.164 phones, converts IANA/Windows timezones to UTC, deduplicates tags |
 | Tooltip Error Pipeline {#norm-tip} | Row `<SelectTrigger>` tooltip, jump-to-row `<Alert>` pills, and disabled footer CTA tooltip | Shows exact offending sample value, missing fields, and normalizer fix hint |
@@ -131,26 +132,44 @@ Every job notification passes `{ id: "dx-job-" + job.id, title, description, but
 
 @facts id=crud-unification-facts
 | Unified Row Menu | All 8 Data Transfer, CRM, and Party views use GenericCrudView getActions sticky w-16 ⋯ DropdownMenu |
-| Zero Column Clipping | Removing inline action button strips restores full width for Contact Info, Occurred, and Category columns |
-| File Decomposition | PartyDirectoryView and DataExchangeStudioOverlay split into focused <= 250-line sub-components (FE-V001) |
-| Flat Matte Slabs | EntityCatalogCard, JobExecutionCard, and MappingPresetCard use bg-nx-surface border-nx-line with 0 shadows |
-| Upgraded Card Fallback | CrudCardGridSection promotes column 1 to card header with top-right ⋯ menu and hairline metadata grid |
-| Bilingual Entity Labels | Jobs, Presets, Dock, Export Dialog, and Step 3 summaries show localized titles above monospace keys |
+| Automatic DAG Discovery | relatedMultiSheetEntityKeys enables Multi-Sheet Migration automatically across CRM (5), Party (3), Identity (2) & Catalog |
+| Preset Studio Launch | PresetsView supports Set as Default (POST /presets/{id}/default) and Use Preset in Import Studio (initialPresetId) |
+| Canonical Confirmations | StudioConfirmExitDialog, CancelJobDialog, and DeletePresetDialog standardize on @core/ui/confirmation-dialog |
+| Pagination & Tenant Guard | GenericTable guarantees Showing 0-0 of 0 results while JobsExecutionView shows real API errors and TenantRequired guard |
+| Bilingual Entity Labels | getEntityDisplayName resolves backend displayNameEn/Ar first across Studio, Dock, Export, Jobs, and Presets |
 
 Standardizing on the `/admins` sticky `w-16` `⋯` action menu eliminates horizontal table clipping while keeping keyboard accessibility, RBAC permission gates, and confirmation dialogs uniform across modules.[](source:dx_admin_mvvm)
 
 | Unified Surface | Component or View | Action & CardGrid Architecture | Compliance Result |
 | --- | --- | --- | --- |
-| Admin Entity Catalog {#ug-ent} | `EntitiesCatalogView` & `EntityCatalogCard` | `getActions` (`Launch Import Studio`, `Download Template`, `Export Data`) + capability slab | {good:100/100 arch-check} |
-| Admin Execution Jobs {#ug-job} | `JobsExecutionView` & `JobExecutionCard` | Contextual `getActions` (`Download Export`, `Rejected Workbook`, `Cancel`, `Refresh`) + KPI strip | {good:Zero right-edge clip} |
-| Admin Mapping Presets {#ug-pre} | `PresetsView` & `MappingPresetCard` | Destructive `Delete Preset` in `⋯` menu + localized entity primary label and mapped count | {good:Clean confirmation flow} |
-| 4 CRM Operational Tables {#ug-crm} | `Contacts`, `Activities`, `Accounts`, `Opportunities` | Replaces wide inline `renderActions` rows with `GenericCrudView` `getActions` `⋯` dropdown | {good:Unclipped CRM columns} |
-| Party Kernel Directory {#ug-pty} | `PartyDirectoryView` (`<= 300` lines) | Decomposed sub-components with `/admins`-parity `⋯` dropdown actions | {good:FE-V001 compliant} |
-| Shared CardGrid Fallback {#ug-grid} | `CrudCardGridSection` (`@core/crud`) | Header + `⋯` slot + responsive `bg-nx-raised` hairline grid with zero resting shadows | {good:Platform-wide uplift} |
+| Admin Entity Catalog {#ug-ent} | `EntitiesCatalogView` & `EntityCatalogCard` | `getActions` (`Launch Import Studio`, dynamic `Multi-Sheet Migration`, `Download Template`, `Export Data`) + client pagination | {good:Auto DAG discovery} |
+| Admin Execution Jobs {#ug-job} | `JobsExecutionView` & `JobExecutionCard` | `Launch Studio` header CTA, `TenantRequired` guard banner, real API error display, and `@core/ui/confirmation-dialog` cancel | {good:Zero right-edge clip} |
+| Admin Mapping Presets {#ug-pre} | `PresetsView` & `MappingPresetCard` | `Create Preset in Studio`, `Use Preset in Import Studio` (`initialPresetId`), `Set as Default`, and `@core/ui/confirmation-dialog` delete | {good:1-click preset launch} |
+| 4 CRM Operational Tables {#ug-crm} | `Contacts`, `Activities`, `Accounts`, `Opportunities` | Automatic `relatedMultiSheetEntityKeys` 5-sheet migration + `GenericCrudView` `getActions` `⋯` dropdown | {good:Unclipped CRM columns} |
+| Party Kernel Directory {#ug-pty} | `PartyDirectoryView` (`<= 300` lines) | Automatic 3-sheet `PartyKernel` migration + `/admins`-parity `⋯` dropdown actions | {good:FE-V001 compliant} |
+| Shared CRUD & Table {#ug-grid} | `GenericCrudView`, `GenericTable` & `CrudCardGridSection` | Finite pagination sanitizer (`Showing 0-0 of 0 results`) + responsive `bg-nx-raised` hairline grid with zero shadows | {good:Zero NaN/1-0 bugs} |
 
-- [x] `DataExchangeStudioOverlay` extracted into `<= 250`-line studio components mounted via `createPortal` (`z-[900]`) with `z-[950]`/`z-[960]` inner overlays.
-- [x] `StudioConfirmExitDialog` guards `Close`, `Escape`, `Step 2 -> Step 1 Back`, `Replace File`, and un-dismissed credentials while keeping `Step 3 -> Step 2 Back` prompt-free.
+## Why is the Entity Catalog Read-Only and How Do Zero-Coupling Plugins, Outbox Events, and Governance Work? {#zero-coupling-and-governance}
+
+DataTransfer keeps zero project references to sibling domain modules (`DataTransfer.*.csproj` reference only `Core.*` and `AstraFlow.*`), discovering entities through `IEntityDataExchangeProvider` in `Core.Application` and publishing terminal job completion via `DataExchangeJobCompletedEvent` in `datatransfer.outbox_messages` (retracted via `DetachPendingOutboxMessages()` on cancellation). On the frontend, `GenericCrudView` reads `entityTypeKey` and mounts `@core/data-exchange` (`DataExchangeToolbarActions` + `useDataExchangeToolbarViewModel`) automatically without ever importing `@modules/admin/data-transfer`.[](source:dx_overview)
+
+| Architectural Question | Authoritative Design Answer | Code & Governance Proof | Result |
+| --- | --- | --- | --- |
+| Why is Entity Catalog read-only? {#qg-cat} | Schemas, keys & quotas come from DI `IEntityDataExchangeProvider` + `EditionSeeder` | Extend custom columns via `/custom-fields` (`cf:*`); run jobs or save presets from Studio | {good:Zero drift} |
+| How do Jobs & Presets populate? {#qg-jp} | `/jobs` captures module toolbar or **Launch Studio** runs; `/presets` saves Step 2 mappings | Supports `initialPresetId`, `POST /presets/{id}/default`, `Use Preset in Import Studio` | {good:Self-service lifecycle} |
+| Single vs Multi-Sheet DAG? {#qg-dag} | `useDataExchangeToolbarViewModel` unlocks Multi-Sheet when all 4 gates pass | `migrations.execute`, `DataTransfer.MultiSheetMigration`, `supportsImport`, `>= 2` `relatedMultiSheetEntityKeys` | {good:Automatic cluster DAG} |
+| Platform vs Tenant context? {#qg-ten} | Strictly tenant-scoped; `DataTransferMenuProvider` enforces `RequiresTenantContext = true` | Platform Super Admin switches tenant or sees `DataExchangeTenantRequiredCard` (`TenantRequired` 400/422) | {good:Zero cross-tenant leak} |
+| Role access & no `[AdminOnly]`? {#qg-rbac} | `[Authorize]` + `[PermissionRequired("datatransfer.*")]` + target entity checks | 7 standard roles incl. `CRM_SALES_REP`; 6 roles excl. `CRM_SALES_REP` for `migrations.execute`; unknown key -> `404` | {good:Least-privilege CRM} |
+| Dynamic vs Hardcoded split? {#qg-dyn} | Descriptors, `cf:*`, FLS, quotas, DB dropdowns (`<= 5,000`), DAGs & labels are dynamic | Hardcoded invariants: 9-stage `O(n)` normalizer, OWASP (`25 MB`/`100 MB`/`1,000`/`100x`), `250`-row chunks | {good:Hardened boundary} |
+| Why no post-completion rollback? {#qg-rec} | Global undo job would overwrite concurrent tenant edits after commit | Safe recovery uses pre-flight `DryRunAsync`, isolated `250`-row chunks, 5-col Rejected `.xlsx`, and `POST /jobs/{id}/cancel` | {good:Concurrent-safe} |
+
+@callout level=note title="2-Pass Key Resolution & Deterministic 9-Stage Normalization Pipeline"
+Multi-sheet DAG imports run Kahn's `TopologicalSortSheets` (`ParentEntityKeys` / `DependsOnEntityKeys`), pass `sessionResolvedKeys` across sheets, persist idempotent lookups in `datatransfer.external_legacy_key_maps`, resolve self-FK links in Pass 2, and defer child rows with `PARENT_ROW_FAILED` (`_CascadeParentRef`). Every mapped cell runs deterministically through Stages 1–9 (`NFKC/BiDi -> Arabic/Persian digits -> Null tokens -> Trim/Whitespace -> Tashkeel/Tatweel & Alef/ى/ک -> CaseMode -> Currency/Accounting -> Email/E.164/MultiValue -> Typed Parse & UTC`).[](source:dx_normalizer)
+
+- [x] `DataExchangeStudioOverlay` extracted into `<= 250`-line studio components mounted via `createPortal` (`z-[900]`) with `z-[950]`/`z-[960]` inner overlays and `initialPresetId` support.
+- [x] `StudioConfirmExitDialog`, `CancelJobDialog`, and `DeletePresetDialog` standardize onto canonical `@core/ui/confirmation-dialog` while keeping `Step 3 -> Step 2 Back` prompt-free.
 - [x] `ColumnNormalizationPopover` exposes all 17 `DataExchangeTransformRule` fields (`dateFormat`, `sourceTimeZoneId`) in a context-smart scrollable container with live preview.
-- [x] Step 2 row `<SelectTrigger>`, error badges, jump-to-row pills, and disabled footer CTA provide actionable `@core/ui/tooltip` diagnostics.
-- [x] All 8 Data Transfer, CRM, and Party views unified onto `GenericCrudView` `getActions` `⋯` dropdowns and flat matte Nexus `CardGrid` slabs.
-- [x] 5-sheet CRM topological DAG (`crm.account -> crm.contact -> crm.lead -> crm.opportunity -> crm.activity`) and `sileo-toast` `dx-job-{id}` morphing verified.
+- [x] Automatic backend-driven `relatedMultiSheetEntityKeys` DAG discovery across CRM (5-sheet), PartyKernel (3-sheet), Identity (2-sheet), and `EntitiesCatalogView`.
+- [x] All 8 Data Transfer, CRM, and Party views unified onto `GenericCrudView` `getActions` `⋯` dropdowns, `Showing 0-0 of 0 results` finite pagination hardening, and flat matte Nexus `CardGrid` slabs.
+- [x] `DataTransferController` exposes 16 PBAC REST endpoints (`POST presets/{id}/default` -> `SetDefaultPreset`), `DataTransferMenuProvider` (`RequiresTenantContext: true`), and `DataTransferDevDataSeeder` (`Order = 155`).[](source:dx_overview)
+- [x] `SCRIPE-Docs-Portal` delivers 100% 7-language parity (`en`, `ar`, `de`, `es`, `fr`, `ru`, `zh`) across technical module, 16-endpoint API reference, and commercial showcase pages.[](source:dx_docs)

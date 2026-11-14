@@ -231,6 +231,9 @@ import "./modules/marketplace/ratings-reviews";
 
 import "./modules/ecosystem-recycle-bin";
 
+// Modules (Data Transfer & Data Exchange Studio)
+import "./modules/data-transfer/data-transfer-overview";
+
 // Modules (CRM — Commercial Operations & Revenue Engine)
 import "./modules/crm-overview";
 import "./modules/crm/accounts-360";
@@ -268,6 +271,7 @@ import "./api-reference/role-permission-api";
 import "./api-reference/user-groups-api";
 import "./api-reference/webhook-email-api";
 import "./api-reference/system-api";
+import "./api-reference/data-transfer-api";
 
 // Frontend Modules
 import "./frontend/crud-system";
@@ -424,3 +428,4 @@ import "./commercial/developer-integrations-ecosystem";
 import "./commercial/custom-fields";
 import "./commercial/work-management";
 import "./commercial/analytics";
+import "./commercial/data-exchange-studio";
