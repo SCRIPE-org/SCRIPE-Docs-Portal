@@ -1,0 +1,400 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "SCRIPE Data Exchange Studio, MENA Normalizer & Immediate Worker Architecture (.NET 10 & AstraFlow 2.3.0)",
+    "locale": "en",
+    "output": "SCRIPE-Docs-Portal/public/archify-hub/scripe-data-exchange-architecture.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "owasp_ingress_stream",
+        "label": "1. OWASP, MENA Normalizer & Engine",
+        "focus": [
+          "client_studio",
+          "controller",
+          "owasp_validator",
+          "orchestrator",
+          "stream_engine"
+        ],
+        "note": "OwaspSpreadsheetSecurityValidator and linear-time O(n) SpreadsheetValueNormalizer sanitize workbooks and normalize 17 MENA rules."
+      },
+      {
+        "id": "immediate_worker_cancellation",
+        "label": "2. Tenant Snapshot & Concurrency",
+        "focus": [
+          "controller",
+          "immediate_worker",
+          "orchestrator",
+          "datatransfer_db",
+          "client_studio"
+        ],
+        "note": "Worker loads jobs via IgnoreQueryFilters, enters DataExchangeAmbientContext, and guards cancel races via DbUpdateConcurrencyException."
+      },
+      {
+        "id": "quota_fls_governance",
+        "label": "3. Compatibility Lock, Quota Lease & FLS",
+        "focus": [
+          "controller",
+          "orchestrator",
+          "stream_engine",
+          "quota_fls",
+          "datatransfer_db"
+        ],
+        "note": "DataExchangeOrchestrator checks SHA-256 template hashes, reserves IQuotaCounterService leases, and enforces FLS."
+      },
+      {
+        "id": "entity_providers_fanout",
+        "label": "4. 10 Entity Providers (CRM/Party/Auth)",
+        "focus": [
+          "orchestrator",
+          "crm_providers",
+          "party_provider",
+          "identity_provider"
+        ],
+        "note": "Ten IEntityDataExchangeProvider contracts consume normalized currency, E.164 phone, email, enum, and cf:* custom fields."
+      },
+      {
+        "id": "partial_commit_storage",
+        "label": "5. Partial Commit & Search/Status DB",
+        "focus": [
+          "orchestrator",
+          "stream_engine",
+          "datatransfer_db",
+          "blob_storage"
+        ],
+        "note": "Valid chunks commit atomically with ProcessedRows updates and Search/Status filtering while errors export to rejected .xlsx."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "client_studio",
+      "type": "frontend",
+      "label": "Frontend Studio & Admin",
+      "sublabel": "Dropdown + Popover + 3 Routes",
+      "tag": "5-Layer MVVM",
+      "pos": [
+        40,
+        230
+      ],
+      "size": [
+        165,
+        64
+      ]
+    },
+    {
+      "id": "owasp_validator",
+      "type": "security",
+      "label": "OWASP + O(n) Normalizer",
+      "sublabel": "Validator & ValueNormalizer.cs",
+      "tag": "ReDoS-Free MENA",
+      "pos": [
+        285,
+        80
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "controller",
+      "type": "backend",
+      "label": "DataTransferController",
+      "sublabel": "REST + Search/Status + Cancel",
+      "tag": "PBAC + Presets",
+      "pos": [
+        285,
+        230
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "immediate_worker",
+      "type": "backend",
+      "label": "ImmediateWorker & Ctx",
+      "sublabel": "IgnoreFilters + AmbientContext",
+      "tag": "Channel<Guid>",
+      "pos": [
+        285,
+        380
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "stream_engine",
+      "type": "backend",
+      "label": "SpreadsheetStreamEngine",
+      "sublabel": "SpreadsheetStreamEngine.cs",
+      "tag": "3-Tab OpenXML",
+      "pos": [
+        545,
+        80
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "orchestrator",
+      "type": "backend",
+      "label": "DataExchangeOrchestrator",
+      "sublabel": "Concurrency & Chunk Commit",
+      "tag": "RowVersion Safe",
+      "pos": [
+        545,
+        215
+      ],
+      "size": [
+        170,
+        96
+      ]
+    },
+    {
+      "id": "quota_fls",
+      "type": "security",
+      "label": "Quota & FLS Guards",
+      "sublabel": "IQuotaCounterService + FLS",
+      "tag": "Atomic Lease",
+      "pos": [
+        545,
+        380
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "crm_providers",
+      "type": "backend",
+      "label": "CRM Providers (5 Entities)",
+      "sublabel": "Lead/Deal/Account/Contact/Act",
+      "tag": "5 Providers",
+      "pos": [
+        825,
+        40
+      ],
+      "size": [
+        175,
+        64
+      ]
+    },
+    {
+      "id": "party_provider",
+      "type": "backend",
+      "label": "Party Providers (3)",
+      "sublabel": "Person/Org/party.contact-point",
+      "tag": "3 Providers",
+      "pos": [
+        825,
+        145
+      ],
+      "size": [
+        175,
+        64
+      ]
+    },
+    {
+      "id": "identity_provider",
+      "type": "security",
+      "label": "Identity Providers (2)",
+      "sublabel": "User & Admin Onboarding Vault",
+      "tag": "2 Providers",
+      "pos": [
+        825,
+        231
+      ],
+      "size": [
+        175,
+        64
+      ]
+    },
+    {
+      "id": "datatransfer_db",
+      "type": "database",
+      "label": "DataTransferDbContext",
+      "sublabel": "datatransfer schema (Jobs/Err)",
+      "tag": "ProcessedRows DB",
+      "pos": [
+        825,
+        355
+      ],
+      "size": [
+        175,
+        64
+      ]
+    },
+    {
+      "id": "blob_storage",
+      "type": "cloud",
+      "label": "IBlobStorage Vault",
+      "sublabel": "Staged & Rejected .xlsx Blobs",
+      "tag": "Encrypted Vault",
+      "pos": [
+        825,
+        460
+      ],
+      "size": [
+        175,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "SCRIPE-Backend DataTransfer Module & Sovereign Host (.NET 10)",
+      "wraps": [
+        "owasp_validator",
+        "controller",
+        "immediate_worker",
+        "stream_engine",
+        "orchestrator",
+        "quota_fls",
+        "crm_providers",
+        "party_provider",
+        "identity_provider",
+        "datatransfer_db",
+        "blob_storage"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "Streaming Orchestration, MENA Normalizer & Quota Core",
+      "wraps": [
+        "stream_engine",
+        "orchestrator",
+        "quota_fls"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "studio-to-controller",
+      "from": "client_studio",
+      "to": "controller",
+      "label": "REST + Stream",
+      "variant": "emphasis"
+    },
+    {
+      "id": "controller-to-owasp",
+      "from": "controller",
+      "to": "owasp_validator",
+      "label": "OWASP + normalize",
+      "variant": "security"
+    },
+    {
+      "id": "controller-to-worker",
+      "from": "controller",
+      "to": "immediate_worker",
+      "label": "enqueue / cancel",
+      "variant": "emphasis"
+    },
+    {
+      "id": "controller-to-orchestrator",
+      "from": "controller",
+      "to": "orchestrator",
+      "label": "dry-run / list",
+      "variant": "default"
+    },
+    {
+      "id": "worker-to-orchestrator",
+      "from": "immediate_worker",
+      "to": "orchestrator",
+      "label": "ambient job",
+      "variant": "emphasis"
+    },
+    {
+      "id": "orchestrator-to-stream",
+      "from": "orchestrator",
+      "to": "stream_engine",
+      "label": "OpenXML I/O",
+      "variant": "emphasis"
+    },
+    {
+      "id": "orchestrator-to-quota",
+      "from": "orchestrator",
+      "to": "quota_fls",
+      "label": "lease & FLS",
+      "variant": "security"
+    },
+    {
+      "id": "orchestrator-to-crm",
+      "from": "orchestrator",
+      "to": "crm_providers",
+      "label": "CRM batch",
+      "variant": "emphasis"
+    },
+    {
+      "id": "orchestrator-to-party",
+      "from": "orchestrator",
+      "to": "party_provider",
+      "label": "Party batch",
+      "variant": "default"
+    },
+    {
+      "id": "orchestrator-to-identity",
+      "from": "orchestrator",
+      "to": "identity_provider",
+      "label": "User batch",
+      "variant": "security"
+    },
+    {
+      "id": "orchestrator-to-db",
+      "from": "orchestrator",
+      "to": "datatransfer_db",
+      "label": "RowVersion DB",
+      "variant": "emphasis"
+    },
+    {
+      "id": "orchestrator-to-blob",
+      "from": "orchestrator",
+      "to": "blob_storage",
+      "label": "rejected .xlsx",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "OWASP Gate & Linear-Time O(n) MENA Normalization Engine",
+      "items": [
+        "OwaspSpreadsheetSecurityValidator blocks macro archives, enforces ZIP ratio ceilings, neutralizes formula triggers, and marks CreatedAt/UpdatedAt as ExportOnly.",
+        "SpreadsheetValueNormalizer executes 17 deterministic DataExchangeTransformRule transforms (N/A nulls, Tashkeel/Tatweel, accounting/Euro numbers, E.164 phones, IANA timezones) with zero user regex."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Worker Tenant Snapshot & Concurrency Cancellation Safety",
+      "items": [
+        "DataExchangeOrchestrator loads queued worker jobs with .IgnoreQueryFilters() (!IsDeleted) before entering DataExchangeAmbientContext.Begin(snapshot).",
+        "DataExchangeOrchestrator.Execution.cs catches DbUpdateConcurrencyException during concurrent POST /jobs/{id}/cancel races, reloads RowVersion, and reconciles quota holds."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Compact Toolbar, Normalization Popover & 3-Route Admin MVVM",
+      "items": [
+        "DataExchangeToolbarActions renders one @core/ui/dropdown-menu trigger inside CrmSectionHeader (hideToolbarActions: true in CRUD), eliminating filter bar overflow.",
+        "The 3-route @modules/data-transfer module (/admin/data-exchange, /jobs, /presets) renders GenericCrudView<T> with Search/Status filtering and ColumnNormalizationPopover previews."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "3-Tab OpenXML Engine, 10 Providers & Ephemeral Onboarding Vault",
+      "items": [
+        "SpreadsheetStreamEngine embeds SHA-256 compatibility locks, Reference Lookups, and cf:* custom fields across 5 CRM, 3 PartyKernel, and 2 Identity providers.",
+        "DataTransferImmediateWorker dispatches via Channel<Guid> (<50ms), DataExchangeFloatingDock polls every 2s, and bulk Identity imports return one-time passwords."
+      ]
+    }
+  ]
+}

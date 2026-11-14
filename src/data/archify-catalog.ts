@@ -51,7 +51,7 @@ export const ARCHIFY_PILLAR_META: Record<
     repoName: "SCRIPE-org/SCRIPE",
     commit: "ffc972a4",
     accentColor: "#B7FF00",
-    count: 10,
+    count: 11,
   },
   backend: {
     label: "SCRIPE-Backend Deep Dive (.NET 10 & AstraFlow 2.3.0)",
@@ -61,7 +61,7 @@ export const ARCHIFY_PILLAR_META: Record<
     repoName: "SCRIPE-org/SCRIPE-Backend",
     commit: "f941b150",
     accentColor: "#38BDF8",
-    count: 9,
+    count: 10,
   },
   frontend: {
     label: "SCRIPE-Frontend Deep Dive (Next.js 16 + React 19 MVVM)",
@@ -71,7 +71,7 @@ export const ARCHIFY_PILLAR_META: Record<
     repoName: "SCRIPE-org/SCRIPE-Frontend",
     commit: "f7d148d6",
     accentColor: "#A78BFA",
-    count: 8,
+    count: 9,
   },
 };
 
@@ -94,8 +94,39 @@ export const ARCHIFY_MODE_META: Record<
 
 export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
   // ============================================================================
-  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 7 PAGES
+  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 11 PAGES
   // ============================================================================
+  {
+    id: "scripe-data-exchange-studio",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "DATA EXCHANGE STUDIO",
+    title: "SCRIPE Data Exchange Studio: MENA Normalization, Streaming Excel Imports & 3-Route Admin MVVM",
+    subtitle:
+      "1-Button Dropdown Toolbar + O(n) MENA Normalizer & Popover + 3-Route Admin MVVM + Channel<Guid> Worker + OWASP Gate",
+    description:
+      "End-to-end architectural explainer board covering the 4-step Data Exchange Studio wizard with live ColumnNormalizationPopover Raw -> Normalized previews, compact 1-button @core/ui/dropdown-menu toolbar in CrmSectionHeader and GenericCrudView, linear-time O(n) SpreadsheetValueNormalizer with 17 DataExchangeTransformRule MENA options (N/A nulls, Arabic Tashkeel/Tatweel, accounting/Euro decimals, E.164 phones, IANA timezones), DataTransferImmediateWorker tenant snapshot resolution (.IgnoreQueryFilters() -> DataExchangeAmbientContext) with DbUpdateConcurrencyException cancel safety, 3-route Admin @modules/data-transfer (/admin/data-exchange, /jobs, /presets) powered by GenericCrudView<T>, OWASP security, quota leases, and ephemeral onboarding credentials.",
+    htmlUrl: "/archify-hub/scripe-data-exchange-studio.html",
+    specUrl: "/archify-hub/specs/scripe-data-exchange-studio.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "8ff5f73",
+    featured: true,
+    highlights: [
+      "Deterministic O(n) MENA & Enterprise Normalization Engine (17 DataExchangeTransformRule toggles) with live ColumnNormalizationPopover preview",
+      "Compact 1-button @core/ui/dropdown-menu Data Exchange trigger inside CrmSectionHeader & flex-hardened GenericCrudView (zero filter-bar clipping)",
+      "Worker tenant snapshot (.IgnoreQueryFilters() -> DataExchangeAmbientContext.Begin) and DbUpdateConcurrencyException cancel safety",
+      "First-class 3-route 5-layer SOLID MVVM @modules/data-transfer (/admin/data-exchange, /jobs, /presets) powered by GenericCrudView<T>",
+    ],
+    keySources: [
+      "SCRIPE-Backend/src/Core/Core.Application/DataExchange/SpreadsheetValueNormalizer.cs",
+      "SCRIPE-Backend/src/Modules/DataTransfer/DataTransfer.Infrastructure/Services/DataExchangeOrchestrator.cs",
+      "SCRIPE-Backend/src/Modules/DataTransfer/DataTransfer.Infrastructure/BackgroundJobs/DataTransferImmediateWorker.cs",
+      "SCRIPE-Backend/src/Core/Core.Infrastructure/DataExchange/OwaspSpreadsheetSecurityValidator.cs",
+      "SCRIPE-Frontend/src/core/data-exchange/presentation/components/DataExchangeToolbarActions.tsx",
+      "SCRIPE-Frontend/src/core/data-exchange/presentation/components/ColumnNormalizationPopover.tsx",
+      "SCRIPE-Frontend/src/modules/admin/data-transfer/di.ts",
+    ],
+  },
   {
     id: "fullstack-master-explainer",
     pillar: "fullstack",
@@ -372,8 +403,38 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
   },
 
   // ============================================================================
-  // PILLAR 2: BACKEND DEEP DIVE (.NET 10 & ASTRAFLOW 2.3.0) — 8 PAGES
+  // PILLAR 2: BACKEND DEEP DIVE (.NET 10 & ASTRAFLOW 2.3.0) — 10 PAGES
   // ============================================================================
+  {
+    id: "scripe-data-exchange-architecture",
+    pillar: "backend",
+    mode: "architecture",
+    badge: "5 GUIDED VIEWS",
+    title: "SCRIPE-Backend Data Exchange, MENA Normalizer & Immediate Worker Architecture",
+    subtitle:
+      "OWASP + O(n) Normalizer -> Channel<Guid> IgnoreQueryFilters Worker -> Concurrency-Safe Orchestrator -> 10 Providers & Search/Status DB",
+    description:
+      "Native Archify Architecture diagram with 5 Guided Views modeling the .NET 10 DataTransfer module, linear-time O(n) SpreadsheetValueNormalizer with 17 DataExchangeTransformRule MENA/enterprise options, DataTransferImmediateWorker Channel<Guid> queue using .IgnoreQueryFilters() -> DataExchangeAmbientContext.Begin(snapshot) and DbUpdateConcurrencyException cancel reload safety, Search/Status filtering on ListJobs and ListPresets, OWASP security gate, OpenXML streaming engine, atomic edition quota leases, FLS scrubbing, and 10 pluggable CRM/PartyKernel/Identity providers.",
+    htmlUrl: "/archify-hub/scripe-data-exchange-architecture.html",
+    specUrl: "/archify-hub/specs/scripe-data-exchange-architecture.architecture.json",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "8ff5f73",
+    featured: true,
+    viewsCount: 5,
+    highlights: [
+      "5 Guided Views: OWASP & MENA Normalizer, Tenant Snapshot & Concurrency, Quota & FLS, 10 Entity Providers, Partial Commit & Search/Status DB",
+      "Deterministic O(n) SpreadsheetValueNormalizer (N/A nulls, Tashkeel/Tatweel, accounting/Euro decimals, E.164 phone, email, IANA timezone)",
+      "Background worker .IgnoreQueryFilters() -> DataExchangeAmbientContext.Begin(snapshot) plus DbUpdateConcurrencyException cancel race handling",
+      "10 Provider Parity across CRM, PartyKernel (party.contact-point), and Identity plus Search/Status query filtering on Jobs and Presets",
+    ],
+    keySources: [
+      "src/Core/Core.Application/DataExchange/SpreadsheetValueNormalizer.cs",
+      "src/Host/API/Controllers/DataTransfer/DataTransferController.cs",
+      "src/Modules/DataTransfer/DataTransfer.Infrastructure/BackgroundJobs/DataTransferImmediateWorker.cs",
+      "src/Modules/DataTransfer/DataTransfer.Infrastructure/Services/DataExchangeOrchestrator.cs",
+      "src/Modules/DataTransfer/DataTransfer.Infrastructure/Persistence/DataTransferDbContext.cs",
+    ],
+  },
   {
     id: "backend-master-explainer",
     pillar: "backend",
@@ -602,8 +663,38 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
   },
 
   // ============================================================================
-  // PILLAR 3: FRONTEND DEEP DIVE (NEXT.JS 16 + REACT 19 MVVM) — 8 PAGES
+  // PILLAR 3: FRONTEND DEEP DIVE (NEXT.JS 16 + REACT 19 MVVM) — 9 PAGES
   // ============================================================================
+  {
+    id: "scripe-data-exchange-workflow",
+    pillar: "frontend",
+    mode: "workflow",
+    badge: "DROPDOWN, POPOVER & 3-ROUTE ADMIN",
+    title: "SCRIPE-Frontend 1-Button Dropdown, MENA Normalization Popover & 3-Route Admin MVVM Workflow",
+    subtitle:
+      "CrmSectionHeader Dropdown -> Step 2 ColumnNormalizationPopover -> Worker & Cancel Safety -> 3-Route GenericCrudView Admin & Dock",
+    description:
+      "Native Archify Workflow v2 diagram illustrating the 4-swimlane frontend Data Exchange journey: compact 1-button @core/ui/dropdown-menu trigger inside CrmSectionHeader (with hideToolbarActions: true in CRUD), flex-hardened GenericCrudView view toggles, 4-step DataExchangeStudioOverlay with non-nested dropzone and ColumnNormalizationPopover live Raw -> Normalized preview, schema hash & quota blocks, rejected .xlsx re-upload loops, DataExchangeFloatingDock 2s polling, and the 3-route 5-layer SOLID MVVM @modules/data-transfer module (/admin/data-exchange, /jobs, /presets).",
+    htmlUrl: "/archify-hub/scripe-data-exchange-workflow.html",
+    specUrl: "/archify-hub/specs/scripe-data-exchange-workflow.workflow.json",
+    repoName: "SCRIPE-org/SCRIPE-Frontend",
+    repoCommit: "8ff5f73",
+    featured: true,
+    highlights: [
+      "4 Swimlanes: CrmSectionHeader & GenericCrudView Loop, Studio Overlay & Live Popover, Compatibility/Quota/Concurrency Guards, 3-Route Admin MVVM & Dock",
+      "1-button @core/ui/dropdown-menu Data Exchange trigger inside CrmSectionHeader & flex-wrapped GenericCrudView preventing Table/Kanban clipping",
+      "ColumnNormalizationPopover configuring all 17 DataExchangeTransformRule toggles with live previewNormalizedSample Raw -> Normalized feedback",
+      "Dedicated 3-route 5-layer SOLID MVVM @modules/data-transfer (/admin/data-exchange, /jobs, /presets) powered 100% by GenericCrudView<T>",
+    ],
+    keySources: [
+      "src/core/crud/components/generic-crud-view.tsx",
+      "src/core/data-exchange/presentation/components/DataExchangeToolbarActions.tsx",
+      "src/core/data-exchange/presentation/components/ColumnNormalizationPopover.tsx",
+      "src/core/data-exchange/presentation/components/DataExchangeStudioOverlay.tsx",
+      "src/core/data-exchange/presentation/store/useDataExchangeJobsStore.ts",
+      "src/modules/admin/data-transfer/di.ts",
+    ],
+  },
   {
     id: "frontend-master-explainer",
     pillar: "frontend",

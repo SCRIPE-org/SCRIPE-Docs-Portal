@@ -1,0 +1,243 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "SCRIPE-Frontend Data Exchange 1-Button Dropdown, MENA Normalization Popover & 3-Route Admin MVVM Workflow",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "SCRIPE-Docs-Portal/public/archify-hub/scripe-data-exchange-workflow.html"
+  },
+  "lanes": [
+    {
+      "id": "crud_lane",
+      "label": "1. CrmSectionHeader & GenericCrudView Loop"
+    },
+    {
+      "id": "studio_lane",
+      "label": "2. DataExchangeStudioOverlay & Live Popover"
+    },
+    {
+      "id": "guard_lane",
+      "label": "3. Compatibility, Quota & Concurrency Guards",
+      "variant": "exception"
+    },
+    {
+      "id": "vault_lane",
+      "label": "4. 3-Route Admin MVVM, Dock & Ephemeral Vault"
+    }
+  ],
+  "phases": [
+    {
+      "id": "dx_init",
+      "label": "1. Dropdown & Template",
+      "fromCol": 0,
+      "toCol": 1
+    },
+    {
+      "id": "dx_validate",
+      "label": "2. MENA Popover & Dry-Run",
+      "fromCol": 2,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "dx_commit",
+      "label": "3. Worker, Admin & Dock",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "mainPath": [
+    "crud_toolbar",
+    "step1_template",
+    "step2_map",
+    "step3_dryrun",
+    "step4_commit",
+    "ephemeral_vault"
+  ],
+  "nodes": [
+    {
+      "id": "crud_toolbar",
+      "lane": "crud_lane",
+      "col": 0,
+      "type": "frontend",
+      "label": "Data Exchange Dropdown",
+      "sublabel": "1-Button CrmSectionHeader",
+      "tag": "PBAC Gate"
+    },
+    {
+      "id": "step1_template",
+      "lane": "studio_lane",
+      "col": 1,
+      "type": "frontend",
+      "label": "Step 1: Template & Upload",
+      "sublabel": "3-Tab .xlsx & Sibling Drop",
+      "tag": "Step 1"
+    },
+    {
+      "id": "step2_map",
+      "lane": "studio_lane",
+      "col": 2,
+      "type": "frontend",
+      "label": "Step 2: Map & Normalize",
+      "sublabel": "Live MENA Popover Preview",
+      "tag": "17 Rules"
+    },
+    {
+      "id": "compat_lock",
+      "lane": "guard_lane",
+      "col": 2,
+      "type": "security",
+      "label": "Schema Hash Mismatch",
+      "sublabel": "Block outdated template"
+    },
+    {
+      "id": "step3_dryrun",
+      "lane": "studio_lane",
+      "col": 3,
+      "type": "backend",
+      "label": "Step 3: Dry-Run Preview",
+      "sublabel": "O(n) Normalizer & Errors",
+      "tag": "Step 3"
+    },
+    {
+      "id": "quota_block",
+      "lane": "guard_lane",
+      "col": 3,
+      "type": "security",
+      "label": "Edition Quota Exceeded",
+      "sublabel": "422 Quota lease denied"
+    },
+    {
+      "id": "step4_commit",
+      "lane": "studio_lane",
+      "col": 4,
+      "type": "backend",
+      "label": "Step 4: Partial Commit",
+      "sublabel": "IgnoreFilters + AmbientCtx",
+      "tag": "Step 4"
+    },
+    {
+      "id": "rejected_xlsx",
+      "lane": "crud_lane",
+      "col": 4,
+      "type": "messagebus",
+      "label": "Rejected Rows .xlsx",
+      "sublabel": "Fix errors & re-upload"
+    },
+    {
+      "id": "cooperative_cancel",
+      "lane": "guard_lane",
+      "col": 5,
+      "type": "security",
+      "label": "Concurrency-Safe Cancel",
+      "sublabel": "Reload RowVersion & Lease",
+      "tag": "Lease Released"
+    },
+    {
+      "id": "ephemeral_vault",
+      "lane": "vault_lane",
+      "col": 5,
+      "type": "security",
+      "label": "3-Route Admin & Live Dock",
+      "sublabel": "GenericCrudView + Vault",
+      "tag": "MVVM & Dock"
+    }
+  ],
+  "edges": [
+    {
+      "id": "dxe1",
+      "from": "crud_toolbar",
+      "to": "step1_template",
+      "label": "launch studio",
+      "variant": "emphasis"
+    },
+    {
+      "id": "dxe2",
+      "from": "step1_template",
+      "to": "step2_map",
+      "label": "upload .xlsx",
+      "variant": "emphasis"
+    },
+    {
+      "id": "dxe3",
+      "from": "step2_map",
+      "to": "compat_lock",
+      "label": "stale hash",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "dxe4",
+      "from": "step2_map",
+      "to": "step3_dryrun",
+      "label": "rules previewed",
+      "variant": "emphasis"
+    },
+    {
+      "id": "dxe5",
+      "from": "step3_dryrun",
+      "to": "quota_block",
+      "label": "quota full",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "dxe6",
+      "from": "step3_dryrun",
+      "to": "step4_commit",
+      "label": "lease reserved",
+      "variant": "emphasis"
+    },
+    {
+      "id": "dxe7",
+      "from": "step4_commit",
+      "to": "rejected_xlsx",
+      "label": "invalid rows",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "dxe8",
+      "from": "rejected_xlsx",
+      "to": "step1_template",
+      "label": "re-upload fixed",
+      "variant": "dashed",
+      "role": "return"
+    },
+    {
+      "id": "dxe9",
+      "from": "step4_commit",
+      "to": "cooperative_cancel",
+      "label": "cancel race",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "dxe10",
+      "from": "step4_commit",
+      "to": "ephemeral_vault",
+      "label": "commit receipt",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "1-Button Dropdown Toolbar & Step 2 MENA Normalization Popover",
+      "items": [
+        "DataExchangeToolbarActions renders one @core/ui/dropdown-menu trigger inside CrmSectionHeader (with hideToolbarActions: true in CRUD) and flex-wraps GenericCrudView so Table/Kanban toggles never clip.",
+        "DataExchangeStudioOverlay fixes Cancel/X overlap and a11y nesting, while ColumnNormalizationPopover configures all 17 DataExchangeTransformRule toggles with live Raw -> Normalized preview."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "3-Route Admin MVVM Module, Concurrency-Safe Cancel & Live Dock",
+      "items": [
+        "The 5-layer SOLID MVVM @modules/data-transfer module replaces legacy hub views across /admin/data-exchange, /jobs, and /presets using GenericCrudView<T> with Search/Status filtering.",
+        "DataTransferImmediateWorker scopes queued jobs via .IgnoreQueryFilters() + DataExchangeAmbientContext, handles DbUpdateConcurrencyException cancel races, and streams 2s updates to DataExchangeFloatingDock."
+      ]
+    }
+  ]
+}
