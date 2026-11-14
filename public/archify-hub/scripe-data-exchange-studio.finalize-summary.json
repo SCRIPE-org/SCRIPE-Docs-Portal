@@ -6,14 +6,14 @@
   "type": "explainer",
   "quality": "showcase",
   "specification": {
-    "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-data-exchange-studio.archify.md",
-    "sha256": "d3e425c7aaaa8be178e7437568b8fde38f62c7374e3c64655be3f6eb7593ba0f",
-    "bytes": 15916
+    "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-data-exchange-studio.archify.md",
+    "sha256": "144375138be02801ff0c0f942f2d4716e0e1c13de6231de50dfe721cfc49f00c",
+    "bytes": 16108
   },
   "artifact": {
-    "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-studio.html",
-    "sha256": "1e533e0fc8ed2fc500c7e2dc23f94e67c99fbbb28634f18044a62fc18a586b3e",
-    "bytes": 666503
+    "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-studio.html",
+    "sha256": "47917f06272bf94ed3d452a30bee743bdf688c857a4e96970828cee2ba80dc52",
+    "bytes": 1435611
   },
   "gates": {
     "validate": "pass",
@@ -42,7 +42,7 @@
     "noticeText": null
   },
   "visualReview": "not-requested",
-  "durationMs": 2252,
+  "durationMs": 4209,
   "browserCheck": {
     "requested": false,
     "ran": false

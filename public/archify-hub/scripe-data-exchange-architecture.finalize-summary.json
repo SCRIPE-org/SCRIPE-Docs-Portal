@@ -1,55 +1,36 @@
 {
   "schemaVersion": 1,
-  "ok": false,
+  "ok": true,
   "command": "finalize",
-  "status": "fail",
+  "status": "pass",
   "type": "architecture",
   "quality": "showcase",
   "specification": {
-    "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-data-exchange-architecture.architecture.json",
-    "sha256": "a650f2718ed21174d6147fb30760263f8185c59a947d8b0f9f47d139552469f9",
-    "bytes": 10549
+    "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-data-exchange-architecture.architecture.json",
+    "sha256": "21701bc7a9ead8fac58f4bf6d1a91fb0ae92d87ec0950eed84d15de5b663d8da",
+    "bytes": 10720
   },
   "artifact": {
-    "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-architecture.html",
-    "sha256": "cbcca18124c31699e7648d35e372719683bfa9ebce68d7bcebecd97b065c809c",
-    "bytes": 861912
+    "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-architecture.html",
+    "sha256": "d6216197044b229d0cc54548c224057ebe839bc5bddee6909724e7eb7397c58d",
+    "bytes": 861910
   },
   "gates": {
     "validate": "pass",
     "deliver": "pass",
     "check": "pass",
-    "browser-check": "fail"
+    "browser-check": "pass"
   },
-  "failedStage": "browser-check",
-  "diagnostics": [
-    {
-      "code": "viewer/evidence-path-conflict",
-      "severity": "error",
-      "message": "browser-check will not replace the existing unowned evidence path \"D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-architecture.browser-check.json\".",
-      "subject": {
-        "artifact": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-architecture.html",
-        "evidencePath": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-architecture.browser-check.json"
-      },
-      "evidence": {
-        "reason": {
-          "code": "ownership-artifact-mismatch"
-        }
-      },
-      "supportedFixes": [
-        "move the conflicting file aside, or choose a separate --out-dir, then rerun browser-check"
-      ]
-    }
-  ],
+  "diagnostics": [],
   "diagnosticSummary": {
-    "total": 1,
-    "shown": 1,
+    "total": 0,
+    "shown": 0,
     "truncated": false
   },
   "evidence": {
     "receipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-architecture.finalize.json",
     "summaryReceipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-architecture.finalize-summary.json",
-    "browserCheckReceipt": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-architecture.browser-check.json"
+    "browserCheckReceipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-architecture.browser-check.json"
   },
   "update": {
     "status": "current",
@@ -62,9 +43,39 @@
     "noticeText": null
   },
   "visualReview": "not-requested",
-  "durationMs": 1482,
+  "durationMs": 4205,
   "browserCheck": {
     "requested": true,
-    "ran": false
+    "ran": true
+  },
+  "visualReviewRecommendation": {
+    "action": "inspect-route-readability",
+    "signals": {
+      "routesOverSuggestedBends": 1,
+      "routesOverSuggestedStretch": 1
+    },
+    "reason": "Automated gates passed, but crossings or detours still need perceptual review before claiming visual quality.",
+    "affectedRoutes": {
+      "crossings": [],
+      "detours": [
+        {
+          "relationship": {
+            "id": "orchestrator-to-crm",
+            "from": "orchestrator",
+            "to": "crm_providers",
+            "label": "5-sheet DAG",
+            "collectionIndex": 7,
+            "artifactIndex": 8
+          },
+          "bends": 3,
+          "stretch": 1.423
+        }
+      ],
+      "truncated": false
+    },
+    "hints": [
+      "orchestrator → crm_providers needs 3 bends: move node orchestrator or crm_providers so they share a row or column with matching centers, or sit diagonally with a clear corner."
+    ],
+    "repair": "Trace these relationships at the desktop viewport. For Architecture, use references/architecture-layout-repair.md: reflow a blocked main path or tangled connected scene, and repair an isolated defect locally only when the surrounding composition is accepted. Preserve all semantic content and user-fixed geometry. Rerun finalize once after the edit."
   }
 }

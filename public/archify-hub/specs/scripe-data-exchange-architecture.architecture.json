@@ -2,14 +2,14 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "SCRIPE Data Exchange Studio, MENA Normalizer & Immediate Worker Architecture (.NET 10 & AstraFlow 2.3.0)",
+    "title": "SCRIPE Data Exchange Studio: 17-Rule MENA Normalizer, 5-Sheet CRM DAG & Worker Architecture (.NET 10)",
     "locale": "en",
     "output": "SCRIPE-Docs-Portal/public/archify-hub/scripe-data-exchange-architecture.html",
     "quality_profile": "showcase",
     "views": [
       {
-        "id": "owasp_ingress_stream",
-        "label": "1. OWASP, MENA Normalizer & Engine",
+        "id": "owasp_mena_normalizer",
+        "label": "1. OWASP & 17-Rule O(n) Normalizer",
         "focus": [
           "client_studio",
           "controller",
@@ -17,11 +17,23 @@
           "orchestrator",
           "stream_engine"
         ],
-        "note": "OwaspSpreadsheetSecurityValidator and linear-time O(n) SpreadsheetValueNormalizer sanitize workbooks and normalize 17 MENA rules."
+        "note": "OwaspSpreadsheetSecurityValidator and O(n) SpreadsheetValueNormalizer apply 17 MENA, DateFormat, and SourceTimeZoneId rules."
+      },
+      {
+        "id": "crm_topological_dag",
+        "label": "2. 5-Sheet CRM Topological DAG",
+        "focus": [
+          "client_studio",
+          "orchestrator",
+          "stream_engine",
+          "crm_providers",
+          "blob_storage"
+        ],
+        "note": "Account -> Contact -> Lead -> Opportunity -> Activity DAG resolves sessionResolvedKeys, natural keys, and cascade deferral."
       },
       {
         "id": "immediate_worker_cancellation",
-        "label": "2. Tenant Snapshot & Concurrency",
+        "label": "3. Worker Context & Cancel Safety",
         "focus": [
           "controller",
           "immediate_worker",
@@ -29,41 +41,31 @@
           "datatransfer_db",
           "client_studio"
         ],
-        "note": "Worker loads jobs via IgnoreQueryFilters, enters DataExchangeAmbientContext, and guards cancel races via DbUpdateConcurrencyException."
+        "note": "Worker claims via IgnoreQueryFilters, enters DataExchangeAmbientContext, guards RowVersion cancel, and emits DisplayNameEn."
       },
       {
-        "id": "quota_fls_governance",
-        "label": "3. Compatibility Lock, Quota Lease & FLS",
+        "id": "quota_fls_providers",
+        "label": "4. Quota Lease, FLS & 10 Providers",
         "focus": [
-          "controller",
           "orchestrator",
-          "stream_engine",
           "quota_fls",
-          "datatransfer_db"
-        ],
-        "note": "DataExchangeOrchestrator checks SHA-256 template hashes, reserves IQuotaCounterService leases, and enforces FLS."
-      },
-      {
-        "id": "entity_providers_fanout",
-        "label": "4. 10 Entity Providers (CRM/Party/Auth)",
-        "focus": [
-          "orchestrator",
           "crm_providers",
           "party_provider",
           "identity_provider"
         ],
-        "note": "Ten IEntityDataExchangeProvider contracts consume normalized currency, E.164 phone, email, enum, and cf:* custom fields."
+        "note": "Reserves atomic edition quota leases, enforces FLS and RoleAssignabilityGuard, and batches across 10 domain providers."
       },
       {
-        "id": "partial_commit_storage",
-        "label": "5. Partial Commit & Search/Status DB",
+        "id": "portal_crud_sileo",
+        "label": "5. Portal Studio, CRUD & Sileo",
         "focus": [
+          "client_studio",
+          "controller",
           "orchestrator",
-          "stream_engine",
           "datatransfer_db",
           "blob_storage"
         ],
-        "note": "Valid chunks commit atomically with ProcessedRows updates and Search/Status filtering while errors export to rejected .xlsx."
+        "note": "z-900 Portal Studio, z-950 Normalizer Popover, z-960 Exit Guard, unified ⋯ CRUD menus, CardGrid slabs, and dx-job-{id} toasts."
       }
     ]
   },
@@ -71,30 +73,30 @@
     {
       "id": "client_studio",
       "type": "frontend",
-      "label": "Frontend Studio & Admin",
-      "sublabel": "Dropdown + Popover + 3 Routes",
+      "label": "Portal Studio & CRUD",
+      "sublabel": "z-900 Portal + ⋯ Menu + Sileo",
       "tag": "5-Layer MVVM",
       "pos": [
         40,
         230
       ],
       "size": [
-        165,
+        170,
         64
       ]
     },
     {
       "id": "owasp_validator",
       "type": "security",
-      "label": "OWASP + O(n) Normalizer",
-      "sublabel": "Validator & ValueNormalizer.cs",
-      "tag": "ReDoS-Free MENA",
+      "label": "OWASP & 17-Rule Engine",
+      "sublabel": "O(n) MENA + Date/TZ Normalizer",
+      "tag": "ReDoS-Free O(n)",
       "pos": [
         285,
         80
       ],
       "size": [
-        170,
+        175,
         64
       ]
     },
@@ -109,7 +111,7 @@
         230
       ],
       "size": [
-        170,
+        175,
         64
       ]
     },
@@ -124,7 +126,7 @@
         380
       ],
       "size": [
-        170,
+        175,
         64
       ]
     },
@@ -132,14 +134,14 @@
       "id": "stream_engine",
       "type": "backend",
       "label": "SpreadsheetStreamEngine",
-      "sublabel": "SpreadsheetStreamEngine.cs",
-      "tag": "3-Tab OpenXML",
+      "sublabel": "3-Tab OpenXML & Multi-Sheet",
+      "tag": "Streaming I/O",
       "pos": [
         545,
         80
       ],
       "size": [
-        170,
+        175,
         64
       ]
     },
@@ -147,14 +149,14 @@
       "id": "orchestrator",
       "type": "backend",
       "label": "DataExchangeOrchestrator",
-      "sublabel": "Concurrency & Chunk Commit",
+      "sublabel": "5-Sheet DAG & sessionKeys",
       "tag": "RowVersion Safe",
       "pos": [
         545,
         215
       ],
       "size": [
-        170,
+        175,
         96
       ]
     },
@@ -169,22 +171,22 @@
         380
       ],
       "size": [
-        170,
+        175,
         64
       ]
     },
     {
       "id": "crm_providers",
       "type": "backend",
-      "label": "CRM Providers (5 Entities)",
-      "sublabel": "Lead/Deal/Account/Contact/Act",
-      "tag": "5 Providers",
+      "label": "CRM DAG Providers (5)",
+      "sublabel": "Acc->Con->Lead->Opp->Act",
+      "tag": "Topological DAG",
       "pos": [
         825,
         40
       ],
       "size": [
-        175,
+        180,
         64
       ]
     },
@@ -192,14 +194,14 @@
       "id": "party_provider",
       "type": "backend",
       "label": "Party Providers (3)",
-      "sublabel": "Person/Org/party.contact-point",
+      "sublabel": "Person/Org/contact-point",
       "tag": "3 Providers",
       "pos": [
         825,
         145
       ],
       "size": [
-        175,
+        180,
         64
       ]
     },
@@ -207,14 +209,14 @@
       "id": "identity_provider",
       "type": "security",
       "label": "Identity Providers (2)",
-      "sublabel": "User & Admin Onboarding Vault",
+      "sublabel": "User/Admin Guard & Vault",
       "tag": "2 Providers",
       "pos": [
         825,
         231
       ],
       "size": [
-        175,
+        180,
         64
       ]
     },
@@ -222,14 +224,14 @@
       "id": "datatransfer_db",
       "type": "database",
       "label": "DataTransferDbContext",
-      "sublabel": "datatransfer schema (Jobs/Err)",
+      "sublabel": "datatransfer schema (Jobs)",
       "tag": "ProcessedRows DB",
       "pos": [
         825,
         355
       ],
       "size": [
-        175,
+        180,
         64
       ]
     },
@@ -237,14 +239,14 @@
       "id": "blob_storage",
       "type": "cloud",
       "label": "IBlobStorage Vault",
-      "sublabel": "Staged & Rejected .xlsx Blobs",
+      "sublabel": "Staged & Rejected .xlsx",
       "tag": "Encrypted Vault",
       "pos": [
         825,
         460
       ],
       "size": [
-        175,
+        180,
         64
       ]
     }
@@ -269,7 +271,7 @@
     },
     {
       "kind": "security-group",
-      "label": "Streaming Orchestration, MENA Normalizer & Quota Core",
+      "label": "5-Sheet Topological DAG, MENA Normalizer & Quota Core",
       "wraps": [
         "stream_engine",
         "orchestrator",
@@ -289,7 +291,7 @@
       "id": "controller-to-owasp",
       "from": "controller",
       "to": "owasp_validator",
-      "label": "OWASP + normalize",
+      "label": "OWASP + 17 rules",
       "variant": "security"
     },
     {
@@ -331,7 +333,7 @@
       "id": "orchestrator-to-crm",
       "from": "orchestrator",
       "to": "crm_providers",
-      "label": "CRM batch",
+      "label": "5-sheet DAG",
       "variant": "emphasis"
     },
     {
@@ -366,34 +368,34 @@
   "cards": [
     {
       "dot": "rose",
-      "title": "OWASP Gate & Linear-Time O(n) MENA Normalization Engine",
+      "title": "OWASP Gate & 17-Rule O(n) MENA Normalization Engine",
       "items": [
         "OwaspSpreadsheetSecurityValidator blocks macro archives, enforces ZIP ratio ceilings, neutralizes formula triggers, and marks CreatedAt/UpdatedAt as ExportOnly.",
-        "SpreadsheetValueNormalizer executes 17 deterministic DataExchangeTransformRule transforms (N/A nulls, Tashkeel/Tatweel, accounting/Euro numbers, E.164 phones, IANA timezones) with zero user regex."
-      ]
-    },
-    {
-      "dot": "cyan",
-      "title": "Worker Tenant Snapshot & Concurrency Cancellation Safety",
-      "items": [
-        "DataExchangeOrchestrator loads queued worker jobs with .IgnoreQueryFilters() (!IsDeleted) before entering DataExchangeAmbientContext.Begin(snapshot).",
-        "DataExchangeOrchestrator.Execution.cs catches DbUpdateConcurrencyException during concurrent POST /jobs/{id}/cancel races, reloads RowVersion, and reconciles quota holds."
-      ]
-    },
-    {
-      "dot": "emerald",
-      "title": "Compact Toolbar, Normalization Popover & 3-Route Admin MVVM",
-      "items": [
-        "DataExchangeToolbarActions renders one @core/ui/dropdown-menu trigger inside CrmSectionHeader (hideToolbarActions: true in CRUD), eliminating filter bar overflow.",
-        "The 3-route @modules/data-transfer module (/admin/data-exchange, /jobs, /presets) renders GenericCrudView<T> with Search/Status filtering and ColumnNormalizationPopover previews."
+        "SpreadsheetValueNormalizer runs 17 deterministic DataExchangeTransformRule options (N/A nulls, Tashkeel/Tatweel, accounting/Euro decimals, E.164 phones, DateFormat, SourceTimeZoneId) in O(n) with zero user regexes."
       ]
     },
     {
       "dot": "amber",
-      "title": "3-Tab OpenXML Engine, 10 Providers & Ephemeral Onboarding Vault",
+      "title": "5-Sheet CRM Topological DAG & Cross-Sheet Session Lookups",
       "items": [
-        "SpreadsheetStreamEngine embeds SHA-256 compatibility locks, Reference Lookups, and cf:* custom fields across 5 CRM, 3 PartyKernel, and 2 Identity providers.",
-        "DataTransferImmediateWorker dispatches via Channel<Guid> (<50ms), DataExchangeFloatingDock polls every 2s, and bulk Identity imports return one-time passwords."
+        "DataExchangeOrchestrator.Execution.cs orders multi-sheet CRM workbooks topologically (crm.account -> crm.contact -> crm.lead -> crm.opportunity -> crm.activity) and resolves parent FKs via sessionResolvedKeys plus Email/Title/ExternalKey natural identifiers.",
+        "Pass-2 self-FK links resolve intra-sheet hierarchies while invalid parent rows trigger cascade deferral and export into a downloadable rejected .xlsx workbook."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Worker Tenant Snapshot, Concurrency Cancel & Localized Notifications",
+      "items": [
+        "DataExchangeOrchestrator claims queued jobs via .IgnoreQueryFilters() (!IsDeleted) before entering DataExchangeAmbientContext.Begin(snapshot) with IsSuperAdmin clamped false.",
+        "Concurrent POST /jobs/{id}/cancel races catch DbUpdateConcurrencyException, reload RowVersion, reconcile QuotaReservationLease, and emit human-readable DisplayNameEn notifications."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Portal Studio (z-900), Unified ⋯ CRUD Menus & Sileo Morphing",
+      "items": [
+        "DataExchangeStudioOverlay mounts via createPortal at z-[900] with StudioConfirmExitDialog (z-[960]), z-[950] error tooltips, and a context-smart scrollable ColumnNormalizationPopover.",
+        "All 8 Admin, CRM, and Party views standardize on GenericCrudView getActions ⋯ dropdowns and flat matte Nexus CardGrid slabs, while sileo-toast morphs dx-job-{id} pills in place."
       ]
     }
   ]

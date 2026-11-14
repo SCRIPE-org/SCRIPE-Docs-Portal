@@ -5,16 +5,16 @@
   "status": "pass",
   "type": "explainer",
   "quality": "showcase",
-  "startedAt": "2026-11-14T02:36:37.875Z",
+  "startedAt": "2026-11-14T10:55:01.665Z",
   "specification": {
-    "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-data-exchange-studio.archify.md",
-    "sha256": "d3e425c7aaaa8be178e7437568b8fde38f62c7374e3c64655be3f6eb7593ba0f",
-    "bytes": 15916
+    "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-data-exchange-studio.archify.md",
+    "sha256": "144375138be02801ff0c0f942f2d4716e0e1c13de6231de50dfe721cfc49f00c",
+    "bytes": 16108
   },
   "artifact": {
-    "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-studio.html",
-    "sha256": "1e533e0fc8ed2fc500c7e2dc23f94e67c99fbbb28634f18044a62fc18a586b3e",
-    "bytes": 666503
+    "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-studio.html",
+    "sha256": "47917f06272bf94ed3d452a30bee743bdf688c857a4e96970828cee2ba80dc52",
+    "bytes": 1435611
   },
   "stages": {
     "browser-check": {
@@ -31,8 +31,8 @@
         "C:\\Users\\seifmoustafa\\.agents\\skills\\archify\\bin\\archify.mjs",
         "deliver",
         "explainer",
-        "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-data-exchange-studio.archify.md",
-        "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-studio.html",
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-data-exchange-studio.archify.md",
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-studio.html",
         "--quality",
         "showcase",
         "--json"
@@ -42,8 +42,8 @@
         "ok": true,
         "command": "validate",
         "specification": {
-          "sha256": "d3e425c7aaaa8be178e7437568b8fde38f62c7374e3c64655be3f6eb7593ba0f",
-          "bytes": 15916
+          "sha256": "144375138be02801ff0c0f942f2d4716e0e1c13de6231de50dfe721cfc49f00c",
+          "bytes": 16108
         },
         "validation": {
           "checksPassed": 4,
@@ -58,45 +58,59 @@
     "deliver": {
       "status": "pass",
       "exitCode": 0,
-      "durationMs": 1225,
+      "durationMs": 2090,
       "command": [
         "C:\\Program Files\\nodejs\\node.exe",
         "C:\\Users\\seifmoustafa\\.agents\\skills\\archify\\bin\\archify.mjs",
         "deliver",
         "explainer",
-        "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-data-exchange-studio.archify.md",
-        "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-studio.html",
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-data-exchange-studio.archify.md",
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-studio.html",
         "--quality",
         "showcase",
         "--json"
       ],
       "receipt": {
         "schemaVersion": 1,
-        "receiptId": "9c05a742-30ee-4ea3-9fb3-2db814ba986d",
+        "receiptId": "6e56dc94-45bc-4648-bb38-2a1155e77ffc",
         "ok": true,
         "command": "deliver",
         "type": "explainer",
-        "input": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-data-exchange-studio.archify.md",
+        "input": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-data-exchange-studio.archify.md",
         "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-studio.html",
         "explainer": {
-          "preparedSha256": "aa7e8111bbf1e68e5bd4d3ca8aec48c53ef0e855a1c06bbaf3ff18ac8045e4e3",
+          "preparedSha256": "5bb58b23b1dfb03dbec6def1741624e9e6e6b252f01243b7694bca3ee2f8f1ca",
           "dependencies": [
             {
               "kind": "diagram-spec",
-              "id": "data-exchange-sequence",
+              "id": "dx-portal-sequence",
               "inline": true,
-              "sha256": "91cfebcc968e3452878e12098cf2584741cbf56579834c7146027e0b518aadbc",
-              "bytes": 3331
+              "sha256": "7d98dd8ba7a57e7e48f73b82f59a74b8a3010451dbf2fbc4f906ab6ed4469788",
+              "bytes": 2240
+            },
+            {
+              "kind": "diagram-spec",
+              "id": "exit-guard-flow",
+              "inline": true,
+              "sha256": "e3b372438e98f5e7ff705032dbe24c1e82fbe17a7cba90f12a83bff925bc39a3",
+              "bytes": 1720
+            },
+            {
+              "kind": "diagram-spec",
+              "id": "crm-dag-flow",
+              "inline": true,
+              "sha256": "1205e6ae1f0311c4c23ee23715603227126a6af7304b3a486af3341cab8a02b1",
+              "bytes": 1740
             }
           ]
         },
         "specification": {
-          "sha256": "d3e425c7aaaa8be178e7437568b8fde38f62c7374e3c64655be3f6eb7593ba0f",
-          "bytes": 15916
+          "sha256": "144375138be02801ff0c0f942f2d4716e0e1c13de6231de50dfe721cfc49f00c",
+          "bytes": 16108
         },
         "artifact": {
-          "sha256": "1e533e0fc8ed2fc500c7e2dc23f94e67c99fbbb28634f18044a62fc18a586b3e",
-          "bytes": 666503
+          "sha256": "47917f06272bf94ed3d452a30bee743bdf688c857a4e96970828cee2ba80dc52",
+          "bytes": 1435611
         },
         "validation": {
           "checksPassed": 4,
@@ -122,28 +136,28 @@
     "check": {
       "status": "pass",
       "exitCode": 0,
-      "durationMs": 656,
+      "durationMs": 1401,
       "command": [
         "C:\\Program Files\\nodejs\\node.exe",
         "C:\\Users\\seifmoustafa\\.agents\\skills\\archify\\bin\\archify.mjs",
         "check",
-        "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-studio.html",
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-studio.html",
         "--require-provenance"
       ],
       "receipt": {
         "ok": true,
-        "file": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-studio.html",
+        "file": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-studio.html",
         "family": "explainer",
         "artifact": {
-          "sha256": "1e533e0fc8ed2fc500c7e2dc23f94e67c99fbbb28634f18044a62fc18a586b3e",
-          "bytes": 666503
+          "sha256": "47917f06272bf94ed3d452a30bee743bdf688c857a4e96970828cee2ba80dc52",
+          "bytes": 1435611
         },
         "checks": [
           {
             "name": "explainer_structure",
             "ok": true,
             "details": [
-              "78 unique DOM IDs"
+              "111 unique DOM IDs"
             ]
           },
           {
@@ -155,14 +169,16 @@
             "name": "explainer_dependencies",
             "ok": true,
             "details": [
-              "1 frozen dependencies"
+              "3 frozen dependencies"
             ]
           },
           {
             "name": "explainer_native_diagrams",
             "ok": true,
             "details": [
-              "data-exchange-sequence: pass"
+              "dx-portal-sequence: pass",
+              "exit-guard-flow: pass",
+              "crm-dag-flow: pass"
             ]
           }
         ],
@@ -177,13 +193,13 @@
           "issues": [],
           "nativeDiagrams": [
             {
-              "id": "data-exchange-sequence",
+              "id": "dx-portal-sequence",
               "receipt": {
                 "ok": true,
-                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-sTyMGj\\child.html",
+                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-4g8jRK\\child.html",
                 "artifact": {
-                  "sha256": "fe16477a305915301f1b5437e153f34658558e4939bdfae919d8db0cc61c6db1",
-                  "bytes": 841393
+                  "sha256": "d500bda5f91f05f3582ae2e8bd087e5c653c7a1b19969f3c688903a096b84c93",
+                  "bytes": 834951
                 },
                 "checks": [
                   {
@@ -253,12 +269,12 @@
                     "minLabelRouteClearance": 28,
                     "desktopReadabilityIssues": 0,
                     "viewportHeightIssues": 0,
-                    "minProjectedNodeTextPx": 9.126594700686947,
+                    "minProjectedNodeTextPx": 10.5,
                     "maxBends": 0,
                     "routesOverSuggestedBends": 0,
                     "maxStretch": 1,
                     "routesOverSuggestedStretch": 0,
-                    "minSegmentPx": 121.5,
+                    "minSegmentPx": 127.8,
                     "minInteriorSegmentPx": null,
                     "shortSegmentCount": 0,
                     "shortEndpointSegmentCount": 0,
@@ -282,13 +298,13 @@
                   "sequenceColumnSpace": {
                     "measured": true,
                     "columnFit": "spread",
-                    "participantCount": 7,
-                    "occupiedRight": 979,
+                    "participantCount": 6,
+                    "occupiedRight": 880.1,
                     "viewBoxLeft": 0,
-                    "canvasWidth": 1019,
-                    "emptyRightPx": 40,
-                    "emptyRightRatio": 0.039,
-                    "typicalParticipantWidth": 104,
+                    "canvasWidth": 920,
+                    "emptyRightPx": 39.9,
+                    "emptyRightRatio": 0.043,
+                    "typicalParticipantWidth": 109,
                     "reviewSuggested": false
                   },
                   "desktopReadability": {
@@ -303,11 +319,265 @@
                     "hardFloorMet": true,
                     "minimumOwner": {
                       "kind": "node",
-                      "id": "studio"
+                      "id": "popover"
                     },
-                    "minimumSourceTextPx": 10,
-                    "minimumProjectedTextPx": 9.126594700686947,
-                    "semanticTextCount": 23
+                    "minimumSourceTextPx": 10.5,
+                    "minimumProjectedTextPx": 10.5,
+                    "semanticTextCount": 15
+                  },
+                  "issues": []
+                }
+              }
+            },
+            {
+              "id": "exit-guard-flow",
+              "receipt": {
+                "ok": true,
+                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-y8bPtz\\child.html",
+                "artifact": {
+                  "sha256": "745289920bf85f0f0ff852acf7b7c29db73fd2dc0edd38d81c147e622d36f269",
+                  "bytes": 835628
+                },
+                "checks": [
+                  {
+                    "name": "single_svg",
+                    "ok": true,
+                    "details": [
+                      "found 1 <svg> block(s)"
+                    ]
+                  },
+                  {
+                    "name": "finite_svg",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "orthogonal_arrows",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "label_route_clearance",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_crossings",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_corridors",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "container_border_runs",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "route_rhythm",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "legend_clearance",
+                    "ok": true,
+                    "details": []
+                  }
+                ],
+                "composition": {
+                  "schemaVersion": 1,
+                  "profile": "showcase",
+                  "status": "pass",
+                  "summary": {
+                    "errors": 0,
+                    "warnings": 0
+                  },
+                  "metrics": {
+                    "properCrossings": 0,
+                    "resolvedCrossovers": 0,
+                    "ambiguousCorridors": 0,
+                    "arrowheadCollisions": 0,
+                    "containerBorderRuns": 0,
+                    "labelRouteClearanceIssues": 0,
+                    "labelCanvasOverflowIssues": 0,
+                    "minLabelRouteClearance": 22,
+                    "desktopReadabilityIssues": 0,
+                    "viewportHeightIssues": 0,
+                    "minProjectedNodeTextPx": 6.91449814126394,
+                    "maxBends": 0,
+                    "routesOverSuggestedBends": 0,
+                    "maxStretch": 1,
+                    "routesOverSuggestedStretch": 0,
+                    "minSegmentPx": 8,
+                    "minInteriorSegmentPx": null,
+                    "shortSegmentCount": 4,
+                    "shortEndpointSegmentCount": 4,
+                    "shortInteriorSegmentCount": 0,
+                    "microSegmentCount": 0
+                  },
+                  "suggestedLimits": {
+                    "bendsPerRelationship": 2,
+                    "stretch": 1.35,
+                    "segmentPx": 16,
+                    "microSegmentPx": 8
+                  },
+                  "routeReview": {
+                    "crossings": [],
+                    "detours": []
+                  },
+                  "leadingSpace": {
+                    "measured": false,
+                    "reviewSuggested": false
+                  },
+                  "desktopReadability": {
+                    "budgetBasis": "legacy-930",
+                    "readerContract": "declared-wide-v1",
+                    "availableDiagramWidth": 930,
+                    "actualBudgetPx": 930,
+                    "limit": "legacy",
+                    "requestedTargetPx": null,
+                    "requestedTargetMet": null,
+                    "hardFloorPx": 6,
+                    "hardFloorMet": true,
+                    "minimumOwner": {
+                      "kind": "edge",
+                      "id": "dirty_gate-to-clean_exit-1",
+                      "from": "dirty_gate",
+                      "to": "clean_exit"
+                    },
+                    "minimumSourceTextPx": 8,
+                    "minimumProjectedTextPx": 6.91449814126394,
+                    "semanticTextCount": 13
+                  },
+                  "issues": []
+                }
+              }
+            },
+            {
+              "id": "crm-dag-flow",
+              "receipt": {
+                "ok": true,
+                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-0yw2r8\\child.html",
+                "artifact": {
+                  "sha256": "94f70c5e8ce7526f33cc4531d15b4109a00007fc35d78082fa772e0056440570",
+                  "bytes": 836141
+                },
+                "checks": [
+                  {
+                    "name": "single_svg",
+                    "ok": true,
+                    "details": [
+                      "found 1 <svg> block(s)"
+                    ]
+                  },
+                  {
+                    "name": "finite_svg",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "orthogonal_arrows",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "label_route_clearance",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_crossings",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_corridors",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "container_border_runs",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "route_rhythm",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "legend_clearance",
+                    "ok": true,
+                    "details": []
+                  }
+                ],
+                "composition": {
+                  "schemaVersion": 1,
+                  "profile": "showcase",
+                  "status": "pass",
+                  "summary": {
+                    "errors": 0,
+                    "warnings": 0
+                  },
+                  "metrics": {
+                    "properCrossings": 0,
+                    "resolvedCrossovers": 0,
+                    "ambiguousCorridors": 0,
+                    "arrowheadCollisions": 0,
+                    "containerBorderRuns": 0,
+                    "labelRouteClearanceIssues": 0,
+                    "labelCanvasOverflowIssues": 0,
+                    "minLabelRouteClearance": 33,
+                    "desktopReadabilityIssues": 0,
+                    "viewportHeightIssues": 0,
+                    "minProjectedNodeTextPx": 6.714801444043322,
+                    "maxBends": 0,
+                    "routesOverSuggestedBends": 0,
+                    "maxStretch": 1,
+                    "routesOverSuggestedStretch": 0,
+                    "minSegmentPx": 8,
+                    "minInteriorSegmentPx": null,
+                    "shortSegmentCount": 2,
+                    "shortEndpointSegmentCount": 2,
+                    "shortInteriorSegmentCount": 0,
+                    "microSegmentCount": 0
+                  },
+                  "suggestedLimits": {
+                    "bendsPerRelationship": 2,
+                    "stretch": 1.35,
+                    "segmentPx": 16,
+                    "microSegmentPx": 8
+                  },
+                  "routeReview": {
+                    "crossings": [],
+                    "detours": []
+                  },
+                  "leadingSpace": {
+                    "measured": false,
+                    "reviewSuggested": false
+                  },
+                  "desktopReadability": {
+                    "budgetBasis": "legacy-930",
+                    "readerContract": "declared-wide-v1",
+                    "availableDiagramWidth": 930,
+                    "actualBudgetPx": 930,
+                    "limit": "legacy",
+                    "requestedTargetPx": null,
+                    "requestedTargetMet": null,
+                    "hardFloorPx": 6,
+                    "hardFloorMet": true,
+                    "minimumOwner": {
+                      "kind": "edge",
+                      "id": "sess_map-to-sh_opp-1",
+                      "from": "sess_map",
+                      "to": "sh_opp"
+                    },
+                    "minimumSourceTextPx": 8,
+                    "minimumProjectedTextPx": 6.714801444043322,
+                    "semanticTextCount": 14
                   },
                   "issues": []
                 }
@@ -317,7 +587,7 @@
         },
         "diagnostics": [],
         "provenance": "current",
-        "deliveryReceiptId": "9c05a742-30ee-4ea3-9fb3-2db814ba986d"
+        "deliveryReceiptId": "6e56dc94-45bc-4648-bb38-2a1155e77ffc"
       }
     }
   },
@@ -331,8 +601,8 @@
     "summaryReceipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-studio.finalize-summary.json"
   },
   "visualReview": "not-requested",
-  "finishedAt": "2026-11-14T02:36:40.127Z",
-  "durationMs": 2252,
+  "finishedAt": "2026-11-14T10:55:05.875Z",
+  "durationMs": 4209,
   "update": {
     "status": "current",
     "installedVersion": "3.2.0",

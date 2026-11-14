@@ -1,131 +1,156 @@
-# How does SCRIPE Data Exchange Studio Deliver MENA Normalization, Streaming Excel Imports, and Partial Commits? {#scripe-data-exchange-studio}
+# How does SCRIPE Data Exchange Studio Unify Portal UX, 17-Rule MENA Normalization, 5-Sheet DAG Imports, and CRUD Actions? {#scripe-data-exchange-studio}
 
-SCRIPE Data Exchange Studio unifies enterprise spreadsheet imports, exports, and background execution across CRM, PartyKernel, and Identity modules. It pairs a **compact 1-button `Data Exchange` dropdown**, a **4-step Next.js 16 wizard with live normalization preview**, a **3-route Admin `data-transfer` module**, and an **AstraFlow 2.3.0 streaming engine**.[](source:dx_overview)
+SCRIPE Data Exchange Studio unifies **full-viewport portal UX**, 17-rule MENA normalization, 5-sheet topological CRM migrations, and `GenericCrudView` action menus across CRM, PartyKernel, and Identity.[](source:dx_overview)
 
-- The backend `OwaspSpreadsheetSecurityValidator` verifies magic bytes, blocks ZIP bombs, neutralizes formula payloads, and locks audit timestamps as `ExportOnly` via `IsImportDeniedField`.[](source:dx_owasp)
-- `SpreadsheetValueNormalizer` runs deterministic `O(n)` MENA and enterprise transforms with zero user regexes, while `ColumnNormalizationPopover` renders live `Raw -> Normalized` previews in Step 2.[](source:dx_normalizer)
-- `DataTransferImmediateWorker` dispatches via `Channel<Guid>`, applies `.IgnoreQueryFilters()` before `DataExchangeAmbientContext.Begin(snapshot)`, and handles `DbUpdateConcurrencyException` safely on concurrent cancellation.[](source:dx_worker)
-- `GenericCrudView` pages mount one compact `@core/ui/dropdown-menu` `Data Exchange` trigger inside `CrmSectionHeader`, while `/admin/data-exchange` provides 3 dedicated `GenericCrudView<T>` routes.[](source:dx_admin_mvvm)
+- `DataExchangeStudioOverlay` mounts via `createPortal` at `z-[900]` with body scroll lock and `StudioConfirmExitDialog` (`z-[960]`) guarding unsaved work.[](source:dx_studio_ui)
+- `ColumnNormalizationPopover` (`z-[950]`) exposes all 17 `O(n)` `DataExchangeTransformRule` options in a context-smart scrollable body paired with Step 2 `@core/ui/tooltip` diagnostics.[](source:dx_normalizer)
+- `DataExchangeOrchestrator` executes 5-sheet CRM topological DAG imports (`Account -> Contact -> Lead -> Opportunity -> Activity`) while `sileo-toast` morphs `dx-job-{id}` states in place.[](source:dx_orchestrator)
+- All 8 Admin, CRM, and Party views standardize on `GenericCrudView` `getActions` `⋯` dropdowns and flat matte Nexus `CardGrid` slabs.[](source:dx_admin_mvvm)
 
-@answer scope="SCRIPE Data Exchange Studio · O(n) MENA Normalization · Compact Dropdown Toolbar · 3-Route Admin MVVM · Immediate Worker Tenant Fix · OWASP Security · 10 Entity Providers"
+@answer scope="Portal Studio z-900 · 17-Rule Normalizer · 5-Sheet DAG · Unified CRUD"
 @meta locale=en style=editorial quality_profile=showcase
 @source dx_overview title="SCRIPE Data Exchange Studio Architecture Overview" url=https://docs.scripe.org/architecture/data-exchange-studio
-@source dx_owasp title="OWASP Spreadsheet Security & Formula Neutralization" url=https://docs.scripe.org/security/owasp-spreadsheet-validator
-@source dx_normalizer title="O(n) MENA & Enterprise Normalization Engine" url=https://docs.scripe.org/backend/spreadsheet-value-normalizer
-@source dx_stream title="OpenXML SpreadsheetStreamEngine & 3-Tab Templates" url=https://docs.scripe.org/backend/spreadsheet-stream-engine
+@source dx_studio_ui title="Full-Viewport Portal Studio & StudioConfirmExitDialog" url=https://docs.scripe.org/frontend/data-exchange-studio-overlay
+@source dx_normalizer title="17-Rule O(n) MENA & Enterprise Normalization Engine" url=https://docs.scripe.org/backend/spreadsheet-value-normalizer
+@source dx_orchestrator title="5-Sheet Topological DAG & DataExchangeOrchestrator" url=https://docs.scripe.org/backend/data-exchange-orchestrator
 @source dx_worker title="DataTransferImmediateWorker Tenant Snapshot & Concurrency" url=https://docs.scripe.org/backend/data-transfer-immediate-worker
-@source dx_orchestrator title="DataExchangeOrchestrator Dry-Run & Partial Commit Engine" url=https://docs.scripe.org/backend/data-exchange-orchestrator
-@source dx_providers title="10 Pluggable IEntityDataExchangeProvider Contracts" url=https://docs.scripe.org/backend/entity-data-exchange-providers
-@source dx_quota_fls title="Atomic Edition Quota Leases & Field-Level Security" url=https://docs.scripe.org/security/quota-and-fls-governance
-@source dx_studio_ui title="Compact Dropdown Toolbar & ColumnNormalizationPopover" url=https://docs.scripe.org/frontend/data-exchange-studio-overlay
-@source dx_admin_mvvm title="3-Route Admin DataTransfer 5-Layer MVVM Module" url=https://docs.scripe.org/frontend/admin-data-transfer-module
+@source dx_owasp title="OWASP Spreadsheet Security & Formula Neutralization" url=https://docs.scripe.org/security/owasp-spreadsheet-validator
+@source dx_admin_mvvm title="Unified GenericCrudView Actions & Executive Nexus CardGrid" url=https://docs.scripe.org/frontend/admin-data-transfer-module
+@source dx_sileo title="Idiomatic sileo-toast ID-Morphing & Localized Entity Names" url=https://docs.scripe.org/frontend/data-exchange-sileo-lifecycle
 
-## How does the 4-step Data Exchange Studio pipeline normalize, validate, and commit spreadsheets? {#data-exchange-pipeline}
+## How does the Full-Viewport Portal Studio (`z-[900]`) coordinate validation, worker execution, and Sileo morphing? {#portal-studio-pipeline}
 
-@sequence id=data-exchange-sequence title="Streaming Data Exchange, O(n) MENA Normalization, Tenant Snapshot & Partial Commit Sequence"
-| actor user | Tenant Operator | external |
-| actor studio | Studio & Popover | frontend |
-| actor owasp | OwaspValidator | security |
+@sequence id=dx-portal-sequence title="Portal Studio (z-900), 17-Rule Popover (z-950), Worker Context & Sileo Morphing"
+| actor operator | Tenant Operator | external |
+| actor portal | Portal Studio | frontend |
+| actor popover | Normalizer z-950 | frontend |
+| actor orchestrator | DAG Orchestrator | backend |
 | actor worker | ImmediateWorker | backend |
-| actor orchestrator | Orchestrator | backend |
-| actor quota | QuotaService | security |
-| actor db | DataTransferDb | database |
-| phase | 1. Compact Dropdown Trigger & OWASP Stream Gate |
-| user | studio | Open Data Exchange Dropdown & Upload Workbook | emphasis |
-| studio | owasp | POST /api/v1/data-transfer/{entity}/dry-run | security |
-| owasp | orchestrator | Verify Magic Bytes, ZIP Ratio & Sanitize Formulas | emphasis |
-| phase | 2. MENA Normalization, Live Preview & Dry-Run |
-| studio | orchestrator | Configure 17-Rule Transform & Preview Normalized Values | emphasis |
-| orchestrator | db | Run O(n) Normalizer & 10-Provider Dry-Run | emphasis |
-| db | studio | Return Dry-Run Summary & Custom Field cf:\* Diagnostics | return |
-| phase | 3. Channel Worker, Tenant Snapshot & Cancel Safety |
-| user | studio | Enqueue Commit or Export Job (POST /export/jobs) | emphasis |
-| studio | worker | Enqueue Job ID via Bounded Channel Queue | emphasis |
-| worker | orchestrator | Load Job via IgnoreQueryFilters & Enter AmbientContext | emphasis |
-| orchestrator | quota | Reserve Atomic Edition Quota Lease | security |
-| orchestrator | db | Commit Chunks & Guard DbUpdateConcurrencyException | emphasis |
-| db | studio | Poll Progress (2s) to FloatingDock & Progress Bar | return |
-| phase | 4. Recovery Loop, Ephemeral Vault & Admin Routes |
-| user | studio | Optional: Cancel Job (POST /jobs/{id}/cancel) | security |
-| studio | worker | Reload Cancelled Row & Reconcile Reserved Quota | security |
-| orchestrator | db | Persist Valid Rows + Generate Rejected .xlsx | emphasis |
-| db | studio | Sileo Alerts, Ephemeral Vault & /admin/data-exchange | return |
+| actor sileo | Sileo & Dock | frontend |
+| phase | 1. Full-Viewport Portal Launch & OWASP Inspect |
+| operator | portal | Open Data Exchange Dropdown & Mount Portal (z-900) | emphasis |
+| portal | orchestrator | Upload .xlsx for Magic-Byte & ZIP-Ratio Inspect | security |
+| orchestrator | portal | Return Sheets, Sample Rows & Compatibility Hash | return |
+| phase | 2. Tooltip Validation & 17-Rule Context-Smart Popover |
+| operator | popover | Hover Incompatible Row Tooltip or Open Normalizer | emphasis |
+| popover | portal | Apply Smart Preset & Preview Raw -> Transformed | return |
+| portal | orchestrator | Run 5-Sheet DAG Dry-Run & Edition Quota Check | emphasis |
+| phase | 3. Tenant-Safe Worker & Sileo ID-Morphing Lifecycle |
+| portal | worker | Enqueue Job & Emit sileo-toast (id: dx-job-{id}) | emphasis |
+| worker | orchestrator | Query IgnoreQueryFilters & Enter AmbientContext | security |
+| orchestrator | sileo | Morph dx-job-{id} Pill (Queued -> Running -> Done) | return |
 
-@steps id=data-exchange-steps
-| st_upload | Compact Dropdown & Upload | Operator opens one compact Data Exchange dropdown inside CrmSectionHeader or GenericCrudView. | data-exchange-sequence | user |
-| st_owasp | OWASP Gate & Timestamp Lock | Validator verifies file signatures, blocks ZIP bombs, and denies inbound audit timestamps. | data-exchange-sequence | owasp |
-| st_norm | O(n) MENA Normalizer & Popover | ColumnNormalizationPopover previews 17 DataExchangeTransformRule transforms before running dry-run validation. | data-exchange-sequence | orchestrator |
-| st_worker | Tenant-Safe Channel Dispatch | ImmediateWorker queries pending jobs with IgnoreQueryFilters and enters DataExchangeAmbientContext per job. | data-exchange-sequence | worker |
-| st_commit | Concurrency-Safe Commit & Recovery | Orchestrator reloads on DbUpdateConcurrencyException, reconciles quota leases, and exports rejected rows. | data-exchange-sequence | db |
+@steps id=dx-portal-steps
+| st_portal | Portal Studio | Mounts on document.body at z-900 with w-screen h-screen overflow-hidden and body scroll lock. | dx-portal-sequence | portal |
+| st_popover | Normalizer z-950 | Layers tooltips, selects, and the 17-rule normalizer at z-950 above the z-900 studio shell. | dx-portal-sequence | popover |
+| st_dag | DAG Orchestrator | Validates OWASP signatures, runs O(n) MENA transforms, and resolves 5-sheet CRM parent keys. | dx-portal-sequence | orchestrator |
+| st_worker | ImmediateWorker | Claims queued jobs with IgnoreQueryFilters and enters DataExchangeAmbientContext per tenant. | dx-portal-sequence | worker |
+| st_sileo | Sileo & Dock | Updates one toast pill in place via id dx-job-{id} using localized entity display names. | dx-portal-sequence | sileo |
 
-The pipeline separates transformation preview from batch persistence through a staged protocol. Operators tune normalization rules and inspect cell diagnostics before committing records.[](source:dx_orchestrator)
+Decomposing the monolithic overlay into eight focused sub-components under `presentation/components/studio/` keeps every file within `250` lines while isolating z-index layers cleanly.[](source:dx_studio_ui)
 
-| Pipeline Stage | Core Component | Execution Behavior | Operational Guarantee |
+| Studio Component | Layer & Elevation | Core Responsibility | UX & Architecture Guarantee |
 | --- | --- | --- | --- |
-| 1. Compact Dropdown & Upload {#stage-template} | `DataExchangeToolbarActions` & `SpreadsheetStreamEngine` | Renders one `@core/ui/dropdown-menu` trigger (`dx-trigger-{entityKey}`) and builds 3-tab `.xlsx` templates | {good:Zero filter-bar overflow} |
-| 2. OWASP & Timestamp Gate {#stage-security} | `OwaspSpreadsheetSecurityValidator` | Blocks macros, ZIP bombs, and formula injection, enforcing `ExportOnly` timestamps | {good:OWASP & ExportOnly locked} |
-| 3. MENA Normalizer & Dry-Run {#stage-normalizer} | `SpreadsheetValueNormalizer` & `DataExchangeOrchestrator` | Runs linear-time `O(n)` MENA transforms and verifies SHA-256 schema compatibility hashes | {good:ReDoS-free preview parity} |
-| 4. Tenant-Safe Worker Queue {#stage-worker} | `DataTransferImmediateWorker` & `DataExchangeAmbientContext` | Dispatches via `Channel<Guid>`, loads jobs with `.IgnoreQueryFilters()`, enters tenant context | {good:Multi-tenant worker safe} |
-| 5. Concurrency & Recovery {#stage-commit} | `DataExchangeOrchestrator` & `DataExchangeFloatingDock` | Reloads cancelled jobs on `DbUpdateConcurrencyException` and exports rejected rows `.xlsx` | {good:Self-service error recovery} |
+| `DataExchangeStudioOverlay` {#st-shell} | `createPortal` (`z-[900]`) | Orchestrates full-screen `w-screen h-screen` shell and locks `document.body` scroll | {good:Zero background bleed} |
+| `StudioHeader` & `StudioStepper` {#st-hdr} | Sticky top bar (`shrink-0`) | Renders localized entity title, 4-step progress pills, and guarded `Close` button | {good:Clear wizard context} |
+| `StudioUploadStep` {#st-s1} | Step 1 body (`flex-1`) | Non-nested dropzone, 3-tab `.xlsx` or `.csv` templates, and multi-sheet mode toggle | {good:WCAG keyboard clean} |
+| `StudioMappingStep` {#st-s2} | Step 2 + `z-[950]` overlays | DAG sheet tabs, jump-to-row error pills, `@core/ui/tooltip` hints, and normalizer trigger | {good:Actionable error guidance} |
+| `StudioDryRunStep` {#st-s3} | Step 3 body (`flex-1`) | Localized `sheetSummaries`, cell diagnostics, and finite edition quota guardrails | {good:Pre-commit certainty} |
+| `StudioResultsStep` {#st-s4} | Step 4 body (`flex-1`) | Partial commit counters, rejected `.xlsx` download, and one-time credential vault | {good:Self-service recovery} |
+| `StudioFooter` {#st-ftr} | Sticky bottom (`shrink-0`) | Guards disabled `Run Dry-Run` CTA with blocker tooltip and handles `Back` routing | {good:Explicit blocker count} |
+| `StudioConfirmExitDialog` {#st-exit} | `@core/ui/alert-dialog` (`z-[960]`) | Intercepts destructive exits with `Keep Editing` vs `Discard & Exit` actions | {good:Zero accidental loss} |
 
-## How does the O(n) MENA & Enterprise Normalization Engine standardize spreadsheet data safely? {#mena-normalization-engine}
+## How do `StudioConfirmExitDialog` and the 17-Rule `ColumnNormalizationPopover` protect operator mappings? {#exit-guard-and-normalizer}
 
-Every spreadsheet cell flows through deterministic linear-time normalization before type parsing or provider persistence. Neither backend C# nor frontend TypeScript accepts user-supplied regular expressions, eliminating ReDoS risks across untrusted uploads.[](source:dx_normalizer)
+@workflow id=exit-guard-flow title="StudioConfirmExitDialog Unsaved-Progress Guard & Lossless Back Navigation"
+| lane nav_lane | Wizard Navigation |
+| lane guard_lane | Unsaved-Progress Guard (z-960) |
+| step1_up | Step 1 Upload | frontend | nav_lane |
+| step2_map | Step 2 Mapping | frontend | nav_lane |
+| step3_dry | Step 3 Dry-Run | frontend | nav_lane |
+| dirty_gate | Unsaved Work? | security | guard_lane |
+| exit_alert | Confirm Exit z-960 | security | guard_lane |
+| clean_exit | Reset or Unmount | external | guard_lane |
+| step1_up > step2_map | inspect | emphasis |
+| step2_map > step3_dry | dry-run | emphasis |
+| step3_dry > step2_map | lossless back | dashed |
+| step2_map > dirty_gate | X or Step 1 | security |
+| dirty_gate > exit_alert | yes | security |
+| dirty_gate > clean_exit | no |
+| exit_alert > clean_exit | discard | security |
 
-| Normalization Capability | Method or Transform Field | Deterministic Transformation Behavior | Supported Edge Cases |
+@steps id=exit-guard-steps
+| eg_s2 | Step 2 Mapping | Holds active column mappings, custom cf: fields, and 17-rule transforms after file inspection. | exit-guard-flow | step2_map |
+| eg_s3 | Step 3 Dry-Run | Pressing Back from Step 3 returns to Step 2 immediately without clearing mappings or prompting. | exit-guard-flow | step3_dry |
+| eg_gate | Unsaved Work? | Triggers on X, Escape, Back from Step 2 to Step 1, Replace File, or un-dismissed credentials. | exit-guard-flow | dirty_gate |
+| eg_alert | Confirm Exit z-960 | Renders above z-900 and z-950 layers with Keep Editing and destructive Discard & Exit buttons. | exit-guard-flow | exit_alert |
+
+Inside Step 2, `ColumnNormalizationPopover` (`w-[440px]`, `max-h-[min(600px,82vh)]`, `z-[950]`) pairs sticky header and live preview bars with an `overflow-y-auto overscroll-contain` body (never `no-scrollbar`). It dynamically promotes the rule group matching `targetDataType` or Arabic sample text to the top with a `Recommended` badge and 1-click **Apply Smart Preset** button.[](source:dx_normalizer)
+
+| Normalizer Group | Exposed `DataExchangeTransformRule` Controls (All 17) | Live Preview & Validation Behavior |
+| --- | --- | --- |
+| Sticky Header & Preview {#norm-sticky} | Target type `<Badge>`, `Reset to Defaults`, and live `rawSample -> transformedSample` box | Simulates all 17 active rules instantaneously in TypeScript before dry-run |
+| Context-Smart Priority {#norm-smart} | Dynamic top section with `Recommended` badge and 1-click `Apply Smart Preset` action | Prioritizes Temporal, Numeric, Phone, Email, or Arabic rules per column |
+| Whitespace, Unicode & Nulls {#norm-core} | `trim`, `collapseWhitespace`, `normalizeUnicodeCompatibility`, `canonicalizeNullTokens`, `caseMode` (`uppercase`/`lowercase`), `defaultValue` | Converts `N/A`, `غير متاح`, NBSP, and zero-width chars deterministically in `O(n)` |
+| MENA Arabic Script {#norm-mena} | `stripArabicDiacritics` (Tashkeel `\u064B-\u065F`) and `normalizeArabicLetters` (Alef/Teh-Marbuta/Tatweel) | Normalizes Arabic names and lookup tokens with zero user-supplied regexes |
+| Currency & Accounting {#norm-num} | `stripCurrencyAndGrouping` (`SAR`, `EGP`, `AED`, `USD`, `EUR`, `%`) and `convertAccountingNegatives` | Parses `(1,250.50)` and `1.250,50` while rejecting formula strings |
+| Contact, Temporal & Lists {#norm-date} | `normalizeEmailAddress`, `defaultCountryDialCode`, `dateFormat`, `sourceTimeZoneId`, `multiValueDelimiter` | Canonicalizes E.164 phones, converts IANA/Windows timezones to UTC, deduplicates tags |
+| Tooltip Error Pipeline {#norm-tip} | Row `<SelectTrigger>` tooltip, jump-to-row `<Alert>` pills, and disabled footer CTA tooltip | Shows exact offending sample value, missing fields, and normalizer fix hint |
+
+## How does 5-Sheet CRM Topological DAG Migration link parent records and morph `sileo-toast` states? {#crm-dag-and-sileo}
+
+@workflow id=crm-dag-flow title="5-Sheet CRM Topological DAG Migration & Cascade Deferral"
+| lane dag_lane | Topological Parent-First Execution Order |
+| lane err_lane | Session Lookup & Recovery |
+| sh_acc | 1. crm.account | backend | dag_lane |
+| sh_con | 2. crm.contact | backend | dag_lane |
+| sh_lead | 3. crm.lead | backend | dag_lane |
+| sh_opp | 4. crm.opportunity | backend | dag_lane |
+| sh_act | 5. crm.activity | backend | dag_lane |
+| sess_map | sessionResolvedKeys | database | err_lane |
+| rej_xlsx | Cascade & Rejected .xlsx | security | err_lane |
+| sh_acc > sh_con | account fk | emphasis |
+| sh_con > sh_lead | contact fk | emphasis |
+| sh_lead > sh_opp | lead fk | emphasis |
+| sh_opp > sh_act | deal fk | emphasis |
+| sh_acc > sess_map | register key | dashed |
+| sess_map > sh_opp | natural key | dashed |
+| sh_lead > rej_xlsx | bad parent | security |
+
+@steps id=crm-dag-steps
+| dag_1 | 1. crm.account | Imports sponsor and club accounts first and records ExternalKey and Name into sessionResolvedKeys. | crm-dag-flow | sh_acc |
+| dag_2 | 2. crm.contact | Links contacts to newly staged or persisted accounts and handles pass-2 self-FK manager references. | crm-dag-flow | sh_con |
+| dag_3 | 3. crm.lead | Matches leads by Email, Title, or ExternalKey during both multi-sheet dry-run and chunk commit. | crm-dag-flow | sh_lead |
+| dag_4 | 4. crm.opportunity | Resolves parent Account, Contact, and Lead links across earlier workbook sheets without false errors. | crm-dag-flow | sh_opp |
+| dag_5 | 5. crm.activity | Links tasks and calls to upstream CRM entities while deferring children of rejected parent rows. | crm-dag-flow | sh_act |
+
+@callout level=note title="In-Place Sileo Toast Morphing & Localized Entity Names"
+Every job notification passes `{ id: "dx-job-" + job.id, title, description, button }` to `@core/ui/sileo-toast` and resolves localized display names (such as `Leads` or `العملاء المحتملون`) instead of raw `'crm.lead'` keys. As a job moves from `Queued` to `Running` and `Completed`, `Failed`, or `Cancelled`, Sileo morphs the existing toast pill in place with zero toast stacking.[](source:dx_sileo)
+
+## How do Unified `GenericCrudView` `⋯` Dropdowns and Executive Nexus `CardGrid` Slabs standardize all 8 views? {#crud-actions-and-cardgrid}
+
+@facts id=crud-unification-facts
+| Unified Row Menu | All 8 Data Transfer, CRM, and Party views use GenericCrudView getActions sticky w-16 ⋯ DropdownMenu |
+| Zero Column Clipping | Removing inline action button strips restores full width for Contact Info, Occurred, and Category columns |
+| File Decomposition | PartyDirectoryView and DataExchangeStudioOverlay split into focused <= 250-line sub-components (FE-V001) |
+| Flat Matte Slabs | EntityCatalogCard, JobExecutionCard, and MappingPresetCard use bg-nx-surface border-nx-line with 0 shadows |
+| Upgraded Card Fallback | CrudCardGridSection promotes column 1 to card header with top-right ⋯ menu and hairline metadata grid |
+| Bilingual Entity Labels | Jobs, Presets, Dock, Export Dialog, and Step 3 summaries show localized titles above monospace keys |
+
+Standardizing on the `/admins` sticky `w-16` `⋯` action menu eliminates horizontal table clipping while keeping keyboard accessibility, RBAC permission gates, and confirmation dialogs uniform across modules.[](source:dx_admin_mvvm)
+
+| Unified Surface | Component or View | Action & CardGrid Architecture | Compliance Result |
 | --- | --- | --- | --- |
-| Null Placeholders {#norm-null} | `IsNullPlaceholder` & `CanonicalizeNullTokens` | Maps `N/A`, `#N/A`, `NA`, `null`, `nil`, `none`, `-`, `—`, `--`, `غير متاح`, and `لا يوجد` to `null` | {good:Optional-safe nulls} |
-| Unicode & Invisible Chars {#norm-unicode} | `NormalizeUnicodeCompatibility` & `CollapseWhitespace` | Applies NFKC, replaces NBSP `\u00A0`, strips zero-width and Bidi isolates, unescapes `'+digit` | {good:Clean copy-paste text} |
-| Arabic Script Hygiene {#norm-arabic} | `NormalizeArabicText` & `StripArabicDiacritics` | Strips Tashkeel `\u064B-\u065F`, `\u0670`, Tatweel `\u0640`, with optional Alef/Ya folding | {good:MENA bilingual parity} |
-| Currency & Accounting {#norm-currency} | `TryParseDecimalStrict` & `ConvertAccountingNegatives` | Parses `SAR`, `EGP`, `AED`, `USD`, `EUR`, `GBP`, `%`, `(1,250.50)` negatives, and `1.250,50` | {good:Rejects alpha formulas} |
-| E.164 Phone & Email {#norm-contact} | `NormalizePhoneNumber` & `NormalizeEmailAddress` | Normalizes Arabic digits, swaps `00` to `+`, prepends `DefaultCountryDialCode`, extracts `Name <addr>` | {good:RFC & E.164 ready} |
-| Enum, Timezone & Lists {#norm-enum} | `NormalizeTokenKey` & `SplitAndDeduplicateMultiValues` | Matches enums separator-insensitively, converts `SourceTimeZoneId` to UTC, deduplicates delimited lists | {good:Zero-alloc token match} |
+| Admin Entity Catalog {#ug-ent} | `EntitiesCatalogView` & `EntityCatalogCard` | `getActions` (`Launch Import Studio`, `Download Template`, `Export Data`) + capability slab | {good:100/100 arch-check} |
+| Admin Execution Jobs {#ug-job} | `JobsExecutionView` & `JobExecutionCard` | Contextual `getActions` (`Download Export`, `Rejected Workbook`, `Cancel`, `Refresh`) + KPI strip | {good:Zero right-edge clip} |
+| Admin Mapping Presets {#ug-pre} | `PresetsView` & `MappingPresetCard` | Destructive `Delete Preset` in `⋯` menu + localized entity primary label and mapped count | {good:Clean confirmation flow} |
+| 4 CRM Operational Tables {#ug-crm} | `Contacts`, `Activities`, `Accounts`, `Opportunities` | Replaces wide inline `renderActions` rows with `GenericCrudView` `getActions` `⋯` dropdown | {good:Unclipped CRM columns} |
+| Party Kernel Directory {#ug-pty} | `PartyDirectoryView` (`<= 300` lines) | Decomposed sub-components with `/admins`-parity `⋯` dropdown actions | {good:FE-V001 compliant} |
+| Shared CardGrid Fallback {#ug-grid} | `CrudCardGridSection` (`@core/crud`) | Header + `⋯` slot + responsive `bg-nx-raised` hairline grid with zero resting shadows | {good:Platform-wide uplift} |
 
-@callout level=note title="17-Rule Frontend & Backend Normalization Parity"
-Both `DataExchangeTransformRule` in `Core.Application` and `previewNormalizedSample` in `mapping-validation.ts` share identical 17-option semantics. Operators configure rules inside `ColumnNormalizationPopover` during Step 2 and inspect `Raw -> Normalized` outputs live before submitting dry-run jobs.[](source:dx_studio_ui)
-
-## How do the Backend Orchestrator, Worker Tenant Context, and Providers enforce security and concurrency? {#backend-governance-security}
-
-@facts id=data-exchange-facts
-| Sovereign Schema | Isolated datatransfer schema managing DataTransferJob with ProcessedRows and DataTransferRowError |
-| Worker Tenant Isolation | IgnoreQueryFilters loads queued job rows before entering DataExchangeAmbientContext.Begin(snapshot) |
-| Concurrency Guard | ReloadAsync catches DbUpdateConcurrencyException when POST /jobs/{id}/cancel bumps RowVersion |
-| OWASP Protection | Blocks =, +, -, @, tab, and CR/LF formula triggers on import, export, and rejected workbooks |
-| Timestamp Protection | IsImportDeniedField forces CreatedAt, UpdatedAt, and ModifiedAt to ExportOnly status |
-| Compatibility Lock | SHA-256 schema fingerprint prevents importing outdated spreadsheet templates |
-| Search & Status API | ListJobs accepts search and status query filters while ListPresets supports search filtering |
-| Quota & FLS Governance | IQuotaCounterService reserves atomic edition leases while IRestrictedFieldsResolver prunes PII |
-| 10 Entity Providers | Complete parity across 5 CRM, 3 PartyKernel, and 2 Identity user and admin providers |
-| Onboarding Vault | Ephemeral one-time credential export for bulk Identity user and admin provisioning |
-
-Every module integrates with `DataExchangeOrchestrator` through `IEntityDataExchangeProvider`. Background execution resolves tenant scope cleanly per job and prevents cancel races from crashing worker loops.[](source:dx_worker)
-
-| Governance Layer | Backend Service | Enforcement Mechanism | Security Outcome |
-| --- | --- | --- | --- |
-| Worker Tenant Scope {#gov-tenant} | `DataTransferImmediateWorker` & `DataExchangeAmbientContext` | Queries queued jobs with `.IgnoreQueryFilters()` (`!IsDeleted`), then scopes tenant from `ActorSnapshotJson` | {good:Tenant-safe worker execution} |
-| Concurrency Cancellation {#gov-cancel} | `DataExchangeOrchestrator` & `IDataTransferCancellationRegistry` | Catches `DbUpdateConcurrencyException`, reloads row, honors `Cancelled` status, reconciles quota hold | {good:Zero race crashes} |
-| OWASP & Timestamp Gate {#gov-owasp} | `OwaspSpreadsheetSecurityValidator` | Magic-byte checks, ZIP ratio limits, formula escaping, and `IsImportDeniedField` enforcement | {good:OWASP A03/A04 compliant} |
-| Edition Quota & FLS {#gov-quota} | `IQuotaCounterService` & `IRestrictedFieldsResolver` | Reserves atomic edition leases pre-commit and strips unauthorized fields from templates and rows | {good:Zero quota or PII leaks} |
-| 10 Pluggable Providers {#gov-providers} | CRM, PartyKernel, and Identity Providers | Batch upserts across 5 CRM, 3 Party (`party.contact-point`), and 2 Identity entities with `cf:*` fields | {good:100% module parity} |
-
-## How do the Compact Toolbar, Popover, and 3-Route Admin MVVM Module work across Frontend pages? {#frontend-studio-recovery}
-
-Replacing multi-button toolbars with one compact `@core/ui/dropdown-menu` trigger eliminates filter-bar overflow on every CRM page. Meanwhile, a dedicated 3-route `@modules/data-transfer` Admin module replaces legacy hub views using strict 5-layer SOLID MVVM.[](source:dx_admin_mvvm)
-
-| Frontend Surface | Component or Route | UX Behavior & Design System Compliance | Architectural Benefit |
-| --- | --- | --- | --- |
-| Compact CRM Header Trigger {#ui-toolbar} | `DataExchangeToolbarActions` & `CrmSectionHeader` | Renders one `dx-trigger-{entityKey}` dropdown inside section headers with `hideToolbarActions: true` in CRUD | {good:No Table/Kanban clipping} |
-| Flex-Hardened Filter Bar {#ui-crud} | `GenericCrudView` | Adds `flex-wrap` and `shrink-0` on view-mode toggles for `hidePageHeader` pages across all modules | {good:Responsive across viewports} |
-| Step 1 & Header Polish {#ui-step1} | `DataExchangeStudioOverlay` | Removes header `Cancel` collision with `DialogContent` close button and drops `div[role="button"]` nesting | {good:Clean a11y & token contrast} |
-| Step 2 Live Normalization {#ui-step2} | `ColumnNormalizationPopover` | `@core/ui/popover` per column showing active transform pill and live `Raw -> Normalized` preview | {good:Instant mapping feedback} |
-| Admin Entity Catalog {#ui-admin-entities} | `/admin/data-exchange` (`EntitiesCatalogView`) | `GenericCrudView<T>` (`Table`, `CardGrid`, `SplitPane`) launching Studio, Multi-Sheet, Export, and Templates | {good:5-layer SOLID MVVM} |
-| Admin Execution History {#ui-admin-jobs} | `/admin/data-exchange/jobs` (`JobsHistoryView`) | Server `search` and `status` filtering, KPI strip, cooperative Cancel `ConfirmationDialog`, and error downloads | {good:Observable operations} |
-| Admin Saved Presets {#ui-admin-presets} | `/admin/data-exchange/presets` (`PresetsCatalogView`) | Server `search` filtering across saved column maps and 17-rule transforms with safe deletion dialogs | {good:Reusable tenant presets} |
-
-- [x] `Core.Application` `SpreadsheetValueNormalizer` and 17-property `DataExchangeTransformRule` verified with deterministic `O(n)` MENA transforms.
-- [x] `DataExchangeOrchestrator` background worker fixed with `.IgnoreQueryFilters()` tenant snapshot scoping and `DbUpdateConcurrencyException` reload safety.
-- [x] `DataTransferMenuProvider` and `PAGE_PERMISSIONS` wired for `/admin/data-exchange`, `/admin/data-exchange/jobs`, and `/admin/data-exchange/presets`.
-- [x] `DataExchangeToolbarActions` consolidated into one compact `@core/ui/dropdown-menu` trigger across CRM section headers and `GenericCrudView`.
-- [x] `ColumnNormalizationPopover` and `previewNormalizedSample` verified in Step 2 with live `Raw -> Normalized` preview.
-- [x] Legacy `DataExchangeAdminHubView` replaced by 3-route 5-layer SOLID MVVM `@modules/data-transfer` module powered by `GenericCrudView<T>`.
-- [x] Archify explainer, architecture, and workflow diagrams verified and registered in `SCRIPE-Docs-Portal`.
+- [x] `DataExchangeStudioOverlay` extracted into `<= 250`-line studio components mounted via `createPortal` (`z-[900]`) with `z-[950]`/`z-[960]` inner overlays.
+- [x] `StudioConfirmExitDialog` guards `Close`, `Escape`, `Step 2 -> Step 1 Back`, `Replace File`, and un-dismissed credentials while keeping `Step 3 -> Step 2 Back` prompt-free.
+- [x] `ColumnNormalizationPopover` exposes all 17 `DataExchangeTransformRule` fields (`dateFormat`, `sourceTimeZoneId`) in a context-smart scrollable container with live preview.
+- [x] Step 2 row `<SelectTrigger>`, error badges, jump-to-row pills, and disabled footer CTA provide actionable `@core/ui/tooltip` diagnostics.
+- [x] All 8 Data Transfer, CRM, and Party views unified onto `GenericCrudView` `getActions` `⋯` dropdowns and flat matte Nexus `CardGrid` slabs.
+- [x] 5-sheet CRM topological DAG (`crm.account -> crm.contact -> crm.lead -> crm.opportunity -> crm.activity`) and `sileo-toast` `dx-job-{id}` morphing verified.

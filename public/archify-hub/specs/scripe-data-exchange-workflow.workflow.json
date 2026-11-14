@@ -2,7 +2,7 @@
   "schema_version": 2,
   "diagram_type": "workflow",
   "meta": {
-    "title": "SCRIPE-Frontend Data Exchange 1-Button Dropdown, MENA Normalization Popover & 3-Route Admin MVVM Workflow",
+    "title": "SCRIPE-Frontend Portal Studio (z-900), 17-Rule Smart Popover, Unified ⋯ CRUD & Sileo Morphing Workflow",
     "visual_preset": "signal-flow",
     "quality_profile": "showcase",
     "output": "SCRIPE-Docs-Portal/public/archify-hub/scripe-data-exchange-workflow.html"
@@ -10,39 +10,39 @@
   "lanes": [
     {
       "id": "crud_lane",
-      "label": "1. CrmSectionHeader & GenericCrudView Loop"
+      "label": "1. Unified GenericCrudView ⋯ Menus & Nexus CardGrid"
     },
     {
       "id": "studio_lane",
-      "label": "2. DataExchangeStudioOverlay & Live Popover"
+      "label": "2. Portal Studio (z-900), 17-Rule Popover & 5-Sheet DAG"
     },
     {
       "id": "guard_lane",
-      "label": "3. Compatibility, Quota & Concurrency Guards",
+      "label": "3. Exit Guard (z-960), Tooltip Errors & Quota Locks",
       "variant": "exception"
     },
     {
       "id": "vault_lane",
-      "label": "4. 3-Route Admin MVVM, Dock & Ephemeral Vault"
+      "label": "4. Sileo dx-job-{id} Morphing, 3-Route Admin & Vault"
     }
   ],
   "phases": [
     {
       "id": "dx_init",
-      "label": "1. Dropdown & Template",
+      "label": "1. Trigger & Portal (z-900)",
       "fromCol": 0,
       "toCol": 1
     },
     {
       "id": "dx_validate",
-      "label": "2. MENA Popover & Dry-Run",
+      "label": "2. 17-Rule Popover & 5-Sheet DAG",
       "fromCol": 2,
       "toCol": 3,
       "variant": "emphasis"
     },
     {
       "id": "dx_commit",
-      "label": "3. Worker, Admin & Dock",
+      "label": "3. Commit, Sileo & CardGrid",
       "fromCol": 4,
       "toCol": 5,
       "variant": "dashed"
@@ -62,43 +62,52 @@
       "lane": "crud_lane",
       "col": 0,
       "type": "frontend",
-      "label": "Data Exchange Dropdown",
-      "sublabel": "1-Button CrmSectionHeader",
-      "tag": "PBAC Gate"
+      "label": "1-Button & ⋯ Menus",
+      "sublabel": "8 Unified Views + CardGrid",
+      "tag": "PBAC + /admins"
     },
     {
       "id": "step1_template",
       "lane": "studio_lane",
       "col": 1,
       "type": "frontend",
-      "label": "Step 1: Template & Upload",
-      "sublabel": "3-Tab .xlsx & Sibling Drop",
+      "label": "Step 1: Portal Upload",
+      "sublabel": "createPortal z-900 + Lock",
       "tag": "Step 1"
+    },
+    {
+      "id": "exit_guard",
+      "lane": "guard_lane",
+      "col": 1,
+      "type": "security",
+      "label": "ConfirmExitDialog",
+      "sublabel": "z-960 Guard on X/Esc/Back",
+      "tag": "Dirty Guard"
     },
     {
       "id": "step2_map",
       "lane": "studio_lane",
       "col": 2,
       "type": "frontend",
-      "label": "Step 2: Map & Normalize",
-      "sublabel": "Live MENA Popover Preview",
-      "tag": "17 Rules"
+      "label": "Step 2: 17-Rule Popover",
+      "sublabel": "Smart Preset + DAG Tabs",
+      "tag": "z-950 Rules"
     },
     {
       "id": "compat_lock",
       "lane": "guard_lane",
       "col": 2,
       "type": "security",
-      "label": "Schema Hash Mismatch",
-      "sublabel": "Block outdated template"
+      "label": "Tooltip Error & Hash",
+      "sublabel": "z-950 Hint + Jump-to-Row"
     },
     {
       "id": "step3_dryrun",
       "lane": "studio_lane",
       "col": 3,
       "type": "backend",
-      "label": "Step 3: Dry-Run Preview",
-      "sublabel": "O(n) Normalizer & Errors",
+      "label": "Step 3: 5-Sheet DAG",
+      "sublabel": "Acc->Con->Lead->Opp->Act",
       "tag": "Step 3"
     },
     {
@@ -106,8 +115,8 @@
       "lane": "guard_lane",
       "col": 3,
       "type": "security",
-      "label": "Edition Quota Exceeded",
-      "sublabel": "422 Quota lease denied"
+      "label": "Edition Quota Block",
+      "sublabel": "422 Finite Lease Guard"
     },
     {
       "id": "step4_commit",
@@ -115,7 +124,7 @@
       "col": 4,
       "type": "backend",
       "label": "Step 4: Partial Commit",
-      "sublabel": "IgnoreFilters + AmbientCtx",
+      "sublabel": "sessionKeys + Cascade",
       "tag": "Step 4"
     },
     {
@@ -131,18 +140,18 @@
       "lane": "guard_lane",
       "col": 5,
       "type": "security",
-      "label": "Concurrency-Safe Cancel",
+      "label": "Concurrency Cancel",
       "sublabel": "Reload RowVersion & Lease",
-      "tag": "Lease Released"
+      "tag": "Lease Freed"
     },
     {
       "id": "ephemeral_vault",
       "lane": "vault_lane",
       "col": 5,
       "type": "security",
-      "label": "3-Route Admin & Live Dock",
-      "sublabel": "GenericCrudView + Vault",
-      "tag": "MVVM & Dock"
+      "label": "Sileo Morph & Cards",
+      "sublabel": "dx-job-{id} + Matte Slabs",
+      "tag": "Sileo & MVVM"
     }
   ],
   "edges": [
@@ -150,21 +159,29 @@
       "id": "dxe1",
       "from": "crud_toolbar",
       "to": "step1_template",
-      "label": "launch studio",
+      "label": "open portal",
       "variant": "emphasis"
+    },
+    {
+      "id": "dxe_exit",
+      "from": "step1_template",
+      "to": "exit_guard",
+      "label": "dirty exit",
+      "variant": "security",
+      "role": "error"
     },
     {
       "id": "dxe2",
       "from": "step1_template",
       "to": "step2_map",
-      "label": "upload .xlsx",
+      "label": "inspect .xlsx",
       "variant": "emphasis"
     },
     {
       "id": "dxe3",
       "from": "step2_map",
       "to": "compat_lock",
-      "label": "stale hash",
+      "label": "type / hash",
       "variant": "security",
       "role": "error"
     },
@@ -172,7 +189,7 @@
       "id": "dxe4",
       "from": "step2_map",
       "to": "step3_dryrun",
-      "label": "rules previewed",
+      "label": "17 rules ok",
       "variant": "emphasis"
     },
     {
@@ -187,21 +204,21 @@
       "id": "dxe6",
       "from": "step3_dryrun",
       "to": "step4_commit",
-      "label": "lease reserved",
+      "label": "DAG dry-run",
       "variant": "emphasis"
     },
     {
       "id": "dxe7",
       "from": "step4_commit",
       "to": "rejected_xlsx",
-      "label": "invalid rows",
+      "label": "cascade err",
       "variant": "dashed",
       "role": "branch"
     },
     {
       "id": "dxe8",
       "from": "rejected_xlsx",
-      "to": "step1_template",
+      "to": "crud_toolbar",
       "label": "re-upload fixed",
       "variant": "dashed",
       "role": "return"
@@ -218,25 +235,33 @@
       "id": "dxe10",
       "from": "step4_commit",
       "to": "ephemeral_vault",
-      "label": "commit receipt",
+      "label": "morph toast",
       "variant": "emphasis"
     }
   ],
   "cards": [
     {
       "dot": "cyan",
-      "title": "1-Button Dropdown Toolbar & Step 2 MENA Normalization Popover",
+      "title": "Full-Viewport Portal Studio (z-900) & Unsaved-Progress Exit Guard",
       "items": [
-        "DataExchangeToolbarActions renders one @core/ui/dropdown-menu trigger inside CrmSectionHeader (with hideToolbarActions: true in CRUD) and flex-wraps GenericCrudView so Table/Kanban toggles never clip.",
-        "DataExchangeStudioOverlay fixes Cancel/X overlap and a11y nesting, while ColumnNormalizationPopover configures all 17 DataExchangeTransformRule toggles with live Raw -> Normalized preview."
+        "DataExchangeStudioOverlay splits into <= 250-line studio sub-components mounted via createPortal(studioEl, document.body) at z-[900] with body scroll lock.",
+        "StudioConfirmExitDialog (z-[960]) guards Close, Escape, Step 2 -> Step 1 Back, Replace File, and un-dismissed credentials while keeping Step 3 -> Step 2 Back prompt-free."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "17-Rule Scrollable Smart Normalizer, Error Tooltips & 5-Sheet DAG",
+      "items": [
+        "ColumnNormalizationPopover (z-[950], overflow-y-auto overscroll-contain) exposes all 17 DataExchangeTransformRule toggles including dateFormat and sourceTimeZoneId with 1-click Smart Presets.",
+        "Step 2 row tooltips, jump-to-row error pills, and topological DAG tabs guide 5-sheet CRM migrations (Account -> Contact -> Lead -> Opportunity -> Activity)."
       ]
     },
     {
       "dot": "emerald",
-      "title": "3-Route Admin MVVM Module, Concurrency-Safe Cancel & Live Dock",
+      "title": "Unified ⋯ CRUD Actions, Flat Matte CardGrid Slabs & Sileo Morphing",
       "items": [
-        "The 5-layer SOLID MVVM @modules/data-transfer module replaces legacy hub views across /admin/data-exchange, /jobs, and /presets using GenericCrudView<T> with Search/Status filtering.",
-        "DataTransferImmediateWorker scopes queued jobs via .IgnoreQueryFilters() + DataExchangeAmbientContext, handles DbUpdateConcurrencyException cancel races, and streams 2s updates to DataExchangeFloatingDock."
+        "All 8 Data Transfer, CRM, and Party views adopt GenericCrudView getActions sticky w-16 ⋯ menus and shadow-free Nexus CardGrid slabs (EntityCatalogCard, JobExecutionCard, MappingPresetCard, CrudCardGridSection).",
+        "Every toast passes id: 'dx-job-' + job.id with localized entity display names so sileo-toast morphs Queued -> Running -> Completed/Failed/Cancelled in place."
       ]
     }
   ]

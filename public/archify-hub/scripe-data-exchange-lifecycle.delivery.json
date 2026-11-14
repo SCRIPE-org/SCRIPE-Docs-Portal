@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "a545c145-a7e5-4b35-8cea-a0d59a01a2a9",
+  "status": "current",
+  "command": "deliver",
+  "type": "lifecycle",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-data-exchange-lifecycle.lifecycle.json",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-lifecycle.html",
+  "specification": {
+    "sha256": "02cfc1416d9ef9a9bae802835e255f846305bedae33f047e28832298d6324adb",
+    "bytes": 7344
+  },
+  "artifact": {
+    "sha256": "c1ea115efca90153a60d528df60bfe83566f9cc8e2b8d9157a09ea718be8bfa7",
+    "bytes": 853535
+  }
+}
