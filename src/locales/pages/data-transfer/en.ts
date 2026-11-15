@@ -13,7 +13,7 @@ export const en = {
           "SCRIPE Data Exchange Studio unites a sovereign Clean Architecture backend module (DataTransfer) with extensible Shared Core engines (Core.Application.DataExchange and Core.Infrastructure.DataExchange) and a 4-step full-viewport frontend Studio (@core/data-exchange). It replaces fragile manual CSV scripts with OWASP-hardened ingestion, deterministic linear-time normalization, atomic quota leasing, and fault-isolated chunked execution across SQL Server, PostgreSQL, and Oracle.",
         infoTitle: "Tenant Context Boundary & Shared Core Architecture",
         infoContent:
-          "Data Exchange endpoints and DataTransferMenuProvider routes enforce RequiresTenantContext = true; calling orchestrator routes without a resolved tenant returns DataTransfer.TenantRequired (400/422) and renders DataExchangeTenantRequiredCard guiding Platform Super Admins to select a tenant. Shared spreadsheet streaming, formula neutralization, OWASP ZIP validation, IEntityDataExchangeProvider, and EfCoreEntityDataExchangeProviderBase<TEntity, TDbContext> live in Core so domain modules plug in with zero coupling.",
+          "Data Exchange endpoints and DataTransferMenuProvider routes enforce RequiresTenantContext = true; calling orchestrator routes without a resolved tenant returns DataTransfer.TenantRequired (400/422) and renders DataExchangeTenantRequiredCard guiding Platform Super Admins to select a tenant. Shared spreadsheet streaming, formula neutralization, OWASP ZIP validation, and IEntityDataExchangeProvider live in Core so domain modules plug in with zero coupling.",
         archTitle: "3-Project Clean Architecture & AstraFlow Lock",
         archIntro:
           "In accordance with SCRIPE backend invariants, DataTransfer isolates domain entities, CQRS contracts/compile-time mappers, and multi-DB infrastructure across three strictly decoupled projects with dedicated datatransfer schema isolation and transactional Outbox/Inbox support.",
@@ -22,19 +22,19 @@ export const en = {
           "DataTransfer.*.csproj carry zero project references to CRM, Identity, or PartyKernel. DataTransfer.Domain models DataTransferJob (emitting DataExchangeJobCompletedEvent to datatransfer.outbox_messages), SavedMappingPreset, and ExternalLegacyKeyMap; DataTransfer.Application dispatches 16 AstraFlow CQRS requests using [AstraGenerateMapping] DataTransferMaps; DataTransfer.Infrastructure persists to datatransfer across SQL Server, PostgreSQL, and Oracle.",
         featSmartTemplates: "ClosedXML Smart Templates & Field Guide",
         featSmartTemplatesDesc:
-          "Generates localized .xlsx, .csv, and .tsv workbooks with @ Text formatting (OOXML NumberFormatId 49) to protect leading zeros and phone numbers, native Excel in-cell validation dropdowns (up to row 5,000), a bilingual Field Guide sheet, and a VeryHidden _scripe_meta sheet storing schema signatures.",
+          "Generates localized .xlsx, .csv, and .tsv workbooks with @ Text formatting (OOXML NumberFormatId 49) to protect leading zeros and phone numbers, native Excel in-cell validation dropdowns (up to row 5,000), a bilingual Field Guide sheet, and a VeryHidden _scripe_meta sheet storing a SHA-256 SchemaFingerprint verified against drift on upload.",
         featNormalization: "17-Rule Linear-Time MENA Normalization",
         featNormalizationDesc:
           "SpreadsheetValueNormalizer runs in deterministic O(n) time with zero ReDoS-prone regexes: converting Arabic/Persian digits, stripping diacritics and BiDi controls, canonicalizing null placeholders, parsing SAR/EGP/AED/USD currency tokens and accounting negatives, normalizing E.164 phones, and blocking masked sentinels.",
         featDryRunQuota: "Pre-Flight Dry-Run & Hard Quota Leasing",
         featDryRunQuotaDesc:
-          "Simulates schema, domain rules, Custom Fields, and license limits without writing a row. Before execution, TryReserveSlotsAsync acquires a 2-hour quota lease that ReconcileReservationLeaseAsync settles dynamically on completion, failure, or cancellation.",
+          "Simulates schema, domain rules, Custom Fields, and license limits without writing a row. Before execution, TryReserveSlotsAsync acquires a 2-hour atomic relational quota lease (fail-closed finite EnsureCounterAsync across all 6 quota-bound entities) that ReconcileReservationLeaseAsync settles dynamically on completion, failure, or cancellation.",
         featTopologicalDag: "Topological Multi-Sheet DAG & 2-Pass Self-FK",
         featTopologicalDagDesc:
-          "ComputeRelatedMultiSheetEntityKeys dynamically discovers caller-authorized multi-sheet DAG clusters (CRM 5-sheet, PartyKernel 3-sheet, Identity 2-sheet) and enables Multi-Sheet Migration automatically in DataExchangeToolbarActions and EntitiesCatalogView. TopologicalSortSheets orders parent-child tabs, ExternalLegacyKeyMap resolves legacy keys, and 2-pass self-FK resolution connects in-sheet hierarchies.",
-        featOwaspFls: "OWASP Upload Defense & FLS Redaction",
+          "ComputeRelatedMultiSheetEntityKeys dynamically discovers caller-authorized multi-sheet DAG clusters (CRM 5-sheet, PartyKernel 3-sheet; Identity entities standalone) and enables Multi-Sheet Migration automatically in DataExchangeToolbarActions and EntitiesCatalogView. TopologicalSortSheets orders parent-child tabs, ExternalLegacyKeyMap resolves legacy keys per chunk, and 2-pass self-FK resolution connects in-sheet hierarchies.",
+        featOwaspFls: "OWASP Upload Defense, FLS Redaction & BYOK",
         featOwaspFlsDesc:
-          "OwaspSpreadsheetSecurityValidator enforces 25 MB uploads, 100 MB uncompressed / 1,000-entry / 100x ZIP bounds, macro blocking, DTD prohibition, HTML sanitization, and CsvFormulaGuard apostrophe neutralization alongside [AstraSensitive] and IRestrictedFieldsResolver filtering.",
+          "OwaspSpreadsheetSecurityValidator enforces 25 MB uploads, 100 MB uncompressed / 1,000-entry / 100x ZIP bounds, macro blocking, DTD prohibition, HTML sanitization, and CsvFormulaGuard apostrophe neutralization alongside [AstraSensitive], IRestrictedFieldsResolver filtering, and confidential cf:* tenant BYOK encryption/decryption.",
         domainTitle: "Domain Aggregate Roots & Persistence Schema",
         domainIntro:
           "All persistence entities inherit AuditableEntity<Guid> and implement ITenantAwareEntity, enforcing automatic query filters and multi-provider migrations across SQL Server, PostgreSQL, and Oracle inside the datatransfer schema.",
@@ -52,10 +52,10 @@ export const en = {
           "DryRunAsync validates every row across type parsers, lookup integrity, custom field rules, and license quotas before touching database tables, reporting exact valid/invalid counts, estimated inserts vs updates, and sync eligibility (<= 250 rows).",
         stepExecute: "Step 4 — Partial-Commit Execution & Rejected Workbook",
         stepExecuteDesc:
-          "Imports <= 250 rows synchronously (unless RunInBackground is set or OneTimeAutoPassword <= 100 applies) and queues larger batches. Each 250-row chunk isolates failures, persists ExternalLegacyKeyMaps, and exports rejected rows with _RowNumber, _ErrorCode, _ErrorColumn, _ErrorMessage, and _CascadeParentRef (24h TTL).",
+          "Imports <= 250 rows synchronously (unless RunInBackground is set or OneTimeAutoPassword <= 100 applies) and queues larger batches with orphaned Running job lease recovery. Each 250-row chunk isolates failures, persists ExternalLegacyKeyMaps (guarded by a unique composite index and pre-commit EXTERNAL_KEY_CONFLICT check), and exports rejected rows with _RowNumber, _ErrorCode, _ErrorColumn, _ErrorMessage, and _CascadeParentRef (24h TTL).",
         entitiesTitle: "Registered Entity Providers & Extensibility",
         entitiesIntro:
-          "Ten domain providers ship out of the box across CRM, Identity, and PartyKernel, and any new module can join the Studio by subclassing EfCoreEntityDataExchangeProviderBase<TEntity, TDbContext>.",
+          "Ten domain providers ship out of the box across CRM, Identity, and PartyKernel, and any new module can join the Studio by implementing IEntityDataExchangeProvider directly (the legacy EfCoreEntityDataExchangeProviderBase helper is deprecated/unused by production providers).",
         normalizationTitle: "Declarative 17-Rule Transform Contract",
         normalizationIntro:
           "Every DataExchangeColumnMapping optionally carries a DataExchangeTransformRule record executed cleanly in linear time prior to strict type parsing and validation.",

@@ -13,7 +13,7 @@ export const zh = {
           "SCRIPE Data Exchange Studio 将独立的整洁架构后端模块 (DataTransfer) 与共享核心引擎 (Core.Application.DataExchange 与 Core.Infrastructure.DataExchange) 及 4 步全视口前端工作室 (@core/data-exchange) 融为一体。它以经过 OWASP 加固的摄取流程、确定性线性时间标准化、原子配额租约及故障隔离的分块执行，全面取代脆弱的手工 CSV 脚本，兼容 SQL Server、PostgreSQL 与 Oracle。",
         infoTitle: "租户上下文边界与共享核心架构",
         infoContent:
-          "数据交换端点与 DataTransferMenuProvider 路由强制要求 RequiresTenantContext = true；无有效租户时返回 DataTransfer.TenantRequired (400/422) 并渲染 DataExchangeTenantRequiredCard，引导平台超级管理员切换租户。电子表格流引擎、公式中和、OWASP ZIP 校验、IEntityDataExchangeProvider 及 EfCoreEntityDataExchangeProviderBase<TEntity, TDbContext> 均解耦位于 Core 中。",
+          "数据交换端点与 DataTransferMenuProvider 路由强制要求 RequiresTenantContext = true；无有效租户时返回 DataTransfer.TenantRequired (400/422) 并渲染 DataExchangeTenantRequiredCard，引导平台超级管理员切换租户。电子表格流引擎、公式中和、OWASP ZIP 校验及 IEntityDataExchangeProvider 契约均解耦位于 Core 中。",
         archTitle: "三层整洁架构与 AstraFlow 全面锁定",
         archIntro:
           "遵循 SCRIPE 后端架构不变量，DataTransfer 将领域实体、CQRS 契约/编译期映射器及多数据库基础设施严格拆分为三个解耦项目，并独占 datatransfer 数据库模式与事务性 Outbox/Inbox 表。",
@@ -22,19 +22,19 @@ export const zh = {
           "DataTransfer.*.csproj 对 CRM、Identity、PartyKernel 保持零项目引用。DataTransfer.Domain 定义 DataTransferJob（完成时向 datatransfer.outbox_messages 写入 DataExchangeJobCompletedEvent）、SavedMappingPreset 与 ExternalLegacyKeyMap；DataTransfer.Application 借助 [AstraGenerateMapping] DataTransferMaps 零反射调度 16 个 AstraFlow 请求；DataTransfer.Infrastructure 持久化至 SQL Server、PostgreSQL 与 Oracle 的 datatransfer 模式。",
         featSmartTemplates: "ClosedXML 智能模板与双语字段指南",
         featSmartTemplatesDesc:
-          "生成本地化 .xlsx、.csv 与 .tsv 工作簿，通过 @ 文本格式 (OOXML NumberFormatId 49) 保护前导零与电话号码，内置 Excel 原生下拉校验 (最多 5,000 行)、双语 Field Guide 工作表以及用于模式匹配的极隐蔽 _scripe_meta 表。",
+          "生成本地化 .xlsx、.csv 与 .tsv 工作簿，通过 @ 文本格式 (OOXML NumberFormatId 49) 保护前导零与电话号码，内置 Excel 原生下拉校验 (最多 5,000 行)、双语 Field Guide 工作表以及用于上传时 SHA-256 SchemaFingerprint 漂移检测的极隐蔽 _scripe_meta 表。",
         featNormalization: "17 条线性时间 MENA 数据标准化规则",
         featNormalizationDesc:
           "SpreadsheetValueNormalizer 以确定性 O(n) 线性时间运行且杜绝 ReDoS 正则：支持阿拉伯语/波斯语数字转换、音符与 BiDi 控制符剥离、空值占位符规范化、SAR/EGP/AED/USD 货币及会计负数解析、E.164 电话标准化的全面处理。",
         featDryRunQuota: "零写入预检模拟 (Dry-Run) 与硬配额租约",
         featDryRunQuotaDesc:
-          "在不写入数据库的情况下模拟模式、业务规则、自定义字段和许可证上限。正式执行前由 TryReserveSlotsAsync 获取 2 小时配额租约，并在完成、失败或取消时通过 ReconcileReservationLeaseAsync 动态清算。",
+          "在不写入数据库的情况下模拟模式、业务规则、自定义字段和许可证上限。正式执行前由 TryReserveSlotsAsync 在关系事务内原子获取 2 小时配额租约（对全部 6 个受配额实体执行失效闭合的 EnsureCounterAsync 初始化），并在完成、失败或取消时通过 ReconcileReservationLeaseAsync 动态清算。",
         featTopologicalDag: "多工作表拓扑 DAG 与两遍式自引用外键解析",
         featTopologicalDagDesc:
-          "ComputeRelatedMultiSheetEntityKeys 动态发现调用方授权的多表 DAG 集群（CRM 5 表、PartyKernel 3 表、Identity 2 表），并在 DataExchangeToolbarActions 与 EntitiesCatalogView 中自动启用多表迁移，配合 TopologicalSortSheets 与两遍式自引用外键解析。",
-        featOwaspFls: "OWASP 上传防御与字段级安全 (FLS) 脱敏",
+          "ComputeRelatedMultiSheetEntityKeys 动态发现调用方授权的多表 DAG 集群（CRM 5 表、PartyKernel 3 表；Identity 实体独立运行），并在 DataExchangeToolbarActions 与 EntitiesCatalogView 中自动启用多表迁移，配合 TopologicalSortSheets 与两遍式自引用外键解析。",
+        featOwaspFls: "OWASP 上传防御、FLS 脱敏与 BYOK 加密",
         featOwaspFlsDesc:
-          "OwaspSpreadsheetSecurityValidator 强制限制 25 MB 上传上限、100 MB 解压上限 / 1,000 条目 / 100 倍压缩比、宏拦截、禁止 DTD/XXE、HTML 清洗及 CsvFormulaGuard 公式中和，并与 [AstraSensitive] 及 IRestrictedFieldsResolver 协同生效。",
+          "OwaspSpreadsheetSecurityValidator 强制限制 25 MB 上传上限、100 MB 解压上限 / 1,000 条目 / 100 倍压缩比、宏拦截、禁止 DTD/XXE、HTML 清洗及 CsvFormulaGuard 公式中和，并与 [AstraSensitive]、IRestrictedFieldsResolver 及机密自定义字段 cf:* BYOK 加解密协同生效。",
         domainTitle: "领域聚合根与持久化架构",
         domainIntro:
           "所有实体继承 AuditableEntity<Guid> 并实现 ITenantAwareEntity，在 datatransfer 模式下自动强制租户隔离与跨数据库迁移。",
@@ -52,10 +52,10 @@ export const zh = {
           "DryRunAsync 在修改任何数据前对全部数据行执行类型解析、关联完整性、自定义字段规则与许可配额模拟，精确反馈有效/无效行数、预计新增与更新数量及同步资格 (<= 250 行)。",
         stepExecute: "第 4 步 — 部分提交执行与拒收错误工作簿",
         stepExecuteDesc:
-          "不超过 250 行时同步提交（除非指定 RunInBackground 或启用不超过 100 行的 OneTimeAutoPassword），更大批量自动转入后台。每 250 行分块故障隔离，生成包含 _RowNumber、_ErrorCode、_ErrorColumn、_ErrorMessage 和 _CascadeParentRef 的 .xlsx 拒收簿（24 小时有效期）。",
+          "不超过 250 行时同步提交（除非指定 RunInBackground 或启用不超过 100 行的 OneTimeAutoPassword），更大批量自动转入后台并支持孤立 Running 作业租约恢复。每 250 行分块故障隔离，持久保存 ExternalLegacyKeyMaps（受唯一复合索引及提交前 EXTERNAL_KEY_CONFLICT 校验保护），并生成包含 _RowNumber、_ErrorCode、_ErrorColumn、_ErrorMessage 和 _CascadeParentRef 的 .xlsx 拒收簿（24 小时有效期）。",
         entitiesTitle: "已注册实体提供程序与扩展机制",
         entitiesIntro:
-          "开箱即用支持 CRM、Identity 与 PartyKernel 的 10 个核心实体，新模块只需继承 EfCoreEntityDataExchangeProviderBase<TEntity, TDbContext> 即可接入。",
+          "开箱即用支持 CRM、Identity 与 PartyKernel 的 10 个核心实体，新模块只需直接实现 IEntityDataExchangeProvider 即可接入（旧版 EfCoreEntityDataExchangeProviderBase 辅助类已弃用且未在生产提供程序中使用）。",
         normalizationTitle: "声明式 17 项转换规则契约",
         normalizationIntro:
           "每个 DataExchangeColumnMapping 均可携带 DataExchangeTransformRule 记录，在严格类型校验前按线性时间执行。",

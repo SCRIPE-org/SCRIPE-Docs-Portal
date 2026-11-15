@@ -13,7 +13,7 @@ export const ar = {
           "يوحّد استوديو تبادل البيانات في SCRIPE وحدة خلفية معزولة (DataTransfer) مع محركات أساسية مشتركة (Core.Application.DataExchange و Core.Infrastructure.DataExchange) وواجهة استوديو بملء الشاشة من 4 خطوات (@core/data-exchange). يستبدل الاستوديو سكربتات CSV الهشة باستيعاب محصّن بمعايير OWASP، وتطبيع حتمي بزمن خطي، وحجز ذري للحصص، وتنفيذ معزول للأعطال عبر SQL Server و PostgreSQL و Oracle.",
         infoTitle: "حدود سياق المستأجر والهيكلة الأساسية المشتركة",
         infoContent:
-          "تفرض نقاط نهاية تبادل البيانات ومسارات DataTransferMenuProvider خاصية RequiresTenantContext = true؛ استدعاء المنسق دون مستأجر مُحدَّد يُعيد DataTransfer.TenantRequired (400/422) ويعرض بطاقة DataExchangeTenantRequiredCard لإرشاد المشرف العام لاختيار مستأجر. وتُحفظ محركات البث والحماية من الصيغ وفحص OWASP و IEntityDataExchangeProvider و EfCoreEntityDataExchangeProviderBase<TEntity, TDbContext> داخل Core لدمج الوحدات دون أي تبعية مباشرة.",
+          "تفرض نقاط نهاية تبادل البيانات ومسارات DataTransferMenuProvider خاصية RequiresTenantContext = true؛ استدعاء المنسق دون مستأجر مُحدَّد يُعيد DataTransfer.TenantRequired (400/422) ويعرض بطاقة DataExchangeTenantRequiredCard لإرشاد المشرف العام لاختيار مستأجر. وتُحفظ محركات البث والحماية من الصيغ وفحص OWASP وعقد IEntityDataExchangeProvider داخل Core لدمج الوحدات دون أي تبعية مباشرة.",
         archTitle: "الهيكلية النظيفة ثلاثية المشاريع والالتزام الكامل بـ AstraFlow",
         archIntro:
           "وفقاً لثوابت SCRIPE المعمارية، تفصل وحدة DataTransfer كيانات النطاق وعقود CQRS والمحولات المُولَّدة وقت الترجمة والبنية التحتية عبر ثلاثة مشاريع معزولة بمخطط datatransfer مستقل وجداول Outbox/Inbox.",
@@ -22,19 +22,19 @@ export const ar = {
           "لا تحوي مشاريع DataTransfer.*.csproj أي إشارة لمشاريع CRM أو Identity أو PartyKernel. تمثّل DataTransfer.Domain كيانات DataTransferJob (مُطلقةً حدث DataExchangeJobCompletedEvent إلى datatransfer.outbox_messages) و SavedMappingPreset و ExternalLegacyKeyMap؛ وتنفّذ DataTransfer.Application 16 طلباً عبر AstraFlow و [AstraGenerateMapping] DataTransferMaps؛ وتدير DataTransfer.Infrastructure مخطط datatransfer عبر SQL Server و PostgreSQL و Oracle.",
         featSmartTemplates: "قوالب ClosedXML الذكية ودليل الحقول ثنائي اللغة",
         featSmartTemplatesDesc:
-          "ينتج ملفات .xlsx و .csv و .tsv مُوطَّنة بتنسيق نصي @ (OOXML NumberFormatId 49) لحماية الأصفار البادئة وأرقام الهواتف، وقوائم تحقق منسدلة أصلية في Excel (حتى الصف 5,000)، وورقة Field Guide ثنائية اللغة، وورقة _scripe_meta المخفية جداً لتوقيع المخطط.",
+          "ينتج ملفات .xlsx و .csv و .tsv مُوطَّنة بتنسيق نصي @ (OOXML NumberFormatId 49) لحماية الأصفار البادئة وأرقام الهواتف، وقوائم تحقق منسدلة أصلية في Excel (حتى الصف 5,000)، وورقة Field Guide ثنائية اللغة، وورقة _scripe_meta المخفية جداً لتخزين بصمة SHA-256 للمخطط والتحقق من انحرافها عند الرفع.",
         featNormalization: "17 قاعدة تطبيع خطية لبيانات الشرق الأوسط وشمال أفريقيا",
         featNormalizationDesc:
           "يعمل SpreadsheetValueNormalizer بزمن خطي حتمي O(n) دون تعبيرات نمطية قابلة لـ ReDoS: تحويل الأرقام العربية والفارسية، إزالة التشكيل وأحرف اتجاه النص، توحيد قيم الفراغ، تحليل عملات SAR و EGP و AED و USD والأرقام السالبة بين أقواس، وتنسيق هواتف E.164.",
         featDryRunQuota: "التجربة الصفرية المسبقة وحجز الحصص الإلزامي",
         featDryRunQuotaDesc:
-          "تحاكي قواعد المخطط والكيانات والحقول المخصصة وحدود الترخيص دون أي كتابة في قاعدة البيانات. وقبل التنفيذ، يحجز TryReserveSlotsAsync حصة مؤقتة لمدة ساعتين وتتم تسويتها عبر ReconcileReservationLeaseAsync عند الاكتمال أو الفشل أو الإلغاء.",
+          "تحاكي قواعد المخطط والكيانات والحقول المخصصة وحدود الترخيص دون أي كتابة في قاعدة البيانات. وقبل التنفيذ، يحجز TryReserveSlotsAsync حصة علائقية ذرية لمدة ساعتين (مع إغلاق آمن في EnsureCounterAsync عبر الكيانات الستة المقيدة بحصة) وتتم تسويتها عبر ReconcileReservationLeaseAsync عند الاكتمال أو الفشل أو الإلغاء.",
         featTopologicalDag: "الترتيب الطوبولوجي متعدد الأوراق والربط الذاتي بمرحلتين",
         featTopologicalDagDesc:
-          "يكتشف ComputeRelatedMultiSheetEntityKeys مجموعات الأوراق المتعددة المصرح بها تلقائياً (5 أوراق لـ CRM، و3 لـ PartyKernel، و2 لـ Identity) ويفعّل الترحيل متعدد الأوراق تلقائياً في شريط الأدوات وكتالوج الكيانات مع ترتيب TopologicalSortSheets وربط Pass 2 الذاتي.",
-        featOwaspFls: "دفاعات OWASP للرفع وتنقيح أمان الحقول (FLS)",
+          "يكتشف ComputeRelatedMultiSheetEntityKeys مجموعات الأوراق المتعددة المصرح بها تلقائياً (5 أوراق لـ CRM، و3 لـ PartyKernel؛ مع بقاء كيانات Identity مستقلة) ويفعّل الترحيل متعدد الأوراق تلقائياً في شريط الأدوات وكتالوج الكيانات مع ترتيب TopologicalSortSheets وربط Pass 2 الذاتي.",
+        featOwaspFls: "دفاعات OWASP وتنقيح أمان الحقول (FLS) وتشفير BYOK",
         featOwaspFlsDesc:
-          "يفرض OwaspSpreadsheetSecurityValidator حد 25 ميجابايت للرفع، وسقف 100 ميجابايت فك الضغط / 1,000 عنصر / نسبة ضغط 100x، وحظر الماكرو و DTD/XXE وتطهير HTML وحماية CsvFormulaGuard بالتكامل مع [AstraSensitive] و IRestrictedFieldsResolver.",
+          "يفرض OwaspSpreadsheetSecurityValidator حد 25 ميجابايت للرفع، وسقف 100 ميجابايت فك الضغط / 1,000 عنصر / نسبة ضغط 100x، وحظر الماكرو و DTD/XXE وتطهير HTML وحماية CsvFormulaGuard بالتكامل مع [AstraSensitive] و IRestrictedFieldsResolver وتشفير/فك تشفير الحقول السرية المخصصة BYOK.",
         domainTitle: "جذور النطاق ومخطط الاستمرارية",
         domainIntro:
           "ترث جميع كيانات DataTransfer من AuditableEntity<Guid> وتطبّق ITenantAwareEntity لفرض عزل المستأجر وتهجير قواعد البيانات الثلاث داخل مخطط datatransfer.",
@@ -52,10 +52,10 @@ export const ar = {
           "يفحص DryRunAsync جميع الصفوف والروابط المرجعية والحقول المخصصة وحدود الترخيص قبل أي تعديل في القاعدة، عارضاً الصفوف الصالحة والمرفوضة وتقدير الإدخال/التحديث وأهلية التنفيذ المتزامن (<= 250 صفاً).",
         stepExecute: "الخطوة 4 — التنفيذ بالالتزام الجزئي ودفتر الأخطاء",
         stepExecuteDesc:
-          "ينفّذ <= 250 صفاً فورياً (ما لم يُطلب التشغيل بالخلفية أو تتجاوز كلمات المرور المؤقتة حد 100 صف) ويجدول الدفعات الأكبر. تعزل كل حزمة من 250 صفاً أخطاءها وتصدر ملف .xlsx للمرفوضات بأعمدة _RowNumber و _ErrorCode و _ErrorColumn و _ErrorMessage و _CascadeParentRef (صلاحية 24 ساعة).",
+          "ينفّذ <= 250 صفاً فورياً (ما لم يُطلب التشغيل بالخلفية أو تتجاوز كلمات المرور المؤقتة حد 100 صف) ويجدول الدفعات الأكبر مع استرداد المهام العالقة. تعزل كل حزمة من 250 صفاً أخطاءها وتحفظ خرائط ExternalLegacyKeyMaps (بفهرس مركب فريد وحارس EXTERNAL_KEY_CONFLICT المسبق) وتصدر ملف .xlsx للمرفوضات بأعمدة _RowNumber و _ErrorCode و _ErrorColumn و _ErrorMessage و _CascadeParentRef (صلاحية 24 ساعة).",
         entitiesTitle: "موفرّو الكيانات المسجلون وقابلية التوسع",
         entitiesIntro:
-          "تتوفر عشرة كيانات مدمجة عبر CRM والهوية ونواة الأطراف، ويمكن لأي وحدة جديدة الانضمام عبر وراثة EfCoreEntityDataExchangeProviderBase<TEntity, TDbContext>.",
+          "تتوفر عشرة كيانات مدمجة عبر CRM والهوية ونواة الأطراف، ويمكن لأي وحدة جديدة الانضمام عبر تطبيق واجهة IEntityDataExchangeProvider مباشرة (فئة EfCoreEntityDataExchangeProviderBase قديمة وغير مستخدمة في الموفّرين الفعليين).",
         normalizationTitle: "عقد قواعد التحويل التقريرية السبعة عشر",
         normalizationIntro:
           "يحمل كل DataExchangeColumnMapping قاعدة DataExchangeTransformRule تُنفّذ بزمن خطي قبل التحليل الصارم للأنواع.",

@@ -126,12 +126,14 @@ Content-Type: multipart/form-data (entityKey, multiSheet, file)`,
         titleKey: "modules.dataTransfer.overview.stepDryRun",
         contentKey: "modules.dataTransfer.overview.stepDryRunDesc",
         codeLanguage: "csharp",
-        codeFilename: "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/.../IdentityDataExchangeProviders.cs",
-        code: `// Domain modules register IEntityDataExchangeProvider without coupling to DataTransfer.DbContext
-public sealed class UserDataExchangeProvider
-    : EfCoreEntityDataExchangeProviderBase<User, IdentityDbContext>
+        codeFilename: "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/DataExchange/UserDataExchangeProvider.cs",
+        code: `// Domain modules implement IEntityDataExchangeProvider without coupling to DataTransfer
+public sealed partial class UserDataExchangeProvider(
+    IdentityDbContext db,
+    IPasswordHasher passwordHasher, ...
+) : IEntityDataExchangeProvider
 {
-    public override string EntityKey => "identity.user";
+    public string EntityKey => "identity.user";
 }`,
       },
       {
@@ -166,14 +168,14 @@ public sealed class UserDataExchangeProvider
     rows: [
       ["crm.account", "CRM", "-", "5-sheet CRM DAG cluster (crm.account -> contact -> lead -> opportunity -> activity)"],
       ["crm.contact", "CRM", "crm.account", "5-sheet CRM DAG cluster + self-FK pass-2"],
-      ["crm.lead", "CRM", "-", "5-sheet CRM DAG cluster; Quota & CustomFields (cf:*) aware"],
-      ["crm.opportunity", "CRM", "crm.account, crm.lead", "5-sheet CRM DAG cluster; resolves Account/Contact/Lead"],
-      ["crm.activity", "CRM", "crm.account, crm.lead, crm.opportunity", "5-sheet CRM DAG cluster; defers on parent cascade error"],
-      ["identity.admin", "Identity", "-", "2-sheet Identity cluster (identity.admin, identity.user); QuotaResourceTypes.Admin"],
-      ["identity.user", "Identity", "-", "2-sheet Identity cluster; 3 onboarding modes (StagedPendingInvite default)"],
-      ["party.organization", "PartyKernel", "-", "3-sheet PartyKernel DAG cluster (party.organization -> person -> contact-point)"],
-      ["party.person", "PartyKernel", "-", "3-sheet PartyKernel DAG cluster; MENA Arabic & E.164 normalization"],
-      ["party.contact-point", "PartyKernel", "party.person, party.organization", "3-sheet PartyKernel DAG cluster; multi-parent lookup"],
+      ["crm.lead", "CRM", "-", "5-sheet CRM DAG cluster; Quota (CRM.MaxLeads) & CustomFields (cf:*) aware"],
+      ["crm.opportunity", "CRM", "crm.account, crm.lead", "5-sheet CRM DAG cluster; Quota (CRM.MaxOpportunities) & Account/Contact/Lead lookup"],
+      ["crm.activity", "CRM", "crm.account, crm.lead, crm.opportunity", "5-sheet CRM DAG cluster; Insert-only; defers on parent cascade error"],
+      ["identity.admin", "Identity", "-", "Standalone Identity entity (relatedMultiSheetEntityKeys: []); QuotaResourceTypes.Admin"],
+      ["identity.user", "Identity", "-", "Standalone Identity entity (relatedMultiSheetEntityKeys: []); 3 onboarding modes (StagedPendingInvite default)"],
+      ["party.organization", "PartyKernel", "-", "3-sheet PartyKernel cluster (shared QuotaResourceTypes.Party -> contact-point)"],
+      ["party.person", "PartyKernel", "-", "3-sheet PartyKernel cluster (shared QuotaResourceTypes.Party); MENA Arabic & E.164 normalization"],
+      ["party.contact-point", "PartyKernel", "party.person, party.organization", "3-sheet PartyKernel cluster; multi-parent lookup"],
     ],
   },
   {
@@ -228,8 +230,8 @@ public sealed class UserDataExchangeProvider
       ["Archive entry & ratio bounds", "Max 1,000 entries; max 100x compression ratio", "OwaspSpreadsheetSecurityValidator"],
       ["XML / XXE & macros", "DtdProcessing.Prohibit, XmlResolver = null, .xlsm blocked", "OwaspSpreadsheetSecurityValidator"],
       ["Formula injection neutralization", "Prefixes '= + - @ \\t \\r \\n' neutralized + BiDi stripped", "CsvFormulaGuard"],
-      ["Hidden metadata sheet", "VeryHidden _scripe_meta sheet (schema signature)", "SpreadsheetStreamEngine (ClosedXML)"],
-      ["Temp blob retention & lease", "24h artifact TTL; 2h TryReserveSlotsAsync lease", "DataTransferArtifactCleanupJob / Orchestrator"],
+      ["Hidden metadata sheet", "VeryHidden _scripe_meta sheet (SHA-256 SchemaFingerprint validated via TEMPLATE_FINGERPRINT_DRIFT)", "SpreadsheetStreamEngine (ClosedXML) & Orchestrator"],
+      ["Temp blob retention & lease", "24h artifact TTL; 2h fail-closed TryReserveSlotsAsync lease + orphan recovery", "DataTransferArtifactCleanupJob / Orchestrator"],
     ],
   },
   {
@@ -300,7 +302,7 @@ public sealed class UserDataExchangeProvider
     rows: [
       [
         "Backend Domain Discovery",
-        "IEntityDataExchangeProvider + EfCoreEntityDataExchangeProviderBase<TEntity, TDbContext> in Core",
+        "IEntityDataExchangeProvider in Core (legacy EfCoreEntityDataExchangeProviderBase unused by current 10 providers)",
         "Zero cross-module .csproj references in DataTransfer.*.csproj; modules opt in via DI",
       ],
       [
@@ -362,7 +364,7 @@ public sealed class UserDataExchangeProvider
       [
         "Scope & Dependency Graph",
         "1 entity sheet (e.g., only crm.lead or only party.person)",
-        "Connected cluster ordered by ParentEntityKeys (DependsOnEntityKeys): CRM 5-sheet, PartyKernel 3-sheet, Identity 2-sheet",
+        "Connected cluster ordered by ParentEntityKeys or shared quota resource/feature: CRM 5-sheet, PartyKernel 3-sheet (Identity entities standalone)",
       ],
       [
         "UI Discovery Gates (4/4 Required)",
@@ -371,8 +373,8 @@ public sealed class UserDataExchangeProvider
       ],
       [
         "Key Resolution & Ordering",
-        "Natural-key lookup + pass-2 self-FK resolution inside 250-row chunks",
-        "Kahn's TopologicalSortSheets executes parents before children, propagates sessionResolvedKeys across sheets, and persists ExternalLegacyKeyMap for idempotent re-imports",
+        "Natural-key lookup, pre-commit Insert ExternalKey conflict guard, & pass-2 self-FK resolution inside 250-row chunks",
+        "Kahn's TopologicalSortSheets executes parents before children, propagates sessionResolvedKeys across sheets, and persists per-chunk ExternalLegacyKeyMap (unique composite index)",
       ],
       [
         "Cascade Failure Handling",
@@ -400,12 +402,12 @@ public sealed class UserDataExchangeProvider
       [
         "Related Multi-Sheet DAG Cluster",
         "Dynamic Cluster Discovery",
-        "ComputeRelatedMultiSheetEntityKeys traverses module & ParentEntityKeys edges filtered dynamically by caller PBAC and tenant Edition entitlements",
+        "ComputeRelatedMultiSheetEntityKeys traverses ParentEntityKeys and shared quota resource/feature edges dynamically filtered by caller PBAC and tenant Edition entitlements",
       ],
       [
         "PBAC, Editions, FLS & Quotas",
         "Dynamic Policy Enforcement",
-        "IEntitlementService, IQuotaCounterService (TryReserveSlotsAsync / ReconcileReservationLeaseAsync), and IRestrictedFieldsResolver evaluate every request",
+        "IRequireFeature on all 8 queries, atomic relational IQuotaCounterService (fail-closed finite EnsureCounterAsync + TryReserveSlotsAsync / ReconcileReservationLeaseAsync), and IRestrictedFieldsResolver + BYOK confidential cf:* protection",
       ],
       [
         "17-Rule Normalizer & Security Blacklist",
@@ -476,5 +478,5 @@ registerPage({
     "modules/analytics-overview",
     "modules/work-management-overview",
   ],
-  lastUpdated: "2026-11-14",
+  lastUpdated: "2026-11-15",
 });

@@ -51,7 +51,7 @@ export const ARCHIFY_PILLAR_META: Record<
     repoName: "SCRIPE-org/SCRIPE",
     commit: "ffc972a4",
     accentColor: "#B7FF00",
-    count: 11,
+    count: 12,
   },
   backend: {
     label: "SCRIPE-Backend Deep Dive (.NET 10 & AstraFlow 2.3.0)",
@@ -94,8 +94,38 @@ export const ARCHIFY_MODE_META: Record<
 
 export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
   // ============================================================================
-  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 11 PAGES
+  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 12 PAGES
   // ============================================================================
+  {
+    id: "venue-identity-super-refactor",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "SUPER FULL-STACK · VENUE + IDENTITY + PROFILE",
+    title: "Venue & Identity Super Refactor: AstraFlow 2.3.0 & 3-DB Concurrency",
+    subtitle:
+      "AuditableEntity<Guid>, Compile-Time [AstraGenerateMapping], 19+1 RowVersion Tokens Across 54 Migrations, ADR-040 Receipts & Profile 409 Recovery",
+    description:
+      "End-to-end architectural deep dive documenting the Venue, Identity, Core, and Frontend Profile refactor with native architecture, sequence, lifecycle, and workflow diagrams plus verified Wave 3B Before/After gates.",
+    htmlUrl: "/archify-hub/venue-identity-super-refactor.html",
+    specUrl: "/archify-hub/specs/venue-identity-super-refactor.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "b28278fd",
+    featured: true,
+    highlights: [
+      "100/100 arch-check on Venue & Identity with 0 files >300L across 2,177 `.cs` files and 0 `FILE-EXCEPTION` waivers",
+      "19 Identity + Core `RowVersion` columns + Venue `GuestReservationAccess` across 54 3-provider migrations (`6/6` pass)",
+      "AstraFlow 2.3.0 `[AstraGenerateMapping]` + `*MapModel` bridges retiring `IdentityConventionProfile` & 9 Venue rule files",
+      "Frontend `profile` end-to-end `rowVersion` + HTTP `409` invalidation passing `24/24` tests and `7/7` backend suites",
+    ],
+    keySources: [
+      "SCRIPE-Backend/src/Modules/Venue/Venue.Domain/Entities/CourtCluster.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Domain/Entities/SignupSession.cs",
+      "SCRIPE-Backend/src/Modules/Venue/Venue.Application/Mapping/CourtMaps.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Persistence/IdentityDbContext.cs",
+      "SCRIPE-Backend/tests/Core.Application.Tests/Idempotency/IdempotencyMigrationPresenceTests.cs",
+      "SCRIPE-Frontend/src/modules/shared/profile/core/src/presentation/utils/concurrency.ts",
+    ],
+  },
   {
     id: "scripe-data-exchange-studio",
     pillar: "fullstack",
@@ -105,7 +135,7 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
     subtitle:
       "16 PBAC REST Endpoints (+SetDefaultPreset) + Full-Viewport Portal & ConfirmExitDialog + 17-Rule Popover + 5-Sheet DAG + Unified ⋯ CRUD + 7-Lang Docs",
     description:
-      "End-to-end architectural explainer board covering Zero-Coupling DataTransfer plugin discovery (IEntityDataExchangeProvider in Core, DataExchangeJobCompletedEvent Outbox, GenericCrudView entityTypeKey via @core/data-exchange with zero @modules/admin/data-transfer imports), 16 [Authorize] PBAC endpoints across 7 roles without [AdminOnly] (POST presets/{id}/default, DataTransfer.UnknownEntity 404, dynamic relatedMultiSheetEntityKeys across CRM 5-sheet, PartyKernel 3-sheet & Identity 2-sheet clusters), Read-Only Entity Catalog vs /custom-fields cf:* vs Jobs vs Presets, RequiresTenantContext = true + DataExchangeTenantRequiredCard, full-viewport createPortal Studio (z-[900]) with StudioConfirmExitDialog (z-[960]), scrollable 9-stage/17-rule O(n) ColumnNormalizationPopover (z-[950]), Dry-Run + 250-row isolated chunks + cooperative cancel without destructive post-completion global rollback, Showing 0-0 of 0 results pagination, and 7-language SCRIPE-Docs-Portal parity.",
+      "End-to-end architectural explainer board covering Zero-Coupling DataTransfer plugin discovery (IEntityDataExchangeProvider in Core, DataExchangeJobCompletedEvent Outbox, GenericCrudView entityTypeKey via @core/data-exchange with zero @modules/admin/data-transfer imports), 16 [Authorize] PBAC endpoints across 7 roles without [AdminOnly] (POST presets/{id}/default, DataTransfer.UnknownEntity 404, dynamic relatedMultiSheetEntityKeys across CRM 5-sheet & PartyKernel 3-sheet clusters with Identity entities standalone), Read-Only Entity Catalog vs /custom-fields cf:* vs Jobs vs Presets, RequiresTenantContext = true + DataExchangeTenantRequiredCard, full-viewport createPortal Studio (z-[900]) with StudioConfirmExitDialog (z-[960]), scrollable 9-stage/17-rule O(n) ColumnNormalizationPopover (z-[950]), Dry-Run + 250-row isolated chunks + cooperative cancel + orphaned job recovery + fail-closed finite quotas, Showing 0-0 of 0 results pagination, and 7-language SCRIPE-Docs-Portal parity.",
     htmlUrl: "/archify-hub/scripe-data-exchange-studio.html",
     specUrl: "/archify-hub/specs/scripe-data-exchange-studio.archify.md",
     repoName: "SCRIPE-org/SCRIPE",

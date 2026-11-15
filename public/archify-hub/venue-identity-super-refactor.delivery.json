@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "084e7172-b568-40bd-89cd-161455843a86",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-venue-identity-super-refactor-20261115-045330\\candidate.archify.md",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-venue-identity-super-refactor-20261115-045330\\venue-identity-super-refactor.html",
+  "specification": {
+    "sha256": "01ff7f66189ff64ee2c96475bee219dec70833967f2af676677087f6e9b34ca2",
+    "bytes": 13426
+  },
+  "artifact": {
+    "sha256": "a92d0fdf0ce1c7fe663e8376026a7a55ce11f366c883f4e9705cbceb58fec0ef",
+    "bytes": 1848366
+  },
+  "explainer": {
+    "preparedSha256": "c7e43b09deb6e6f200bdde28310bb7c9678441af7d2bb1e659f2f7aed605acd9",
+    "dependencies": [
+      {
+        "kind": "diagram-spec",
+        "id": "refactor-arch",
+        "inline": true,
+        "sha256": "31acff93dcaf1af2be287464c254622d60fc37376105f7bea7d634cd4f2b006c",
+        "bytes": 1719
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "concurrency-idempotency-seq",
+        "inline": true,
+        "sha256": "cdccff0395a1bb4368fea9e1129445ab14e6ec41f2e7bf0a23ed4adf5a5b0971",
+        "bytes": 1974
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "concurrency-lifecycle",
+        "path": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-venue-identity-super-refactor-20261115-045330\\venue-identity-concurrency-lifecycle.lifecycle.json",
+        "relativePath": "venue-identity-concurrency-lifecycle.lifecycle.json",
+        "sha256": "d1f82b241a6c7f8635f6fc775e394c4c1d6bb0da09f5977ee254bae42a041520",
+        "bytes": 5962
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "refactor-wf",
+        "inline": true,
+        "sha256": "dd874c43c395df6b27858b81fa33d6ee35d38a848adad61c620e78ababee73bc",
+        "bytes": 1340
+      }
+    ]
+  }
+}
