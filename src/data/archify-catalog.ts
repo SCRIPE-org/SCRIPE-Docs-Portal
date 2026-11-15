@@ -49,9 +49,9 @@ export const ARCHIFY_PILLAR_META: Record<
     tagline:
       "End-to-End Platform Single Source of Truth uniting Next.js 16 MVVM, .NET 10 AstraFlow 2.3.0, Dual-Mode DB, Outbox & 193-Command CLI",
     repoName: "SCRIPE-org/SCRIPE",
-    commit: "ffc972a4",
+    commit: "1ce419b",
     accentColor: "#B7FF00",
-    count: 12,
+    count: 13,
   },
   backend: {
     label: "SCRIPE-Backend Deep Dive (.NET 10 & AstraFlow 2.3.0)",
@@ -67,11 +67,11 @@ export const ARCHIFY_PILLAR_META: Record<
     label: "SCRIPE-Frontend Deep Dive (Next.js 16 + React 19 MVVM)",
     shortLabel: "Frontend (Next.js 16)",
     tagline:
-      "65+ Isolated Sub-Modules, 5-Layer SOLID MVVM Data Flow, 100% @core/ui/* Nexus Tokens, 401 Mutex & Bilingual EN/AR Parity",
+      "65+ Isolated Sub-Modules, 5-Layer SOLID MVVM Data Flow, Inversify DI, Sileo UI & Bilingual EN/AR Parity",
     repoName: "SCRIPE-org/SCRIPE-Frontend",
-    commit: "f7d148d6",
+    commit: "2915891e5",
     accentColor: "#A78BFA",
-    count: 10,
+    count: 11,
   },
 };
 
@@ -94,8 +94,39 @@ export const ARCHIFY_MODE_META: Record<
 
 export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
   // ============================================================================
-  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 12 PAGES
+  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 13 PAGES
   // ============================================================================
+  {
+    id: "unified-navigation-route-security",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "OPTION C · UNIFIED AUTHZ & ROUTING",
+    title: "Unified Context-Aware Navigation & Fail-Closed Route Security (Option C)",
+    subtitle:
+      "AuthorizedRouteDescriptor + MenuAccessEvaluator + 192-Route APP_ROUTE_MANIFEST + Fail-Closed RouteGuard & Reusable Shell Context Gates",
+    description:
+      "Full-stack security and architecture explainer detailing the retirement of SupportsTenantGuidance and TENANT_SCOPED_GUIDANCE_PAGES, remediation of /crm and /settings/* SYSTEM_PAGES bypasses, cross-tenant dashboard MRR and webhook IDOR hardening, 192-route manifest parity, inline TenantContextRequiredGate / FeatureUnavailableGate / PlatformContextRequiredGate UX, and live E2E verification.",
+    htmlUrl: "/archify-hub/unified-navigation-route-security.html",
+    specUrl: "/archify-hub/specs/unified-navigation-route-security.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "1ce419b",
+    featured: true,
+    highlights: [
+      "Removes SupportsTenantGuidance DB columns/migrations and TENANT_SCOPED_GUIDANCE_PAGES with zero new database columns",
+      "Eliminates SYSTEM_PAGES /crm & /settings/* bypasses, reverse-prefix matching, SSR/SPA flashes, and default-allow PAGE_PERMISSIONS",
+      "Unifies .NET MenuAccessEvaluator across Navigation, Workspaces & Routes emitting AuthorizedRouteDescriptor + AccessState",
+      "Delivers inline shell TenantContextRequiredGate, PlatformContextRequiredGate & FeatureUnavailableGate via /api/v1/tenants/switchable",
+    ],
+    keySources: [
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Application/Queries/Menu/MenuAccessEvaluator.cs",
+      "SCRIPE-Backend/src/Host/API/Middleware/TenantContextMiddleware.cs",
+      "SCRIPE-Backend/src/Host/API/Controllers/Tenancy/TenantsController.Switchable.cs",
+      "SCRIPE-Frontend/src/core/config/app-route-manifest.ts",
+      "SCRIPE-Frontend/src/core/providers/route-guard.tsx",
+      "SCRIPE-Frontend/src/core/hooks/useTenantContextSwitcher.ts",
+      "SCRIPE-Frontend/src/core/components/tenant-context/index.ts",
+    ],
+  },
   {
     id: "venue-identity-super-refactor",
     pillar: "fullstack",
@@ -693,8 +724,37 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
   },
 
   // ============================================================================
-  // PILLAR 3: FRONTEND DEEP DIVE (NEXT.JS 16 + REACT 19 MVVM) — 10 PAGES
+  // PILLAR 3: FRONTEND DEEP DIVE (NEXT.JS 16 + REACT 19 MVVM) — 11 PAGES
   // ============================================================================
+  {
+    id: "sileo-toast-hardening-guide",
+    pillar: "frontend",
+    mode: "explainer",
+    badge: "SILEO UI & THEME PARITY",
+    title: "SCRIPE Sileo Gooey Toast Architecture: Light/Dark/HC Parity, SVG Motion Isolation & RTL",
+    subtitle:
+      "var(--nx-surface) Reactive Fill · [data-sileo-*] 0ms Motion Gate · Single-Mirror RTL · OKLCH Pill Action Buttons",
+    description:
+      "Interactive Explainer Board and Native Architecture/Sequence Diagrams documenting SCRIPE's full review and hardening of sileo-toast across Light/Dark/High-Contrast themes, Framer Motion SVG rect isolation under data-animation='moderate', pill width sizing, tailwind-merge style composition, and RTL timer-safe lifecycle transitions.",
+    htmlUrl: "/archify-hub/sileo-toast-hardening-guide.html",
+    specUrl: "/archify-hub/specs/sileo-toast-hardening-guide.archify.md",
+    repoName: "SCRIPE-org/SCRIPE-Frontend",
+    repoCommit: "2915891e5",
+    featured: true,
+    highlights: [
+      "Eliminates OS-dark/app-light inversion & SSR race via var(--nx-surface) fill, .dark/.light class priority, and Contrast Lock presets",
+      "Isolates Framer Motion SVG rects from global data-animation='moderate' transitions so Retry/Action buttons stay 15.75px inside cards",
+      "Removes max-width: 100% pill clamp (223px-246px full titles) and aligns OKLCH semantic button borders via color-mix()",
+      "Single-pass RTL position normalization, activeToastTimers cleanup, and twMerge override composition verified in Playwright & Vitest",
+    ],
+    keySources: [
+      "src/core/ui/sileo-toast/sileo-config.ts",
+      "src/core/ui/sileo-toast/sileo-toast.ts",
+      "src/core/ui/sileo-toast/sileo-toaster.tsx",
+      "src/app/globals.css",
+      "src/app/(auth)/sileo-playground/page.tsx",
+    ],
+  },
   {
     id: "scripe-data-exchange-workflow",
     pillar: "frontend",
