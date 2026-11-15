@@ -79,7 +79,7 @@ export const es = {
           "DataTransfer descubre entidades mediante contratos de Core.Application y publica eventos de cierre por su Outbox sin referencias entre módulos en backend ni frontend.",
         adminSurfacesTitle: "Por Qué el Catálogo es de Solo Lectura y Cómo Funciona Cada Pantalla",
         adminSurfacesIntro:
-          "El Catálogo (/admin/data-exchange) se autogenera desde proveedores DI y derechos de edición, las columnas personalizadas vienen de /custom-fields y Trabajos (/jobs) y Presets (/presets) nacen directamente del Estudio y las barras de módulos.",
+          "El Catálogo (/data-exchange) se autogenera desde proveedores DI y derechos de edición, las columnas personalizadas vienen de /custom-fields y Trabajos (/jobs) y Presets (/presets) nacen directamente del Estudio y las barras de módulos.",
         dagComparisonTitle: "Importación Individual vs Migración Topológica Multihoja (DAG)",
         dagComparisonIntro:
           "Ambos flujos comparten OWASP, normalización y lotes de 250 filas; la migración multihoja se activa dinámicamente vía ComputeRelatedMultiSheetEntityKeys cuando el clúster autorizado abarca dos o más entidades relacionadas.",

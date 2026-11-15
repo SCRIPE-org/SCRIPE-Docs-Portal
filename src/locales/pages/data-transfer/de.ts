@@ -79,7 +79,7 @@ export const de = {
           "DataTransfer erkennt Domänenentitäten über Core.Application-Verträge und publiziert Job-Abschlüsse asynchron über das eigene Outbox-Schema — komplett ohne Querverweise im Backend oder Frontend.",
         adminSurfacesTitle: "Warum der Entity-Katalog schreibgeschützt ist & wie die Ansichten arbeiten",
         adminSurfacesIntro:
-          "Der Entity-Katalog (/admin/data-exchange) wird dynamisch aus DI-Providern und Edition-Rechten aufgebaut, benutzerdefinierte Spalten stammen aus /custom-fields, und Jobs (/jobs) sowie Mapping-Presets (/presets) entstehen direkt aus Studio- und Toolbar-Aktionen.",
+          "Der Entity-Katalog (/data-exchange) wird dynamisch aus DI-Providern und Edition-Rechten aufgebaut, benutzerdefinierte Spalten stammen aus /custom-fields, und Jobs (/jobs) sowie Mapping-Presets (/presets) entstehen direkt aus Studio- und Toolbar-Aktionen.",
         dagComparisonTitle: "Einzelentitäts-Import vs. Topologische Multi-Sheet-Migration (DAG)",
         dagComparisonIntro:
           "Beide Modi teilen OWASP-Prüfung, Normalisierung und 250er-Chunks; die Multi-Sheet-Migration schaltet sich über ComputeRelatedMultiSheetEntityKeys dynamisch frei, sobald ein Modul-Cluster mindestens zwei berechtigte Tabellen umfasst.",

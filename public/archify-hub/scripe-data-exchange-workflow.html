@@ -5708,7 +5708,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           <h3>Read-Only Catalog, Jobs/Presets Lifecycle, Outbox &amp; Sileo Morphing</h3>
         </div>
         <ul>
-          <li>/admin/data-exchange Entity Catalog is DI + Edition read-only; /jobs records module toolbar + Launch Studio runs; /presets saves Step 2 mappings (initialPresetId &amp; POST /presets/{id}/default); no destructive post-completion global rollback job exists.</li>
+          <li>/data-exchange Entity Catalog is DI + Edition read-only; /jobs records module toolbar + Launch Studio runs; /presets saves Step 2 mappings (initialPresetId &amp; POST /presets/{id}/default); no destructive post-completion global rollback job exists.</li>
           <li>Jobs emit DataExchangeJobCompletedEvent to datatransfer.outbox_messages (retracted via DetachPendingOutboxMessages on cancel) and morph single id: &#39;dx-job-&#39; + job.id Sileo toasts with localized entity display names.</li>
         </ul>
       </div>

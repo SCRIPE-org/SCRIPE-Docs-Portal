@@ -79,7 +79,7 @@ export const fr = {
           "DataTransfer découvre les entités métier via les contrats Core.Application et publie les événements d'achèvement via son Outbox sans dépendance croisée backend ni frontend.",
         adminSurfacesTitle: "Pourquoi le Catalogue est en Lecture Seule & Rôle de Chaque Écran",
         adminSurfacesIntro:
-          "Le Catalogue (/admin/data-exchange) est auto-découvert depuis les fournisseurs DI et droits d'édition, les colonnes personnalisées proviennent de /custom-fields, tandis que Tâches (/jobs) et Préréglages (/presets) naissent depuis le Studio et les barres d'outils.",
+          "Le Catalogue (/data-exchange) est auto-découvert depuis les fournisseurs DI et droits d'édition, les colonnes personnalisées proviennent de /custom-fields, tandis que Tâches (/jobs) et Préréglages (/presets) naissent depuis le Studio et les barres d'outils.",
         dagComparisonTitle: "Import Simple vs Migration Topologique Multi-Feuilles (DAG)",
         dagComparisonIntro:
           "Les deux modes partagent OWASP, normalisation et lots de 250 lignes ; la migration multi-feuilles s'active dynamiquement via ComputeRelatedMultiSheetEntityKeys lorsqu'une grappe autorisée couvre au moins deux entités liées.",

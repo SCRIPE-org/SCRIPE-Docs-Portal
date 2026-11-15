@@ -313,7 +313,7 @@ public sealed partial class UserDataExchangeProvider(
       [
         "Frontend Operation Isolation",
         "@core/data-exchange (GenericCrudView entityTypeKey -> DataExchangeToolbarActions + StudioOverlay)",
-        "Feature modules (CRM, Identity, PartyKernel) never import @modules/admin/data-transfer",
+        "Feature modules (CRM, Identity, PartyKernel) never import @modules/data-transfer",
       ],
     ],
   },
@@ -329,7 +329,7 @@ public sealed partial class UserDataExchangeProvider(
     headers: ["Route", "Surface & Edit Model", "Why It Works This Way & Available Actions"],
     rows: [
       [
-        "/admin/data-exchange",
+        "/data-exchange",
         "Entities Catalog (Auto-Discovered Read-Only Registry)",
         "Schemas, keys, and quotas come dynamically from DI IEntityDataExchangeProvider + Edition entitlements. Supports Launch Import Studio, dynamic Multi-Sheet Migration, Download Template, and Export Data.",
       ],
@@ -339,12 +339,12 @@ public sealed partial class UserDataExchangeProvider(
         "Tenant custom fields created here auto-inject cf:* columns and OptionSet dropdowns into descriptors, Smart Templates, Dry-Run, Import, and Export without restarting or editing DataTransfer.",
       ],
       [
-        "/admin/data-exchange/jobs",
+        "/data-exchange/jobs",
         "Execution History (Monitor + Launch Studio)",
         "Records queued and synchronous runs initiated from any module toolbar or the Jobs Launch Studio CTA. Shows real API errors, DataExchangeTenantRequiredCard, cooperative Cancel, and Rejected/Export .xlsx download.",
       ],
       [
-        "/admin/data-exchange/presets",
+        "/data-exchange/presets",
         "Saved Mapping Presets (Create, Default, Reuse, Delete)",
         "Saved during Step 2 (Column Mapping) or launched via Create Preset in Studio. Supports Use Preset in Import Studio (initialPresetId), Set as Default (POST /presets/{id}/default), and soft Delete.",
       ],

@@ -79,7 +79,7 @@ export const en = {
           "DataTransfer discovers domain entities via Core abstractions and communicates completion asynchronously through its module Outbox — never referencing sibling module assemblies on backend or frontend.",
         adminSurfacesTitle: "Why Entity Catalog Is Read-Only & How Every Surface Works",
         adminSurfacesIntro:
-          "Operators often wonder why /admin/data-exchange has no manual 'Add Entity' button: entity providers come dynamically from backend DI and custom columns come from /custom-fields, while Jobs and Presets are populated directly from Data Exchange Studio workflows.",
+          "Operators often wonder why /data-exchange has no manual 'Add Entity' button: entity providers come dynamically from backend DI and custom columns come from /custom-fields, while Jobs and Presets are populated directly from Data Exchange Studio workflows.",
         dagComparisonTitle: "Single-Entity Import vs Multi-Sheet Topological Migration (DAG)",
         dagComparisonIntro:
           "Both modes share the same OWASP, normalization, and 250-row chunk engine, while Multi-Sheet Migration unlocks automatically via ComputeRelatedMultiSheetEntityKeys when a module cluster spans two or more authorized parent-child entities.",

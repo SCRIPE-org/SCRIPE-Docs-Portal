@@ -79,7 +79,7 @@ export const zh = {
           "DataTransfer 仅通过 Core.Application 抽象自动发现领域实体，并通过模块专属 Outbox 异步广播作业完成事件，前后端均不引用兄弟业务模块。",
         adminSurfacesTitle: "为何实体目录为只读及各管理页面的协作方式",
         adminSurfacesIntro:
-          "实体目录 (/admin/data-exchange) 由后台 DI 提供程序与版本权益动态生成，自定义字段统一在 /custom-fields 扩展，而作业记录 (/jobs) 与映射预设 (/presets) 则由工作室与模块工具栏直接驱动创建。",
+          "实体目录 (/data-exchange) 由后台 DI 提供程序与版本权益动态生成，自定义字段统一在 /custom-fields 扩展，而作业记录 (/jobs) 与映射预设 (/presets) 则由工作室与模块工具栏直接驱动创建。",
         dagComparisonTitle: "单实体导入与多工作表拓扑迁移 (DAG) 对比",
         dagComparisonIntro:
           "两种模式共享 OWASP 检测、线性标准化与 250 行分块核心；当调用方在模块关联图中拥有两个及以上已授权父子实体时，ComputeRelatedMultiSheetEntityKeys 会自动解锁多工作表迁移。",
