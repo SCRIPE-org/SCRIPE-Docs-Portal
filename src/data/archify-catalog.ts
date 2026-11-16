@@ -61,7 +61,7 @@ export const ARCHIFY_PILLAR_META: Record<
     repoName: "SCRIPE-org/SCRIPE-Backend",
     commit: "f941b150",
     accentColor: "#38BDF8",
-    count: 10,
+    count: 11,
   },
   frontend: {
     label: "SCRIPE-Frontend Deep Dive (Next.js 16 + React 19 MVVM)",
@@ -530,6 +530,27 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
       "src/Modules/DataTransfer/DataTransfer.Infrastructure/BackgroundJobs/DataTransferImmediateWorker.cs",
       "src/Host/API/Controllers/DataTransfer/DataTransferController.cs",
     ],
+  },
+  {
+    id: "astraflow-242-assertion-gap",
+    pillar: "backend",
+    mode: "explainer",
+    badge: "ASTRAFLOW 2.4.2 · ASSERTION MIGRATION GATE",
+    title: "AstraFlow 2.4.2 Assertions: Fixed Message Overload and Remaining SCRIPE Gaps",
+    subtitle:
+      "The screenshot's BeTrue reason overload is fixed; other compile-time gaps still pause migration",
+    description:
+      "A .NET 10 backend migration diagnosis comparing the assertion gap fixed by AstraFlow 2.4.2 with the missing reason overloads, BooleanAssertions.Be(bool), and duplicate public exception name that still block a faithful SCRIPE test migration.",
+    htmlUrl: "/archify-hub/astraflow-242-assertion-gap.html",
+    specUrl: "/archify-hub/specs/astraflow-242-assertion-gap.archify.md",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "980cd2217882f9080ae0a1ce65a9c87e1e576719",
+    highlights: [
+      "AstraFlow.Assertions 2.4.2 adds formatted BeTrue and BeFalse reason overloads",
+      "The backend build still reports 277 compiler errors, including missing reason overloads and Be(bool)",
+      "The migration remains paused on .NET 10 until a compatible 2.4.x assertion patch is published",
+    ],
+    keySources: [],
   },
   {
     id: "backend-master-explainer",
