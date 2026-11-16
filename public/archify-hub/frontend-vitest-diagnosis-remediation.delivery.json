@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "0f495695-b145-4a5d-87f2-4be10964c7a5",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\frontend-vitest-diagnosis-remediation.archify.md",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\frontend-vitest-diagnosis-remediation.html",
+  "specification": {
+    "sha256": "6ad15b3e85104154a98eb2fd7d85e5e325a093938990f0e71b9080e11d4ff905",
+    "bytes": 10461
+  },
+  "artifact": {
+    "sha256": "2fb332ba9aa19bc9e17cf247950f0f1ed8a28bd99e6eb0b0ba27e69b226e0edf",
+    "bytes": 584108
+  },
+  "explainer": {
+    "preparedSha256": "16854b674b7ecd5cdc048ca2c869eb7aa9f61ae2ddbf0bcd382d9fc06ca8f5d8",
+    "dependencies": [
+      {
+        "kind": "diagram-spec",
+        "id": "triage-flow",
+        "inline": true,
+        "sha256": "d7c88d2015dc7e4b83cf071aed049d21d35bd0db6a664fb88161249396ef1638",
+        "bytes": 1580
+      }
+    ]
+  }
+}

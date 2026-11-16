@@ -1,6 +1,6 @@
 # How does SCRIPE enforce Sovereign Account Security, Passkeys, and Perimeter Isolation? {#sovereign-account-security}
 
-SCRIPE protects administrative access through **W3C WebAuthn Level 3 Passkeys**, **Enterprise SSO Identity Federation**, and **Subnet CIDR Perimeter Enforcement**.[](source:w3c_webauthn)
+SCRIPE protects administrative access through **W3C WebAuthn Level 3 Passkeys**, Enterprise SSO Identity Federation, and Subnet CIDR Perimeter Enforcement.[](source:w3c_webauthn)
 
 - Hardware passkeys eliminate credential theft via unpadded Base64Url normalization (RFC 4648 §5) and FIDO2 AAGUID model resolution.[](source:rfc4648)
 - `PasskeyController` and `Fido2WebAuthnService` verify CBOR attestation and COSE public keys with zero external cloud dependencies.[](source:fido2_ctap2)
@@ -99,10 +99,10 @@ Enterprise SSO supports Dual-Mode identity binding. Administrators authenticate 
 
 | Enterprise Provider | Authentication Protocol | Tenant Domain Mapping | Account Binding Mode |
 | --- | --- | --- | --- |
-| Google Workspace Enterprise {#row-google} | OpenID Connect (OIDC) | `al-ahly.org` | {good:Automatic Domain Claim Link} |
-| Microsoft Entra ID (Azure AD) {#row-entra} | OpenID Connect (OIDC) | `corp.al-ahly.org` | {good:Enterprise Tenant Federation} |
-| Okta Workforce Identity {#row-okta} | SAML 2.0 / OIDC | `sso.al-ahly.org` | {good:Corporate Role Synchronization} |
-| GitHub Enterprise Cloud {#row-github} | OpenID Connect (OIDC) | `github.com/scripe-org` | {good:DevOps Identity Verification} |
+| Google Workspace Enterprise {#row-google} | OpenID Connect (OIDC) | Configured org domain | {good:Tenant-Bound Domain Link} |
+| Microsoft Entra ID (Azure AD) {#row-entra} | OpenID Connect (OIDC) | Configured org tenant ID | {good:Enterprise Tenant Federation} |
+| Okta Workforce Identity {#row-okta} | SAML 2.0 / OIDC | Configured org SSO endpoint | {good:Corporate Role Synchronization} |
+| GitHub Enterprise Cloud {#row-github} | OpenID Connect (OIDC) | Configured GitHub org | {good:DevOps Identity Verification} |
 
 ## How does the Interactive CIDR Perimeter Allowlist and Step-Up WebAuthn protect admin endpoints? {#cidr-perimeter-stepup}
 
@@ -135,7 +135,7 @@ The CIDR perimeter evaluates client IP addresses before any handler execution. A
 | Perimeter Defense Layer | Enforcement Point | Technical Mechanism | Operational Recovery |
 | --- | --- | --- | --- |
 | Subnet CIDR Allowlist {#row-cidr} | Middleware Stage 16 | IPv4 (`/32`, `/24`) & IPv6 (`/64`, `/128`) CIDR Evaluation | {good:Admin re-enrollment from trusted IP} |
-| Biometric Sudo Mode {#row-sudo} | Sensitive Action Guard | 15-Minute Sliding Memory Token | {good:Re-authenticate with Passkey} |
+| Biometric Sudo Mode {#row-sudo} | Sensitive Action Guard | 15-Minute `HttpOnly` Cookie + `X-Sudo-Token` | {good:Adaptive Passkey / TOTP / Password} |
 | Nuclear Emergency Lockdown {#row-lockdown} | Redis Cache & DB | Instant Token Revocation & Account Freeze | {caution:Master Security Recovery Key} |
 
 ## How are Sovereign Account Security policies configured and verified in production? {#verification-checklist}

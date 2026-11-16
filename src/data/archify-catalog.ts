@@ -49,9 +49,9 @@ export const ARCHIFY_PILLAR_META: Record<
     tagline:
       "End-to-End Platform Single Source of Truth uniting Next.js 16 MVVM, .NET 10 AstraFlow 2.3.0, Dual-Mode DB, Outbox & 193-Command CLI",
     repoName: "SCRIPE-org/SCRIPE",
-    commit: "1ce419b",
+    commit: "e0d390a",
     accentColor: "#B7FF00",
-    count: 13,
+    count: 14,
   },
   backend: {
     label: "SCRIPE-Backend Deep Dive (.NET 10 & AstraFlow 2.3.0)",
@@ -71,7 +71,7 @@ export const ARCHIFY_PILLAR_META: Record<
     repoName: "SCRIPE-org/SCRIPE-Frontend",
     commit: "2915891e5",
     accentColor: "#A78BFA",
-    count: 11,
+    count: 13,
   },
 };
 
@@ -94,8 +94,43 @@ export const ARCHIFY_MODE_META: Record<
 
 export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
   // ============================================================================
-  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 13 PAGES
+  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 14 PAGES
   // ============================================================================
+  {
+    id: "account-passkeys-sudo-ux-redemption",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "4-TRACK + MILESTONE 9 + PAT STUDIO · PASSKEYS + SUDO",
+    title: "Account World, Fido2NetLib Passkeys, Unified Sudo, Quotas & GitHub+ PAT Studio",
+    subtitle:
+      "Polymorphic Fido2NetLib + Cookie Sudo + MMC First-Login + Principal Isolation + Real Quotas + Bilingual PAT Studio",
+    description:
+      "Complete 4-track + Milestone 9 + GitHub+ PAT Studio implementation uniting Fido2NetLib passkeys, reload-safe HttpOnly cookie Sudo, MMC-parity mcp=true first-login password setup, strict Platform vs Tenant isolation, real MaxPerTenant plan quotas with post-commit override sync, full-canvas bilingual EN/AR /account/integrations/new and /account/integrations/[id] with RowVersion concurrency, per-card @core/ui/skeletons, and 14/14 unmocked Chromium Playwright verification.",
+    htmlUrl: "/archify-hub/account-passkeys-sudo-ux-redemption.html",
+    specUrl: "/archify-hub/specs/account-passkeys-sudo-ux-redemption.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "e0d390a",
+    featured: true,
+    highlights: [
+      "Polymorphic Fido2NetLib passkeys + HttpOnly cookie Sudo (Passkey -> TOTP -> Password fallback) + safe sole-passkey removal",
+      "Strict Platform SuperAdmin vs Tenant isolation (Global Control Plane badge, hidden /account/plan, DelegateAuthority + Break-Glass guard)",
+      "Real Edition & TenantFeatureOverride quotas (.IgnoreQueryFilters() + post-commit FeatureCache clear + api_key QuotaCounter) with 422 QuotaExceeded enforcement",
+      "GitHub+ PAT Studio (/account/integrations/new & [id]) with bilingual NameEn/NameAr, inline descriptions + HoverCard/Popover, technical key switch, RowVersion edits & 14/14 Chromium E2E",
+    ],
+    keySources: [
+      "docs/superpowers/specs/2026-11-15-account-passkeys-sudo-ux-redemption-design.md",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Application/DTOs/Auth/CompletePasskeyRegistrationRequest.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Services/Fido2WebAuthnService.Crypto.cs",
+      "SCRIPE-Backend/src/Host/API/Controllers/Auth/PasskeyController.cs",
+      "SCRIPE-Frontend/src/modules/shared/profile/core/src/presentation/views/AccountSecurityView.tsx",
+      "SCRIPE-Frontend/src/modules/shared/profile/core/src/presentation/views/AccountGovernanceView.tsx",
+      "SCRIPE-Frontend/src/modules/shared/profile/core/src/presentation/views/AccountIntegrationsView.tsx",
+      "SCRIPE-Frontend/src/modules/shared/profile/core/src/presentation/views/PatCreatePageView.tsx",
+      "SCRIPE-Frontend/src/modules/shared/profile/core/src/presentation/views/PatDetailPageView.tsx",
+      "SCRIPE-Frontend/src/modules/shared/profile/core/src/presentation/views/AccountPreferencesView.tsx",
+      "SCRIPE-Frontend/src/modules/shared/profile/core/src/presentation/views/ForceChangePasswordView.tsx",
+    ],
+  },
   {
     id: "unified-navigation-route-security",
     pillar: "fullstack",
@@ -724,8 +759,38 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
   },
 
   // ============================================================================
-  // PILLAR 3: FRONTEND DEEP DIVE (NEXT.JS 16 + REACT 19 MVVM) — 11 PAGES
+  // PILLAR 3: FRONTEND DEEP DIVE (NEXT.JS 16 + REACT 19 MVVM) — 12 PAGES
   // ============================================================================
+  {
+    id: "frontend-vitest-diagnosis-remediation",
+    pillar: "frontend",
+    mode: "explainer",
+    badge: "VITEST TRIAGE & MAIN APP FIXES",
+    title: "SCRIPE-Frontend Vitest Suite Diagnosis: Main App vs. Test Issues & Remediation",
+    subtitle:
+      "5 Failed Suites (7/3301 Tests) · Main App i18n/UI Bugs (Header/KPI/Nav) · OptionSet Slice · RestrictedFields Scan Cache & 30s Load Headroom",
+    description:
+      "Diagnostic Explainer Board and triage workflow mapping all 5 failing Vitest suites in SCRIPE-Frontend across Main App UI/i18n bugs, brittle text-slice test assertions, redundant monorepo tree-walk scans (14.2s -> 595ms), and 12-worker Windows CPU contention timeouts.",
+    htmlUrl: "/archify-hub/frontend-vitest-diagnosis-remediation.html",
+    specUrl: "/archify-hub/specs/frontend-vitest-diagnosis-remediation.archify.md",
+    repoName: "SCRIPE-org/SCRIPE-Frontend",
+    repoCommit: "a65306410",
+    featured: true,
+    highlights: [
+      "Exposes & fixes 3 Main App UI bugs in Venue Overview (hardcoded English buttons + dead useAppStore, raw camelCase KPI fallbacks, VenueNav Dashboard mismatch)",
+      "Replaces brittle isPlatformContext end-marker slice in optionSet.wiring.test.ts with block extraction preserving React 19 useMemo dependencies",
+      "Caches monorepo tree scans in use-restricted-fields.backendContract.test.ts (cutting 3x ~14s walks to 595ms total) and raises Vitest testTimeout to 30000ms",
+      "Verified post-edit across scripe test frontend (349.59s), validate-locales (18,677 keys), arch-check (93/100), oxlint (0 errors), and build (202 routes)",
+    ],
+    keySources: [
+      "src/modules/venue/venue-overview/src/presentation/components/VenueOverviewHeader.tsx",
+      "src/modules/venue/venue-overview/src/presentation/components/VenueOverviewKpiStrip.tsx",
+      "src/modules/venue/shared/src/presentation/components/VenueNav.tsx",
+      "src/modules/custom-fields/custom-fields/option-set/optionSet.wiring.test.ts",
+      "src/core/hooks/use-restricted-fields.backendContract.test.ts",
+      "vitest.config.ts",
+    ],
+  },
   {
     id: "sileo-toast-hardening-guide",
     pillar: "frontend",
@@ -1010,6 +1075,35 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
       "src/core/di.ts",
       "src/core/ui/card.tsx",
       "src/modules/venue-operations/di.ts",
+    ],
+  },
+  {
+    id: "frontend-design-system-transformation",
+    pillar: "frontend",
+    mode: "explainer",
+    badge: "RELAY vNEXT & OVERLAYS",
+    title: "SCRIPE Relay vNext Design System, WCAG Contrast & Frame-0 Floating Overlay Architecture",
+    subtitle:
+      "--scripe-* Token Cascade -> Light/Dark/DEF-03 AA Contrast Calibration -> Radix Popper Wrapper Lock & transition-none Origin Snap",
+    description:
+      "Validated Archify Explainer Board with embedded native Architecture, Sequence, and xychart-beta diagrams documenting the SCRIPE Relay vNext token evolution, disabled CTA contrast fix (DEF-03), and systemic Frame-0 floating overlay origin-snap fix.",
+    htmlUrl: "/archify-hub/frontend-design-system-transformation.html",
+    specUrl: "/archify-hub/specs/frontend-design-system-transformation.archify.md",
+    repoName: "SCRIPE-org/SCRIPE-Frontend",
+    repoCommit: "a65306410",
+    featured: true,
+    highlights: [
+      "Documents the --scripe-* -> --nx-* / --sx-* token cascade eliminating #050506 dark black-crush and unifying semantic status hues",
+      "Includes before/after WCAG 2.2 AA xychart-beta chart covering DEF-03 Dark disabled CTA (1.09:1 -> 8.20:1) & Light status pills",
+      "Traces how [data-radix-popper-content-wrapper] lock, --nx-t-micro CSS vars, and transition-none eliminate viewport overlay slide-in",
+      "Pinned to src/app/globals.css lines 306-364 and verified with 25/25 Radix Popper + 4/4 DatePicker 0px drift traces",
+    ],
+    keySources: [
+      "src/app/globals.css",
+      "src/core/ui/tooltip.tsx",
+      "src/core/ui/dropdown-menu.tsx",
+      "src/core/ui/select.tsx",
+      "src/core/ui/notification/NotificationBell.tsx",
     ],
   },
 ];
