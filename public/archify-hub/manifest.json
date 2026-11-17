@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-10T18:35:53.751Z",
+  "generatedAt": "2026-11-17T00:34:46.099Z",
   "version": "6.0-SSOT",
-  "totalArtifacts": 23,
+  "totalArtifacts": 24,
   "allPassedVerification": true,
   "pillars": {
     "fullstack": 7,
-    "backend": 8,
+    "backend": 9,
     "frontend": 8
   },
   "items": [
@@ -421,6 +421,24 @@
         "nodeCount": null,
         "edgeCount": null,
         "sectionCount": null
+      }
+    },
+    {
+      "id": "backend-astraflow-244-assertion-stop",
+      "pillar": "backend",
+      "mode": "explainer",
+      "title": "SCRIPE Backend AstraFlow 2.4.4 Assertion Migration Stop",
+      "subtitle": "Confirmed public API gaps, preserved failure reasons, and the .NET 10 resume gate",
+      "description": "A verified migration checkpoint that separates supported AstraFlow 2.4.4 call-site changes from missing assertion context overloads.",
+      "htmlUrl": "/archify-hub/backend-astraflow-244-assertion-stop.html",
+      "specUrl": "/archify-hub/specs/backend-astraflow-244-assertion-stop.archify.md",
+      "sizeKb": 527,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": 4
       }
     }
   ]
