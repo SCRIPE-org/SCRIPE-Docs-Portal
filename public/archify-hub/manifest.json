@@ -1,14 +1,32 @@
 {
-  "generatedAt": "2026-11-17T00:34:46.099Z",
+  "generatedAt": "2026-11-18T00:45:00.000Z",
   "version": "6.0-SSOT",
-  "totalArtifacts": 24,
+  "totalArtifacts": 25,
   "allPassedVerification": true,
   "pillars": {
-    "fullstack": 7,
+    "fullstack": 8,
     "backend": 9,
     "frontend": 8
   },
   "items": [
+    {
+      "id": "crm-enterprise-overhaul-security-ux",
+      "pillar": "fullstack",
+      "mode": "explainer",
+      "title": "CRM Enterprise Overhaul, Sovereign Assignees, Full-Card Kanban & 5-Layer OWASP Defense",
+      "subtitle": "Tenant Assignee Lookup + Exit Gate Allowlist + BOLA/PBAC Defense + Zero-Handle Direct Drag + Multi-Currency Kanban + Dynamic Stage Gates",
+      "description": "Comprehensive publication-grade Single Source of Truth explainer board and interactive diagrams documenting the SCRIPE CRM Enterprise Overhaul: tenant-scoped sovereign assignee lookup (/api/v1/crm/settings/assignees) with PII field redaction and AES-GCM encrypted wire IDs, PermittedExitFieldKeys exit gate allowlists, OWASP BOLA/PBAC elimination across lead/opportunity/contact-role handlers, zero-handle direct full-card Kanban drag with 6px PointerSensor, CrmEntitySearchSelect server combobox with inline quick-creation, multi-currency column and reporting conversions, and batch display-name hydration benchmarked against Odoo 18, SAP Sales Cloud, and Salesforce Lightning.",
+      "htmlUrl": "/archify-hub/crm-enterprise-overhaul-security-ux.html",
+      "specUrl": "/archify-hub/specs/crm-enterprise-overhaul-security-ux.archify.md",
+      "sizeKb": 1885.3,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": null
+      }
+    },
     {
       "id": "fullstack-architecture",
       "pillar": "fullstack",

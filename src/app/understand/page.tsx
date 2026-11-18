@@ -461,7 +461,7 @@ export default function DocsUnderstandHubPage() {
                     id: "wiki-reader" as MainWorkspaceTab,
                     icon: BookOpen,
                     title: "36 Karpathy LLM Wiki Articles",
-                    desc: "Read all 36 interconnected Markdown knowledge articles covering every backend module, AstraFlow 2.3.0, PBAC, and Outbox.",
+                    desc: "Read all 36 interconnected Markdown knowledge articles covering every backend module, AstraFlow 2.4.7, PBAC, and Outbox.",
                     cta: "Read Wiki Articles",
                   },
                   {

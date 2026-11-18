@@ -49,9 +49,9 @@ export const ARCHIFY_PILLAR_META: Record<
     tagline:
       "End-to-End Platform Single Source of Truth uniting Next.js 16 MVVM, .NET 10 AstraFlow 2.3.0, Dual-Mode DB, Outbox & 193-Command CLI",
     repoName: "SCRIPE-org/SCRIPE",
-    commit: "e0d390a",
+    commit: "83eb92c",
     accentColor: "#B7FF00",
-    count: 14,
+    count: 16,
   },
   backend: {
     label: "SCRIPE-Backend Deep Dive (.NET 10 & AstraFlow 2.3.0)",
@@ -94,8 +94,80 @@ export const ARCHIFY_MODE_META: Record<
 
 export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
   // ============================================================================
-  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 14 PAGES
+  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 16 PAGES
   // ============================================================================
+  {
+    id: "data-exchange-360-audit-resilient-pipeline",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "DATA EXCHANGE 360° AUDIT · 500 FIX & OWASP",
+    title: "Data Exchange 360° Audit: Resilient Upload Pipeline, 7-Vector OWASP Shield & 10-Provider Parity",
+    subtitle:
+      "ResilientDevelopmentBlobStorage + SpreadsheetValidationException (422/503) + Stream SHA-256 Idempotency + Artifact FLS Clearance + 10-Provider DAG & RTL Studio",
+    description:
+      "End-to-end Single Source of Truth explainer board and interactive native sequence, workflow, and architecture diagrams documenting the elimination of .xlsx upload HTTP 500 errors (ResilientDevelopmentBlobStorage + LocalBlobStorage hierarchical relative paths + SpreadsheetValidationException 422/503 separation), 7-vector OWASP spreadsheet & formula defense, DataExchangeAmbientContext worker privilege scoping, fail-closed ValidateDownloadArtifactFieldClearanceAsync FLS & confidential cf:* enforcement, 10-provider natural-key/batch-lookup/quota hardening across CRM, PartyKernel, Identity & CustomFields, and context-scoped Next.js 16 Studio & Hub UX verified across 11 live Playwright E2E screenshots.",
+    htmlUrl: "/archify-hub/data-exchange-360-audit-resilient-pipeline.html",
+    specUrl: "/archify-hub/specs/data-exchange-360-audit-resilient-pipeline.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "83eb92c",
+    featured: true,
+    highlights: [
+      "Eliminates .xlsx/.csv upload HTTP 500 crashes via ResilientDevelopmentBlobStorage stream rewind & LocalBlobStorage fallback plus SpreadsheetValidationException 422/503 mapping",
+      "Enforces 7-vector OWASP upload shield (.xls OLE2, 100 MB ZIP ratio, full XML/DTD/vbaProject/.rels scan, Unicode format-char CSV formula guard) and sanitized job ErrorSummary",
+      "Hardens worker DataExchangeAmbientContext, membership-only AdminDataExchangeProvider.Assignability, stream SHA-256 idempotency, and fail-closed download FLS & cf:* clearance",
+      "Unifies all 10 CRM/PartyKernel/Identity providers (ResolvePartyIdsBatchAsync >2,000 rows, pre-commit ValidateReferenceAsync, WasCreated quota billing) & EN/AR RTL Nexus Studio UX",
+    ],
+    keySources: [
+      "SCRIPE-Backend/src/Host/API/Extensions/BlobStorageConfiguration.cs",
+      "SCRIPE-Backend/src/Core/Core.Infrastructure/Storage/LocalBlobStorage.cs",
+      "SCRIPE-Backend/src/Core/Core.Infrastructure/DataExchange/OwaspSpreadsheetSecurityValidator.cs",
+      "SCRIPE-Backend/src/Core/Core.Infrastructure/DataExchange/SpreadsheetValidationException.cs",
+      "SCRIPE-Backend/src/Modules/DataTransfer/DataTransfer.Infrastructure/Services/DataExchangeOrchestrator.Jobs.cs",
+      "SCRIPE-Backend/src/Modules/DataTransfer/DataTransfer.Infrastructure/Services/DataExchangeOrchestrator.ExecutionChunkCommit.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/DataExchange/AdminDataExchangeProvider.Assignability.cs",
+      "SCRIPE-Backend/src/Modules/CRM/CRM.Infrastructure/DataExchange/CrmEntityLookupProvider.cs",
+      "SCRIPE-Backend/src/Modules/CustomFields/CustomFields.Infrastructure/Services/CustomFieldBatchDataExchangeBridge.cs",
+      "SCRIPE-Frontend/src/core/data-exchange/infrastructure/repositories/data-exchange.repository.ts",
+      "SCRIPE-Frontend/src/core/data-exchange/presentation/stores/data-exchange-jobs.store.ts",
+      "SCRIPE-Frontend/src/modules/admin/data-transfer/src/presentation/views/EntitiesCatalogView.tsx",
+    ],
+  },
+  {
+    id: "crm-enterprise-overhaul-security-ux",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "CRM ENTERPRISE OVERHAUL · OWASP & UX AUDIT",
+    title: "CRM Enterprise Overhaul, Sovereign Assignees, Full-Card Kanban & 5-Layer OWASP Defense",
+    subtitle:
+      "Tenant Assignee Lookup + Exit Gate Allowlist + BOLA/PBAC Defense + Zero-Handle Direct Drag + Multi-Currency Kanban + Dynamic Stage Gates",
+    description:
+      "Comprehensive publication-grade Single Source of Truth explainer board and interactive diagrams documenting the SCRIPE CRM Enterprise Overhaul: tenant-scoped sovereign assignee lookup (/api/v1/crm/settings/assignees) with PII field redaction and AES-GCM encrypted wire IDs, PermittedExitFieldKeys exit gate allowlists, OWASP BOLA/PBAC elimination across lead/opportunity/contact-role handlers, zero-handle direct full-card Kanban drag with 6px PointerSensor, CrmEntitySearchSelect server combobox with inline quick-creation, multi-currency column and reporting conversions, and batch display-name hydration benchmarked against Odoo 18, SAP Sales Cloud, and Salesforce Lightning.",
+    htmlUrl: "/archify-hub/crm-enterprise-overhaul-security-ux.html",
+    specUrl: "/archify-hub/specs/crm-enterprise-overhaul-security-ux.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "83eb92c9",
+    featured: true,
+    highlights: [
+      "Tenant-scoped sovereign assignee resolution (GET /api/v1/crm/settings/assignees) with PBAC verification, PII field masking via IRestrictedFieldsResolver, and AES-GCM ID encryption",
+      "PermittedExitFieldKeys exit gate allowlist and MoveOpportunityStageCommandHandler gate validation eliminating untrusted dictionary keys and verifying tenant context",
+      "Zero-handle direct full-card Kanban dragging via KanbanSortableCard and 6px PointerSensor activation constraint, removing GripVertical friction and outer border nesting",
+      "CrmEntitySearchSelect debounced server combobox with CrmEntityQuickCreateDialog inline creation, CrmWorkflowTransitionDialog form reset on open, and live multi-currency column aggregation",
+    ],
+    keySources: [
+      "SCRIPE-Backend/src/Host/API/Controllers/CRM/SettingsController.cs",
+      "SCRIPE-Backend/src/Modules/CRM/CRM.Application/Queries/Settings/LookupCrmAssigneesQueryHandler.cs",
+      "SCRIPE-Backend/src/Modules/CRM/CRM.Application/Common/PermittedExitFieldKeys.cs",
+      "SCRIPE-Backend/src/Modules/CRM/CRM.Application/Commands/Opportunities/MoveOpportunityStageCommandHandler.GateValidation.cs",
+      "SCRIPE-Backend/src/Host/API/Controllers/CRM/DealContactRolesController.cs",
+      "SCRIPE-Backend/src/Modules/CRM/CRM.Application/Commands/Opportunities/RemoveDealContactRoleCommandHandler.cs",
+      "SCRIPE-Backend/src/Modules/CRM/CRM.Application/Common/CrmDisplayNameResolutionHelper.cs",
+      "SCRIPE-Frontend/src/core/crud/kanban/KanbanSortableCard.tsx",
+      "SCRIPE-Frontend/src/modules/crm/overview/src/presentation/components/CrmEntitySearchSelect.tsx",
+      "SCRIPE-Frontend/src/modules/crm/overview/src/presentation/components/CrmWorkflowTransitionDialog.tsx",
+      "SCRIPE-Frontend/src/modules/crm/overview/src/presentation/viewmodels/useCrmCurrency.ts",
+      "SCRIPE-Frontend/src/modules/crm/overview/src/presentation/components/settings/CrmCustomFieldsStudioCard.tsx",
+    ],
+  },
   {
     id: "account-passkeys-sudo-ux-redemption",
     pillar: "fullstack",
