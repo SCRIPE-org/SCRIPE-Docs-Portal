@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "SCRIPE-Backend Security Remediation V2: Sudo Binding, Critical RBAC & Federated Isolation",
+    "locale": "en",
+    "output": "SCRIPE-Docs-Portal/public/archify-hub/backend-security-remediation-v2-sequence.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Backend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "e772fd54bb8d0b3361190a33f0137487310c8791"
+    }
+  },
+  "participants": [
+    {
+      "id": "client",
+      "type": "frontend",
+      "label": "SPA / API Caller",
+      "sublabel": "JWT + Cookies",
+      "sources": [
+        {
+          "path": "src/Host/API/Extensions/MiddlewarePipeline.cs",
+          "line": 225,
+          "end_line": 280,
+          "label": "Middleware Ordering"
+        }
+      ]
+    },
+    {
+      "id": "edge",
+      "type": "security",
+      "label": "Edge Pipeline",
+      "sublabel": "Auth-First + Cookie",
+      "sources": [
+        {
+          "path": "src/Host/API/Middleware/CookieAuthMiddleware.cs",
+          "line": 310,
+          "end_line": 350,
+          "label": "Atomic Cookie Clear"
+        }
+      ]
+    },
+    {
+      "id": "sudo",
+      "type": "security",
+      "label": "SudoService",
+      "sublabel": "sid/jti HMAC Gate",
+      "sources": [
+        {
+          "path": "src/Modules/Identity/Identity.Infrastructure/Services/SudoService.Validation.cs",
+          "line": 21,
+          "end_line": 124,
+          "label": "Session Binding"
+        }
+      ]
+    },
+    {
+      "id": "handlers",
+      "type": "backend",
+      "label": "CQRS Handlers",
+      "sublabel": "RBAC, SSO & Media",
+      "sources": [
+        {
+          "path": "src/Core/Core.Application/Authorization/PermissionAuthorizationHandler.cs",
+          "line": 1,
+          "end_line": 50,
+          "label": "PBAC & PAT Scopes"
+        }
+      ]
+    },
+    {
+      "id": "cache",
+      "type": "database",
+      "label": "Distributed Cache",
+      "sublabel": "Sudo, Nonce & 2FA",
+      "sources": [
+        {
+          "path": "src/Core/Core.Infrastructure/Security/InternalServiceOnlyFilter.cs",
+          "line": 1,
+          "end_line": 45,
+          "label": "Replay & Session Store"
+        }
+      ]
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "Identity & Media DB",
+      "sublabel": "RoleGraph + Quotas",
+      "sources": [
+        {
+          "path": "src/Core/Core.Infrastructure/Services/FileService.cs",
+          "line": 1,
+          "end_line": 40,
+          "label": "RoleGraph & Upload Store"
+        }
+      ]
+    }
+  ],
+  "segments": [
+    { "from": 152, "to": 300, "label": "1. Auth-First Rate Limiting, 5-Part HMAC & Session-Bound Sudo Validation" },
+    { "from": 312, "to": 460, "label": "2. Critical RBAC Ceilings (#23/#27), Live Break-Glass (#11) & SSO Role Isolation (#01/#02)" },
+    { "from": 472, "to": 620, "label": "3. Media SVG/Quota Shield (#06/#31-33) & Atomic Refresh/OIDC/Sudo Logout Clearing (#16)" }
+  ],
+  "messages": [
+    {
+      "id": "req_ingress",
+      "from": "client",
+      "to": "edge",
+      "y": 176,
+      "label": "HTTPS + JWT + scripe_sudo_token",
+      "variant": "emphasis"
+    },
+    {
+      "id": "auth_before_rate",
+      "from": "edge",
+      "to": "cache",
+      "y": 210,
+      "label": "UseAuthentication -> per-user rate + nonce",
+      "variant": "security"
+    },
+    {
+      "id": "sudo_validate",
+      "from": "edge",
+      "to": "sudo",
+      "y": 244,
+      "label": "ValidateCurrentSessionElevation (no downgrade)",
+      "variant": "security"
+    },
+    {
+      "id": "sudo_cache_verify",
+      "from": "sudo",
+      "to": "cache",
+      "y": 278,
+      "label": "check sid/jti hash + activeSessionJti + TokenSha256",
+      "variant": "security"
+    },
+    {
+      "id": "rbac_cmd",
+      "from": "sudo",
+      "to": "handlers",
+      "y": 336,
+      "label": "GrantScopedAccess / TransferProtection / SSO",
+      "variant": "emphasis"
+    },
+    {
+      "id": "rbac_db_check",
+      "from": "handlers",
+      "to": "db",
+      "y": 370,
+      "label": "enforce non-self-grant, !IsDeleted & custody ceiling",
+      "variant": "security"
+    },
+    {
+      "id": "sso_role_check",
+      "from": "handlers",
+      "to": "db",
+      "y": 404,
+      "label": "verify EnabledForAdmins/Users + active tenant",
+      "variant": "security"
+    },
+    {
+      "id": "mfa_ticket",
+      "from": "handlers",
+      "to": "cache",
+      "y": 438,
+      "label": "issue 5m TwoFactorPendingToken (if MFA needed)",
+      "variant": "default"
+    },
+    {
+      "id": "media_upload",
+      "from": "client",
+      "to": "handlers",
+      "y": 496,
+      "label": "POST /medias/upload/chunk or /uploads/image",
+      "variant": "emphasis"
+    },
+    {
+      "id": "media_verify",
+      "from": "handlers",
+      "to": "db",
+      "y": 530,
+      "label": "magic bytes + SMIL SVG strip + staging quota",
+      "variant": "security"
+    },
+    {
+      "id": "logout_req",
+      "from": "client",
+      "to": "edge",
+      "y": 564,
+      "label": "POST /api/v1/auth/admin/logout",
+      "variant": "emphasis"
+    },
+    {
+      "id": "atomic_cookie_clear",
+      "from": "edge",
+      "to": "client",
+      "y": 598,
+      "label": "Clear refresh + OidcSession + Sudo cookies",
+      "variant": "return"
+    }
+  ],
+  "activations": [
+    { "participant": "edge", "from": 172, "to": 252, "type": "security" },
+    { "participant": "sudo", "from": 240, "to": 344, "type": "security" },
+    { "participant": "handlers", "from": 332, "to": 446, "type": "backend" },
+    { "participant": "handlers", "from": 492, "to": 538, "type": "backend" },
+    { "participant": "edge", "from": 560, "to": 604, "type": "security" }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Critical & High RBAC Hardening",
+      "items": [
+        "#23 ScopeGrant: blocks self-grant, validates tenant ownership & enforces caller data-scope ceiling",
+        "#27 TransferProtection: requires current protected owner + role assignability before transfer",
+        "#11 Delegations & Break-Glass: live grantor DirectPerms intersection + custody ceilings + !PlatformOnly"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Session-Bound Sudo & Auth-First Edge",
+      "items": [
+        "SudoService binds scripe_sudo_token to sid/jti SessionHash and blocks header-to-cookie downgrade",
+        "MiddlewarePipeline runs UseCookieAuth + UseAuthentication before UseRateLimitingConfiguration",
+        "CookieAuthMiddleware atomically clears scr_refresh_token, scr.oidc.session & scripe_sudo_token"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Media Shield & Test Verification",
+      "items": [
+        "FileService strips SMIL, control-char URIs & DTDs; static .svg serves sandbox CSP header",
+        "UploadChunkCommand enforces magic bytes, MaxAllowedChunks=1000 & active staging quota accounting",
+        "1,926 backend tests passing (359 Entitlements + 127 Media + 539 API + 901 Identity)"
+      ]
+    }
+  ]
+}

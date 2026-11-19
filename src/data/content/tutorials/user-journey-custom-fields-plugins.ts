@@ -29,7 +29,7 @@ const sections: DocSection[] = [
   "valueType": "Text",
   "isRequired": true,
   "isEncrypted": true,
-  "validationRegex": "^\\\\+?[1-9]\\\\d{1,14}\$",
+  "validationRegex": "^\\\\+?[1-9]\\\\d{1,14}$",
   "fieldGroupId": "fg_safety_protocol"
 }`,
   },

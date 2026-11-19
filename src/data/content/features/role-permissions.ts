@@ -215,7 +215,7 @@ const sections: DocSection[] = [
     code: `// RolePermission for role "HR_VIEWER" on permission "admins.view"
 {
   "scopeOverride": "own_tenant",
-  "restrictedFieldsJson": "[\"salary\", \"ssn\", \"bankAccount\", \"nationalId\"]"
+  "restrictedFieldsJson": "["salary", "ssn", "bankAccount", "nationalId"]"
 }
 
 // API Response: restricted fields are recursively nullified by middleware

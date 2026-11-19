@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "explainer",
+  "quality": "showcase",
+  "specification": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-identity-sso-zero-trust-security-20261119-012000\\candidate.archify.md",
+    "sha256": "50f90937ed009f4aa4dd3b219894e4f97e8a6f969cd6009c2e7612a378a190da",
+    "bytes": 17828
+  },
+  "artifact": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-zero-trust-security.html",
+    "sha256": "f32bec7b6d034ae221de2123cfe0f600079b85bdde9d17cd2c5414dc49419893",
+    "bytes": 1469438
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "not-run"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-zero-trust-security.finalize.json",
+    "summaryReceipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-zero-trust-security.finalize-summary.json"
+  },
+  "visualReview": "not-requested",
+  "durationMs": 5624,
+  "browserCheck": {
+    "requested": false,
+    "ran": false
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "explainer",
+  "quality": "showcase",
+  "specification": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-identity-sso-security-remediation-v2-20261119-195800\\candidate.archify.md",
+    "sha256": "300ade2ddeb0461cc42ec9841cd80892e32693210ffa208389b2e600113b5015",
+    "bytes": 17551
+  },
+  "artifact": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-security-remediation-v2.html",
+    "sha256": "20ad50a8ef0bd6034ea4a7739ad31b409eb7b4956bfe18e1377ec48c3b3dc57d",
+    "bytes": 1455570
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "not-run"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-security-remediation-v2.finalize.json",
+    "summaryReceipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-security-remediation-v2.finalize-summary.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-18T23:23:05.931Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 4226,
+  "browserCheck": {
+    "requested": false,
+    "ran": false
+  }
+}

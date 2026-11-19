@@ -41,7 +41,7 @@ const sections: DocSection[] = [
     language: "bash",
     filename: "Submit DSR Erasure Request (POST /api/v1/compliance/dsr)",
     code: `curl -X POST http://localhost:5000/api/v1/compliance/dsr \\
-  -H "Authorization: Bearer \$TOKEN" \\
+  -H "Authorization: Bearer $TOKEN" \\
   -H "Content-Type: application/json" \\
   -d '{
     "subjectEmail": "user@example.com",

@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "SCRIPE Federated SSO, Sudo Link, Hybrid MFA & Runtime Guard Sequence",
+    "locale": "en",
+    "output": "SCRIPE-Docs-Portal/public/archify-hub/identity-sso-hybrid-mfa-sequence.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "960923d28a6e9ebc72114cec9228cb2f73457f30"
+    }
+  },
+  "participants": [
+    {
+      "id": "spa",
+      "type": "frontend",
+      "label": "Next.js 16 SPA",
+      "sublabel": "Login & Account UI",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 96,
+          "end_line": 105,
+          "label": "Frontend MVVM"
+        }
+      ]
+    },
+    {
+      "id": "edge",
+      "type": "security",
+      "label": "Security Edge",
+      "sublabel": "PAT, CIDR & Sudo",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 124,
+          "end_line": 133,
+          "label": "5-Layer Security"
+        }
+      ]
+    },
+    {
+      "id": "sso",
+      "type": "backend",
+      "label": "SSO & Auth API",
+      "sublabel": "OIDC, SAML & 2FA",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 83,
+          "end_line": 88,
+          "label": "Backend CQRS"
+        }
+      ]
+    },
+    {
+      "id": "idp",
+      "type": "external",
+      "label": "External IdP",
+      "sublabel": "JWKS / X.509",
+      "sources": [
+        {
+          "path": ".agents/skills/scripe-security-crypto/SKILL.md",
+          "line": 38,
+          "end_line": 55,
+          "label": "Federated Trust"
+        }
+      ]
+    },
+    {
+      "id": "cache",
+      "type": "database",
+      "label": "State & 2FA Cache",
+      "sublabel": "IDistributedCache",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 128,
+          "end_line": 131,
+          "label": "Single-Use Tickets"
+        }
+      ]
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "Identity DB",
+      "sublabel": "IgnoreQueryFilters",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 89,
+          "end_line": 94,
+          "label": "Schema Isolation"
+        }
+      ]
+    }
+  ],
+  "segments": [
+    { "from": 152, "to": 292, "label": "1. Sudo / Login Challenge & Server-Side State Ticket" },
+    { "from": 304, "to": 448, "label": "2. Cryptographic Verification & Subject-First Binding" },
+    { "from": 460, "to": 604, "label": "3. Hybrid MFA TwoFactorPendingToken & Live Runtime Guard" }
+  ],
+  "messages": [
+    {
+      "id": "init_challenge",
+      "from": "spa",
+      "to": "edge",
+      "y": 176,
+      "label": "POST initiate-link / login",
+      "variant": "emphasis"
+    },
+    {
+      "id": "verify_sudo",
+      "from": "edge",
+      "to": "sso",
+      "y": 208,
+      "label": "TryDecrypt IDs + X-Sudo-Token",
+      "variant": "security"
+    },
+    {
+      "id": "save_ticket",
+      "from": "sso",
+      "to": "cache",
+      "y": 240,
+      "label": "save state, nonce, PKCE, purpose",
+      "variant": "security"
+    },
+    {
+      "id": "redirect_idp",
+      "from": "sso",
+      "to": "spa",
+      "y": 272,
+      "label": "allowlisted authorizationUrl",
+      "variant": "return"
+    },
+    {
+      "id": "idp_authn",
+      "from": "spa",
+      "to": "idp",
+      "y": 328,
+      "label": "authenticate & callback code/SAML",
+      "variant": "default"
+    },
+    {
+      "id": "consume_ticket",
+      "from": "sso",
+      "to": "cache",
+      "y": 360,
+      "label": "consume single-use state ticket",
+      "variant": "security"
+    },
+    {
+      "id": "verify_proof",
+      "from": "sso",
+      "to": "idp",
+      "y": 392,
+      "label": "verify JWKS / X.509 + sub + email_verified",
+      "variant": "security"
+    },
+    {
+      "id": "subject_lookup",
+      "from": "sso",
+      "to": "db",
+      "y": 424,
+      "label": "IgnoreQueryFilters (ProviderId, sub)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "issue_2fa_ticket",
+      "from": "sso",
+      "to": "cache",
+      "y": 484,
+      "label": "HybridMfaPolicy -> 5m 2FA ticket",
+      "variant": "security"
+    },
+    {
+      "id": "return_2fa",
+      "from": "sso",
+      "to": "spa",
+      "y": 516,
+      "label": "200 Requires2FA (empty tokens)",
+      "variant": "return"
+    },
+    {
+      "id": "redeem_2fa",
+      "from": "spa",
+      "to": "sso",
+      "y": 548,
+      "label": "POST /2fa/verify (TOTP + ticket)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "runtime_call",
+      "from": "spa",
+      "to": "edge",
+      "y": 580,
+      "label": "API call (JWT / scr_pat_ / CIDR)",
+      "variant": "security"
+    }
+  ],
+  "activations": [
+    { "participant": "edge", "from": 172, "to": 216, "type": "security" },
+    { "participant": "sso", "from": 204, "to": 278, "type": "backend" },
+    { "participant": "sso", "from": 354, "to": 556, "type": "backend" },
+    { "participant": "cache", "from": 236, "to": 252, "type": "database" },
+    { "participant": "cache", "from": 356, "to": 372, "type": "database" },
+    { "participant": "cache", "from": 480, "to": 496, "type": "database" },
+    { "participant": "edge", "from": 574, "to": 592, "type": "security" }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Cryptographic & Binding Invariants",
+      "items": [
+        "Encrypted IDs fail closed (422/404) via EncryptedGuidModelBinder and _idEncryption.TryDecrypt",
+        "Subject-first (IdentityProviderId, ProviderKey) lookup blocks subject-swap takeover",
+        "Auto-linking requires EmailVerified=true; legacy client-supplied link returns 410 Gone"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Hybrid MFA & Cookie Delivery",
+      "items": [
+        "TrustIdpMfa or verified amr/acr skips duplicate TOTP; otherwise issues 5-min TwoFactorPendingToken",
+        "CookieAuthMiddleware strips refreshToken from JSON bodies into HttpOnly scr_refresh_token",
+        "UpdateLastLoginAtAsync persists via ExecuteUpdateAsync to avoid EF role-graph collisions"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Post-Auth Runtime Gates",
+      "items": [
+        "PersonalAccessTokenAuthenticationHandler enforces pat_scope with no SystemProtected bypass",
+        "TrustedCidrEnforcementMiddleware enforces AdminSecurityProfile CIDRs across every module",
+        "ApiKeyUsageMiddleware enforces X-API-Key SHA-256, IpWhitelist, burst rate limits & usage logs"
+      ]
+    }
+  ]
+}

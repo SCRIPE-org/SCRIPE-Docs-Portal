@@ -47,21 +47,21 @@ export const ARCHIFY_PILLAR_META: Record<
     label: "Super Full-Stack (Both Backend + Frontend)",
     shortLabel: "Super Full-Stack",
     tagline:
-      "End-to-End Platform Single Source of Truth uniting Next.js 16 MVVM, .NET 10 AstraFlow 2.3.0, Dual-Mode DB, Outbox & 193-Command CLI",
+      "End-to-End Platform Single Source of Truth uniting Next.js 16 MVVM, .NET 10 AstraFlow 2.4.7, Dual-Mode DB, Outbox & 193-Command CLI",
     repoName: "SCRIPE-org/SCRIPE",
-    commit: "83eb92c",
+    commit: "960923d",
     accentColor: "#B7FF00",
-    count: 16,
+    count: 21,
   },
   backend: {
-    label: "SCRIPE-Backend Deep Dive (.NET 10 & AstraFlow 2.3.0)",
+    label: "SCRIPE-Backend Deep Dive (.NET 10 & AstraFlow 2.4.7)",
     shortLabel: "Backend (.NET 10)",
     tagline:
       "18 Isolated 3-Project Domain Modules, 29-Stage Security Gate, 927+ CQRS Handlers, 3-TX Idempotency & Multi-DB Persistence",
     repoName: "SCRIPE-org/SCRIPE-Backend",
-    commit: "f941b150",
+    commit: "e772fd54bb8d0b3361190a33f0137487310c8791",
     accentColor: "#38BDF8",
-    count: 11,
+    count: 14,
   },
   frontend: {
     label: "SCRIPE-Frontend Deep Dive (Next.js 16 + React 19 MVVM)",
@@ -69,9 +69,9 @@ export const ARCHIFY_PILLAR_META: Record<
     tagline:
       "65+ Isolated Sub-Modules, 5-Layer SOLID MVVM Data Flow, Inversify DI, Sileo UI & Bilingual EN/AR Parity",
     repoName: "SCRIPE-org/SCRIPE-Frontend",
-    commit: "2915891e5",
+    commit: "91232f19b",
     accentColor: "#A78BFA",
-    count: 13,
+    count: 14,
   },
 };
 
@@ -94,8 +94,170 @@ export const ARCHIFY_MODE_META: Record<
 
 export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
   // ============================================================================
-  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 16 PAGES
+  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 21 PAGES
   // ============================================================================
+  {
+    id: "identity-sso-security-remediation-v2",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "IDENTITY & SSO V2 · 36/36 AUDIT + CLI",
+    title: "Identity & Multi-Tenant SSO Security Remediation V2: 36/36 Audit, Smart Adaptive SSO & Hardened CLI",
+    subtitle:
+      "6-Tenant Adaptive SSO + Fail-Closed UNKNOWN_999 · 36/36 Run-2 Findings Mitigated · scripe_sudo_token Session Binding · 1.37 GB Cobertura Stream",
+    description:
+      "Single Source of Truth explainer board for the Identity & Multi-Tenant SSO Security Remediation V2 milestone: Smart Adaptive SSO across AHLY, CITY, FALCON, APEX, COMMUNITY, ACFC, Platform Root, and fail-closed UNKNOWN_999 (with zero clipping in EN/AR RTL and 375px mobile), 36/36 Security Audit run-2 mitigations (2 Critical, 17 High, 16 Medium, 1 Low across Identity, SSO, RBAC, Delegations/Break-Glass, OpenIddict/SAML, Media Uploads, Host Cookies, and Frontend store cleanup), scripe-cli streaming Cobertura XML parser (1.37 GB / 26 files in 2.63s) and command hardening, verified across 1,926 backend tests, arch-check 96/100, astraflow validate ok, check --quick 5/5, 6/6 live Playwright (21 PNGs), and ux-expert-v4 PASS.",
+    htmlUrl: "/archify-hub/identity-sso-security-remediation-v2.html",
+    specUrl: "/archify-hub/specs/identity-sso-security-remediation-v2.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "960923d",
+    featured: true,
+    highlights: [
+      "36/36 Security Audit run-2 findings mitigated (2 Critical: ScopeGrant #23 & TransferProtection #27; 17 High, 16 Medium, 1 Low; 0 gaps)",
+      "Smart Adaptive SSO across all 6 tenants (AHLY, CITY, FALCON, APEX, COMMUNITY, ACFC) + Platform Root + fail-closed UNKNOWN_999 with 0px clipping in EN/AR RTL & 375px mobile",
+      "Session-bound scripe_sudo_token (sid/jti) + atomic CookieAuthMiddleware logout clearing + AccountLayout real POST /logout + ownerUserId PAT & Sudo store purge",
+      "scripe-cli streams 1.37 GB (26 Cobertura files) in 2.63s (59.9 MB heap), removes -v collision, isolates SQLCMDPASSWORD, enforces shell:false & db outbox purge --confirm",
+      "Verified gates: 1,926 backend tests (359+127+539+901), arch-check 96/100, astraflow validate ok, check --quick 5/5, live Playwright 6/6 (21 PNGs), ux-expert-v4 PASS",
+    ],
+    keySources: [
+      ".agents/rules/security-and-infrastructure.md",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Services/SudoService.Validation.cs",
+      "SCRIPE-Backend/src/Host/API/Middleware/CookieAuthMiddleware.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Persistence/Repositories/AdminRepository.RoleGraph.Delegations.BreakGlass.cs",
+      "SCRIPE-Backend/src/Core/Core.Infrastructure/Services/FileService.cs",
+      "SCRIPE-Frontend/src/modules/shared/auth/signin/src/presentation/components/SsoProviderButtons.tsx",
+      "SCRIPE-Frontend/src/app/(account)/layout.tsx",
+      "SCRIPE-Frontend/src/core/store/usePatOneTimeSecretStore.ts",
+      "SCRIPE-Dev-Tools/scripe-cli/src/utils/coverage-checker.ts",
+    ],
+  },
+  {
+    id: "identity-sso-remediation-v2-architecture",
+    pillar: "fullstack",
+    mode: "architecture",
+    badge: "4 GUIDED VIEWS · V2 REMEDIATION",
+    title: "Identity & Multi-Tenant SSO Security Remediation V2 Architecture",
+    subtitle:
+      "4 Guided Views: Smart Adaptive SSO & Fail-Closed · Audit run-2 (36/36) Shield · Sudo Cookie & Store Cleanup · Hardened CLI & Quality Gates",
+    description:
+      "Native Archify Architecture diagram with 4 Guided Views mapping SCRIPE V2 across Adaptive SSO Login, Account & Store Isolation, Auth-First Rate Limiting & Cookie Clearing, Session-Bound Sudo, Critical RBAC & Break-Glass Custody, Media/SVG Quota Shield, Hardened scripe-cli, and Verified Quality Gates.",
+    htmlUrl: "/archify-hub/identity-sso-remediation-v2-architecture.html",
+    specUrl: "/archify-hub/specs/identity-sso-remediation-v2-architecture.architecture.json",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "960923d",
+    featured: true,
+    viewsCount: 4,
+    highlights: [
+      "4 Guided Views covering Smart Adaptive SSO, Audit run-2 (36/36), Session-Bound Sudo & Store Cleanup, and Hardened CLI & Quality Gates",
+      "Zero-crossing showcase topology verified by automated check and real browser-check (0 errors, 0 warnings)",
+      "Covers all 6 seeded tenants + Platform Root + fail-closed UNKNOWN_999 and 1,926 passing backend tests",
+    ],
+    keySources: [
+      "AGENTS.md",
+      ".agents/skills/scripe-security-crypto/SKILL.md",
+      "SCRIPE-Backend/src/Host/API/Middleware/CookieAuthMiddleware.cs",
+      "SCRIPE-Frontend/src/modules/shared/auth/signin/src/presentation/components/SsoProviderButtons.tsx",
+      "SCRIPE-Dev-Tools/scripe-cli/src/utils/coverage-checker.ts",
+    ],
+  },
+  {
+    id: "identity-sso-zero-trust-security",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "ZERO-TRUST IDENTITY · SSO + HYBRID MFA + RUNTIME",
+    title: "Multi-Tenant Identity Provider, Federated SSO, Hybrid MFA & Runtime Security Enforcement",
+    subtitle:
+      "Pre-Auth IgnoreQueryFilters + Fail-Closed Encrypted IDs + OIDC/OAuth2/SAML Cryptographic Proof + TwoFactorPendingToken + Sudo Console + Live PAT/API-Key/Delegation/CIDR",
+    description:
+      "Comprehensive Single Source of Truth explainer board documenting the hardened SCRIPE Multi-Tenant Identity Provider, Federated SSO (OIDC, pure OAuth2/GitHub, SAML 2.0 SP & IdP, Apple/Microsoft/Google/Facebook JWKS & debug_token), HybridMfaPolicy TwoFactorPendingToken step-up across SSO and passwordless flows (Magic Link, Phone OTP, atomic QR Login), Sudo-gated Account Security console eliminating mock SSO catalogs (410 Gone direct link), Platform-Admin /tenants/[id] IdP management with RowVersion/IsActive/TrustIdpMfa, and live runtime enforcement for PATs (scr_pat_...), X-API-Key, AdminDelegation, and Global CIDR.",
+    htmlUrl: "/archify-hub/identity-sso-zero-trust-security.html",
+    specUrl: "/archify-hub/specs/identity-sso-zero-trust-security.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "960923d",
+    featured: true,
+    highlights: [
+      "Enforces .IgnoreQueryFilters() with explicit !IsDeleted/lockout/tenant guards on pre-auth & cross-tenant lookups plus fail-closed EncryptedGuidModelBinder/_idEncryption.TryDecrypt (422/404, zero Guid.TryParse)",
+      "Cryptographically verifies Apple/Microsoft/Google/OIDC JWKS (MapInboundClaims=false), GitHub OAuth2 /user/emails, and SAML X.509 + InResponseTo with subject-first lookup and verified-email auto-link",
+      "Unifies HybridMfaPolicy TwoFactorPendingToken step-up across OIDC, OAuth2, SAML, Magic Link, and Phone OTP plus atomic Approved->Consumed QR Login and OpenIddict /connect/authorize Deny",
+      "Eliminates mock catalogs and dead security tables: live DB availableSsoProviders, Sudo initiate-link (410 Gone legacy link), PAT scr_pat_... pat_scope enforcement, X-API-Key, AdminDelegation, and Global CIDR across all modules",
+    ],
+    keySources: [
+      ".agents/rules/security-and-infrastructure.md",
+      ".agents/skills/scripe-security-crypto/SKILL.md",
+      "SCRIPE-Backend/src/Host/API/Extensions/EncryptedGuidModelBinder.cs",
+      "SCRIPE-Backend/src/Host/API/Controllers/Auth/OidcClientController.cs",
+      "SCRIPE-Backend/src/Host/API/Controllers/Auth/OidcServerController.cs",
+      "SCRIPE-Backend/src/Host/API/Controllers/Identity/PlatformTenantIdentityProvidersController.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Application/Abstractions/HybridMfaPolicy.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Services/OidcClientService.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Services/SamlClientService.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Services/ExternalAuthService.cs",
+      "SCRIPE-Backend/src/Core/Core.Infrastructure/Authentication/PersonalAccessTokenAuthenticationHandler.cs",
+      "SCRIPE-Backend/src/Core/Core.Application/Authorization/PermissionAuthorizationHandler.cs",
+      "SCRIPE-Backend/src/Host/API/Middleware/ApiKeyUsageMiddleware.cs",
+      "SCRIPE-Backend/src/Host/API/Middleware/TrustedCidrEnforcementMiddleware.cs",
+      "SCRIPE-Frontend/src/modules/shared/profile/core/src/presentation/views/AccountSecurityView.tsx",
+      "SCRIPE-Frontend/src/modules/admin/identity/identity-providers/src/presentation/views/IdentityProvidersView.tsx",
+      "SCRIPE-Frontend/src/modules/admin/identity/tenants/src/presentation/components/tabs/TenantIdentityProvidersTab.tsx",
+      "SCRIPE-Frontend/src/modules/shared/auth/signin/src/presentation/views/LoginView.tsx",
+    ],
+  },
+  {
+    id: "identity-sso-zero-trust-architecture",
+    pillar: "fullstack",
+    mode: "architecture",
+    badge: "4 GUIDED VIEWS · ZERO-TRUST IDENTITY",
+    title: "Multi-Tenant Identity, Federated SSO, Hybrid MFA & Runtime Security Architecture",
+    subtitle:
+      "4 Guided Views: Multi-Tenant IdP Discovery, Federated SSO & Hybrid MFA, Sudo Account Console & Live PAT/API-Key/Delegation/Global CIDR Enforcement",
+    description:
+      "Native Archify Architecture diagram with 4 Guided Views mapping Next.js 16 Login & Account/IdP Consoles, Zero-Trust ASP.NET Core Edge Middleware (PAT, X-API-Key, Global CIDR), Encrypted ID & Sudo PBAC Gate, OIDC/OAuth2/SAML/Passwordless Engines, OpenIddict Server, HybridMfaPolicy, Distributed Cache Tickets, and Identity/Integrations Schemas.",
+    htmlUrl: "/archify-hub/identity-sso-zero-trust-architecture.html",
+    specUrl: "/archify-hub/specs/identity-sso-zero-trust-architecture.architecture.json",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "960923d",
+    featured: true,
+    viewsCount: 4,
+    highlights: [
+      "4 Guided Views covering IdP Discovery, Federated SSO & Hybrid MFA, Sudo Account Console, and Live Runtime Guards",
+      "Zero-crossing topology uniting Frontend MVVM, ASP.NET Core security edge, External IdPs, OpenIddict, and isolated DB schemas",
+      "Verified with showcase quality gate and real-browser check (0 diagnostics)",
+    ],
+    keySources: [
+      "SCRIPE-Backend/src/Host/API/Middleware/TrustedCidrEnforcementMiddleware.cs",
+      "SCRIPE-Backend/src/Host/API/Middleware/ApiKeyUsageMiddleware.cs",
+      "SCRIPE-Backend/src/Core/Core.Infrastructure/Authentication/PersonalAccessTokenAuthenticationHandler.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Application/Abstractions/HybridMfaPolicy.cs",
+      "SCRIPE-Backend/src/Host/API/Controllers/Identity/PlatformTenantIdentityProvidersController.cs",
+      "SCRIPE-Frontend/src/modules/shared/profile/core/src/presentation/views/AccountSecurityView.tsx",
+    ],
+  },
+  {
+    id: "identity-sso-hybrid-mfa-sequence",
+    pillar: "fullstack",
+    mode: "sequence",
+    badge: "6 PARTICIPANTS · FEDERATED SSO + 2FA",
+    title: "Federated SSO, Sudo Link, Hybrid MFA & Runtime Guard Sequence",
+    subtitle:
+      "Next.js 16 SPA -> Security Edge (Sudo/PAT/CIDR) -> SSO & Auth API -> External IdP (JWKS/X.509) -> State & 2FA Cache -> Identity DB",
+    description:
+      "Native Archify Sequence diagram tracing the 3-phase lifecycle of Sudo-gated federated linking and SSO login: encrypted ID & Sudo validation, server-side single-use state/nonce/PKCE tickets, cryptographic JWKS/X.509 proof with subject-first .IgnoreQueryFilters() binding, HybridMfaPolicy TwoFactorPendingToken step-up, and post-auth PAT/CIDR runtime enforcement.",
+    htmlUrl: "/archify-hub/identity-sso-hybrid-mfa-sequence.html",
+    specUrl: "/archify-hub/specs/identity-sso-hybrid-mfa-sequence.sequence.json",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "960923d",
+    highlights: [
+      "3 Segmented Phases: Sudo/Login Challenge, Cryptographic Verification & Subject-First Binding, Hybrid MFA & Runtime Guard",
+      "Traces single-use IExternalAuthStateStore tickets and 5-minute TwoFactorPendingToken redemption with empty pre-2FA tokens",
+      "Verified with showcase quality gate and real-browser check (0 diagnostics)",
+    ],
+    keySources: [
+      "SCRIPE-Backend/src/Host/API/Controllers/Auth/OidcClientController.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Services/OidcClientService.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Services/SamlClientService.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Services/TwoFactorPendingTicketService.cs",
+      "SCRIPE-Frontend/src/modules/shared/auth/signin/src/presentation/components/SsoCallbackContent.tsx",
+    ],
+  },
   {
     id: "data-exchange-360-audit-resilient-pipeline",
     pillar: "fullstack",
@@ -571,8 +733,92 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
   },
 
   // ============================================================================
-  // PILLAR 2: BACKEND DEEP DIVE (.NET 10 & ASTRAFLOW 2.3.0) — 10 PAGES
+  // PILLAR 2: BACKEND DEEP DIVE (.NET 10 & ASTRAFLOW 2.4.7) — 14 PAGES
   // ============================================================================
+  {
+    id: "backend-seeding-architecture-review",
+    pillar: "backend",
+    mode: "explainer",
+    badge: "SEEDING AUDIT · 19 MODULES · PROD VS DEV",
+    title: "SCRIPE-Backend Seeding Architecture Review: Production Baseline vs. Opt-In Dev Seeders & 8 Audit Gaps",
+    subtitle:
+      "DatabaseSeeder + 18 IModuleSeeder (Smart Sync, Self-Healing + SEC-10, DDL Guardians, Seed-Once) vs. 19 IModuleDevDataSeeder DAG (Order 10..170) & SeedingScope",
+    description:
+      "Comprehensive audit of SCRIPE's two-tier database seeding architecture across all 19 backend modules and scripe-cli: Production baseline seeding (DatabaseSeeder, IModulePermissionProvider, IModuleMenuProvider, IModuleFeatureProvider, RoleAndAdminSeeder SEC-10 fail-closed guard, Oracle/PG/SQLServer Guardian triggers, and 12 migration-only seeders) vs. opt-in development UAT seeding (DevDataSeederRunner Order 10..170 and DevSeedConstants deterministic UUID v4 catalog), plus 8 architectural risks and CLI gaps including missing Production guards on --seed-dev, double execution of 3 hosted seeders, swallowed exceptions in RunModuleSeedersAsync, and unwired CLI flags (--seed-reset, prod -m).",
+    htmlUrl: "/archify-hub/backend-seeding-architecture-review.html",
+    specUrl: "/archify-hub/specs/backend-seeding-architecture-review.archify.md",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "e772fd54bb8d0b3361190a33f0137487310c8791",
+    featured: true,
+    highlights: [
+      "Two-tier DI contract separation across 19 modules: Tier 1 Production Baseline (DatabaseSeeder + 18 IModuleSeeder) vs. Tier 2 Opt-In Dev UAT (DevDataSeederRunner + 19 IModuleDevDataSeeder)",
+      "4 Production strategies: Smart-Sync providers, Self-Healing + SEC-10 fail-closed admin provisioning, 4-DB DDL Guardian triggers, and Seed-Once lookup catalogs",
+      "SeedingScope (AsyncLocal<bool>) suppresses OutboxMessage emission and AuditableEntityInterceptor audit floods across both startup and dev seeding",
+      "Identifies 8 concrete gaps: missing IsProduction() guard on --seed-dev, double execution of Entitlements/Compliance/Communication hosted seeders, swallowed production exceptions, and unwired --seed-reset / prod -m CLI flags",
+    ],
+    keySources: [
+      "src/Modules/Identity/Identity.Infrastructure/Persistence/DatabaseSeeder.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Persistence/DatabaseSeeder.Orchestration.cs",
+      "src/Core/Core.Infrastructure/Architecture/DevDataSeederRunner.cs",
+      "src/Core/Core.Infrastructure/Architecture/DevSeedConstants.cs",
+      "src/Core/Core.Infrastructure/Persistence/SeedingScope.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Persistence/Seeding/RoleAndAdminSeeder.AdminAndDomains.cs",
+      "SCRIPE-Dev-Tools/scripe-cli/src/commands/db-lifecycle.ts",
+    ],
+  },
+  {
+    id: "backend-security-remediation-v2-sequence",
+    pillar: "backend",
+    mode: "sequence",
+    badge: "36/36 AUDIT · SUDO, RBAC & MEDIA",
+    title: "SCRIPE-Backend Security Remediation V2: Sudo Binding, Critical RBAC & Federated Isolation",
+    subtitle:
+      "Auth-First Rate Limiting + sid/jti scripe_sudo_token -> Critical ScopeGrant (#23) / TransferProtection (#27) / Break-Glass (#11) -> Media Shield & Atomic Logout Clear",
+    description:
+      "Native Archify Sequence diagram tracing the 3 hardened backend security lifecycles verified in Security Audit run-2 (36/36 mitigated across 1,926 backend tests): Auth-First rate limiting and 5-part HMAC + session-bound scripe_sudo_token anti-downgrade verification, Critical RBAC ceilings (#23 ScopeGrant, #27 TransferProtection) with live Break-Glass custody (#11) and OIDC/SAML role isolation (#01/#02/#22), and Media/SVG SMIL+magic-byte+quota defense (#06/#31-33) plus atomic Refresh/OidcSession/Sudo cookie clearing (#16).",
+    htmlUrl: "/archify-hub/backend-security-remediation-v2-sequence.html",
+    specUrl: "/archify-hub/specs/backend-security-remediation-v2-sequence.sequence.json",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "e772fd54bb8d0b3361190a33f0137487310c8791",
+    featured: true,
+    highlights: [
+      "Traces Auth-First MiddlewarePipeline ordering, 5-part HMAC + replay nonce, and session-bound scripe_sudo_token sid/jti verification without header-to-cookie downgrade",
+      "Models Critical #23 ScopeGrant & #27 TransferProtection guards, #11 live Break-Glass custody intersection, and #01/#02 OIDC/SAML role + 2FA isolation",
+      "Traces Media/SVG SMIL stripping, sandbox CSP, staging quota accounting (#06/#31-33), and atomic clearing of scr_refresh_token, scr.oidc.session & scripe_sudo_token",
+    ],
+    keySources: [
+      "src/Host/API/Extensions/MiddlewarePipeline.cs",
+      "src/Host/API/Middleware/CookieAuthMiddleware.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Services/SudoService.Validation.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Persistence/Repositories/AdminRepository.RoleGraph.Delegations.BreakGlass.cs",
+      "src/Core/Core.Infrastructure/Services/FileService.cs",
+    ],
+  },
+  {
+    id: "astraflow-247-full-migration",
+    pillar: "backend",
+    mode: "explainer",
+    badge: "CURRENT · ASTRAFLOW 2.4.7 · .NET 10",
+    title: "SCRIPE AstraFlow 2.4.7 Full-Family Migration",
+    subtitle:
+      "All 16 packages: generated mapping, CQRS, projection, validation, diagnostics, security, telemetry, assertions & CLI",
+    description:
+      "Current SCRIPE backend audit documenting all 16 AstraFlow 2.4.7 packages, active capabilities, Identity projection, passing backend build and test suites, complete CRM refusal coverage, and two AstraFlow CLI/convention limitations triaged as non-blocking. The repository-wide quick gate still reports unrelated CSharpier drift and a docs Turbopack build failure.",
+    htmlUrl: "/archify-hub/astraflow-247-full-migration.html",
+    specUrl: "/archify-hub/specs/astraflow-247-full-migration.archify.md",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "e772fd54bb8d0b3361190a33f0137487310c8791",
+    featured: true,
+    highlights: [
+      "All 16 AstraFlow packages centrally pinned to 2.4.7; the backend stays on .NET 10",
+      "AstraFlow mediator and generated mappings used across 20+ application projects",
+      "Provider-translatable projections validated for SQL Server, Oracle, and PostgreSQL",
+      "Diagnostics, redaction, FluentValidation, OpenTelemetry, assertions, testing, and CLI integrated",
+      "All 26 CRM authorization refusals have real test coverage; the backend build and all 25 test suites pass",
+      "AwesomeAssertions removed from backend references; a 2.4.7 bundled-doc version typo reported upstream",
+    ],
+    keySources: [],
+  },
   {
     id: "scripe-data-exchange-architecture",
     pillar: "backend",
@@ -607,20 +853,20 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
     id: "astraflow-242-assertion-gap",
     pillar: "backend",
     mode: "explainer",
-    badge: "ASTRAFLOW 2.4.2 · ASSERTION MIGRATION GATE",
-    title: "AstraFlow 2.4.2 Assertions: Fixed Message Overload and Remaining SCRIPE Gaps",
+    badge: "HISTORICAL SNAPSHOT · ASTRAFLOW 2.4.2",
+    title: "Historical AstraFlow 2.4.2 Assertions Diagnosis",
     subtitle:
-      "The screenshot's BeTrue reason overload is fixed; other compile-time gaps still pause migration",
+      "This earlier assertion-gap snapshot was superseded by the AstraFlow 2.4.7 migration",
     description:
-      "A .NET 10 backend migration diagnosis comparing the assertion gap fixed by AstraFlow 2.4.2 with the missing reason overloads, BooleanAssertions.Be(bool), and duplicate public exception name that still block a faithful SCRIPE test migration.",
+      "Historical .NET 10 migration diagnosis for AstraFlow 2.4.2. Its missing assertion overloads and compile failures describe that old package snapshot and are not the current 2.4.7 migration status.",
     htmlUrl: "/archify-hub/astraflow-242-assertion-gap.html",
     specUrl: "/archify-hub/specs/astraflow-242-assertion-gap.archify.md",
     repoName: "SCRIPE-org/SCRIPE-Backend",
     repoCommit: "980cd2217882f9080ae0a1ce65a9c87e1e576719",
     highlights: [
       "AstraFlow.Assertions 2.4.2 adds formatted BeTrue and BeFalse reason overloads",
-      "The backend build still reports 277 compiler errors, including missing reason overloads and Be(bool)",
-      "The migration remains paused on .NET 10 until a compatible 2.4.x assertion patch is published",
+      "The old snapshot recorded compiler errors, including missing reason overloads and Be(bool)",
+      "Superseded by the current AstraFlow 2.4.7 full-family migration",
     ],
     keySources: [],
   },
@@ -628,7 +874,7 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
     id: "backend-master-explainer",
     pillar: "backend",
     mode: "explainer",
-    badge: "BACKEND MASTER BOARD",
+    badge: "HISTORICAL SNAPSHOT · ASTRAFLOW 2.3.0",
     title: "SCRIPE-Backend Master Deep Dive: .NET 10 Modular Monolith & AstraFlow 2.3.0",
     subtitle:
       "18 Isolated 3-Project Domain Modules, 927+ AstraFlow CQRS Handlers, 3-Transaction Idempotency & Transactional Outbox",
@@ -852,8 +1098,39 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
   },
 
   // ============================================================================
-  // PILLAR 3: FRONTEND DEEP DIVE (NEXT.JS 16 + REACT 19 MVVM) — 12 PAGES
+  // PILLAR 3: FRONTEND DEEP DIVE (NEXT.JS 16 + REACT 19 MVVM) — 14 PAGES
   // ============================================================================
+  {
+    id: "frontend-adaptive-sso-and-cleanup-workflow",
+    pillar: "frontend",
+    mode: "workflow",
+    badge: "ADAPTIVE SSO · RTL & STORE PURGE",
+    title: "SCRIPE-Frontend Smart Adaptive SSO, RTL Polish & Store Cleanup Workflow",
+    subtitle:
+      "6-Tenant Adaptive Hierarchy + Fail-Closed UNKNOWN_999 -> Concise 2-Col & AR RTL Polish -> Real AccountLayout Logout & Zustand/Broadcast Purge",
+    description:
+      "Native Archify Workflow v2 diagram mapping the V2 frontend authentication and security hardening journey: live DB provider discovery across Platform Root and all 6 tenants (AHLY, CITY, FALCON, APEX, COMMUNITY, ACFC) with fail-closed UNKNOWN_999, Smart Adaptive SSO layout with prefix stripping (0px clipping on 1440px and 375px mobile), localized AR RTL hero prefixes and logical password input, 1-row 4-chip telemetry HUD with <bdi> isolation and <Sun>/<Moon> sync, and remediation of Findings #34, #35, and #36 across AccountLayout, ImpersonationRepository, authBroadcast, useSudoStore, and ownerUserId-scoped usePatOneTimeSecretStore.",
+    htmlUrl: "/archify-hub/frontend-adaptive-sso-and-cleanup-workflow.html",
+    specUrl: "/archify-hub/specs/frontend-adaptive-sso-and-cleanup-workflow.workflow.json",
+    repoName: "SCRIPE-org/SCRIPE-Frontend",
+    repoCommit: "91232f19b",
+    featured: true,
+    highlights: [
+      "4 Swimlanes: Tenant & IdP Discovery, Adaptive SSO & RTL UI, Fail-Closed & HUD, Sign-Out & Store Isolation",
+      "Documents Smart Adaptive SSO across AHLY, CITY, FALCON, APEX, COMMUNITY, ACFC, Platform Root & UNKNOWN_999 with 0px clipping at 1440px & 375px",
+      "Covers Findings #34 (AccountLayout real POST /logout), #35 (ImpersonationRepository + authBroadcast Set purge) & #36 (ownerUserId PAT secret + Sudo store reset)",
+      "Verified by 6/6 live unmocked Playwright specs (21 PNGs, 0 pageerrors, 0 5xx) and ux-expert-v4 PASS",
+    ],
+    keySources: [
+      "src/modules/shared/auth/signin/src/presentation/components/SsoProviderButtons.tsx",
+      "src/modules/shared/auth/signin/src/presentation/components/CredentialsPasswordInput.tsx",
+      "src/app/(account)/layout.tsx",
+      "src/modules/shared/auth/core/data/repositories/ImpersonationRepository.ts",
+      "src/core/common/broadcast-auth.ts",
+      "src/core/store/usePatOneTimeSecretStore.ts",
+      "src/core/ui/layout/common/theme-switcher.tsx",
+    ],
+  },
   {
     id: "frontend-vitest-diagnosis-remediation",
     pillar: "frontend",

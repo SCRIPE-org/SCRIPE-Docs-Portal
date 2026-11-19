@@ -1,0 +1,632 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "explainer",
+  "quality": "showcase",
+  "startedAt": "2026-11-18T23:22:09.003Z",
+  "specification": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-identity-sso-zero-trust-security-20261119-012000\\candidate.archify.md",
+    "sha256": "50f90937ed009f4aa4dd3b219894e4f97e8a6f969cd6009c2e7612a378a190da",
+    "bytes": 17828
+  },
+  "artifact": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-zero-trust-security.html",
+    "sha256": "f32bec7b6d034ae221de2123cfe0f600079b85bdde9d17cd2c5414dc49419893",
+    "bytes": 1469438
+  },
+  "stages": {
+    "browser-check": {
+      "status": "not-run",
+      "execution": "not-requested"
+    },
+    "validate": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": null,
+      "execution": "embedded-in-deliver",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "C:\\Users\\seifmoustafa\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "deliver",
+        "explainer",
+        "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-identity-sso-zero-trust-security-20261119-012000\\candidate.archify.md",
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-zero-trust-security.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "d:\\01_PROJECTS\\SCRIPE",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": true,
+        "command": "validate",
+        "specification": {
+          "sha256": "50f90937ed009f4aa4dd3b219894e4f97e8a6f969cd6009c2e7612a378a190da",
+          "bytes": 17828
+        },
+        "validation": {
+          "checksPassed": 4,
+          "checkCount": 4,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        }
+      }
+    },
+    "deliver": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 3390,
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "C:\\Users\\seifmoustafa\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "deliver",
+        "explainer",
+        "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-identity-sso-zero-trust-security-20261119-012000\\candidate.archify.md",
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-zero-trust-security.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "d:\\01_PROJECTS\\SCRIPE",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "receiptId": "eecfe5cc-9124-42f0-aa2d-3d5eb7c33b19",
+        "ok": true,
+        "command": "deliver",
+        "type": "explainer",
+        "input": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-identity-sso-zero-trust-security-20261119-012000\\candidate.archify.md",
+        "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-zero-trust-security.html",
+        "explainer": {
+          "preparedSha256": "9c56b2d8d90f823f47e94bc9119222732e418b7774cc612ec5c2a5e885e066a7",
+          "dependencies": [
+            {
+              "kind": "diagram-spec",
+              "id": "identity-zero-trust-arch",
+              "inline": true,
+              "sha256": "66f5d470b702330d4fb1a4c16df715ec4f700b9e7cfe6bd14160ae453b88b75c",
+              "bytes": 1878
+            },
+            {
+              "kind": "diagram-spec",
+              "id": "sso-hybrid-mfa-seq",
+              "inline": true,
+              "sha256": "613a8609cf07130ea8d617ae7d6b221e79fa99359508a566528a87fb754e5dc2",
+              "bytes": 2350
+            },
+            {
+              "kind": "diagram-spec",
+              "id": "sudo-link-workflow",
+              "inline": true,
+              "sha256": "c4aea36e69805346b195810f57e7d11e5c43dab7d98f8b3a13fc58bef72363ef",
+              "bytes": 1394
+            }
+          ]
+        },
+        "specification": {
+          "sha256": "50f90937ed009f4aa4dd3b219894e4f97e8a6f969cd6009c2e7612a378a190da",
+          "bytes": 17828
+        },
+        "artifact": {
+          "sha256": "f32bec7b6d034ae221de2123cfe0f600079b85bdde9d17cd2c5414dc49419893",
+          "bytes": 1469438
+        },
+        "validation": {
+          "checksPassed": 4,
+          "checkCount": 4,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        },
+        "update": {
+          "status": "unavailable",
+          "installedVersion": null,
+          "availableVersion": null,
+          "releaseNotes": null,
+          "checkedAt": null,
+          "source": null,
+          "noticeRequired": false,
+          "noticeText": null,
+          "reason": "disabled"
+        }
+      }
+    },
+    "check": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 1639,
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "C:\\Users\\seifmoustafa\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "check",
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-zero-trust-security.html",
+        "--require-provenance"
+      ],
+      "receipt": {
+        "ok": true,
+        "file": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-zero-trust-security.html",
+        "family": "explainer",
+        "artifact": {
+          "sha256": "f32bec7b6d034ae221de2123cfe0f600079b85bdde9d17cd2c5414dc49419893",
+          "bytes": 1469438
+        },
+        "checks": [
+          {
+            "name": "explainer_structure",
+            "ok": true,
+            "details": [
+              "120 unique DOM IDs"
+            ]
+          },
+          {
+            "name": "explainer_payload_identity",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "explainer_dependencies",
+            "ok": true,
+            "details": [
+              "3 frozen dependencies"
+            ]
+          },
+          {
+            "name": "explainer_native_diagrams",
+            "ok": true,
+            "details": [
+              "identity-zero-trust-arch: pass",
+              "sso-hybrid-mfa-seq: pass",
+              "sudo-link-workflow: pass"
+            ]
+          }
+        ],
+        "composition": {
+          "schemaVersion": 1,
+          "profile": "showcase",
+          "status": "pass",
+          "summary": {
+            "errors": 0,
+            "warnings": 0
+          },
+          "issues": [],
+          "nativeDiagrams": [
+            {
+              "id": "identity-zero-trust-arch",
+              "receipt": {
+                "ok": true,
+                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-CnlShH\\child.html",
+                "artifact": {
+                  "sha256": "c8ed746f442ec051d5fc4d823f1a4448ccaa15307ae731ff96a57b8cc09e4642",
+                  "bytes": 840779
+                },
+                "checks": [
+                  {
+                    "name": "single_svg",
+                    "ok": true,
+                    "details": [
+                      "found 1 <svg> block(s)"
+                    ]
+                  },
+                  {
+                    "name": "finite_svg",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "orthogonal_arrows",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "label_route_clearance",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_crossings",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_corridors",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "container_border_runs",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "route_rhythm",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "legend_clearance",
+                    "ok": true,
+                    "details": []
+                  }
+                ],
+                "composition": {
+                  "schemaVersion": 1,
+                  "profile": "showcase",
+                  "status": "pass",
+                  "summary": {
+                    "errors": 0,
+                    "warnings": 0
+                  },
+                  "metrics": {
+                    "properCrossings": 0,
+                    "resolvedCrossovers": 0,
+                    "ambiguousCorridors": 0,
+                    "arrowheadCollisions": 0,
+                    "containerBorderRuns": 0,
+                    "labelRouteClearanceIssues": 0,
+                    "labelCanvasOverflowIssues": 0,
+                    "minLabelRouteClearance": 18.1,
+                    "desktopReadabilityIssues": 0,
+                    "viewportHeightIssues": 0,
+                    "minProjectedNodeTextPx": 7.5,
+                    "maxBends": 2,
+                    "routesOverSuggestedBends": 0,
+                    "maxStretch": 1,
+                    "routesOverSuggestedStretch": 0,
+                    "minSegmentPx": 24,
+                    "minInteriorSegmentPx": 172,
+                    "shortSegmentCount": 0,
+                    "shortEndpointSegmentCount": 0,
+                    "shortInteriorSegmentCount": 0,
+                    "microSegmentCount": 0
+                  },
+                  "suggestedLimits": {
+                    "bendsPerRelationship": 2,
+                    "stretch": 1.35,
+                    "segmentPx": 16,
+                    "microSegmentPx": 8
+                  },
+                  "routeReview": {
+                    "crossings": [],
+                    "detours": []
+                  },
+                  "leadingSpace": {
+                    "measured": true,
+                    "emptyTopPx": 80,
+                    "emptyTopRatio": 0.138,
+                    "occupiedTop": 80,
+                    "viewBoxTop": 0,
+                    "canvasHeight": 580,
+                    "typicalNodeHeight": 60,
+                    "reviewSuggested": false
+                  },
+                  "desktopReadability": {
+                    "budgetBasis": "recognized-declared-wide",
+                    "readerContract": "declared-wide-v1",
+                    "availableDiagramWidth": 984.375,
+                    "actualBudgetPx": 984.375,
+                    "actualReaderWidth": 1014.375,
+                    "desiredReaderWidth": 1014.375,
+                    "viewportCap": 1376,
+                    "limit": "source-size",
+                    "requestedTargetPx": 7.5,
+                    "requestedTargetMet": true,
+                    "hardFloorPx": 6,
+                    "hardFloorMet": true,
+                    "minimumOwner": {
+                      "kind": "edge",
+                      "id": "fe_login-to-edge_mw-1",
+                      "from": "fe_login",
+                      "to": "edge_mw"
+                    },
+                    "minimumSourceTextPx": 8,
+                    "minimumProjectedTextPx": 7.5,
+                    "semanticTextCount": 16
+                  },
+                  "issues": []
+                }
+              }
+            },
+            {
+              "id": "sso-hybrid-mfa-seq",
+              "receipt": {
+                "ok": true,
+                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-uKldSs\\child.html",
+                "artifact": {
+                  "sha256": "23670d46a7788e904d4e29d39a4f65689911566378dc22685058e949bc9e7b39",
+                  "bytes": 836770
+                },
+                "checks": [
+                  {
+                    "name": "single_svg",
+                    "ok": true,
+                    "details": [
+                      "found 1 <svg> block(s)"
+                    ]
+                  },
+                  {
+                    "name": "finite_svg",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "orthogonal_arrows",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "label_route_clearance",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_crossings",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_corridors",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "container_border_runs",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "route_rhythm",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "legend_clearance",
+                    "ok": true,
+                    "details": []
+                  }
+                ],
+                "composition": {
+                  "schemaVersion": 1,
+                  "profile": "showcase",
+                  "status": "pass",
+                  "summary": {
+                    "errors": 0,
+                    "warnings": 0
+                  },
+                  "metrics": {
+                    "properCrossings": 0,
+                    "resolvedCrossovers": 0,
+                    "ambiguousCorridors": 0,
+                    "arrowheadCollisions": 0,
+                    "containerBorderRuns": 0,
+                    "labelRouteClearanceIssues": 0,
+                    "labelCanvasOverflowIssues": 0,
+                    "minLabelRouteClearance": 28,
+                    "desktopReadabilityIssues": 0,
+                    "viewportHeightIssues": 0,
+                    "minProjectedNodeTextPx": 11,
+                    "maxBends": 0,
+                    "routesOverSuggestedBends": 0,
+                    "maxStretch": 1,
+                    "routesOverSuggestedStretch": 0,
+                    "minSegmentPx": 156.8,
+                    "minInteriorSegmentPx": null,
+                    "shortSegmentCount": 0,
+                    "shortEndpointSegmentCount": 0,
+                    "shortInteriorSegmentCount": 0,
+                    "microSegmentCount": 0
+                  },
+                  "suggestedLimits": {
+                    "bendsPerRelationship": 2,
+                    "stretch": 1.35,
+                    "segmentPx": 16,
+                    "microSegmentPx": 8
+                  },
+                  "routeReview": {
+                    "crossings": [],
+                    "detours": []
+                  },
+                  "leadingSpace": {
+                    "measured": false,
+                    "reviewSuggested": false
+                  },
+                  "sequenceColumnSpace": {
+                    "measured": true,
+                    "columnFit": "spread",
+                    "participantCount": 5,
+                    "occupiedRight": 880,
+                    "viewBoxLeft": 0,
+                    "canvasWidth": 920,
+                    "emptyRightPx": 40,
+                    "emptyRightRatio": 0.043,
+                    "typicalParticipantWidth": 135,
+                    "reviewSuggested": false
+                  },
+                  "desktopReadability": {
+                    "budgetBasis": "legacy-930",
+                    "readerContract": "declared-wide-v1",
+                    "availableDiagramWidth": 930,
+                    "actualBudgetPx": 930,
+                    "limit": "legacy",
+                    "requestedTargetPx": null,
+                    "requestedTargetMet": null,
+                    "hardFloorPx": 6,
+                    "hardFloorMet": true,
+                    "minimumOwner": {
+                      "kind": "edge",
+                      "id": "spa-to-api-1",
+                      "from": "spa",
+                      "to": "api"
+                    },
+                    "minimumSourceTextPx": 11,
+                    "minimumProjectedTextPx": 11,
+                    "semanticTextCount": 19
+                  },
+                  "issues": []
+                }
+              }
+            },
+            {
+              "id": "sudo-link-workflow",
+              "receipt": {
+                "ok": true,
+                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-FR24hQ\\child.html",
+                "artifact": {
+                  "sha256": "943448f05a8c1c82259b4e4a6a52924484fee1129d6e62ca141e59d6619a7bca",
+                  "bytes": 833095
+                },
+                "checks": [
+                  {
+                    "name": "single_svg",
+                    "ok": true,
+                    "details": [
+                      "found 1 <svg> block(s)"
+                    ]
+                  },
+                  {
+                    "name": "finite_svg",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "orthogonal_arrows",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "label_route_clearance",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_crossings",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_corridors",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "container_border_runs",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "route_rhythm",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "legend_clearance",
+                    "ok": true,
+                    "details": []
+                  }
+                ],
+                "composition": {
+                  "schemaVersion": 1,
+                  "profile": "showcase",
+                  "status": "pass",
+                  "summary": {
+                    "errors": 0,
+                    "warnings": 0
+                  },
+                  "metrics": {
+                    "properCrossings": 0,
+                    "resolvedCrossovers": 0,
+                    "ambiguousCorridors": 0,
+                    "arrowheadCollisions": 0,
+                    "containerBorderRuns": 0,
+                    "labelRouteClearanceIssues": 0,
+                    "labelCanvasOverflowIssues": 0,
+                    "minLabelRouteClearance": 67.6,
+                    "desktopReadabilityIssues": 0,
+                    "viewportHeightIssues": 0,
+                    "minProjectedNodeTextPx": 8,
+                    "maxBends": 0,
+                    "routesOverSuggestedBends": 0,
+                    "maxStretch": 1,
+                    "routesOverSuggestedStretch": 0,
+                    "minSegmentPx": 38,
+                    "minInteriorSegmentPx": null,
+                    "shortSegmentCount": 0,
+                    "shortEndpointSegmentCount": 0,
+                    "shortInteriorSegmentCount": 0,
+                    "microSegmentCount": 0
+                  },
+                  "suggestedLimits": {
+                    "bendsPerRelationship": 2,
+                    "stretch": 1.35,
+                    "segmentPx": 16,
+                    "microSegmentPx": 8
+                  },
+                  "routeReview": {
+                    "crossings": [],
+                    "detours": []
+                  },
+                  "leadingSpace": {
+                    "measured": false,
+                    "reviewSuggested": false
+                  },
+                  "desktopReadability": {
+                    "budgetBasis": "legacy-930",
+                    "readerContract": "declared-wide-v1",
+                    "availableDiagramWidth": 930,
+                    "actualBudgetPx": 930,
+                    "limit": "legacy",
+                    "requestedTargetPx": null,
+                    "requestedTargetMet": null,
+                    "hardFloorPx": 6,
+                    "hardFloorMet": true,
+                    "minimumOwner": {
+                      "kind": "edge",
+                      "id": "acct_view-to-sudo_gate-1",
+                      "from": "acct_view",
+                      "to": "sudo_gate"
+                    },
+                    "minimumSourceTextPx": 8,
+                    "minimumProjectedTextPx": 8,
+                    "semanticTextCount": 11
+                  },
+                  "issues": []
+                }
+              }
+            }
+          ]
+        },
+        "diagnostics": [],
+        "provenance": "current",
+        "deliveryReceiptId": "eecfe5cc-9124-42f0-aa2d-3d5eb7c33b19"
+      }
+    }
+  },
+  "browserCheck": {
+    "requested": false,
+    "ran": false
+  },
+  "diagnostics": [],
+  "evidence": {
+    "receipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-zero-trust-security.finalize.json",
+    "summaryReceipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-zero-trust-security.finalize-summary.json"
+  },
+  "visualReview": "not-requested",
+  "finishedAt": "2026-11-18T23:22:14.627Z",
+  "durationMs": 5624,
+  "update": {
+    "status": "unavailable",
+    "installedVersion": null,
+    "availableVersion": null,
+    "releaseNotes": null,
+    "checkedAt": null,
+    "source": null,
+    "noticeRequired": false,
+    "noticeText": null,
+    "reason": "timeout"
+  }
+}

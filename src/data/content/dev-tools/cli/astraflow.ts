@@ -174,7 +174,7 @@ const sections: DocSection[] = [
     "type": "code",
     "language": "bash",
     "filename": "Syntax & Example",
-    "code": "$ scripe astraflow update [--tool-version <v>] [--dry-run]\n\n# Example:\n$ scripe astraflow update --tool-version 2.3.0"
+    "code": "$ scripe astraflow update [--tool-version <v>] [--dry-run]\n\n# Example:\n$ scripe astraflow update --tool-version 2.4.7"
   },
   {
     "type": "table",

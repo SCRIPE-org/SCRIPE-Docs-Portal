@@ -1,14 +1,68 @@
 {
-  "generatedAt": "2026-11-18T00:45:00.000Z",
+  "generatedAt": "2026-11-19T01:24:00.000Z",
   "version": "6.0-SSOT",
-  "totalArtifacts": 25,
+  "totalArtifacts": 28,
   "allPassedVerification": true,
   "pillars": {
-    "fullstack": 8,
+    "fullstack": 11,
     "backend": 9,
     "frontend": 8
   },
   "items": [
+    {
+      "id": "identity-sso-zero-trust-security",
+      "pillar": "fullstack",
+      "mode": "explainer",
+      "title": "Multi-Tenant Identity Provider, Federated SSO, Hybrid MFA & Runtime Security Enforcement",
+      "subtitle": "Pre-Auth IgnoreQueryFilters + Fail-Closed Encrypted IDs + OIDC/OAuth2/SAML Cryptographic Proof + TwoFactorPendingToken + Sudo Console + Live PAT/API-Key/Delegation/CIDR",
+      "description": "Comprehensive Single Source of Truth explainer board documenting SCRIPE's repaired Multi-Tenant Identity Provider, Federated SSO (OIDC, pure OAuth2, SAML 2.0 SP & IdP, Apple/Microsoft/Google/Facebook), HybridMfaPolicy TwoFactorPendingToken step-up, Sudo-gated Account Console eliminating mock SSO catalogs, and live runtime enforcement for PATs (scr_pat_...), X-API-Key, AdminDelegation, and Global CIDR.",
+      "htmlUrl": "/archify-hub/identity-sso-zero-trust-security.html",
+      "specUrl": "/archify-hub/specs/identity-sso-zero-trust-security.archify.md",
+      "sizeKb": 1435,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": null,
+        "edgeCount": null,
+        "sectionCount": 5
+      }
+    },
+    {
+      "id": "identity-sso-zero-trust-architecture",
+      "pillar": "fullstack",
+      "mode": "architecture",
+      "title": "Multi-Tenant Identity, Federated SSO, Hybrid MFA & Runtime Security Architecture",
+      "subtitle": "4 Guided Views: Multi-Tenant IdP Discovery, Federated SSO & Hybrid MFA, Sudo Account Console & Live PAT/API-Key/Delegation/Global CIDR Enforcement",
+      "description": "Native Archify Architecture diagram with 4 Guided Views mapping Next.js 16 Login & Account/IdP Consoles, Zero-Trust ASP.NET Core Edge Middleware, Encrypted ID & Sudo PBAC Gate, OIDC/OAuth2/SAML/Passwordless Engines, OpenIddict Server, HybridMfaPolicy, Distributed Cache Tickets, and Identity/Integrations Schemas.",
+      "htmlUrl": "/archify-hub/identity-sso-zero-trust-architecture.html",
+      "specUrl": "/archify-hub/specs/identity-sso-zero-trust-architecture.architecture.json",
+      "sizeKb": 836.2,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": 11,
+        "edgeCount": 10,
+        "sectionCount": null
+      }
+    },
+    {
+      "id": "identity-sso-hybrid-mfa-sequence",
+      "pillar": "fullstack",
+      "mode": "sequence",
+      "title": "Federated SSO, Sudo Link, Hybrid MFA & Runtime Guard Sequence",
+      "subtitle": "Next.js 16 SPA -> Security Edge (Sudo/PAT/CIDR) -> SSO & Auth API -> External IdP (JWKS/X.509) -> State & 2FA Cache -> Identity DB",
+      "description": "Native Archify Sequence diagram tracing Sudo-gated federated linking and SSO login: encrypted ID & Sudo validation, server-side single-use state/nonce/PKCE tickets, cryptographic JWKS/X.509 proof with subject-first .IgnoreQueryFilters() binding, HybridMfaPolicy TwoFactorPendingToken step-up, and post-auth PAT/CIDR runtime enforcement.",
+      "htmlUrl": "/archify-hub/identity-sso-hybrid-mfa-sequence.html",
+      "specUrl": "/archify-hub/specs/identity-sso-hybrid-mfa-sequence.sequence.json",
+      "sizeKb": 822.9,
+      "verified": true,
+      "checkSummary": {
+        "qualityProfile": "showcase",
+        "nodeCount": 6,
+        "edgeCount": 12,
+        "sectionCount": null
+      }
+    },
     {
       "id": "crm-enterprise-overhaul-security-ux",
       "pillar": "fullstack",

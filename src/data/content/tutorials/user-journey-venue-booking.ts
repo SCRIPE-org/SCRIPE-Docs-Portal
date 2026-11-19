@@ -83,7 +83,7 @@ const sections: DocSection[] = [
     language: "bash",
     filename: "Create Draft (POST /api/v1/Reservations)",
     code: `curl -X POST http://localhost:5000/api/v1/Reservations \\
-  -H "Authorization: Bearer \$TOKEN" \\
+  -H "Authorization: Bearer $TOKEN" \\
   -H "Content-Type: application/json" \\
   -d '{
     "resourceId": "<encrypted-resource-id>",
@@ -99,7 +99,7 @@ const sections: DocSection[] = [
     language: "bash",
     filename: "Hold Acquisition (POST /api/v1/BookingHolds)",
     code: `curl -X POST http://localhost:5000/api/v1/BookingHolds \\
-  -H "Authorization: Bearer \$TOKEN" \\
+  -H "Authorization: Bearer $TOKEN" \\
   -H "Content-Type: application/json" \\
   -d '{
     "reservationId": "<encrypted-reservation-id>",
@@ -111,7 +111,7 @@ const sections: DocSection[] = [
     language: "bash",
     filename: "Calculate Price Quote (reuse the same body and key on retry)",
     code: `curl -X POST http://localhost:5000/api/v1/catalog-pricing/price-quotes/calculate \\
-  -H "Authorization: Bearer \$TOKEN" \\
+  -H "Authorization: Bearer $TOKEN" \\
   -H "Content-Type: application/json" \\
   -d '{
     "offeringId": "<encrypted-offering-id>",

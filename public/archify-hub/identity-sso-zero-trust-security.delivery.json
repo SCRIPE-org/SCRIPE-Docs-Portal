@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "eecfe5cc-9124-42f0-aa2d-3d5eb7c33b19",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-identity-sso-zero-trust-security-20261119-012000\\candidate.archify.md",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-zero-trust-security.html",
+  "specification": {
+    "sha256": "50f90937ed009f4aa4dd3b219894e4f97e8a6f969cd6009c2e7612a378a190da",
+    "bytes": 17828
+  },
+  "artifact": {
+    "sha256": "f32bec7b6d034ae221de2123cfe0f600079b85bdde9d17cd2c5414dc49419893",
+    "bytes": 1469438
+  },
+  "explainer": {
+    "preparedSha256": "9c56b2d8d90f823f47e94bc9119222732e418b7774cc612ec5c2a5e885e066a7",
+    "dependencies": [
+      {
+        "kind": "diagram-spec",
+        "id": "identity-zero-trust-arch",
+        "inline": true,
+        "sha256": "66f5d470b702330d4fb1a4c16df715ec4f700b9e7cfe6bd14160ae453b88b75c",
+        "bytes": 1878
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "sso-hybrid-mfa-seq",
+        "inline": true,
+        "sha256": "613a8609cf07130ea8d617ae7d6b221e79fa99359508a566528a87fb754e5dc2",
+        "bytes": 2350
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "sudo-link-workflow",
+        "inline": true,
+        "sha256": "c4aea36e69805346b195810f57e7d11e5c43dab7d98f8b3a13fc58bef72363ef",
+        "bytes": 1394
+      }
+    ]
+  }
+}

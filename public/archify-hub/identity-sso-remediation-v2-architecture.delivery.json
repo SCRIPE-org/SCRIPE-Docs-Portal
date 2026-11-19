@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "1cc31dc8-df9b-46b9-8a7d-ac1cc706be81",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\.archify\\architecture-identity-sso-remediation-v2-20261119-195800\\candidate.json",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-remediation-v2-architecture.html",
+  "specification": {
+    "sha256": "978d48cf694463c2b485978a9d7d6d5805a3e6d946d031fd7c39e5de730d3ef3",
+    "bytes": 10163
+  },
+  "artifact": {
+    "sha256": "ae6b9cef0f473e59f780edfaaa2cbe71df0299e5c9fa3574e13e5c1159421503",
+    "bytes": 858236
+  }
+}

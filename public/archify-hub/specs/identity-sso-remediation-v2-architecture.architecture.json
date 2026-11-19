@@ -1,0 +1,367 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "SCRIPE Identity & Multi-Tenant SSO Security Remediation V2 Architecture",
+    "locale": "en",
+    "output": "SCRIPE-Docs-Portal/public/archify-hub/identity-sso-remediation-v2-architecture.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "960923d28a6e9ebc72114cec9228cb2f73457f30"
+    },
+    "views": [
+      {
+        "id": "adaptive_sso",
+        "label": "1. Smart Adaptive SSO & Fail-Closed",
+        "focus": [
+          "fe_adaptive_sso",
+          "edge_pipeline",
+          "sso_passkey",
+          "identity_store"
+        ],
+        "note": "6 seeded tenants (AHLY, CITY, FALCON, APEX, COMMUNITY, ACFC) + Platform Root + fail-closed UNKNOWN_999 with zero clipping in EN/AR RTL."
+      },
+      {
+        "id": "audit_shield",
+        "label": "2. Audit run-2 (36/36) Security Shield",
+        "focus": [
+          "edge_pipeline",
+          "rbac_delegation",
+          "sso_passkey",
+          "media_guard",
+          "identity_store"
+        ],
+        "note": "36/36 findings mitigated: Critical ScopeGrant (#23) & TransferProtection (#27), Break-Glass custody (#11), OIDC/SAML & Media shield."
+      },
+      {
+        "id": "session_store_cleanup",
+        "label": "3. Sudo Cookie & Store Cleanup",
+        "focus": [
+          "fe_account_stores",
+          "edge_pipeline",
+          "sudo_session",
+          "dist_cache"
+        ],
+        "note": "Session-bound scripe_sudo_token (sid/jti), atomic cookie clear on logout, real AccountLayout POST /logout & ownerUserId PAT guard."
+      },
+      {
+        "id": "cli_quality_gates",
+        "label": "4. Hardened CLI & Quality Gates",
+        "focus": [
+          "cli_engine",
+          "quality_gates",
+          "identity_store"
+        ],
+        "note": "1.37 GB Cobertura stream (2.63s), SQLCMDPASSWORD, shell:false, outbox --confirm, 1,926 tests, arch-check 96/100 & 6/6 Playwright."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "fe_adaptive_sso",
+      "type": "frontend",
+      "label": "Adaptive SSO Login",
+      "sublabel": "6 Tenants + Root + Fail-Closed",
+      "tag": "EN/AR RTL · 375px",
+      "pos": [40, 40],
+      "size": [196, 68],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 96,
+          "end_line": 115,
+          "label": "Frontend MVVM & i18n"
+        }
+      ]
+    },
+    {
+      "id": "fe_account_stores",
+      "type": "frontend",
+      "label": "Account & Stores",
+      "sublabel": "Logout + Sudo + PAT Owner",
+      "tag": "authBroadcast Set",
+      "pos": [356, 40],
+      "size": [196, 68],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 96,
+          "end_line": 105,
+          "label": "Frontend State Isolation"
+        }
+      ]
+    },
+    {
+      "id": "cli_engine",
+      "type": "backend",
+      "label": "Hardened scripe-cli",
+      "sublabel": "4MB Cobertura Stream + shell:false",
+      "tag": "1.37GB in 2.63s",
+      "pos": [672, 40],
+      "size": [196, 68],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 44,
+          "end_line": 68,
+          "label": "CLI Commands & Gates"
+        }
+      ]
+    },
+    {
+      "id": "quality_gates",
+      "type": "cloud",
+      "label": "Verified Quality Gates",
+      "sublabel": "1,926 Tests · 96/100 · 6/6 E2E",
+      "tag": "ux-expert-v4 PASS",
+      "pos": [988, 40],
+      "size": [196, 68],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 56,
+          "end_line": 68,
+          "label": "Verification Gates"
+        }
+      ]
+    },
+    {
+      "id": "edge_pipeline",
+      "type": "security",
+      "label": "Edge Auth & Cookies",
+      "sublabel": "Auth-First Rate + Cookie Clear",
+      "tag": "5-Part HMAC",
+      "pos": [40, 198],
+      "size": [196, 68],
+      "sources": [
+        {
+          "path": ".agents/skills/scripe-security-crypto/SKILL.md",
+          "line": 38,
+          "end_line": 55,
+          "label": "5-Layer Edge Defense"
+        }
+      ]
+    },
+    {
+      "id": "sudo_session",
+      "type": "security",
+      "label": "Sudo Session Gate",
+      "sublabel": "scripe_sudo_token sid/jti Bind",
+      "tag": "Anti-Downgrade",
+      "pos": [356, 198],
+      "size": [196, 68],
+      "sources": [
+        {
+          "path": ".agents/skills/scripe-security-crypto/SKILL.md",
+          "line": 44,
+          "end_line": 55,
+          "label": "Session & Step-Up"
+        }
+      ]
+    },
+    {
+      "id": "rbac_delegation",
+      "type": "security",
+      "label": "RBAC & Break-Glass",
+      "sublabel": "ScopeGrant + TransferProtection",
+      "tag": "Live Intersection",
+      "pos": [672, 198],
+      "size": [196, 68],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 124,
+          "end_line": 135,
+          "label": "PBAC & Tenant Isolation"
+        }
+      ]
+    },
+    {
+      "id": "media_guard",
+      "type": "security",
+      "label": "Media & SVG Shield",
+      "sublabel": "Magic Bytes + SMIL Strip + Quota",
+      "tag": "Sandbox CSP",
+      "pos": [988, 198],
+      "size": [196, 68],
+      "sources": [
+        {
+          "path": ".agents/skills/scripe-security-crypto/SKILL.md",
+          "line": 38,
+          "end_line": 55,
+          "label": "Upload Hardening"
+        }
+      ]
+    },
+    {
+      "id": "sso_passkey",
+      "type": "backend",
+      "label": "SSO, OIDC & Passkeys",
+      "sublabel": "Role Flags + SAML SP + 2FA Ticket",
+      "tag": "AstraFlow 2.4.7",
+      "pos": [40, 356],
+      "size": [196, 68],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 83,
+          "end_line": 88,
+          "label": "AstraFlow 2.4.7 Lock"
+        }
+      ]
+    },
+    {
+      "id": "dist_cache",
+      "type": "database",
+      "label": "Distributed Cache",
+      "sublabel": "Sudo JTI + Nonces + 2FA Tickets",
+      "tag": "Atomic TryAdd",
+      "pos": [356, 356],
+      "size": [196, 68],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 126,
+          "end_line": 133,
+          "label": "Revocation & Nonces"
+        }
+      ]
+    },
+    {
+      "id": "identity_store",
+      "type": "database",
+      "label": "Identity & Media DB",
+      "sublabel": "IgnoreFilters + Outbox + Staging",
+      "tag": "3-DB Isolated",
+      "pos": [672, 356],
+      "size": [196, 68],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 89,
+          "end_line": 94,
+          "label": "Dual-Mode Persistence"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Zero-Trust ASP.NET Core V2 Remediation Perimeter (36/36 Mitigated)",
+      "wraps": ["edge_pipeline", "sudo_session", "rbac_delegation", "media_guard"],
+      "pad": 18
+    }
+  ],
+  "connections": [
+    {
+      "id": "sso_ui_to_edge",
+      "from": "fe_adaptive_sso",
+      "to": "edge_pipeline",
+      "label": "Tenant Discovery",
+      "variant": "emphasis"
+    },
+    {
+      "id": "acct_to_sudo",
+      "from": "fe_account_stores",
+      "to": "sudo_session",
+      "label": "Sudo & Logout",
+      "variant": "emphasis"
+    },
+    {
+      "id": "edge_to_sudo",
+      "from": "edge_pipeline",
+      "to": "sudo_session",
+      "label": "Cookie Sync",
+      "variant": "security"
+    },
+    {
+      "id": "edge_to_sso",
+      "from": "edge_pipeline",
+      "to": "sso_passkey",
+      "label": "Auth-First",
+      "variant": "security"
+    },
+    {
+      "id": "sudo_to_cache",
+      "from": "sudo_session",
+      "to": "dist_cache",
+      "label": "sid/jti Check",
+      "variant": "security"
+    },
+    {
+      "id": "sudo_to_rbac",
+      "from": "sudo_session",
+      "to": "rbac_delegation",
+      "label": "Step-Up OK",
+      "variant": "security"
+    },
+    {
+      "id": "rbac_to_media",
+      "from": "rbac_delegation",
+      "to": "media_guard",
+      "label": "medias.create",
+      "variant": "default"
+    },
+    {
+      "id": "rbac_to_db",
+      "from": "rbac_delegation",
+      "to": "identity_store",
+      "label": "Live Grants",
+      "variant": "security"
+    },
+    {
+      "id": "sso_to_cache",
+      "from": "sso_passkey",
+      "to": "dist_cache",
+      "label": "2FA & Nonce",
+      "variant": "dashed"
+    },
+    {
+      "id": "cli_to_gates",
+      "from": "cli_engine",
+      "to": "quality_gates",
+      "label": "5/5 Gates",
+      "variant": "emphasis"
+    },
+    {
+      "id": "cli_to_rbac",
+      "from": "cli_engine",
+      "to": "rbac_delegation",
+      "label": "arch-check 96",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Smart Adaptive SSO (6 Tenants + Root)",
+      "items": [
+        "AHLY (ahly-okta) & ACFC (acfc-saml) render [Org] hero col-span-2 above concise 2-col Google | Microsoft",
+        "FALCON uses custom 1-org full-width hero; CITY, APEX, COMMUNITY & Root use 2-col global; UNKNOWN_999 fails closed",
+        "AR RTL localizes hero prefix + logical RTL password input + <bdi> club wrap + 375px zero clipping"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Audit run-2: 36/36 Confirmed Mitigated",
+      "items": [
+        "2 Critical: ScopeGrant (#23) self-grant/ceiling + TransferProtection (#27) owner/assignability guards",
+        "17 High + 16 Medium + 1 Low: Live Break-Glass custody, OIDC/SAML role isolation, SVG SMIL/CSP, PAT/Sudo store purge",
+        "Auth-first rate limiting, 5-part HMAC + nonce replay protection, and session-bound scripe_sudo_token clearing"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "CLI Evolution & Quality Verification",
+      "items": [
+        "Streaming 4MB Cobertura parser scans 1.37 GB (26 files) in 2.63s (59.9 MB heap, 512 MB ceiling)",
+        "Removed -v collision, isolated SQLCMDPASSWORD, enforced shell:false arrays & db outbox purge --confirm",
+        "1,926 backend tests, arch-check 96/100, astraflow validate ok, check --quick 5/5, 6/6 Playwright & ux-expert-v4 PASS"
+      ]
+    }
+  ]
+}
