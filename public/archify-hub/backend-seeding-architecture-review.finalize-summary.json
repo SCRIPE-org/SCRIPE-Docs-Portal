@@ -6,14 +6,14 @@
   "type": "explainer",
   "quality": "showcase",
   "specification": {
-    "path": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-seeding-architecture-review-20261119-210100\\candidate.archify.md",
-    "sha256": "777c96abbe50f71c394ed51df77ce07e79c6f4b735334917ead94531b98dc67d",
-    "bytes": 12040
+    "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\backend-seeding-architecture-review.archify.md",
+    "sha256": "be30b01aab0326f7c68b2d1ea3ad8c3f263276b88323dc2959418e26ae6bb3b3",
+    "bytes": 13329
   },
   "artifact": {
     "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\backend-seeding-architecture-review.html",
-    "sha256": "0c74778445faf7bcdd2b3d29333505530c71a88efdccf407524b3e5ec76160b9",
-    "bytes": 630217
+    "sha256": "6dfaebb6c2ff787e4a2d1f61d0a900a5cd63cac190ae8bab58a2642f35e207c1",
+    "bytes": 637772
   },
   "gates": {
     "validate": "pass",
@@ -42,7 +42,7 @@
     "noticeText": null
   },
   "visualReview": "not-requested",
-  "durationMs": 1986,
+  "durationMs": 2276,
   "browserCheck": {
     "requested": false,
     "ran": false

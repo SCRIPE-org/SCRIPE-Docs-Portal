@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "57cc6c75-c3cf-48fe-9291-5bba5d582513",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-crm-10-submodule-super-arch-20261120\\candidate.archify.md",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-10-submodule-super-architecture.html",
+  "specification": {
+    "sha256": "0b8c4e9b9d41e385a3181091a0826e836b05f52bca52f18414430e4ada526abe",
+    "bytes": 8277
+  },
+  "artifact": {
+    "sha256": "b6469f60bca26ee1bfc406de3a6b7c212782db36855a71ef1c8e751f2633144d",
+    "bytes": 1031311
+  },
+  "explainer": {
+    "preparedSha256": "7cdf441fbc3f6319d18871e6b7dd0c598a84c72adcf8984193801cdab33daf60",
+    "dependencies": [
+      {
+        "kind": "diagram-spec",
+        "id": "crm-10-submodule-map",
+        "inline": true,
+        "sha256": "ab270251e03e83b48a811c04157717d231efc45e521e6740e186e8839bf4b9d0",
+        "bytes": 2436
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "crm-transition-quote-pipeline",
+        "inline": true,
+        "sha256": "4c4a84a25436e66cf9ce065527aebc6a32b484be4ef17d0447074fa183bbe584",
+        "bytes": 2011
+      }
+    ]
+  }
+}

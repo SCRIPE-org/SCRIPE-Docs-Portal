@@ -1,0 +1,733 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "explainer",
+  "quality": "showcase",
+  "startedAt": "2026-11-19T22:36:34.122Z",
+  "specification": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-crm-10-submodule-super-arch-20261120\\candidate.archify.md",
+    "sha256": "0b8c4e9b9d41e385a3181091a0826e836b05f52bca52f18414430e4ada526abe",
+    "bytes": 8277
+  },
+  "artifact": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-10-submodule-super-architecture.html",
+    "sha256": "b6469f60bca26ee1bfc406de3a6b7c212782db36855a71ef1c8e751f2633144d",
+    "bytes": 1031311
+  },
+  "stages": {
+    "browser-check": {
+      "status": "not-run",
+      "execution": "not-requested"
+    },
+    "validate": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": null,
+      "execution": "embedded-in-deliver",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "C:\\Users\\seifmoustafa\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "deliver",
+        "explainer",
+        "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-crm-10-submodule-super-arch-20261120\\candidate.archify.md",
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-10-submodule-super-architecture.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "d:\\01_PROJECTS\\SCRIPE",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": true,
+        "command": "validate",
+        "specification": {
+          "sha256": "0b8c4e9b9d41e385a3181091a0826e836b05f52bca52f18414430e4ada526abe",
+          "bytes": 8277
+        },
+        "validation": {
+          "checksPassed": 4,
+          "checkCount": 4,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        }
+      }
+    },
+    "deliver": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 1735,
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "C:\\Users\\seifmoustafa\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "deliver",
+        "explainer",
+        "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-crm-10-submodule-super-arch-20261120\\candidate.archify.md",
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-10-submodule-super-architecture.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "d:\\01_PROJECTS\\SCRIPE",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "receiptId": "57cc6c75-c3cf-48fe-9291-5bba5d582513",
+        "ok": true,
+        "command": "deliver",
+        "type": "explainer",
+        "input": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-crm-10-submodule-super-arch-20261120\\candidate.archify.md",
+        "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-10-submodule-super-architecture.html",
+        "explainer": {
+          "preparedSha256": "7cdf441fbc3f6319d18871e6b7dd0c598a84c72adcf8984193801cdab33daf60",
+          "dependencies": [
+            {
+              "kind": "diagram-spec",
+              "id": "crm-10-submodule-map",
+              "inline": true,
+              "sha256": "ab270251e03e83b48a811c04157717d231efc45e521e6740e186e8839bf4b9d0",
+              "bytes": 2436
+            },
+            {
+              "kind": "diagram-spec",
+              "id": "crm-transition-quote-pipeline",
+              "inline": true,
+              "sha256": "4c4a84a25436e66cf9ce065527aebc6a32b484be4ef17d0447074fa183bbe584",
+              "bytes": 2011
+            }
+          ]
+        },
+        "specification": {
+          "sha256": "0b8c4e9b9d41e385a3181091a0826e836b05f52bca52f18414430e4ada526abe",
+          "bytes": 8277
+        },
+        "artifact": {
+          "sha256": "b6469f60bca26ee1bfc406de3a6b7c212782db36855a71ef1c8e751f2633144d",
+          "bytes": 1031311
+        },
+        "validation": {
+          "checksPassed": 4,
+          "checkCount": 4,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        },
+        "update": {
+          "status": "unavailable",
+          "installedVersion": null,
+          "availableVersion": null,
+          "releaseNotes": null,
+          "checkedAt": null,
+          "source": null,
+          "noticeRequired": false,
+          "noticeText": null,
+          "reason": "disabled"
+        }
+      }
+    },
+    "check": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 1086,
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "C:\\Users\\seifmoustafa\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "check",
+        "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-10-submodule-super-architecture.html",
+        "--require-provenance"
+      ],
+      "receipt": {
+        "ok": true,
+        "file": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-10-submodule-super-architecture.html",
+        "family": "explainer",
+        "artifact": {
+          "sha256": "b6469f60bca26ee1bfc406de3a6b7c212782db36855a71ef1c8e751f2633144d",
+          "bytes": 1031311
+        },
+        "checks": [
+          {
+            "name": "explainer_structure",
+            "ok": true,
+            "details": [
+              "63 unique DOM IDs"
+            ]
+          },
+          {
+            "name": "explainer_payload_identity",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "explainer_dependencies",
+            "ok": true,
+            "details": [
+              "2 frozen dependencies"
+            ]
+          },
+          {
+            "name": "explainer_native_diagrams",
+            "ok": true,
+            "details": [
+              "crm-10-submodule-map: pass",
+              "crm-transition-quote-pipeline: pass"
+            ]
+          }
+        ],
+        "composition": {
+          "schemaVersion": 1,
+          "profile": "showcase",
+          "status": "pass",
+          "summary": {
+            "errors": 0,
+            "warnings": 0
+          },
+          "issues": [],
+          "nativeDiagrams": [
+            {
+              "id": "crm-10-submodule-map",
+              "receipt": {
+                "ok": true,
+                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-uEosr5\\child.html",
+                "artifact": {
+                  "sha256": "b0543e4c344919fd5b84ba9710ade20a2e2714f125232ded1d9b80ad5a74ed79",
+                  "bytes": 846386
+                },
+                "checks": [
+                  {
+                    "name": "single_svg",
+                    "ok": true,
+                    "details": [
+                      "found 1 <svg> block(s)"
+                    ]
+                  },
+                  {
+                    "name": "finite_svg",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "orthogonal_arrows",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "label_route_clearance",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_crossings",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_corridors",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "container_border_runs",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "route_rhythm",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "legend_clearance",
+                    "ok": true,
+                    "details": []
+                  }
+                ],
+                "composition": {
+                  "schemaVersion": 1,
+                  "profile": "showcase",
+                  "status": "pass",
+                  "summary": {
+                    "errors": 0,
+                    "warnings": 0
+                  },
+                  "metrics": {
+                    "properCrossings": 0,
+                    "resolvedCrossovers": 7,
+                    "ambiguousCorridors": 0,
+                    "arrowheadCollisions": 0,
+                    "containerBorderRuns": 0,
+                    "labelRouteClearanceIssues": 0,
+                    "labelCanvasOverflowIssues": 0,
+                    "minLabelRouteClearance": 4.7,
+                    "desktopReadabilityIssues": 0,
+                    "viewportHeightIssues": 0,
+                    "minProjectedNodeTextPx": 7.373637264618434,
+                    "maxBends": 4,
+                    "routesOverSuggestedBends": 6,
+                    "maxStretch": 1.289,
+                    "routesOverSuggestedStretch": 0,
+                    "minSegmentPx": 24,
+                    "minInteriorSegmentPx": 54,
+                    "shortSegmentCount": 0,
+                    "shortEndpointSegmentCount": 0,
+                    "shortInteriorSegmentCount": 0,
+                    "microSegmentCount": 0
+                  },
+                  "suggestedLimits": {
+                    "bendsPerRelationship": 2,
+                    "stretch": 1.35,
+                    "segmentPx": 16,
+                    "microSegmentPx": 8
+                  },
+                  "routeReview": {
+                    "crossings": [
+                      {
+                        "left": {
+                          "id": "core_crud-to-opps_mod-1",
+                          "from": "core_crud",
+                          "to": "opps_mod",
+                          "label": "Unified Board &amp; Table",
+                          "collectionIndex": 0,
+                          "artifactIndex": 1
+                        },
+                        "right": {
+                          "id": "di_root-to-leads_mod-1",
+                          "from": "di_root",
+                          "to": "leads_mod",
+                          "label": "Injects Lead &amp; Account Repos",
+                          "collectionIndex": 4,
+                          "artifactIndex": 5
+                        },
+                        "point": [
+                          391,
+                          208
+                        ]
+                      },
+                      {
+                        "left": {
+                          "id": "core_crud-to-opps_mod-1",
+                          "from": "core_crud",
+                          "to": "opps_mod",
+                          "label": "Unified Board &amp; Table",
+                          "collectionIndex": 0,
+                          "artifactIndex": 1
+                        },
+                        "right": {
+                          "id": "di_root-to-settings_mod-1",
+                          "from": "di_root",
+                          "to": "settings_mod",
+                          "label": "Injects Settings &amp; Catalog Repos",
+                          "collectionIndex": 6,
+                          "artifactIndex": 7
+                        },
+                        "point": [
+                          390.93333333333334,
+                          110
+                        ]
+                      },
+                      {
+                        "left": {
+                          "id": "core_crud-to-leads_mod-1",
+                          "from": "core_crud",
+                          "to": "leads_mod",
+                          "label": "Stage Progression Grid",
+                          "collectionIndex": 1,
+                          "artifactIndex": 2
+                        },
+                        "right": {
+                          "id": "shared_mod-to-workflows_mod-1",
+                          "from": "shared_mod",
+                          "to": "workflows_mod",
+                          "label": "Client Prefs &amp; Tokens",
+                          "collectionIndex": 2,
+                          "artifactIndex": 3
+                        },
+                        "point": [
+                          258,
+                          536
+                        ]
+                      },
+                      {
+                        "left": {
+                          "id": "core_crud-to-leads_mod-1",
+                          "from": "core_crud",
+                          "to": "leads_mod",
+                          "label": "Stage Progression Grid",
+                          "collectionIndex": 1,
+                          "artifactIndex": 2
+                        },
+                        "right": {
+                          "id": "workflows_mod-to-opps_mod-1",
+                          "from": "workflows_mod",
+                          "to": "opps_mod",
+                          "label": "CrmWorkflowTransitionDialog",
+                          "collectionIndex": 8,
+                          "artifactIndex": 9
+                        },
+                        "point": [
+                          745,
+                          536
+                        ]
+                      },
+                      {
+                        "left": {
+                          "id": "di_root-to-opps_mod-1",
+                          "from": "di_root",
+                          "to": "opps_mod",
+                          "label": "Injects Opportunity &amp; Workflow Repos",
+                          "collectionIndex": 3,
+                          "artifactIndex": 4
+                        },
+                        "right": {
+                          "id": "di_root-to-leads_mod-1",
+                          "from": "di_root",
+                          "to": "leads_mod",
+                          "label": "Injects Lead &amp; Account Repos",
+                          "collectionIndex": 4,
+                          "artifactIndex": 5
+                        },
+                        "point": [
+                          329.125,
+                          296
+                        ],
+                        "sharedNode": "di_root"
+                      },
+                      {
+                        "left": {
+                          "id": "di_root-to-leads_mod-1",
+                          "from": "di_root",
+                          "to": "leads_mod",
+                          "label": "Injects Lead &amp; Account Repos",
+                          "collectionIndex": 4,
+                          "artifactIndex": 5
+                        },
+                        "right": {
+                          "id": "workflows_mod-to-opps_mod-1",
+                          "from": "workflows_mod",
+                          "to": "opps_mod",
+                          "label": "CrmWorkflowTransitionDialog",
+                          "collectionIndex": 8,
+                          "artifactIndex": 9
+                        },
+                        "point": [
+                          745,
+                          482
+                        ]
+                      },
+                      {
+                        "left": {
+                          "id": "di_root-to-dir_mods-1",
+                          "from": "di_root",
+                          "to": "dir_mods",
+                          "label": "Injects Account, Contact &amp; Activity Repos",
+                          "collectionIndex": 5,
+                          "artifactIndex": 6
+                        },
+                        "right": {
+                          "id": "di_root-to-exec_mods-1",
+                          "from": "di_root",
+                          "to": "exec_mods",
+                          "label": "Injects Overview &amp; Reports Repos",
+                          "collectionIndex": 7,
+                          "artifactIndex": 8
+                        },
+                        "point": [
+                          141.5,
+                          350
+                        ],
+                        "sharedNode": "di_root"
+                      }
+                    ],
+                    "crowdedSides": [
+                      {
+                        "node": "di_root",
+                        "label": "crm/di.ts Root Container",
+                        "side": "right",
+                        "relationships": 5,
+                        "sidePx": 60,
+                        "neededPx": 88
+                      }
+                    ],
+                    "detours": [
+                      {
+                        "relationship": {
+                          "id": "core_crud-to-opps_mod-1",
+                          "from": "core_crud",
+                          "to": "opps_mod",
+                          "label": "Unified Board &amp; Table",
+                          "collectionIndex": 0,
+                          "artifactIndex": 1
+                        },
+                        "bends": 3,
+                        "stretch": 1
+                      },
+                      {
+                        "relationship": {
+                          "id": "core_crud-to-leads_mod-1",
+                          "from": "core_crud",
+                          "to": "leads_mod",
+                          "label": "Stage Progression Grid",
+                          "collectionIndex": 1,
+                          "artifactIndex": 2
+                        },
+                        "bends": 3,
+                        "stretch": 1.08
+                      },
+                      {
+                        "relationship": {
+                          "id": "di_root-to-opps_mod-1",
+                          "from": "di_root",
+                          "to": "opps_mod",
+                          "label": "Injects Opportunity &amp; Workflow Repos",
+                          "collectionIndex": 3,
+                          "artifactIndex": 4
+                        },
+                        "bends": 4,
+                        "stretch": 1.23,
+                        "directCorridorBlockers": [
+                          {
+                            "id": "dir_mods",
+                            "label": "crm/accounts + contacts + activities",
+                            "box": [
+                              394,
+                              266,
+                              254,
+                              60
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "relationship": {
+                          "id": "di_root-to-leads_mod-1",
+                          "from": "di_root",
+                          "to": "leads_mod",
+                          "label": "Injects Lead &amp; Account Repos",
+                          "collectionIndex": 4,
+                          "artifactIndex": 5
+                        },
+                        "bends": 4,
+                        "stretch": 1.289
+                      },
+                      {
+                        "relationship": {
+                          "id": "di_root-to-dir_mods-1",
+                          "from": "di_root",
+                          "to": "dir_mods",
+                          "label": "Injects Account, Contact &amp; Activity Repos",
+                          "collectionIndex": 5,
+                          "artifactIndex": 6
+                        },
+                        "bends": 3,
+                        "stretch": 1.162
+                      },
+                      {
+                        "relationship": {
+                          "id": "workflows_mod-to-opps_mod-1",
+                          "from": "workflows_mod",
+                          "to": "opps_mod",
+                          "label": "CrmWorkflowTransitionDialog",
+                          "collectionIndex": 8,
+                          "artifactIndex": 9
+                        },
+                        "bends": 4,
+                        "stretch": 1
+                      }
+                    ]
+                  },
+                  "leadingSpace": {
+                    "measured": true,
+                    "emptyTopPx": 80,
+                    "emptyTopRatio": 0.104,
+                    "occupiedTop": 80,
+                    "viewBoxTop": 0,
+                    "canvasHeight": 766,
+                    "typicalNodeHeight": 60,
+                    "reviewSuggested": false
+                  },
+                  "desktopReadability": {
+                    "budgetBasis": "legacy-930",
+                    "readerContract": "declared-wide-v1",
+                    "availableDiagramWidth": 930,
+                    "actualBudgetPx": 930,
+                    "limit": "legacy",
+                    "requestedTargetPx": 7.5,
+                    "requestedTargetMet": false,
+                    "hardFloorPx": 6,
+                    "hardFloorMet": true,
+                    "minimumOwner": {
+                      "kind": "edge",
+                      "id": "core_crud-to-opps_mod-1",
+                      "from": "core_crud",
+                      "to": "opps_mod"
+                    },
+                    "minimumSourceTextPx": 8,
+                    "minimumProjectedTextPx": 7.373637264618434,
+                    "semanticTextCount": 19
+                  },
+                  "issues": []
+                }
+              }
+            },
+            {
+              "id": "crm-transition-quote-pipeline",
+              "receipt": {
+                "ok": true,
+                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-pwxGN1\\child.html",
+                "artifact": {
+                  "sha256": "b3d1dc56a5b16f30ab541d21a510f417512bec65a60d41271d6e89965ed6aa29",
+                  "bytes": 837925
+                },
+                "checks": [
+                  {
+                    "name": "single_svg",
+                    "ok": true,
+                    "details": [
+                      "found 1 <svg> block(s)"
+                    ]
+                  },
+                  {
+                    "name": "finite_svg",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "orthogonal_arrows",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "label_route_clearance",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_crossings",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_corridors",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "container_border_runs",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "route_rhythm",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "legend_clearance",
+                    "ok": true,
+                    "details": []
+                  }
+                ],
+                "composition": {
+                  "schemaVersion": 1,
+                  "profile": "showcase",
+                  "status": "pass",
+                  "summary": {
+                    "errors": 0,
+                    "warnings": 0
+                  },
+                  "metrics": {
+                    "properCrossings": 0,
+                    "resolvedCrossovers": 0,
+                    "ambiguousCorridors": 0,
+                    "arrowheadCollisions": 0,
+                    "containerBorderRuns": 0,
+                    "labelRouteClearanceIssues": 0,
+                    "labelCanvasOverflowIssues": 0,
+                    "minLabelRouteClearance": 23.3,
+                    "desktopReadabilityIssues": 0,
+                    "viewportHeightIssues": 0,
+                    "minProjectedNodeTextPx": 7.099236641221374,
+                    "maxBends": 0,
+                    "routesOverSuggestedBends": 0,
+                    "maxStretch": 1,
+                    "routesOverSuggestedStretch": 0,
+                    "minSegmentPx": 8,
+                    "minInteriorSegmentPx": null,
+                    "shortSegmentCount": 1,
+                    "shortEndpointSegmentCount": 1,
+                    "shortInteriorSegmentCount": 0,
+                    "microSegmentCount": 0
+                  },
+                  "suggestedLimits": {
+                    "bendsPerRelationship": 2,
+                    "stretch": 1.35,
+                    "segmentPx": 16,
+                    "microSegmentPx": 8
+                  },
+                  "routeReview": {
+                    "crossings": [],
+                    "detours": []
+                  },
+                  "leadingSpace": {
+                    "measured": false,
+                    "reviewSuggested": false
+                  },
+                  "desktopReadability": {
+                    "budgetBasis": "legacy-930",
+                    "readerContract": "declared-wide-v1",
+                    "availableDiagramWidth": 930,
+                    "actualBudgetPx": 930,
+                    "limit": "legacy",
+                    "requestedTargetPx": null,
+                    "requestedTargetMet": null,
+                    "hardFloorPx": 6,
+                    "hardFloorMet": true,
+                    "minimumOwner": {
+                      "kind": "edge",
+                      "id": "engine_eval-to-modal_gate-1",
+                      "from": "engine_eval",
+                      "to": "modal_gate"
+                    },
+                    "minimumSourceTextPx": 8,
+                    "minimumProjectedTextPx": 7.099236641221374,
+                    "semanticTextCount": 12
+                  },
+                  "issues": []
+                }
+              }
+            }
+          ]
+        },
+        "diagnostics": [],
+        "provenance": "current",
+        "deliveryReceiptId": "57cc6c75-c3cf-48fe-9291-5bba5d582513"
+      }
+    }
+  },
+  "browserCheck": {
+    "requested": false,
+    "ran": false
+  },
+  "diagnostics": [],
+  "evidence": {
+    "receipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-10-submodule-super-architecture.finalize.json",
+    "summaryReceipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-10-submodule-super-architecture.finalize-summary.json"
+  },
+  "visualReview": "not-requested",
+  "finishedAt": "2026-11-19T22:36:37.916Z",
+  "durationMs": 3794,
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-18T23:23:05.931Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  }
+}
