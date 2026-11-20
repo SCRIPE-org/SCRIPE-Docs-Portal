@@ -378,6 +378,12 @@ export const de = {
       loggingTitle: "Zentralisiertes Logging (Serilog + Loki)",
       loggingIntro:
         "Serilog reichert jeden Logeintrag mit Maschinenname, Umgebung, Korrelations-ID, Mandanten-ID und Modul-Tag an. Bei konfiguriertem Loki werden Logs in Echtzeit gepusht.",
+      securityRedactionTitle: "Schwärzung sensibler Daten (AstraFlow.Security)",
+      securityRedactionIntro:
+        "AstraFlow.Security erzwingt automatisch 19 Schwärzungsregeln für sensible Eigenschaftsmuster. Sensible Werte (Passwörter, Tokens, API-Schlüssel, Verbindungszeichenfolgen) werden in allen exportierten Spans und Metriken mit [redacted] maskiert.",
+      correlationTitle: "Verteilte Trace-Korrelation über Outbox & Inbox",
+      correlationIntro:
+        "Die verteilte Korrelation bewahrt End-to-End-Trace-Kontexte über asynchrone Nachrichtengrenzen hinweg. Der W3C-traceparent-Header und die CorrelationId werden in der transaktionalen Outbox persistiert und bei der Ereignisverarbeitung automatisch wiederhergestellt.",
       alertsTitle: "Alarmregeln",
       alertsIntro:
         "Vorkonfigurierte Prometheus-Alarmregeln erkennen kritische und warnende Zustände. Kritische Alarme feuern bei hohen Fehlerraten, Datenbankausfällen und extremer Latenz.",

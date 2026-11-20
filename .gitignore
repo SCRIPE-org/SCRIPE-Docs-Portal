@@ -4,3 +4,7 @@ out/
 .env.local
 .env.*.local
 *.log
+
+.ua/
+.understand-anything/
+public/understand-hub/graphs/

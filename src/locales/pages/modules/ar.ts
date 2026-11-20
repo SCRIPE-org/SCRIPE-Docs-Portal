@@ -867,7 +867,7 @@ export const ar = {
         descUpsert:
           "يخزن الحالة الحالية في ذاكرة التخزين المؤقت ConsentSnapshot لفحص الأذونات عالي الأداء.",
         nodeEvents: "أحداث النطاق",
-        descEvents: "ينشر أحداث ConsentGrantedEvent أو ConsentWithdrawnEvent عبر MediatR.",
+        descEvents: "ينشر أحداث ConsentGrantedEvent أو ConsentWithdrawnEvent عبر AstraFlow.",
         nodeExpiry: "وظيفة انتهاء الموافقة",
         descExpiry:
           "تفحص وظيفة الخلفية الأسبوعية عدم تطابق النسخ وتعلم السجلات القديمة لإعادة الموافقة.",
@@ -903,7 +903,7 @@ export const ar = {
         dontTitle: "ممارسات يجب تجنبها",
         do1: "التحقق من أن مفتاح الغرض يطابق قيود التعبير النمطي للأحرف الصغيرة والأرقام.",
         do2: "تشغيل وظيفة ConsentExpiryJob الأسبوعية دائماً لفرض إعادة الموافقة عند تحديثات النسخ.",
-        do3: "استهلاك أحداث ConsentWithdrawnEvents لـ MediatR لتقييد معالجة البيانات اللاحقة.",
+        do3: "استهلاك أحداث ConsentWithdrawnEvents لـ AstraFlow لتقييد معالجة البيانات اللاحقة.",
         dont1: "تجنب تعديل صفوف ConsentRecord مباشرة لتفادي كسر سلامة السجل غير القابل للتغيير.",
         dont2:
           "تجنب تشغيل استعلامات قاعدة بيانات مباشرة على ConsentRecord لفحص أذونات الواجهة الأمامية؛ اقرأ دائماً ConsentSnapshot.",
@@ -1664,6 +1664,7 @@ export const ar = {
         "أنشئ مفتاحًا سريًا فريدًا لكل نقطة نهاية webhook. على خادمك، احسب HMAC-SHA256 لجسم الطلب الخام باستخدام المفتاح السري وقارنه برأس X-Scripe-Signature. لا تتحقق أبدًا من التوقيعات باستخدام JSON معاد بناؤه — دائمًا استخدم البايتات الخام لجسم الطلب.",
       signatureWarning:
         "لا تتخطى أبدًا التحقق من التوقيع في الإنتاج. بدونه، يمكن لأي طرف يكتشف عنوان webhook URL الخاص بك إرسال حمولات مزيفة. دائمًا قارن التوقيعات باستخدام دالة مقارنة ثابتة الوقت (مثل CryptographicOperations.FixedTimeEquals) لمنع هجمات التوقيت.",
+      registeringTitle: "تسجيل نقطة نهاية Webhook",
     },
     tenantPlans: {
       title: "خطط المستأجرين",

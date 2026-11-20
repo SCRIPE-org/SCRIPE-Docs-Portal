@@ -227,6 +227,7 @@ export const en = {
     commercialWorkManagement: "Work Management",
     commercialAnalytics: "Analytics & Event Stream",
     identityModule: "Identity & Access",
+    crmModule: "Commercial CRM & Deals",
     venueModule: "Venue Operations",
     catalogPricingModule: "Catalog & Pricing",
     financeModule: "Finance & Settlement",
@@ -240,6 +241,8 @@ export const en = {
     crosscuttingModule: "Communication & Files",
     marketplace: "Marketplace",
     recycleBin: "Recycle Bin",
+    dataTransfer: "Data Exchange Studio",
+    commercialDataExchange: "Data Exchange Studio",
   },
   // Commercial header mega-menu — 4 sections x (label + N items x title/desc).
   commercialMegaMenu: {

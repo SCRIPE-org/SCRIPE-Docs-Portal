@@ -1,0 +1,2318 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "SCRIPE-Frontend — MVVM & Sub-Module Domain Architecture",
+    "languages": [
+      "typescript",
+      "tsx"
+    ],
+    "frameworks": [
+      "Next.js 16",
+      "React 19",
+      "Tailwind CSS",
+      "TanStack Query",
+      "Zustand"
+    ],
+    "description": "Interactive Frontend domain flow graph mapping all feature modules and core kernels across strict View -> ViewModel -> Repository -> Service -> IApiService flows.",
+    "analyzedAt": "2026-11-10T09:29:53.430Z",
+    "gitCommitHash": "HEAD"
+  },
+  "nodes": [
+    {
+      "id": "domain:fe-core-ui",
+      "type": "domain",
+      "name": "Core Design System (@core/ui/* & Nexus Tokens)",
+      "summary": "Mandatory @core/ui/* shared primitives, Nexus dark/light theme tokens, cards, tables, forms, and dialogs (src/core/ui/ & src/core/components/). Contains 167 files enforcing MVVM separation, @core/ui/* primitives, and bilingual EN/AR locales.",
+      "languageNotes": "Frontend Bounded Module (Core Design System (@core/ui/* & Nexus Tokens)): Isolates sub-modules with dedicated DI registration (di.ts) and co-located locales.",
+      "tags": [
+        "frontend-domain",
+        "core-ui",
+        "mvvm"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entities": [
+          "View (.tsx)",
+          "ViewModel (use*ViewModel)",
+          "Repository (*Repository)",
+          "Service (*Service)",
+          "Locales (EN/AR)"
+        ],
+        "businessRules": [
+          "Views and ViewModels never import IApiService or make raw fetch() calls.",
+          "All interactive controls use @core/ui/* primitives and Nexus theme tokens.",
+          "All static copy resides in co-located *.en.ts and *.ar.ts dictionaries."
+        ],
+        "crossDomainInteractions": [
+          "Resolves shared HTTP transport and auth session via @core/kernel.",
+          "Renders shared design primitives from @core/ui/*."
+        ]
+      }
+    },
+    {
+      "id": "flow:fe-core-ui-mvvm",
+      "type": "flow",
+      "name": "Core Design System (@core/ui/* & Nexus Tokens) — End-to-End MVVM User Journey",
+      "summary": "Traces user interaction from the Next.js 16 Route & @core/ui/* View through the ViewModel hook, Repository, Service, and IApiService HTTP adapter.",
+      "languageNotes": "Unidirectional MVVM Flow: Guarantees testable presentation logic and zero transport leakage into React components.",
+      "tags": [
+        "frontend-flow",
+        "core-ui"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "src/modules/core-ui/index.ts",
+        "entryType": "react-mvvm-flow"
+      }
+    },
+    {
+      "id": "step:flow:fe-core-ui-mvvm:1",
+      "type": "step",
+      "name": "1. Presentation View (@core/ui/*)",
+      "filePath": "src/core/components/ComingSoonView.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 1. Presentation View (@core/ui/*) in src/core/components/ComingSoonView.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/core/components/ComingSoonView.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "core-ui"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-core-ui-mvvm:2",
+      "type": "step",
+      "name": "2. ViewModel Hook (State & Commands)",
+      "filePath": "src/core/ui/__tests__/dialog.focus.test.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 2. ViewModel Hook (State & Commands) in src/core/ui/__tests__/dialog.focus.test.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/core/ui/__tests__/dialog.focus.test.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "core-ui"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-core-ui-mvvm:3",
+      "type": "step",
+      "name": "3. Repository (DTO-to-Model Mapping)",
+      "filePath": "src/core/ui/__tests__/dialog.test.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 3. Repository (DTO-to-Model Mapping) in src/core/ui/__tests__/dialog.test.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/core/ui/__tests__/dialog.test.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "core-ui"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-core-ui-mvvm:4",
+      "type": "step",
+      "name": "4. Service & DI Container (IApiService)",
+      "filePath": "src/core/ui/accordion.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 4. Service & DI Container (IApiService) in src/core/ui/accordion.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/core/ui/accordion.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "core-ui"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "domain:fe-core-kernel",
+      "type": "domain",
+      "name": "Core Kernel, DI Container, IApiService & Hooks",
+      "summary": "Frontend IoC container, IApiService HTTP client, PBAC permission hooks (use-permission), i18n engine, and global stores (src/core/). Contains 225 files enforcing MVVM separation, @core/ui/* primitives, and bilingual EN/AR locales.",
+      "languageNotes": "Frontend Bounded Module (Core Kernel, DI Container, IApiService & Hooks): Isolates sub-modules with dedicated DI registration (di.ts) and co-located locales.",
+      "tags": [
+        "frontend-domain",
+        "core-kernel",
+        "mvvm"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entities": [
+          "View (.tsx)",
+          "ViewModel (use*ViewModel)",
+          "Repository (*Repository)",
+          "Service (*Service)",
+          "Locales (EN/AR)"
+        ],
+        "businessRules": [
+          "Views and ViewModels never import IApiService or make raw fetch() calls.",
+          "All interactive controls use @core/ui/* primitives and Nexus theme tokens.",
+          "All static copy resides in co-located *.en.ts and *.ar.ts dictionaries."
+        ],
+        "crossDomainInteractions": [
+          "Resolves shared HTTP transport and auth session via @core/kernel.",
+          "Renders shared design primitives from @core/ui/*."
+        ]
+      }
+    },
+    {
+      "id": "flow:fe-core-kernel-mvvm",
+      "type": "flow",
+      "name": "Core Kernel, DI Container, IApiService & Hooks — End-to-End MVVM User Journey",
+      "summary": "Traces user interaction from the Next.js 16 Route & @core/ui/* View through the ViewModel hook, Repository, Service, and IApiService HTTP adapter.",
+      "languageNotes": "Unidirectional MVVM Flow: Guarantees testable presentation logic and zero transport leakage into React components.",
+      "tags": [
+        "frontend-flow",
+        "core-kernel"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "src/modules/core-kernel/index.ts",
+        "entryType": "react-mvvm-flow"
+      }
+    },
+    {
+      "id": "step:flow:fe-core-kernel-mvvm:1",
+      "type": "step",
+      "name": "1. Presentation View (@core/ui/*)",
+      "filePath": "src/core/common/image-utils.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 1. Presentation View (@core/ui/*) in src/core/common/image-utils.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/core/common/image-utils.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "core-kernel"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-core-kernel-mvvm:2",
+      "type": "step",
+      "name": "2. ViewModel Hook (State & Commands)",
+      "filePath": "src/core/common/utils.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 2. ViewModel Hook (State & Commands) in src/core/common/utils.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/core/common/utils.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "core-kernel"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-core-kernel-mvvm:3",
+      "type": "step",
+      "name": "3. Repository (DTO-to-Model Mapping)",
+      "filePath": "src/core/crud/components/generic-chart.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 3. Repository (DTO-to-Model Mapping) in src/core/crud/components/generic-chart.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/core/crud/components/generic-chart.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "core-kernel"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-core-kernel-mvvm:4",
+      "type": "step",
+      "name": "4. Service & DI Container (IApiService)",
+      "filePath": "src/core/crud/components/generic-crud-view.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 4. Service & DI Container (IApiService) in src/core/crud/components/generic-crud-view.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/core/crud/components/generic-crud-view.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "core-kernel"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "domain:fe-mod-crm",
+      "type": "domain",
+      "name": "Module: CRM & Commercial Pipeline Portal",
+      "summary": "CRM sub-modules (leads, opportunities, pipelines, contacts, accounts, activities, quotes) following strict View -> ViewModel -> Repository -> Service flow. Contains 234 files enforcing MVVM separation, @core/ui/* primitives, and bilingual EN/AR locales.",
+      "languageNotes": "Frontend Bounded Module (Module: CRM & Commercial Pipeline Portal): Isolates sub-modules with dedicated DI registration (di.ts) and co-located locales.",
+      "tags": [
+        "frontend-domain",
+        "mod-crm",
+        "mvvm"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entities": [
+          "View (.tsx)",
+          "ViewModel (use*ViewModel)",
+          "Repository (*Repository)",
+          "Service (*Service)",
+          "Locales (EN/AR)"
+        ],
+        "businessRules": [
+          "Views and ViewModels never import IApiService or make raw fetch() calls.",
+          "All interactive controls use @core/ui/* primitives and Nexus theme tokens.",
+          "All static copy resides in co-located *.en.ts and *.ar.ts dictionaries."
+        ],
+        "crossDomainInteractions": [
+          "Resolves shared HTTP transport and auth session via @core/kernel.",
+          "Renders shared design primitives from @core/ui/*."
+        ]
+      }
+    },
+    {
+      "id": "flow:fe-mod-crm-mvvm",
+      "type": "flow",
+      "name": "CRM & Commercial Pipeline Portal — End-to-End MVVM User Journey",
+      "summary": "Traces user interaction from the Next.js 16 Route & @core/ui/* View through the ViewModel hook, Repository, Service, and IApiService HTTP adapter.",
+      "languageNotes": "Unidirectional MVVM Flow: Guarantees testable presentation logic and zero transport leakage into React components.",
+      "tags": [
+        "frontend-flow",
+        "mod-crm"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "src/modules/crm/index.ts",
+        "entryType": "react-mvvm-flow"
+      }
+    },
+    {
+      "id": "step:flow:fe-mod-crm-mvvm:1",
+      "type": "step",
+      "name": "1. Presentation View (@core/ui/*)",
+      "filePath": "src/modules/crm/accounts/src/data/mappers/CrmAccountMapper.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 1. Presentation View (@core/ui/*) in src/modules/crm/accounts/src/data/mappers/CrmAccountMapper.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/crm/accounts/src/data/mappers/CrmAccountMapper.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-crm"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-crm-mvvm:2",
+      "type": "step",
+      "name": "2. ViewModel Hook (State & Commands)",
+      "filePath": "src/modules/crm/accounts/src/data/repositories/CrmAccountRepository.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 2. ViewModel Hook (State & Commands) in src/modules/crm/accounts/src/data/repositories/CrmAccountRepository.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/crm/accounts/src/data/repositories/CrmAccountRepository.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-crm"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-crm-mvvm:3",
+      "type": "step",
+      "name": "3. Repository (DTO-to-Model Mapping)",
+      "filePath": "src/modules/crm/accounts/src/data/services/CrmAccountService.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 3. Repository (DTO-to-Model Mapping) in src/modules/crm/accounts/src/data/services/CrmAccountService.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/crm/accounts/src/data/services/CrmAccountService.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-crm"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-crm-mvvm:4",
+      "type": "step",
+      "name": "4. Service & DI Container (IApiService)",
+      "filePath": "src/modules/crm/accounts/src/data/services/crm-account.endpoints.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 4. Service & DI Container (IApiService) in src/modules/crm/accounts/src/data/services/crm-account.endpoints.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/crm/accounts/src/data/services/crm-account.endpoints.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-crm"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "domain:fe-mod-venue",
+      "type": "domain",
+      "name": "Module: Venue, Courts & Booking Operations",
+      "summary": "Venue topology, interactive court calendar, booking wizard, conflict resolution, and facility management sub-modules. Contains 425 files enforcing MVVM separation, @core/ui/* primitives, and bilingual EN/AR locales.",
+      "languageNotes": "Frontend Bounded Module (Module: Venue, Courts & Booking Operations): Isolates sub-modules with dedicated DI registration (di.ts) and co-located locales.",
+      "tags": [
+        "frontend-domain",
+        "mod-venue",
+        "mvvm"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entities": [
+          "View (.tsx)",
+          "ViewModel (use*ViewModel)",
+          "Repository (*Repository)",
+          "Service (*Service)",
+          "Locales (EN/AR)"
+        ],
+        "businessRules": [
+          "Views and ViewModels never import IApiService or make raw fetch() calls.",
+          "All interactive controls use @core/ui/* primitives and Nexus theme tokens.",
+          "All static copy resides in co-located *.en.ts and *.ar.ts dictionaries."
+        ],
+        "crossDomainInteractions": [
+          "Resolves shared HTTP transport and auth session via @core/kernel.",
+          "Renders shared design primitives from @core/ui/*."
+        ]
+      }
+    },
+    {
+      "id": "flow:fe-mod-venue-mvvm",
+      "type": "flow",
+      "name": "Venue, Courts & Booking Operations — End-to-End MVVM User Journey",
+      "summary": "Traces user interaction from the Next.js 16 Route & @core/ui/* View through the ViewModel hook, Repository, Service, and IApiService HTTP adapter.",
+      "languageNotes": "Unidirectional MVVM Flow: Guarantees testable presentation logic and zero transport leakage into React components.",
+      "tags": [
+        "frontend-flow",
+        "mod-venue"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "src/modules/venue/index.ts",
+        "entryType": "react-mvvm-flow"
+      }
+    },
+    {
+      "id": "step:flow:fe-mod-venue-mvvm:1",
+      "type": "step",
+      "name": "1. Presentation View (@core/ui/*)",
+      "filePath": "src/modules/venue/attention-center/src/presentation/views/VenueAttentionView.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 1. Presentation View (@core/ui/*) in src/modules/venue/attention-center/src/presentation/views/VenueAttentionView.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/venue/attention-center/src/presentation/views/VenueAttentionView.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-venue"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-venue-mvvm:2",
+      "type": "step",
+      "name": "2. ViewModel Hook (State & Commands)",
+      "filePath": "src/modules/venue/availability/src/presentation/views/AvailabilityView.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 2. ViewModel Hook (State & Commands) in src/modules/venue/availability/src/presentation/views/AvailabilityView.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/venue/availability/src/presentation/views/AvailabilityView.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-venue"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-venue-mvvm:3",
+      "type": "step",
+      "name": "3. Repository (DTO-to-Model Mapping)",
+      "filePath": "src/modules/venue/booking-360/src/presentation/components/BookingChangeResourceDialog.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 3. Repository (DTO-to-Model Mapping) in src/modules/venue/booking-360/src/presentation/components/BookingChangeResourceDialog.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/venue/booking-360/src/presentation/components/BookingChangeResourceDialog.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-venue"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-venue-mvvm:4",
+      "type": "step",
+      "name": "4. Service & DI Container (IApiService)",
+      "filePath": "src/modules/venue/booking-360/src/presentation/components/BookingGuestAccessCard.test.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 4. Service & DI Container (IApiService) in src/modules/venue/booking-360/src/presentation/components/BookingGuestAccessCard.test.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/venue/booking-360/src/presentation/components/BookingGuestAccessCard.test.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-venue"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "domain:fe-mod-admin",
+      "type": "domain",
+      "name": "Module: Admin, Identity, Roles & Tenants",
+      "summary": "Multi-tenant administration, users, RBAC/PBAC permission matrices, security policies, and audit logs. Contains 747 files enforcing MVVM separation, @core/ui/* primitives, and bilingual EN/AR locales.",
+      "languageNotes": "Frontend Bounded Module (Module: Admin, Identity, Roles & Tenants): Isolates sub-modules with dedicated DI registration (di.ts) and co-located locales.",
+      "tags": [
+        "frontend-domain",
+        "mod-admin",
+        "mvvm"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entities": [
+          "View (.tsx)",
+          "ViewModel (use*ViewModel)",
+          "Repository (*Repository)",
+          "Service (*Service)",
+          "Locales (EN/AR)"
+        ],
+        "businessRules": [
+          "Views and ViewModels never import IApiService or make raw fetch() calls.",
+          "All interactive controls use @core/ui/* primitives and Nexus theme tokens.",
+          "All static copy resides in co-located *.en.ts and *.ar.ts dictionaries."
+        ],
+        "crossDomainInteractions": [
+          "Resolves shared HTTP transport and auth session via @core/kernel.",
+          "Renders shared design primitives from @core/ui/*."
+        ]
+      }
+    },
+    {
+      "id": "flow:fe-mod-admin-mvvm",
+      "type": "flow",
+      "name": "Admin, Identity, Roles & Tenants — End-to-End MVVM User Journey",
+      "summary": "Traces user interaction from the Next.js 16 Route & @core/ui/* View through the ViewModel hook, Repository, Service, and IApiService HTTP adapter.",
+      "languageNotes": "Unidirectional MVVM Flow: Guarantees testable presentation logic and zero transport leakage into React components.",
+      "tags": [
+        "frontend-flow",
+        "mod-admin"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "src/modules/admin/index.ts",
+        "entryType": "react-mvvm-flow"
+      }
+    },
+    {
+      "id": "step:flow:fe-mod-admin-mvvm:1",
+      "type": "step",
+      "name": "1. Presentation View (@core/ui/*)",
+      "filePath": "src/modules/admin/communication/message-composer/src/presentation/components/AttachmentUploader.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 1. Presentation View (@core/ui/*) in src/modules/admin/communication/message-composer/src/presentation/components/AttachmentUploader.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/admin/communication/message-composer/src/presentation/components/AttachmentUploader.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-admin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-admin-mvvm:2",
+      "type": "step",
+      "name": "2. ViewModel Hook (State & Commands)",
+      "filePath": "src/modules/admin/communication/message-composer/src/presentation/components/ComposeSection.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 2. ViewModel Hook (State & Commands) in src/modules/admin/communication/message-composer/src/presentation/components/ComposeSection.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/admin/communication/message-composer/src/presentation/components/ComposeSection.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-admin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-admin-mvvm:3",
+      "type": "step",
+      "name": "3. Repository (DTO-to-Model Mapping)",
+      "filePath": "src/modules/admin/communication/message-composer/src/presentation/components/EmailPreviewDialog.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 3. Repository (DTO-to-Model Mapping) in src/modules/admin/communication/message-composer/src/presentation/components/EmailPreviewDialog.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/admin/communication/message-composer/src/presentation/components/EmailPreviewDialog.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-admin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-admin-mvvm:4",
+      "type": "step",
+      "name": "4. Service & DI Container (IApiService)",
+      "filePath": "src/modules/admin/communication/message-composer/src/presentation/components/HistorySection.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 4. Service & DI Container (IApiService) in src/modules/admin/communication/message-composer/src/presentation/components/HistorySection.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/admin/communication/message-composer/src/presentation/components/HistorySection.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-admin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "domain:fe-mod-billing",
+      "type": "domain",
+      "name": "Module: Billing, Editions, Subscriptions & Quotas",
+      "summary": "SaaS edition management, tenant entitlements, usage quota meters, invoices, and payment workflows. Contains 432 files enforcing MVVM separation, @core/ui/* primitives, and bilingual EN/AR locales.",
+      "languageNotes": "Frontend Bounded Module (Module: Billing, Editions, Subscriptions & Quotas): Isolates sub-modules with dedicated DI registration (di.ts) and co-located locales.",
+      "tags": [
+        "frontend-domain",
+        "mod-billing",
+        "mvvm"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entities": [
+          "View (.tsx)",
+          "ViewModel (use*ViewModel)",
+          "Repository (*Repository)",
+          "Service (*Service)",
+          "Locales (EN/AR)"
+        ],
+        "businessRules": [
+          "Views and ViewModels never import IApiService or make raw fetch() calls.",
+          "All interactive controls use @core/ui/* primitives and Nexus theme tokens.",
+          "All static copy resides in co-located *.en.ts and *.ar.ts dictionaries."
+        ],
+        "crossDomainInteractions": [
+          "Resolves shared HTTP transport and auth session via @core/kernel.",
+          "Renders shared design primitives from @core/ui/*."
+        ]
+      }
+    },
+    {
+      "id": "flow:fe-mod-billing-mvvm",
+      "type": "flow",
+      "name": "Billing, Editions, Subscriptions & Quotas — End-to-End MVVM User Journey",
+      "summary": "Traces user interaction from the Next.js 16 Route & @core/ui/* View through the ViewModel hook, Repository, Service, and IApiService HTTP adapter.",
+      "languageNotes": "Unidirectional MVVM Flow: Guarantees testable presentation logic and zero transport leakage into React components.",
+      "tags": [
+        "frontend-flow",
+        "mod-billing"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "src/modules/billing/index.ts",
+        "entryType": "react-mvvm-flow"
+      }
+    },
+    {
+      "id": "step:flow:fe-mod-billing-mvvm:1",
+      "type": "step",
+      "name": "1. Presentation View (@core/ui/*)",
+      "filePath": "src/modules/billing/entitlements/analytics/src/data/mappers/AnalyticsMapper.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 1. Presentation View (@core/ui/*) in src/modules/billing/entitlements/analytics/src/data/mappers/AnalyticsMapper.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/billing/entitlements/analytics/src/data/mappers/AnalyticsMapper.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-billing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-billing-mvvm:2",
+      "type": "step",
+      "name": "2. ViewModel Hook (State & Commands)",
+      "filePath": "src/modules/billing/entitlements/analytics/src/data/models/AnalyticsModels.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 2. ViewModel Hook (State & Commands) in src/modules/billing/entitlements/analytics/src/data/models/AnalyticsModels.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/billing/entitlements/analytics/src/data/models/AnalyticsModels.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-billing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-billing-mvvm:3",
+      "type": "step",
+      "name": "3. Repository (DTO-to-Model Mapping)",
+      "filePath": "src/modules/billing/entitlements/analytics/src/data/repositories/AnalyticsRepository.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 3. Repository (DTO-to-Model Mapping) in src/modules/billing/entitlements/analytics/src/data/repositories/AnalyticsRepository.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/billing/entitlements/analytics/src/data/repositories/AnalyticsRepository.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-billing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-billing-mvvm:4",
+      "type": "step",
+      "name": "4. Service & DI Container (IApiService)",
+      "filePath": "src/modules/billing/entitlements/analytics/src/data/services/AnalyticsService.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 4. Service & DI Container (IApiService) in src/modules/billing/entitlements/analytics/src/data/services/AnalyticsService.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/billing/entitlements/analytics/src/data/services/AnalyticsService.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-billing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "domain:fe-mod-custom-fields",
+      "type": "domain",
+      "name": "Module: CustomFields & Dynamic Form Studio",
+      "summary": "Dynamic custom field builder, schema definitions, validation rules, and runtime field renderers. Contains 397 files enforcing MVVM separation, @core/ui/* primitives, and bilingual EN/AR locales.",
+      "languageNotes": "Frontend Bounded Module (Module: CustomFields & Dynamic Form Studio): Isolates sub-modules with dedicated DI registration (di.ts) and co-located locales.",
+      "tags": [
+        "frontend-domain",
+        "mod-custom-fields",
+        "mvvm"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entities": [
+          "View (.tsx)",
+          "ViewModel (use*ViewModel)",
+          "Repository (*Repository)",
+          "Service (*Service)",
+          "Locales (EN/AR)"
+        ],
+        "businessRules": [
+          "Views and ViewModels never import IApiService or make raw fetch() calls.",
+          "All interactive controls use @core/ui/* primitives and Nexus theme tokens.",
+          "All static copy resides in co-located *.en.ts and *.ar.ts dictionaries."
+        ],
+        "crossDomainInteractions": [
+          "Resolves shared HTTP transport and auth session via @core/kernel.",
+          "Renders shared design primitives from @core/ui/*."
+        ]
+      }
+    },
+    {
+      "id": "flow:fe-mod-custom-fields-mvvm",
+      "type": "flow",
+      "name": "CustomFields & Dynamic Form Studio — End-to-End MVVM User Journey",
+      "summary": "Traces user interaction from the Next.js 16 Route & @core/ui/* View through the ViewModel hook, Repository, Service, and IApiService HTTP adapter.",
+      "languageNotes": "Unidirectional MVVM Flow: Guarantees testable presentation logic and zero transport leakage into React components.",
+      "tags": [
+        "frontend-flow",
+        "mod-custom-fields"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "src/modules/custom-fields/index.ts",
+        "entryType": "react-mvvm-flow"
+      }
+    },
+    {
+      "id": "step:flow:fe-mod-custom-fields-mvvm:1",
+      "type": "step",
+      "name": "1. Presentation View (@core/ui/*)",
+      "filePath": "src/modules/custom-fields/custom-fields/custom-field/src/presentation/dialogs/detail/DetailAuditSection.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 1. Presentation View (@core/ui/*) in src/modules/custom-fields/custom-fields/custom-field/src/presentation/dialogs/detail/DetailAuditSection.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/custom-fields/custom-fields/custom-field/src/presentation/dialogs/detail/DetailAuditSection.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-custom-fields"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-custom-fields-mvvm:2",
+      "type": "step",
+      "name": "2. ViewModel Hook (State & Commands)",
+      "filePath": "src/modules/custom-fields/custom-fields/custom-field/src/presentation/dialogs/detail/DetailGeneralSection.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 2. ViewModel Hook (State & Commands) in src/modules/custom-fields/custom-fields/custom-field/src/presentation/dialogs/detail/DetailGeneralSection.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/custom-fields/custom-fields/custom-field/src/presentation/dialogs/detail/DetailGeneralSection.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-custom-fields"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-custom-fields-mvvm:3",
+      "type": "step",
+      "name": "3. Repository (DTO-to-Model Mapping)",
+      "filePath": "src/modules/custom-fields/custom-fields/custom-field/src/presentation/dialogs/detail/DetailGovernanceSection.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 3. Repository (DTO-to-Model Mapping) in src/modules/custom-fields/custom-fields/custom-field/src/presentation/dialogs/detail/DetailGovernanceSection.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/custom-fields/custom-fields/custom-field/src/presentation/dialogs/detail/DetailGovernanceSection.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-custom-fields"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-custom-fields-mvvm:4",
+      "type": "step",
+      "name": "4. Service & DI Container (IApiService)",
+      "filePath": "src/modules/custom-fields/custom-fields/custom-field/src/presentation/dialogs/detail/DetailOptionsSection.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 4. Service & DI Container (IApiService) in src/modules/custom-fields/custom-fields/custom-field/src/presentation/dialogs/detail/DetailOptionsSection.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/custom-fields/custom-fields/custom-field/src/presentation/dialogs/detail/DetailOptionsSection.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-custom-fields"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "domain:fe-mod-party-kernel",
+      "type": "domain",
+      "name": "Module: PartyKernel & Unified Directory",
+      "summary": "Individual, athlete, household, and organization 360-degree profile views and relationship graphs. Contains 125 files enforcing MVVM separation, @core/ui/* primitives, and bilingual EN/AR locales.",
+      "languageNotes": "Frontend Bounded Module (Module: PartyKernel & Unified Directory): Isolates sub-modules with dedicated DI registration (di.ts) and co-located locales.",
+      "tags": [
+        "frontend-domain",
+        "mod-party-kernel",
+        "mvvm"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entities": [
+          "View (.tsx)",
+          "ViewModel (use*ViewModel)",
+          "Repository (*Repository)",
+          "Service (*Service)",
+          "Locales (EN/AR)"
+        ],
+        "businessRules": [
+          "Views and ViewModels never import IApiService or make raw fetch() calls.",
+          "All interactive controls use @core/ui/* primitives and Nexus theme tokens.",
+          "All static copy resides in co-located *.en.ts and *.ar.ts dictionaries."
+        ],
+        "crossDomainInteractions": [
+          "Resolves shared HTTP transport and auth session via @core/kernel.",
+          "Renders shared design primitives from @core/ui/*."
+        ]
+      }
+    },
+    {
+      "id": "flow:fe-mod-party-kernel-mvvm",
+      "type": "flow",
+      "name": "PartyKernel & Unified Directory — End-to-End MVVM User Journey",
+      "summary": "Traces user interaction from the Next.js 16 Route & @core/ui/* View through the ViewModel hook, Repository, Service, and IApiService HTTP adapter.",
+      "languageNotes": "Unidirectional MVVM Flow: Guarantees testable presentation logic and zero transport leakage into React components.",
+      "tags": [
+        "frontend-flow",
+        "mod-party-kernel"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "src/modules/party-kernel/index.ts",
+        "entryType": "react-mvvm-flow"
+      }
+    },
+    {
+      "id": "step:flow:fe-mod-party-kernel-mvvm:1",
+      "type": "step",
+      "name": "1. Presentation View (@core/ui/*)",
+      "filePath": "src/modules/party-kernel/party-kernel/merge-candidate/src/presentation/views/MergeCandidateListView.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 1. Presentation View (@core/ui/*) in src/modules/party-kernel/party-kernel/merge-candidate/src/presentation/views/MergeCandidateListView.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/party-kernel/party-kernel/merge-candidate/src/presentation/views/MergeCandidateListView.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-party-kernel"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-party-kernel-mvvm:2",
+      "type": "step",
+      "name": "2. ViewModel Hook (State & Commands)",
+      "filePath": "src/modules/party-kernel/party-kernel/party/src/presentation/components/dialogs/DeletePartyDialog.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 2. ViewModel Hook (State & Commands) in src/modules/party-kernel/party-kernel/party/src/presentation/components/dialogs/DeletePartyDialog.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/party-kernel/party-kernel/party/src/presentation/components/dialogs/DeletePartyDialog.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-party-kernel"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-party-kernel-mvvm:3",
+      "type": "step",
+      "name": "3. Repository (DTO-to-Model Mapping)",
+      "filePath": "src/modules/party-kernel/party-kernel/party/src/presentation/views/PartyProfileView.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 3. Repository (DTO-to-Model Mapping) in src/modules/party-kernel/party-kernel/party/src/presentation/views/PartyProfileView.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/party-kernel/party-kernel/party/src/presentation/views/PartyProfileView.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-party-kernel"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-party-kernel-mvvm:4",
+      "type": "step",
+      "name": "4. Service & DI Container (IApiService)",
+      "filePath": "src/modules/party-kernel/party-kernel/contact-point/locales/index.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 4. Service & DI Container (IApiService) in src/modules/party-kernel/party-kernel/contact-point/locales/index.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/party-kernel/party-kernel/contact-point/locales/index.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-party-kernel"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "domain:fe-mod-hrms",
+      "type": "domain",
+      "name": "Module: HRMS, Staff Directory, Shifts & Leave",
+      "summary": "Employee profiles, coach assignments, shift scheduling, attendance logs, and leave approval workflows. Contains 94 files enforcing MVVM separation, @core/ui/* primitives, and bilingual EN/AR locales.",
+      "languageNotes": "Frontend Bounded Module (Module: HRMS, Staff Directory, Shifts & Leave): Isolates sub-modules with dedicated DI registration (di.ts) and co-located locales.",
+      "tags": [
+        "frontend-domain",
+        "mod-hrms",
+        "mvvm"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entities": [
+          "View (.tsx)",
+          "ViewModel (use*ViewModel)",
+          "Repository (*Repository)",
+          "Service (*Service)",
+          "Locales (EN/AR)"
+        ],
+        "businessRules": [
+          "Views and ViewModels never import IApiService or make raw fetch() calls.",
+          "All interactive controls use @core/ui/* primitives and Nexus theme tokens.",
+          "All static copy resides in co-located *.en.ts and *.ar.ts dictionaries."
+        ],
+        "crossDomainInteractions": [
+          "Resolves shared HTTP transport and auth session via @core/kernel.",
+          "Renders shared design primitives from @core/ui/*."
+        ]
+      }
+    },
+    {
+      "id": "flow:fe-mod-hrms-mvvm",
+      "type": "flow",
+      "name": "HRMS, Staff Directory, Shifts & Leave — End-to-End MVVM User Journey",
+      "summary": "Traces user interaction from the Next.js 16 Route & @core/ui/* View through the ViewModel hook, Repository, Service, and IApiService HTTP adapter.",
+      "languageNotes": "Unidirectional MVVM Flow: Guarantees testable presentation logic and zero transport leakage into React components.",
+      "tags": [
+        "frontend-flow",
+        "mod-hrms"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "src/modules/hrms/index.ts",
+        "entryType": "react-mvvm-flow"
+      }
+    },
+    {
+      "id": "step:flow:fe-mod-hrms-mvvm:1",
+      "type": "step",
+      "name": "1. Presentation View (@core/ui/*)",
+      "filePath": "src/modules/hrms/hrms/employment-record/src/presentation/views/EmploymentRecordListView.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 1. Presentation View (@core/ui/*) in src/modules/hrms/hrms/employment-record/src/presentation/views/EmploymentRecordListView.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/hrms/hrms/employment-record/src/presentation/views/EmploymentRecordListView.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-hrms"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-hrms-mvvm:2",
+      "type": "step",
+      "name": "2. ViewModel Hook (State & Commands)",
+      "filePath": "src/modules/hrms/hrms/permission-constants.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 2. ViewModel Hook (State & Commands) in src/modules/hrms/hrms/permission-constants.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/hrms/hrms/permission-constants.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-hrms"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-hrms-mvvm:3",
+      "type": "step",
+      "name": "3. Repository (DTO-to-Model Mapping)",
+      "filePath": "src/modules/hrms/hrms/qualification/src/presentation/views/QualificationListView.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 3. Repository (DTO-to-Model Mapping) in src/modules/hrms/hrms/qualification/src/presentation/views/QualificationListView.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/hrms/hrms/qualification/src/presentation/views/QualificationListView.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-hrms"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-hrms-mvvm:4",
+      "type": "step",
+      "name": "4. Service & DI Container (IApiService)",
+      "filePath": "src/modules/hrms/hrms/staff-assignment/src/presentation/views/StaffAssignmentListView.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 4. Service & DI Container (IApiService) in src/modules/hrms/hrms/staff-assignment/src/presentation/views/StaffAssignmentListView.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/hrms/hrms/staff-assignment/src/presentation/views/StaffAssignmentListView.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-hrms"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "domain:fe-mod-marketplace",
+      "type": "domain",
+      "name": "Module: Marketplace & Partner Catalog",
+      "summary": "Partner listings, service discovery, vendor onboarding, and booking checkout views. Contains 95 files enforcing MVVM separation, @core/ui/* primitives, and bilingual EN/AR locales.",
+      "languageNotes": "Frontend Bounded Module (Module: Marketplace & Partner Catalog): Isolates sub-modules with dedicated DI registration (di.ts) and co-located locales.",
+      "tags": [
+        "frontend-domain",
+        "mod-marketplace",
+        "mvvm"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entities": [
+          "View (.tsx)",
+          "ViewModel (use*ViewModel)",
+          "Repository (*Repository)",
+          "Service (*Service)",
+          "Locales (EN/AR)"
+        ],
+        "businessRules": [
+          "Views and ViewModels never import IApiService or make raw fetch() calls.",
+          "All interactive controls use @core/ui/* primitives and Nexus theme tokens.",
+          "All static copy resides in co-located *.en.ts and *.ar.ts dictionaries."
+        ],
+        "crossDomainInteractions": [
+          "Resolves shared HTTP transport and auth session via @core/kernel.",
+          "Renders shared design primitives from @core/ui/*."
+        ]
+      }
+    },
+    {
+      "id": "flow:fe-mod-marketplace-mvvm",
+      "type": "flow",
+      "name": "Marketplace & Partner Catalog — End-to-End MVVM User Journey",
+      "summary": "Traces user interaction from the Next.js 16 Route & @core/ui/* View through the ViewModel hook, Repository, Service, and IApiService HTTP adapter.",
+      "languageNotes": "Unidirectional MVVM Flow: Guarantees testable presentation logic and zero transport leakage into React components.",
+      "tags": [
+        "frontend-flow",
+        "mod-marketplace"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "src/modules/marketplace/index.ts",
+        "entryType": "react-mvvm-flow"
+      }
+    },
+    {
+      "id": "step:flow:fe-mod-marketplace-mvvm:1",
+      "type": "step",
+      "name": "1. Presentation View (@core/ui/*)",
+      "filePath": "src/modules/marketplace/marketplace/app-listings/src/presentation/components/AppListingCard.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 1. Presentation View (@core/ui/*) in src/modules/marketplace/marketplace/app-listings/src/presentation/components/AppListingCard.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/marketplace/marketplace/app-listings/src/presentation/components/AppListingCard.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-marketplace"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-marketplace-mvvm:2",
+      "type": "step",
+      "name": "2. ViewModel Hook (State & Commands)",
+      "filePath": "src/modules/marketplace/marketplace/app-listings/src/presentation/components/AppListingsStats.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 2. ViewModel Hook (State & Commands) in src/modules/marketplace/marketplace/app-listings/src/presentation/components/AppListingsStats.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/marketplace/marketplace/app-listings/src/presentation/components/AppListingsStats.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-marketplace"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-marketplace-mvvm:3",
+      "type": "step",
+      "name": "3. Repository (DTO-to-Model Mapping)",
+      "filePath": "src/modules/marketplace/marketplace/app-listings/src/presentation/views/AppDetailView.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 3. Repository (DTO-to-Model Mapping) in src/modules/marketplace/marketplace/app-listings/src/presentation/views/AppDetailView.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/marketplace/marketplace/app-listings/src/presentation/views/AppDetailView.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-marketplace"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-marketplace-mvvm:4",
+      "type": "step",
+      "name": "4. Service & DI Container (IApiService)",
+      "filePath": "src/modules/marketplace/marketplace/app-listings/src/presentation/views/AppListingsView.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 4. Service & DI Container (IApiService) in src/modules/marketplace/marketplace/app-listings/src/presentation/views/AppListingsView.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/marketplace/marketplace/app-listings/src/presentation/views/AppListingsView.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-marketplace"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "domain:fe-mod-work-management",
+      "type": "domain",
+      "name": "Module: WorkManagement, Tasks &Kanban Boards",
+      "summary": "Facility tasks, operational checklists, Kanban boards, and SLA deadline trackers. Contains 17 files enforcing MVVM separation, @core/ui/* primitives, and bilingual EN/AR locales.",
+      "languageNotes": "Frontend Bounded Module (Module: WorkManagement, Tasks &Kanban Boards): Isolates sub-modules with dedicated DI registration (di.ts) and co-located locales.",
+      "tags": [
+        "frontend-domain",
+        "mod-work-management",
+        "mvvm"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entities": [
+          "View (.tsx)",
+          "ViewModel (use*ViewModel)",
+          "Repository (*Repository)",
+          "Service (*Service)",
+          "Locales (EN/AR)"
+        ],
+        "businessRules": [
+          "Views and ViewModels never import IApiService or make raw fetch() calls.",
+          "All interactive controls use @core/ui/* primitives and Nexus theme tokens.",
+          "All static copy resides in co-located *.en.ts and *.ar.ts dictionaries."
+        ],
+        "crossDomainInteractions": [
+          "Resolves shared HTTP transport and auth session via @core/kernel.",
+          "Renders shared design primitives from @core/ui/*."
+        ]
+      }
+    },
+    {
+      "id": "flow:fe-mod-work-management-mvvm",
+      "type": "flow",
+      "name": "WorkManagement, Tasks &Kanban Boards — End-to-End MVVM User Journey",
+      "summary": "Traces user interaction from the Next.js 16 Route & @core/ui/* View through the ViewModel hook, Repository, Service, and IApiService HTTP adapter.",
+      "languageNotes": "Unidirectional MVVM Flow: Guarantees testable presentation logic and zero transport leakage into React components.",
+      "tags": [
+        "frontend-flow",
+        "mod-work-management"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "src/modules/work-management/index.ts",
+        "entryType": "react-mvvm-flow"
+      }
+    },
+    {
+      "id": "step:flow:fe-mod-work-management-mvvm:1",
+      "type": "step",
+      "name": "1. Presentation View (@core/ui/*)",
+      "filePath": "src/modules/work-management/work-management/permission-constants.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 1. Presentation View (@core/ui/*) in src/modules/work-management/work-management/permission-constants.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/work-management/work-management/permission-constants.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-work-management"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-work-management-mvvm:2",
+      "type": "step",
+      "name": "2. ViewModel Hook (State & Commands)",
+      "filePath": "src/modules/work-management/work-management/di.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 2. ViewModel Hook (State & Commands) in src/modules/work-management/work-management/di.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/work-management/work-management/di.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-work-management"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-work-management-mvvm:3",
+      "type": "step",
+      "name": "3. Repository (DTO-to-Model Mapping)",
+      "filePath": "src/modules/work-management/work-management/work-item/src/data/mappers/WorkItemMapper.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 3. Repository (DTO-to-Model Mapping) in src/modules/work-management/work-management/work-item/src/data/mappers/WorkItemMapper.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/work-management/work-management/work-item/src/data/mappers/WorkItemMapper.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-work-management"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-work-management-mvvm:4",
+      "type": "step",
+      "name": "4. Service & DI Container (IApiService)",
+      "filePath": "src/modules/work-management/work-management/work-item/src/data/models/WorkItemModel.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 4. Service & DI Container (IApiService) in src/modules/work-management/work-management/work-item/src/data/models/WorkItemModel.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/work-management/work-management/work-item/src/data/models/WorkItemModel.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-work-management"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "domain:fe-mod-media",
+      "type": "domain",
+      "name": "Module: Media Library & Secure Asset Manager",
+      "summary": "Multi-tenant asset browser, drag-and-drop uploaders, image previews, and storage quota indicators. Contains 7 files enforcing MVVM separation, @core/ui/* primitives, and bilingual EN/AR locales.",
+      "languageNotes": "Frontend Bounded Module (Module: Media Library & Secure Asset Manager): Isolates sub-modules with dedicated DI registration (di.ts) and co-located locales.",
+      "tags": [
+        "frontend-domain",
+        "mod-media",
+        "mvvm"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entities": [
+          "View (.tsx)",
+          "ViewModel (use*ViewModel)",
+          "Repository (*Repository)",
+          "Service (*Service)",
+          "Locales (EN/AR)"
+        ],
+        "businessRules": [
+          "Views and ViewModels never import IApiService or make raw fetch() calls.",
+          "All interactive controls use @core/ui/* primitives and Nexus theme tokens.",
+          "All static copy resides in co-located *.en.ts and *.ar.ts dictionaries."
+        ],
+        "crossDomainInteractions": [
+          "Resolves shared HTTP transport and auth session via @core/kernel.",
+          "Renders shared design primitives from @core/ui/*."
+        ]
+      }
+    },
+    {
+      "id": "flow:fe-mod-media-mvvm",
+      "type": "flow",
+      "name": "Media Library & Secure Asset Manager — End-to-End MVVM User Journey",
+      "summary": "Traces user interaction from the Next.js 16 Route & @core/ui/* View through the ViewModel hook, Repository, Service, and IApiService HTTP adapter.",
+      "languageNotes": "Unidirectional MVVM Flow: Guarantees testable presentation logic and zero transport leakage into React components.",
+      "tags": [
+        "frontend-flow",
+        "mod-media"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "src/modules/media/index.ts",
+        "entryType": "react-mvvm-flow"
+      }
+    },
+    {
+      "id": "step:flow:fe-mod-media-mvvm:1",
+      "type": "step",
+      "name": "1. Presentation View (@core/ui/*)",
+      "filePath": "src/modules/media/media/src/presentation/views/MediaLibraryView.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 1. Presentation View (@core/ui/*) in src/modules/media/media/src/presentation/views/MediaLibraryView.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/media/media/src/presentation/views/MediaLibraryView.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-media"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-media-mvvm:2",
+      "type": "step",
+      "name": "2. ViewModel Hook (State & Commands)",
+      "filePath": "src/modules/media/media/di.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 2. ViewModel Hook (State & Commands) in src/modules/media/media/di.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/media/media/di.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-media"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-media-mvvm:3",
+      "type": "step",
+      "name": "3. Repository (DTO-to-Model Mapping)",
+      "filePath": "src/modules/media/media/locales/index.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 3. Repository (DTO-to-Model Mapping) in src/modules/media/media/locales/index.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/media/media/locales/index.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-media"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-media-mvvm:4",
+      "type": "step",
+      "name": "4. Service & DI Container (IApiService)",
+      "filePath": "src/modules/media/media/permission-constants.ts",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 4. Service & DI Container (IApiService) in src/modules/media/media/permission-constants.ts following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/media/media/permission-constants.ts' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-media"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "domain:fe-mod-plugins",
+      "type": "domain",
+      "name": "Module: Plugins, Webhooks & Extensions UI",
+      "summary": "Plugin marketplace, tenant extension configuration, and webhook delivery logs. Contains 86 files enforcing MVVM separation, @core/ui/* primitives, and bilingual EN/AR locales.",
+      "languageNotes": "Frontend Bounded Module (Module: Plugins, Webhooks & Extensions UI): Isolates sub-modules with dedicated DI registration (di.ts) and co-located locales.",
+      "tags": [
+        "frontend-domain",
+        "mod-plugins",
+        "mvvm"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entities": [
+          "View (.tsx)",
+          "ViewModel (use*ViewModel)",
+          "Repository (*Repository)",
+          "Service (*Service)",
+          "Locales (EN/AR)"
+        ],
+        "businessRules": [
+          "Views and ViewModels never import IApiService or make raw fetch() calls.",
+          "All interactive controls use @core/ui/* primitives and Nexus theme tokens.",
+          "All static copy resides in co-located *.en.ts and *.ar.ts dictionaries."
+        ],
+        "crossDomainInteractions": [
+          "Resolves shared HTTP transport and auth session via @core/kernel.",
+          "Renders shared design primitives from @core/ui/*."
+        ]
+      }
+    },
+    {
+      "id": "flow:fe-mod-plugins-mvvm",
+      "type": "flow",
+      "name": "Plugins, Webhooks & Extensions UI — End-to-End MVVM User Journey",
+      "summary": "Traces user interaction from the Next.js 16 Route & @core/ui/* View through the ViewModel hook, Repository, Service, and IApiService HTTP adapter.",
+      "languageNotes": "Unidirectional MVVM Flow: Guarantees testable presentation logic and zero transport leakage into React components.",
+      "tags": [
+        "frontend-flow",
+        "mod-plugins"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "src/modules/plugins/index.ts",
+        "entryType": "react-mvvm-flow"
+      }
+    },
+    {
+      "id": "step:flow:fe-mod-plugins-mvvm:1",
+      "type": "step",
+      "name": "1. Presentation View (@core/ui/*)",
+      "filePath": "src/modules/plugins/plugins/catalog/src/presentation/components/PluginCard.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 1. Presentation View (@core/ui/*) in src/modules/plugins/plugins/catalog/src/presentation/components/PluginCard.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/plugins/plugins/catalog/src/presentation/components/PluginCard.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-plugins"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-plugins-mvvm:2",
+      "type": "step",
+      "name": "2. ViewModel Hook (State & Commands)",
+      "filePath": "src/modules/plugins/plugins/catalog/src/presentation/components/PluginInstallDialog.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 2. ViewModel Hook (State & Commands) in src/modules/plugins/plugins/catalog/src/presentation/components/PluginInstallDialog.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/plugins/plugins/catalog/src/presentation/components/PluginInstallDialog.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-plugins"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-plugins-mvvm:3",
+      "type": "step",
+      "name": "3. Repository (DTO-to-Model Mapping)",
+      "filePath": "src/modules/plugins/plugins/catalog/src/presentation/views/PluginCatalogView.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 3. Repository (DTO-to-Model Mapping) in src/modules/plugins/plugins/catalog/src/presentation/views/PluginCatalogView.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/plugins/plugins/catalog/src/presentation/views/PluginCatalogView.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-plugins"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-plugins-mvvm:4",
+      "type": "step",
+      "name": "4. Service & DI Container (IApiService)",
+      "filePath": "src/modules/plugins/plugins/definitions/src/presentation/components/DeleteDefinitionDialog.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 4. Service & DI Container (IApiService) in src/modules/plugins/plugins/definitions/src/presentation/components/DeleteDefinitionDialog.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/plugins/plugins/definitions/src/presentation/components/DeleteDefinitionDialog.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-plugins"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "domain:fe-mod-analytics",
+      "type": "domain",
+      "name": "Module: Analytics & Executive KPI Dashboards",
+      "summary": "Real-time operational charts, revenue telemetry, court utilization heatmaps, and cohort analytics. Contains 150 files enforcing MVVM separation, @core/ui/* primitives, and bilingual EN/AR locales.",
+      "languageNotes": "Frontend Bounded Module (Module: Analytics & Executive KPI Dashboards): Isolates sub-modules with dedicated DI registration (di.ts) and co-located locales.",
+      "tags": [
+        "frontend-domain",
+        "mod-analytics",
+        "mvvm"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entities": [
+          "View (.tsx)",
+          "ViewModel (use*ViewModel)",
+          "Repository (*Repository)",
+          "Service (*Service)",
+          "Locales (EN/AR)"
+        ],
+        "businessRules": [
+          "Views and ViewModels never import IApiService or make raw fetch() calls.",
+          "All interactive controls use @core/ui/* primitives and Nexus theme tokens.",
+          "All static copy resides in co-located *.en.ts and *.ar.ts dictionaries."
+        ],
+        "crossDomainInteractions": [
+          "Resolves shared HTTP transport and auth session via @core/kernel.",
+          "Renders shared design primitives from @core/ui/*."
+        ]
+      }
+    },
+    {
+      "id": "flow:fe-mod-analytics-mvvm",
+      "type": "flow",
+      "name": "Analytics & Executive KPI Dashboards — End-to-End MVVM User Journey",
+      "summary": "Traces user interaction from the Next.js 16 Route & @core/ui/* View through the ViewModel hook, Repository, Service, and IApiService HTTP adapter.",
+      "languageNotes": "Unidirectional MVVM Flow: Guarantees testable presentation logic and zero transport leakage into React components.",
+      "tags": [
+        "frontend-flow",
+        "mod-analytics"
+      ],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "src/modules/analytics/index.ts",
+        "entryType": "react-mvvm-flow"
+      }
+    },
+    {
+      "id": "step:flow:fe-mod-analytics-mvvm:1",
+      "type": "step",
+      "name": "1. Presentation View (@core/ui/*)",
+      "filePath": "src/modules/analytics/analytics/events/src/presentation/views/AnalyticsEventStreamView.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 1. Presentation View (@core/ui/*) in src/modules/analytics/analytics/events/src/presentation/views/AnalyticsEventStreamView.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/analytics/analytics/events/src/presentation/views/AnalyticsEventStreamView.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-analytics"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-analytics-mvvm:2",
+      "type": "step",
+      "name": "2. ViewModel Hook (State & Commands)",
+      "filePath": "src/modules/analytics/monitoring/analytics/src/presentation/components/AdminDistributionPie.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 2. ViewModel Hook (State & Commands) in src/modules/analytics/monitoring/analytics/src/presentation/components/AdminDistributionPie.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/analytics/monitoring/analytics/src/presentation/components/AdminDistributionPie.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-analytics"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-analytics-mvvm:3",
+      "type": "step",
+      "name": "3. Repository (DTO-to-Model Mapping)",
+      "filePath": "src/modules/analytics/monitoring/analytics/src/presentation/components/LoginComparisonChart.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 3. Repository (DTO-to-Model Mapping) in src/modules/analytics/monitoring/analytics/src/presentation/components/LoginComparisonChart.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/analytics/monitoring/analytics/src/presentation/components/LoginComparisonChart.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-analytics"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:flow:fe-mod-analytics-mvvm:4",
+      "type": "step",
+      "name": "4. Service & DI Container (IApiService)",
+      "filePath": "src/modules/analytics/monitoring/analytics/src/presentation/components/TenantAnalyticsKpis.tsx",
+      "lineRange": [
+        1,
+        60
+      ],
+      "summary": "Executes 4. Service & DI Container (IApiService) in src/modules/analytics/monitoring/analytics/src/presentation/components/TenantAnalyticsKpis.tsx following SCRIPE Frontend architecture invariants.",
+      "languageNotes": "Click 'Open Code' above to inspect 'src/modules/analytics/monitoring/analytics/src/presentation/components/TenantAnalyticsKpis.tsx' in the live CodeViewer.",
+      "tags": [
+        "frontend-step",
+        "mod-analytics"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "domain:fe-core-ui",
+      "target": "flow:fe-core-ui-mvvm",
+      "type": "contains_flow",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "flow:fe-core-ui-mvvm",
+      "target": "step:flow:fe-core-ui-mvvm:1",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.1
+    },
+    {
+      "source": "flow:fe-core-ui-mvvm",
+      "target": "step:flow:fe-core-ui-mvvm:2",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.2
+    },
+    {
+      "source": "flow:fe-core-ui-mvvm",
+      "target": "step:flow:fe-core-ui-mvvm:3",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.3
+    },
+    {
+      "source": "flow:fe-core-ui-mvvm",
+      "target": "step:flow:fe-core-ui-mvvm:4",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.4
+    },
+    {
+      "source": "domain:fe-core-kernel",
+      "target": "flow:fe-core-kernel-mvvm",
+      "type": "contains_flow",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "flow:fe-core-kernel-mvvm",
+      "target": "step:flow:fe-core-kernel-mvvm:1",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.1
+    },
+    {
+      "source": "flow:fe-core-kernel-mvvm",
+      "target": "step:flow:fe-core-kernel-mvvm:2",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.2
+    },
+    {
+      "source": "flow:fe-core-kernel-mvvm",
+      "target": "step:flow:fe-core-kernel-mvvm:3",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.3
+    },
+    {
+      "source": "flow:fe-core-kernel-mvvm",
+      "target": "step:flow:fe-core-kernel-mvvm:4",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.4
+    },
+    {
+      "source": "domain:fe-mod-crm",
+      "target": "flow:fe-mod-crm-mvvm",
+      "type": "contains_flow",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "flow:fe-mod-crm-mvvm",
+      "target": "step:flow:fe-mod-crm-mvvm:1",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.1
+    },
+    {
+      "source": "flow:fe-mod-crm-mvvm",
+      "target": "step:flow:fe-mod-crm-mvvm:2",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.2
+    },
+    {
+      "source": "flow:fe-mod-crm-mvvm",
+      "target": "step:flow:fe-mod-crm-mvvm:3",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.3
+    },
+    {
+      "source": "flow:fe-mod-crm-mvvm",
+      "target": "step:flow:fe-mod-crm-mvvm:4",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.4
+    },
+    {
+      "source": "domain:fe-mod-venue",
+      "target": "flow:fe-mod-venue-mvvm",
+      "type": "contains_flow",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "flow:fe-mod-venue-mvvm",
+      "target": "step:flow:fe-mod-venue-mvvm:1",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.1
+    },
+    {
+      "source": "flow:fe-mod-venue-mvvm",
+      "target": "step:flow:fe-mod-venue-mvvm:2",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.2
+    },
+    {
+      "source": "flow:fe-mod-venue-mvvm",
+      "target": "step:flow:fe-mod-venue-mvvm:3",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.3
+    },
+    {
+      "source": "flow:fe-mod-venue-mvvm",
+      "target": "step:flow:fe-mod-venue-mvvm:4",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.4
+    },
+    {
+      "source": "domain:fe-mod-admin",
+      "target": "flow:fe-mod-admin-mvvm",
+      "type": "contains_flow",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "flow:fe-mod-admin-mvvm",
+      "target": "step:flow:fe-mod-admin-mvvm:1",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.1
+    },
+    {
+      "source": "flow:fe-mod-admin-mvvm",
+      "target": "step:flow:fe-mod-admin-mvvm:2",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.2
+    },
+    {
+      "source": "flow:fe-mod-admin-mvvm",
+      "target": "step:flow:fe-mod-admin-mvvm:3",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.3
+    },
+    {
+      "source": "flow:fe-mod-admin-mvvm",
+      "target": "step:flow:fe-mod-admin-mvvm:4",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.4
+    },
+    {
+      "source": "domain:fe-mod-billing",
+      "target": "flow:fe-mod-billing-mvvm",
+      "type": "contains_flow",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "flow:fe-mod-billing-mvvm",
+      "target": "step:flow:fe-mod-billing-mvvm:1",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.1
+    },
+    {
+      "source": "flow:fe-mod-billing-mvvm",
+      "target": "step:flow:fe-mod-billing-mvvm:2",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.2
+    },
+    {
+      "source": "flow:fe-mod-billing-mvvm",
+      "target": "step:flow:fe-mod-billing-mvvm:3",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.3
+    },
+    {
+      "source": "flow:fe-mod-billing-mvvm",
+      "target": "step:flow:fe-mod-billing-mvvm:4",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.4
+    },
+    {
+      "source": "domain:fe-mod-custom-fields",
+      "target": "flow:fe-mod-custom-fields-mvvm",
+      "type": "contains_flow",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "flow:fe-mod-custom-fields-mvvm",
+      "target": "step:flow:fe-mod-custom-fields-mvvm:1",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.1
+    },
+    {
+      "source": "flow:fe-mod-custom-fields-mvvm",
+      "target": "step:flow:fe-mod-custom-fields-mvvm:2",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.2
+    },
+    {
+      "source": "flow:fe-mod-custom-fields-mvvm",
+      "target": "step:flow:fe-mod-custom-fields-mvvm:3",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.3
+    },
+    {
+      "source": "flow:fe-mod-custom-fields-mvvm",
+      "target": "step:flow:fe-mod-custom-fields-mvvm:4",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.4
+    },
+    {
+      "source": "domain:fe-mod-party-kernel",
+      "target": "flow:fe-mod-party-kernel-mvvm",
+      "type": "contains_flow",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "flow:fe-mod-party-kernel-mvvm",
+      "target": "step:flow:fe-mod-party-kernel-mvvm:1",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.1
+    },
+    {
+      "source": "flow:fe-mod-party-kernel-mvvm",
+      "target": "step:flow:fe-mod-party-kernel-mvvm:2",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.2
+    },
+    {
+      "source": "flow:fe-mod-party-kernel-mvvm",
+      "target": "step:flow:fe-mod-party-kernel-mvvm:3",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.3
+    },
+    {
+      "source": "flow:fe-mod-party-kernel-mvvm",
+      "target": "step:flow:fe-mod-party-kernel-mvvm:4",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.4
+    },
+    {
+      "source": "domain:fe-mod-hrms",
+      "target": "flow:fe-mod-hrms-mvvm",
+      "type": "contains_flow",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "flow:fe-mod-hrms-mvvm",
+      "target": "step:flow:fe-mod-hrms-mvvm:1",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.1
+    },
+    {
+      "source": "flow:fe-mod-hrms-mvvm",
+      "target": "step:flow:fe-mod-hrms-mvvm:2",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.2
+    },
+    {
+      "source": "flow:fe-mod-hrms-mvvm",
+      "target": "step:flow:fe-mod-hrms-mvvm:3",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.3
+    },
+    {
+      "source": "flow:fe-mod-hrms-mvvm",
+      "target": "step:flow:fe-mod-hrms-mvvm:4",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.4
+    },
+    {
+      "source": "domain:fe-mod-marketplace",
+      "target": "flow:fe-mod-marketplace-mvvm",
+      "type": "contains_flow",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "flow:fe-mod-marketplace-mvvm",
+      "target": "step:flow:fe-mod-marketplace-mvvm:1",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.1
+    },
+    {
+      "source": "flow:fe-mod-marketplace-mvvm",
+      "target": "step:flow:fe-mod-marketplace-mvvm:2",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.2
+    },
+    {
+      "source": "flow:fe-mod-marketplace-mvvm",
+      "target": "step:flow:fe-mod-marketplace-mvvm:3",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.3
+    },
+    {
+      "source": "flow:fe-mod-marketplace-mvvm",
+      "target": "step:flow:fe-mod-marketplace-mvvm:4",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.4
+    },
+    {
+      "source": "domain:fe-mod-work-management",
+      "target": "flow:fe-mod-work-management-mvvm",
+      "type": "contains_flow",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "flow:fe-mod-work-management-mvvm",
+      "target": "step:flow:fe-mod-work-management-mvvm:1",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.1
+    },
+    {
+      "source": "flow:fe-mod-work-management-mvvm",
+      "target": "step:flow:fe-mod-work-management-mvvm:2",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.2
+    },
+    {
+      "source": "flow:fe-mod-work-management-mvvm",
+      "target": "step:flow:fe-mod-work-management-mvvm:3",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.3
+    },
+    {
+      "source": "flow:fe-mod-work-management-mvvm",
+      "target": "step:flow:fe-mod-work-management-mvvm:4",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.4
+    },
+    {
+      "source": "domain:fe-mod-media",
+      "target": "flow:fe-mod-media-mvvm",
+      "type": "contains_flow",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "flow:fe-mod-media-mvvm",
+      "target": "step:flow:fe-mod-media-mvvm:1",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.1
+    },
+    {
+      "source": "flow:fe-mod-media-mvvm",
+      "target": "step:flow:fe-mod-media-mvvm:2",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.2
+    },
+    {
+      "source": "flow:fe-mod-media-mvvm",
+      "target": "step:flow:fe-mod-media-mvvm:3",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.3
+    },
+    {
+      "source": "flow:fe-mod-media-mvvm",
+      "target": "step:flow:fe-mod-media-mvvm:4",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.4
+    },
+    {
+      "source": "domain:fe-mod-plugins",
+      "target": "flow:fe-mod-plugins-mvvm",
+      "type": "contains_flow",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "flow:fe-mod-plugins-mvvm",
+      "target": "step:flow:fe-mod-plugins-mvvm:1",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.1
+    },
+    {
+      "source": "flow:fe-mod-plugins-mvvm",
+      "target": "step:flow:fe-mod-plugins-mvvm:2",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.2
+    },
+    {
+      "source": "flow:fe-mod-plugins-mvvm",
+      "target": "step:flow:fe-mod-plugins-mvvm:3",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.3
+    },
+    {
+      "source": "flow:fe-mod-plugins-mvvm",
+      "target": "step:flow:fe-mod-plugins-mvvm:4",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.4
+    },
+    {
+      "source": "domain:fe-mod-analytics",
+      "target": "flow:fe-mod-analytics-mvvm",
+      "type": "contains_flow",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "flow:fe-mod-analytics-mvvm",
+      "target": "step:flow:fe-mod-analytics-mvvm:1",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.1
+    },
+    {
+      "source": "flow:fe-mod-analytics-mvvm",
+      "target": "step:flow:fe-mod-analytics-mvvm:2",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.2
+    },
+    {
+      "source": "flow:fe-mod-analytics-mvvm",
+      "target": "step:flow:fe-mod-analytics-mvvm:3",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.3
+    },
+    {
+      "source": "flow:fe-mod-analytics-mvvm",
+      "target": "step:flow:fe-mod-analytics-mvvm:4",
+      "type": "flow_step",
+      "direction": "forward",
+      "weight": 0.4
+    },
+    {
+      "source": "domain:fe-mod-crm",
+      "target": "domain:fe-core-ui",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Consumes @core/ui/* primitives & Nexus tokens"
+    },
+    {
+      "source": "domain:fe-mod-crm",
+      "target": "domain:fe-core-kernel",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Resolves IApiService, DI & PBAC permission hooks"
+    },
+    {
+      "source": "domain:fe-mod-venue",
+      "target": "domain:fe-core-ui",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Consumes @core/ui/* primitives & Nexus tokens"
+    },
+    {
+      "source": "domain:fe-mod-venue",
+      "target": "domain:fe-core-kernel",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Resolves IApiService, DI & PBAC permission hooks"
+    },
+    {
+      "source": "domain:fe-mod-admin",
+      "target": "domain:fe-core-ui",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Consumes @core/ui/* primitives & Nexus tokens"
+    },
+    {
+      "source": "domain:fe-mod-admin",
+      "target": "domain:fe-core-kernel",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Resolves IApiService, DI & PBAC permission hooks"
+    },
+    {
+      "source": "domain:fe-mod-billing",
+      "target": "domain:fe-core-ui",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Consumes @core/ui/* primitives & Nexus tokens"
+    },
+    {
+      "source": "domain:fe-mod-billing",
+      "target": "domain:fe-core-kernel",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Resolves IApiService, DI & PBAC permission hooks"
+    },
+    {
+      "source": "domain:fe-mod-custom-fields",
+      "target": "domain:fe-core-ui",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Consumes @core/ui/* primitives & Nexus tokens"
+    },
+    {
+      "source": "domain:fe-mod-custom-fields",
+      "target": "domain:fe-core-kernel",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Resolves IApiService, DI & PBAC permission hooks"
+    },
+    {
+      "source": "domain:fe-mod-party-kernel",
+      "target": "domain:fe-core-ui",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Consumes @core/ui/* primitives & Nexus tokens"
+    },
+    {
+      "source": "domain:fe-mod-party-kernel",
+      "target": "domain:fe-core-kernel",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Resolves IApiService, DI & PBAC permission hooks"
+    },
+    {
+      "source": "domain:fe-mod-hrms",
+      "target": "domain:fe-core-ui",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Consumes @core/ui/* primitives & Nexus tokens"
+    },
+    {
+      "source": "domain:fe-mod-hrms",
+      "target": "domain:fe-core-kernel",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Resolves IApiService, DI & PBAC permission hooks"
+    },
+    {
+      "source": "domain:fe-mod-marketplace",
+      "target": "domain:fe-core-ui",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Consumes @core/ui/* primitives & Nexus tokens"
+    },
+    {
+      "source": "domain:fe-mod-marketplace",
+      "target": "domain:fe-core-kernel",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Resolves IApiService, DI & PBAC permission hooks"
+    },
+    {
+      "source": "domain:fe-mod-work-management",
+      "target": "domain:fe-core-ui",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Consumes @core/ui/* primitives & Nexus tokens"
+    },
+    {
+      "source": "domain:fe-mod-work-management",
+      "target": "domain:fe-core-kernel",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Resolves IApiService, DI & PBAC permission hooks"
+    },
+    {
+      "source": "domain:fe-mod-media",
+      "target": "domain:fe-core-ui",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Consumes @core/ui/* primitives & Nexus tokens"
+    },
+    {
+      "source": "domain:fe-mod-media",
+      "target": "domain:fe-core-kernel",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Resolves IApiService, DI & PBAC permission hooks"
+    },
+    {
+      "source": "domain:fe-mod-plugins",
+      "target": "domain:fe-core-ui",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Consumes @core/ui/* primitives & Nexus tokens"
+    },
+    {
+      "source": "domain:fe-mod-plugins",
+      "target": "domain:fe-core-kernel",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Resolves IApiService, DI & PBAC permission hooks"
+    },
+    {
+      "source": "domain:fe-mod-analytics",
+      "target": "domain:fe-core-ui",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Consumes @core/ui/* primitives & Nexus tokens"
+    },
+    {
+      "source": "domain:fe-mod-analytics",
+      "target": "domain:fe-core-kernel",
+      "type": "cross_domain",
+      "direction": "forward",
+      "weight": 0.85,
+      "description": "Resolves IApiService, DI & PBAC permission hooks"
+    }
+  ],
+  "layers": [],
+  "tour": []
+}

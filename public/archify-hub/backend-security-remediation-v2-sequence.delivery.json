@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "3cb75c22-8885-47fa-9a0a-c6c0b8cc90f3",
+  "status": "current",
+  "command": "deliver",
+  "type": "sequence",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\.archify\\sequence-backend-security-remediation-v2-20261119-195800\\candidate.json",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\backend-security-remediation-v2-sequence.html",
+  "specification": {
+    "sha256": "5ad2e66a5b4bb137cea40d83cd281ceeaf55f5350f7db8002a7bd2ecdecf4695",
+    "bytes": 7107
+  },
+  "artifact": {
+    "sha256": "7ba4e29c5759bd56e2459bd9634e9ed146973efb95158fae33723b772037f70f",
+    "bytes": 843272
+  }
+}

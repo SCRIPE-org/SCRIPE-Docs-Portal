@@ -109,6 +109,7 @@ export const es = {
     commercialWorkManagement: "Gestión de Trabajo",
     commercialAnalytics: "Analítica y Flujo de Eventos",
     identityModule: "Identidad y Acceso",
+    crmModule: "CRM Comercial y Acuerdos",
     venueModule: "Operaciones de Sedes",
     catalogPricingModule: "Catálogo y Precios",
     financeModule: "Finanzas y Liquidaciones",
@@ -122,5 +123,7 @@ export const es = {
     crosscuttingModule: "Comunicación y Archivos",
     marketplace: "Mercado y Apps",
     recycleBin: "Papelera del Ecosistema",
+    dataTransfer: "Estudio de Intercambio de Datos",
+    commercialDataExchange: "Estudio de Intercambio de Datos",
   },
 };

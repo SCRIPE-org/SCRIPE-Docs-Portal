@@ -66,6 +66,11 @@ export function DocsSearch({
   // Navigate to result
   const navigateToResult = useCallback(
     (result: SearchResult) => {
+      if (result.slug.startsWith("archify/")) {
+        router.push(`/${result.slug}`);
+        onClose();
+        return;
+      }
       const isComm = result.slug.startsWith("commercial/");
       const targetBase = isComm ? "/commercial" : "/technical";
       const cleanSlug = result.slug

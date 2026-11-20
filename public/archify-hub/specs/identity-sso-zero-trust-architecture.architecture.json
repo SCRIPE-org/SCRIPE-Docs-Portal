@@ -1,0 +1,365 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "SCRIPE Multi-Tenant Identity, Federated SSO, Hybrid MFA & Runtime Security Architecture",
+    "locale": "en",
+    "output": "SCRIPE-Docs-Portal/public/archify-hub/identity-sso-zero-trust-architecture.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "960923d28a6e9ebc72114cec9228cb2f73457f30"
+    },
+    "views": [
+      {
+        "id": "idp_discovery",
+        "label": "1. Multi-Tenant IdP & Discovery",
+        "focus": [
+          "fe_login",
+          "fe_console",
+          "pbac_sudo",
+          "sso_engines",
+          "identity_db"
+        ],
+        "note": "Live DB IdentityProvider discovery honoring IsActive, inherit/custom mode, slug shadowing, and Platform-Admin /tenants/[id] CRUD."
+      },
+      {
+        "id": "federated_mfa",
+        "label": "2. Federated SSO & Hybrid MFA",
+        "focus": [
+          "fe_login",
+          "sso_engines",
+          "ext_idp",
+          "hybrid_mfa",
+          "dist_cache",
+          "oidc_srv"
+        ],
+        "note": "OIDC, OAuth2, SAML, and social JWKS/X.509 verification feeding HybridMfaPolicy and single-use TwoFactorPendingToken tickets."
+      },
+      {
+        "id": "sudo_console",
+        "label": "3. Sudo Account Console",
+        "focus": [
+          "fe_console",
+          "pbac_sudo",
+          "sso_engines",
+          "hybrid_mfa",
+          "identity_db"
+        ],
+        "note": "Sudo-gated initiate-link (replacing 410 Gone direct link), passkey registration, sole-auth unlink guard, and CIDR /32 helper."
+      },
+      {
+        "id": "runtime_guards",
+        "label": "4. Live Runtime Enforcement",
+        "focus": [
+          "fe_login",
+          "edge_gate",
+          "int_db",
+          "pbac_sudo",
+          "identity_db"
+        ],
+        "note": "Enforces scr_pat_... PAT scopes, X-API-Key whitelists/quotas, AdminDelegation live grants, and Global CIDR across all modules."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "fe_login",
+      "type": "frontend",
+      "label": "Login & SSO UI",
+      "sublabel": "LoginView + /sso/callback",
+      "tag": "Next.js 16 MVVM",
+      "pos": [40, 40],
+      "size": [190, 66],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 96,
+          "end_line": 105,
+          "label": "Frontend MVVM"
+        }
+      ]
+    },
+    {
+      "id": "fe_console",
+      "type": "frontend",
+      "label": "Account & IdP UI",
+      "sublabel": "AccountSecurity + Tenants",
+      "tag": "Sudo + RowVersion",
+      "pos": [340, 40],
+      "size": [190, 66],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 106,
+          "end_line": 115,
+          "label": "Nexus & i18n"
+        }
+      ]
+    },
+    {
+      "id": "ext_idp",
+      "type": "external",
+      "label": "External IdPs",
+      "sublabel": "OIDC, OAuth2, SAML, Social",
+      "tag": "JWKS & X.509",
+      "pos": [640, 40],
+      "size": [190, 66],
+      "sources": [
+        {
+          "path": ".agents/skills/scripe-security-crypto/SKILL.md",
+          "line": 38,
+          "end_line": 55,
+          "label": "5-Layer Defense"
+        }
+      ]
+    },
+    {
+      "id": "edge_gate",
+      "type": "security",
+      "label": "Edge Auth & CIDR",
+      "sublabel": "PAT + API-Key + Global CIDR",
+      "tag": "All Modules",
+      "pos": [40, 190],
+      "size": [190, 66],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 124,
+          "end_line": 133,
+          "label": "5-Layer Security"
+        }
+      ]
+    },
+    {
+      "id": "pbac_sudo",
+      "type": "security",
+      "label": "IDs, Sudo & PBAC",
+      "sublabel": "TryDecrypt + Delegation",
+      "tag": "Fail-Closed",
+      "pos": [340, 190],
+      "size": [190, 66],
+      "sources": [
+        {
+          "path": ".agents/skills/scripe-security-crypto/SKILL.md",
+          "line": 44,
+          "end_line": 55,
+          "label": "PBAC & Crypto"
+        }
+      ]
+    },
+    {
+      "id": "sso_engines",
+      "type": "backend",
+      "label": "SSO & Passwordless",
+      "sublabel": "OIDC, SAML, OTP, QR",
+      "tag": "AstraFlow CQRS",
+      "pos": [640, 190],
+      "size": [190, 66],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 83,
+          "end_line": 88,
+          "label": "Backend CQRS"
+        }
+      ]
+    },
+    {
+      "id": "hybrid_mfa",
+      "type": "security",
+      "label": "State & Hybrid MFA",
+      "sublabel": "HybridMfaPolicy + Tickets",
+      "tag": "TwoFactorPending",
+      "pos": [940, 190],
+      "size": [190, 66],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 126,
+          "end_line": 131,
+          "label": "Auth & MFA Gate"
+        }
+      ]
+    },
+    {
+      "id": "int_db",
+      "type": "database",
+      "label": "Integrations DB",
+      "sublabel": "ApiKey + UsageLogs",
+      "tag": "integrations.*",
+      "pos": [40, 340],
+      "size": [190, 66],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 89,
+          "end_line": 94,
+          "label": "Schema Isolation"
+        }
+      ]
+    },
+    {
+      "id": "identity_db",
+      "type": "database",
+      "label": "Identity Schema DB",
+      "sublabel": "IdP, PAT, Delegation, CIDR",
+      "tag": "identity.*",
+      "pos": [340, 340],
+      "size": [190, 66],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 89,
+          "end_line": 94,
+          "label": "Identity Schema"
+        }
+      ]
+    },
+    {
+      "id": "oidc_srv",
+      "type": "backend",
+      "label": "OpenIddict Server",
+      "sublabel": "/authorize + /token",
+      "tag": "Live Re-Check",
+      "pos": [640, 340],
+      "size": [190, 66],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 128,
+          "end_line": 131,
+          "label": "OAuth2 & OIDC"
+        }
+      ]
+    },
+    {
+      "id": "dist_cache",
+      "type": "database",
+      "label": "Distributed Cache",
+      "sublabel": "State, Nonce, PKCE, 2FA",
+      "tag": "Single-Use TTL",
+      "pos": [940, 340],
+      "size": [190, 66],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 128,
+          "end_line": 131,
+          "label": "Session Tickets"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Zero-Trust ASP.NET Core Security Edge & Identity Services",
+      "wraps": ["edge_gate", "pbac_sudo", "sso_engines", "hybrid_mfa"],
+      "pad": 18
+    }
+  ],
+  "connections": [
+    {
+      "id": "login_to_edge",
+      "from": "fe_login",
+      "to": "edge_gate",
+      "label": "Login & SSO",
+      "variant": "emphasis"
+    },
+    {
+      "id": "edge_to_intdb",
+      "from": "edge_gate",
+      "to": "int_db",
+      "label": "X-API-Key",
+      "variant": "security"
+    },
+    {
+      "id": "console_to_pbac",
+      "from": "fe_console",
+      "to": "pbac_sudo",
+      "label": "Sudo & CRUD",
+      "variant": "emphasis"
+    },
+    {
+      "id": "edge_to_pbac",
+      "from": "edge_gate",
+      "to": "pbac_sudo",
+      "label": "PAT + CIDR",
+      "variant": "security"
+    },
+    {
+      "id": "pbac_to_iddb",
+      "from": "pbac_sudo",
+      "to": "identity_db",
+      "label": "IgnoreFilters",
+      "variant": "security"
+    },
+    {
+      "id": "pbac_to_sso",
+      "from": "pbac_sudo",
+      "to": "sso_engines",
+      "label": "TryDecrypt",
+      "variant": "default"
+    },
+    {
+      "id": "sso_to_extidp",
+      "from": "sso_engines",
+      "to": "ext_idp",
+      "label": "JWKS / X.509",
+      "variant": "security"
+    },
+    {
+      "id": "sso_to_oidcsrv",
+      "from": "sso_engines",
+      "to": "oidc_srv",
+      "label": "Consent/Token",
+      "variant": "default"
+    },
+    {
+      "id": "sso_to_mfa",
+      "from": "sso_engines",
+      "to": "hybrid_mfa",
+      "label": "Hybrid MFA",
+      "variant": "security"
+    },
+    {
+      "id": "mfa_to_cache",
+      "from": "hybrid_mfa",
+      "to": "dist_cache",
+      "label": "5-Min TTL",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Pre-Auth & Encrypted ID Laws",
+      "items": [
+        "Pre-auth lookups use .IgnoreQueryFilters() + explicit !IsDeleted, lockout & tenant status",
+        "EncryptedGuidModelBinder & _idEncryption.TryDecrypt fail closed (422/404) — zero Guid.TryParse",
+        "UpdateLastLoginAtAsync uses ExecuteUpdateAsync to prevent synthetic role-graph collisions"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Federated SSO & Hybrid MFA",
+      "items": [
+        "Apple/MS/OIDC JWKS (MapInboundClaims=false), GitHub OAuth2 /user/emails, SAML X.509 + InResponseTo",
+        "Subject-first (ProviderId, sub) lookup blocks subject-swap; auto-link requires EmailVerified=true",
+        "HybridMfaPolicy issues 5-min TwoFactorPendingToken across OIDC, OAuth2, SAML, Magic Link & OTP"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Live Runtime & Sudo Enforcement",
+      "items": [
+        "PAT scr_pat_... intersects pat_scope with zero SystemProtected bypass; X-API-Key enforces whitelist + burst",
+        "TrustedCidrEnforcementMiddleware enforces AdminSecurityProfile CIDRs across every backend module",
+        "AccountSecurityView uses live DB availableSsoProviders + Sudo initiate-link (legacy link 410 Gone)"
+      ]
+    }
+  ]
+}

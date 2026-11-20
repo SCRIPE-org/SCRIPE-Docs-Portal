@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "explainer",
+  "quality": "showcase",
+  "specification": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-crm-10-submodule-super-arch-20261120\\candidate.archify.md",
+    "sha256": "0b8c4e9b9d41e385a3181091a0826e836b05f52bca52f18414430e4ada526abe",
+    "bytes": 8277
+  },
+  "artifact": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-10-submodule-super-architecture.html",
+    "sha256": "b6469f60bca26ee1bfc406de3a6b7c212782db36855a71ef1c8e751f2633144d",
+    "bytes": 1031311
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "not-run"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-10-submodule-super-architecture.finalize.json",
+    "summaryReceipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-10-submodule-super-architecture.finalize-summary.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-18T23:23:05.931Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 3794,
+  "browserCheck": {
+    "requested": false,
+    "ran": false
+  }
+}

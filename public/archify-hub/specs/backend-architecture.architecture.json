@@ -1,0 +1,573 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "SCRIPE-Backend Architecture (.NET 10 Modular Monolith & AstraFlow 2.3.0 CQRS)",
+    "locale": "en",
+    "output": "public/archify-hub/backend-architecture.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Backend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "f941b1500a9ef98b0f81bdb473d1306f554d6526"
+    },
+    "views": [
+      {
+        "id": "request_ingress",
+        "label": "1. 29-Stage Security & HTTP Ingress",
+        "focus": [
+          "client",
+          "http_pipeline",
+          "identity_auth",
+          "observability",
+          "controllers"
+        ],
+        "note": "29-stage ordered middleware pipeline enforcing Cloudflare origin, JWT revocation, CSRF, replay protection, and tenant context."
+      },
+      {
+        "id": "astraflow_cqrs",
+        "label": "2. AstraFlow 2.3 CQRS Pipeline",
+        "focus": [
+          "controllers",
+          "mediator",
+          "redis_cache",
+          "handlers",
+          "pricing_engine"
+        ],
+        "note": "AstraFlow v2.3.0 mediator runs Logging, Validation, Idempotency (3-TX), Authorization, Caching, and compile-time mappers."
+      },
+      {
+        "id": "persistence_outbox",
+        "label": "3. Dual-Mode DB & Transactional Outbox",
+        "focus": [
+          "handlers",
+          "pricing_engine",
+          "base_dbcontext",
+          "module_db",
+          "outbox_processor",
+          "event_bus",
+          "mediator"
+        ],
+        "note": "BaseDbContext commits domain rows, outbox_messages, and idempotency_receipts atomically per module schema across PG, SQL Server & Oracle."
+      },
+      {
+        "id": "cross_module_contracts",
+        "label": "4. Cross-Module Contracts & Event Bus",
+        "focus": [
+          "handlers",
+          "pricing_engine",
+          "event_bus",
+          "outbox_processor",
+          "mediator"
+        ],
+        "note": "Synchronous reads use Contracts interfaces (ICatalogPricingCalculationService); asynchronous updates flow via Outbox & Inbox."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "client",
+      "type": "external",
+      "label": "Clients & Edge",
+      "sublabel": "Next.js 16 / Coach App",
+      "pos": [
+        40,
+        180
+      ],
+      "size": [
+        145,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/Host/API/Extensions/MiddlewarePipeline.cs",
+          "line": 55,
+          "end_line": 59,
+          "label": "Forwarded headers & ingress"
+        }
+      ]
+    },
+    {
+      "id": "identity_auth",
+      "type": "security",
+      "label": "JWT & Revocation",
+      "sublabel": "Bearer + revocation gate",
+      "tag": "Fail-Closed",
+      "pos": [
+        255,
+        40
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/Core/Core.Infrastructure/DependencyInjection.cs",
+          "line": 544,
+          "end_line": 652,
+          "label": "JWT & IAccountRevocationCache"
+        }
+      ]
+    },
+    {
+      "id": "http_pipeline",
+      "type": "security",
+      "label": "Middleware Pipeline",
+      "sublabel": "29-stage HTTP security",
+      "tag": "CSRF + Replay",
+      "pos": [
+        255,
+        180
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/Host/API/Extensions/MiddlewarePipeline.cs",
+          "line": 48,
+          "end_line": 104,
+          "label": "Pipeline stages 1-6"
+        },
+        {
+          "path": "src/Host/API/Extensions/MiddlewarePipeline.cs",
+          "line": 230,
+          "end_line": 293,
+          "label": "Auth, CSRF, Replay & Tenant"
+        }
+      ]
+    },
+    {
+      "id": "observability",
+      "type": "cloud",
+      "label": "OTel & Real-Time",
+      "sublabel": "/metrics + SignalR hubs",
+      "pos": [
+        255,
+        330
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/Host/API/Extensions/CoreServiceRegistration.cs",
+          "line": 56,
+          "end_line": 63,
+          "label": "AstraFlow OpenTelemetry"
+        },
+        {
+          "path": "src/Host/API/Extensions/MiddlewarePipeline.cs",
+          "line": 296,
+          "end_line": 308,
+          "label": "Prometheus & SignalR"
+        }
+      ]
+    },
+    {
+      "id": "controllers",
+      "type": "backend",
+      "label": "API Controllers",
+      "sublabel": "Versioned REST + PBAC",
+      "tag": "Result<T>",
+      "pos": [
+        495,
+        180
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/Host/API/Controllers/CatalogPricing/PriceQuotesController.cs",
+          "line": 16,
+          "end_line": 58,
+          "label": "PriceQuotesController"
+        }
+      ]
+    },
+    {
+      "id": "redis_cache",
+      "type": "database",
+      "label": "Redis L1 & Locks",
+      "sublabel": "Receipts + HybridCache",
+      "tag": "Distributed",
+      "pos": [
+        745,
+        40
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/Core/Core.Application/Behaviors/CachingBehavior.cs",
+          "line": 78,
+          "end_line": 133,
+          "label": "Tenant-isolated CachingBehavior"
+        },
+        {
+          "path": "src/Core/Core.Application/Behaviors/IdempotencyBehavior.cs",
+          "line": 61,
+          "end_line": 133,
+          "label": "L1 + DB 3-TX Idempotency"
+        }
+      ]
+    },
+    {
+      "id": "mediator",
+      "type": "messagebus",
+      "label": "AstraFlow Mediator",
+      "sublabel": "6 ordered behaviors",
+      "tag": "3-TX Idempotency",
+      "pos": [
+        745,
+        180
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/Core/Core.Application/DependencyInjection.cs",
+          "line": 59,
+          "end_line": 117,
+          "label": "AstraFlow pipeline registration"
+        }
+      ]
+    },
+    {
+      "id": "event_bus",
+      "type": "messagebus",
+      "label": "EventBus & Inbox",
+      "sublabel": "InProcess / RabbitMQ",
+      "tag": "At-Least-Once",
+      "pos": [
+        745,
+        330
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/Core/Core.Infrastructure/DependencyInjection.cs",
+          "line": 280,
+          "end_line": 331,
+          "label": "EventBus & Inbox Consumer"
+        },
+        {
+          "path": "src/Core/Core.Infrastructure/Events/IntegrationEventConsumer.cs",
+          "line": 17,
+          "end_line": 43,
+          "label": "IntegrationEvent -> AstraFlow bridge"
+        }
+      ]
+    },
+    {
+      "id": "handlers",
+      "type": "backend",
+      "label": "18 Domain Modules",
+      "sublabel": "927+ CQRS Handlers",
+      "tag": "3-Project Split",
+      "pos": [
+        995,
+        130
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/Host/API/Extensions/ModuleRegistration.cs",
+          "line": 69,
+          "end_line": 182,
+          "label": "Module registration & DI guards"
+        },
+        {
+          "path": "src/Modules/Venue/Venue.Domain/Entities/Reservation.cs",
+          "line": 1,
+          "end_line": 90,
+          "label": "Venue Reservation Aggregate"
+        }
+      ]
+    },
+    {
+      "id": "pricing_engine",
+      "type": "backend",
+      "label": "CatalogPricing Engine",
+      "sublabel": "Commercial Snapshot",
+      "tag": "PriceQuote",
+      "pos": [
+        995,
+        240
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/Modules/CatalogPricing/CatalogPricing.Application/Commands/CalculatePriceQuoteCommandHandler.cs",
+          "line": 86,
+          "end_line": 166,
+          "label": "CalculatePriceQuoteCommandHandler"
+        }
+      ]
+    },
+    {
+      "id": "base_dbcontext",
+      "type": "backend",
+      "label": "BaseDbContext",
+      "sublabel": "RLS + UTC + Outbox hook",
+      "tag": "Atomic UoW",
+      "pos": [
+        995,
+        360
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/Core/Core.Infrastructure/Database/BaseDbContext.cs",
+          "line": 280,
+          "end_line": 361,
+          "label": "SaveChanges & Outbox extraction"
+        },
+        {
+          "path": "src/Core/Core.Infrastructure/Database/BaseDbContext.cs",
+          "line": 450,
+          "end_line": 553,
+          "label": "Expression-tree TenantId filters"
+        }
+      ]
+    },
+    {
+      "id": "outbox_processor",
+      "type": "backend",
+      "label": "OutboxProcessorJob",
+      "sublabel": "Polls module schemas",
+      "tag": "Distributed Lock",
+      "pos": [
+        745,
+        480
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/Core/Core.Infrastructure/Outbox/OutboxProcessor.cs",
+          "line": 55,
+          "end_line": 176,
+          "label": "Outbox polling & dispatch"
+        }
+      ]
+    },
+    {
+      "id": "module_db",
+      "type": "database",
+      "label": "Schema-Isolated DBs",
+      "sublabel": "PG / SQL Server / Oracle",
+      "tag": "Dual-Mode DB",
+      "pos": [
+        995,
+        480
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/Core/Core.Infrastructure/Database/BaseDbContext.cs",
+          "line": 185,
+          "end_line": 274,
+          "label": "Per-schema Outbox, Inbox & Receipts"
+        },
+        {
+          "path": "src/Core/Core.Infrastructure/Database/DatabaseExtensions.cs",
+          "line": 200,
+          "end_line": 272,
+          "label": "Multi-provider module DB wiring"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "SCRIPE-Backend Host (.NET 10 Modular Monolith / Server Roles)",
+      "wraps": [
+        "identity_auth",
+        "redis_cache",
+        "http_pipeline",
+        "controllers",
+        "mediator",
+        "handlers",
+        "pricing_engine",
+        "observability",
+        "event_bus",
+        "base_dbcontext",
+        "outbox_processor",
+        "module_db"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "AstraFlow 2.3.0 CQRS & Transactional Domain Core",
+      "wraps": [
+        "mediator",
+        "handlers",
+        "pricing_engine",
+        "event_bus",
+        "base_dbcontext"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "client-to-pipeline",
+      "from": "client",
+      "to": "http_pipeline",
+      "label": "HTTPS",
+      "variant": "emphasis"
+    },
+    {
+      "id": "pipeline-to-auth",
+      "from": "http_pipeline",
+      "to": "identity_auth",
+      "label": "verify JWT",
+      "variant": "security"
+    },
+    {
+      "id": "pipeline-to-observability",
+      "from": "http_pipeline",
+      "to": "observability",
+      "label": "traces & hubs",
+      "variant": "dashed"
+    },
+    {
+      "id": "pipeline-to-controllers",
+      "from": "http_pipeline",
+      "to": "controllers",
+      "label": "PBAC route",
+      "variant": "emphasis"
+    },
+    {
+      "id": "controllers-to-mediator",
+      "from": "controllers",
+      "to": "mediator",
+      "label": "ISender.Send",
+      "variant": "emphasis"
+    },
+    {
+      "id": "mediator-to-cache",
+      "from": "mediator",
+      "to": "redis_cache",
+      "label": "L1 cache & lock"
+    },
+    {
+      "id": "mediator-to-handlers",
+      "from": "mediator",
+      "to": "handlers",
+      "label": "dispatch",
+      "variant": "emphasis"
+    },
+    {
+      "id": "handlers-to-pricing",
+      "from": "handlers",
+      "to": "pricing_engine",
+      "label": "Quote Contract",
+      "variant": "default"
+    },
+    {
+      "id": "handlers-to-dbcontext",
+      "from": "handlers",
+      "to": "base_dbcontext",
+      "label": "SaveChanges",
+      "variant": "emphasis"
+    },
+    {
+      "id": "pricing-to-dbcontext",
+      "from": "pricing_engine",
+      "to": "base_dbcontext",
+      "label": "Freeze Quote",
+      "variant": "default"
+    },
+    {
+      "id": "dbcontext-to-db",
+      "from": "base_dbcontext",
+      "to": "module_db",
+      "label": "atomic commit",
+      "variant": "emphasis"
+    },
+    {
+      "id": "db-to-outbox",
+      "from": "module_db",
+      "to": "outbox_processor",
+      "label": "poll outbox",
+      "variant": "dashed"
+    },
+    {
+      "id": "outbox-to-bus",
+      "from": "outbox_processor",
+      "to": "event_bus",
+      "label": "publish batch",
+      "variant": "dashed"
+    },
+    {
+      "id": "bus-to-mediator",
+      "from": "event_bus",
+      "to": "mediator",
+      "label": "INotification",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "5-Layer Defense & 29-Stage HTTP Pipeline",
+      "items": [
+        "MiddlewarePipeline enforces strict ordering: ForwardedHeaders -> GlobalException -> SecurityHeaders -> CorrelationId -> OTel -> CORS -> Cloudflare Origin -> RateLimiting.",
+        "Auth & mutation defense: CookieAuth -> JwtBearer (fail-closed IAccountRevocationCache) -> CsrfProtection -> InputSanitization -> PBAC Authorization -> ReplayProtection -> TenantContextValidation."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "AstraFlow 2.3.0 Total Ecosystem Lock",
+      "items": [
+        "Ordered mediator pipeline: LoggingBehavior -> ValidationBehavior -> IdempotencyBehavior -> AuthorizationBehavior -> CachingBehavior -> PerformanceBehavior.",
+        "ScripeSecureIdCodec & [AstraGenerateMapping] encrypt internal Guid keys at the DTO boundary and provide zero-allocation compile-time mappings."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "18 Sovereign Modules & Fail-Closed DI",
+      "items": [
+        "Modules follow strict Domain / Application / Infrastructure boundaries with zero cross-module foreign keys.",
+        "ModuleRegistration validates cross-module contract dependencies at startup so server-role splits fail fast at boot."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Dual-Mode Multi-DB & Transactional Outbox",
+      "items": [
+        "AddModuleMultiProviderDatabase resolves SqlServer, Oracle, or PostgreSQL DbContexts per module in Single-DB or Multi-DB mode.",
+        "SaveChangesAsync atomically captures aggregate domain events into schema-local outbox_messages alongside 3-transaction idempotency_receipts."
+      ]
+    }
+  ]
+}

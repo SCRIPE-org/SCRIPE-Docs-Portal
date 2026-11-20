@@ -43,6 +43,8 @@ import { fr as pageWebhooks } from "../pages/webhooks/fr";
 import { fr as pageMarketplace } from "../pages/marketplace/fr";
 import { fr as pageEcosystemRecycleBin } from "../pages/ecosystem-recycle-bin/fr";
 import { fr as pageCustomFields } from "../pages/custom-fields/fr";
+import { fr as pageCrm } from "../pages/crm/fr";
+import { fr as pageDataTransfer } from "../pages/data-transfer/fr";
 
 import { mergeAll } from "./utils";
 
@@ -87,5 +89,7 @@ export const allDocsFr: Record<string, any> = mergeAll(
   pageMarketplace,
   pageEcosystemRecycleBin,
   pageCustomFields,
+  pageCrm,
+  pageDataTransfer,
   devTools
 );

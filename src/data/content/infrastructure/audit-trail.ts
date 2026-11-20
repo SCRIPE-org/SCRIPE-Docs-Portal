@@ -28,7 +28,7 @@ const sections: DocSection[] = [
         id: "behavior",
         label: "AuditBehavior",
         type: "info",
-        description: "AstraFlow mediator pipeline",
+        description: "AstraFlow pipeline",
       },
       { id: "service", label: "AuditService", type: "warning", description: "Module auto-detect" },
       { id: "db", label: "AuditLogs Table", type: "success", description: "Persistent storage" },

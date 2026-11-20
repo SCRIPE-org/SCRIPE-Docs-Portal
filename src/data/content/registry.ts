@@ -25,6 +25,7 @@ import "./dev-tools/cli/localization-engine";
 import "./dev-tools/cli/environment-config";
 import "./dev-tools/cli/platform-diagnostics";
 import "./dev-tools/cli/arch-intelligence";
+import "./dev-tools/cli/astraflow";
 
 // Developer Tools — SCRIPE Studio Suite (20 Deep Pages)
 import "./dev-tools/studio/overview";
@@ -47,6 +48,7 @@ import "./dev-tools/studio/security-tenants";
 import "./dev-tools/studio/terminal-palette";
 import "./dev-tools/studio/monitoring";
 import "./dev-tools/studio/engine-api";
+import "./dev-tools/studio/astraflow";
 
 // Master Class Tutorials (5 Pages)
 import "./tutorials/master-module-generation";
@@ -229,6 +231,20 @@ import "./modules/marketplace/ratings-reviews";
 
 import "./modules/ecosystem-recycle-bin";
 
+// Modules (Data Transfer & Data Exchange Studio)
+import "./modules/data-transfer/data-transfer-overview";
+
+// Modules (CRM — Commercial Operations & Revenue Engine)
+import "./modules/crm-overview";
+import "./modules/crm/accounts-360";
+import "./modules/crm/contacts-context";
+import "./modules/crm/leads-qualification";
+import "./modules/crm/opportunities-kanban";
+import "./modules/crm/pipeline-admin";
+import "./modules/crm/workflow-studio-2d";
+import "./modules/crm/settings-governance";
+import "./modules/crm/sales-activities";
+
 // Modules (Identity — Entity Deep Dives)
 import "./modules/identity/auth-sessions";
 import "./modules/identity/menu-system";
@@ -255,6 +271,7 @@ import "./api-reference/role-permission-api";
 import "./api-reference/user-groups-api";
 import "./api-reference/webhook-email-api";
 import "./api-reference/system-api";
+import "./api-reference/data-transfer-api";
 
 // Frontend Modules
 import "./frontend/crud-system";
@@ -411,3 +428,4 @@ import "./commercial/developer-integrations-ecosystem";
 import "./commercial/custom-fields";
 import "./commercial/work-management";
 import "./commercial/analytics";
+import "./commercial/data-exchange-studio";

@@ -1,0 +1,329 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "SCRIPE CLI-First Engineering & 11-Point UAT Readiness Workflow",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "public/archify-hub/fullstack-devops-workflow.html",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "ffc972a40a448abee3f41b394bd3e823457fc346"
+    }
+  },
+  "lanes": [
+    {
+      "id": "cli_lane",
+      "label": "1. scripe-cli Scaffolding"
+    },
+    {
+      "id": "gate_lane",
+      "label": "2. 5-Stage Verification Gate"
+    },
+    {
+      "id": "recovery_lane",
+      "label": "3. Undo & Violation Recovery",
+      "variant": "exception"
+    },
+    {
+      "id": "uat_lane",
+      "label": "4. Multi-DB Seeding & Live UAT"
+    }
+  ],
+  "phases": [
+    {
+      "id": "ph_scaffold",
+      "label": "Scaffold & Codegen",
+      "fromCol": 0,
+      "toCol": 1
+    },
+    {
+      "id": "ph_verify",
+      "label": "Arch-Check & Universal Gate",
+      "fromCol": 2,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "ph_release",
+      "label": "Seed, UAT & Docs SSOT",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "groups": [
+    {
+      "id": "grp_gates",
+      "label": "Zero-Error Quality Gate",
+      "lane": "gate_lane",
+      "fromCol": 2,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "grp_rollback",
+      "label": "Fail-Closed Rollback",
+      "lane": "recovery_lane",
+      "fromCol": 2,
+      "toCol": 4,
+      "variant": "security"
+    },
+    {
+      "id": "grp_uat",
+      "label": "11-Point Founder Readiness",
+      "lane": "uat_lane",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "mainPath": [
+    "cmd_new",
+    "cmd_ddd",
+    "gate_arch",
+    "gate_check",
+    "db_seed",
+    "live_uat"
+  ],
+  "nodes": [
+    {
+      "id": "cmd_new",
+      "lane": "cli_lane",
+      "col": 0,
+      "type": "external",
+      "label": "scripe new-*",
+      "sublabel": "module / sub-module",
+      "tag": "193 cmds",
+      "width": 136,
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 32,
+          "end_line": 64,
+          "label": "CLI Commands"
+        }
+      ]
+    },
+    {
+      "id": "cmd_ddd",
+      "lane": "cli_lane",
+      "col": 1,
+      "type": "backend",
+      "label": "DDD & Mapper Gen",
+      "sublabel": "[AstraGenerateMapping]",
+      "width": 136,
+      "sources": [
+        {
+          "path": ".agents/rules/astraflow-ecosystem-and-evolution.md",
+          "line": 38,
+          "end_line": 56,
+          "label": "Mapper Codegen"
+        }
+      ]
+    },
+    {
+      "id": "gate_arch",
+      "lane": "gate_lane",
+      "col": 2,
+      "type": "security",
+      "label": "scripe arch-check",
+      "sublabel": "+ validate-locales",
+      "tag": "0 errors",
+      "width": 136,
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 47,
+          "end_line": 56,
+          "label": "Quality Gates"
+        }
+      ]
+    },
+    {
+      "id": "gate_check",
+      "lane": "gate_lane",
+      "col": 3,
+      "type": "backend",
+      "label": "scripe check",
+      "sublabel": "lint + build + test",
+      "tag": "5-stage",
+      "width": 136,
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 47,
+          "end_line": 56,
+          "label": "Universal Gate"
+        }
+      ]
+    },
+    {
+      "id": "err_block",
+      "lane": "recovery_lane",
+      "col": 2,
+      "type": "security",
+      "label": "Gate Blocked",
+      "sublabel": "boundary / locale error",
+      "width": 136,
+      "sources": [
+        {
+          "path": ".agents/rules/cli-feedback-and-evolution.md",
+          "line": 10,
+          "end_line": 45,
+          "label": "CLI Feedback Protocol"
+        }
+      ]
+    },
+    {
+      "id": "cmd_undo",
+      "lane": "recovery_lane",
+      "col": 3,
+      "type": "messagebus",
+      "label": "scripe undo",
+      "sublabel": "journal rollback",
+      "width": 136,
+      "sources": [
+        {
+          "path": ".agents/rules/cli-feedback-and-evolution.md",
+          "line": 50,
+          "end_line": 58,
+          "label": "Undo Journal"
+        }
+      ]
+    },
+    {
+      "id": "db_migrate",
+      "lane": "uat_lane",
+      "col": 1,
+      "type": "database",
+      "label": "scripe db migrate",
+      "sublabel": "PG / SQL / Oracle",
+      "width": 136,
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 92,
+          "end_line": 94,
+          "label": "Multi-DB Migrations"
+        }
+      ]
+    },
+    {
+      "id": "db_seed",
+      "lane": "uat_lane",
+      "col": 4,
+      "type": "database",
+      "label": "scripe db seed --dev",
+      "sublabel": "RBAC + Menus + Data",
+      "tag": "Idempotent",
+      "width": 136,
+      "sources": [
+        {
+          "path": ".agents/rules/uat-readiness-and-seeding.md",
+          "line": 14,
+          "end_line": 76,
+          "label": "Mandatory Seeding"
+        }
+      ]
+    },
+    {
+      "id": "live_uat",
+      "lane": "uat_lane",
+      "col": 5,
+      "type": "frontend",
+      "label": "Browser UAT & SSOT",
+      "sublabel": ":3000 + :3002 /archify",
+      "tag": "11-Point DoD",
+      "width": 136,
+      "sources": [
+        {
+          "path": ".agents/rules/uat-readiness-and-seeding.md",
+          "line": 79,
+          "end_line": 120,
+          "label": "Real Browser UAT"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "we1",
+      "from": "cmd_new",
+      "to": "cmd_ddd",
+      "variant": "default"
+    },
+    {
+      "id": "we2",
+      "from": "cmd_ddd",
+      "to": "gate_arch",
+      "label": "static audit",
+      "variant": "emphasis"
+    },
+    {
+      "id": "we3",
+      "from": "gate_arch",
+      "to": "gate_check",
+      "label": "pass",
+      "variant": "emphasis"
+    },
+    {
+      "id": "we4",
+      "from": "gate_arch",
+      "to": "err_block",
+      "label": "violation",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "we5",
+      "from": "err_block",
+      "to": "cmd_undo",
+      "label": "clean dirty state",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "we6",
+      "from": "gate_check",
+      "to": "db_seed",
+      "label": "builds green",
+      "variant": "emphasis"
+    },
+    {
+      "id": "we7",
+      "from": "db_migrate",
+      "to": "db_seed",
+      "label": "schemas ready",
+      "variant": "dashed"
+    },
+    {
+      "id": "we8",
+      "from": "db_seed",
+      "to": "live_uat",
+      "label": "verify live UI",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "CLI-First Governance (193 Commands)",
+      "items": [
+        "All scaffolding, tactical DDD generation, and database migrations run through scripe-cli.",
+        "Undo journal guarantees partial writes can be rolled back cleanly via scripe undo."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Permanent 11-Point UAT Definition of Done",
+      "items": [
+        "Every vertical slice seeds Permissions, Edition Features, Quotas, Bilingual Menus, and Dev Personas.",
+        "Archify SSOT explainers and native diagrams are compiled and verified into SCRIPE-Docs-Portal (/archify)."
+      ]
+    }
+  ]
+}

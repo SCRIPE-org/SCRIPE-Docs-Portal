@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "c8065d2a-8391-453f-b657-a4343b87fceb",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\.archify\\architecture-identity-sso-zero-trust-20261119-012200\\candidate.json",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-zero-trust-architecture.html",
+  "specification": {
+    "sha256": "2663e1fa8e8983a730d2bfd281f3d17c9fcf82c05ff9de57b7cb0e8151f24802",
+    "bytes": 9560
+  },
+  "artifact": {
+    "sha256": "2430920a383962fc75354ac1058555768ef9f12063cf1c5de90d0bfdc96b7be2",
+    "bytes": 856280
+  }
+}

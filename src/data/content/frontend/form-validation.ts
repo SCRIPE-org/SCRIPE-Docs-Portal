@@ -37,7 +37,7 @@ const sections: DocSection[] = [
         type: "danger",
         description: "Server-side validators",
       },
-      { id: "pipeline", label: "ValidationBehavior (AstraFlow mediator)", type: "danger" },
+      { id: "pipeline", label: "ValidationBehavior (AstraFlow)", type: "danger" },
     ],
     connections: [
       { from: "frontend", to: "zod" },

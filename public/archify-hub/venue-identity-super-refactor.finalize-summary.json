@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "explainer",
+  "quality": "showcase",
+  "specification": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-venue-identity-super-refactor-20261115-045330\\candidate.archify.md",
+    "sha256": "01ff7f66189ff64ee2c96475bee219dec70833967f2af676677087f6e9b34ca2",
+    "bytes": 13426
+  },
+  "artifact": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-venue-identity-super-refactor-20261115-045330\\venue-identity-super-refactor.html",
+    "sha256": "a92d0fdf0ce1c7fe663e8376026a7a55ce11f366c883f4e9705cbceb58fec0ef",
+    "bytes": 1848366
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "not-run"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-venue-identity-super-refactor-20261115-045330\\venue-identity-super-refactor.finalize.json",
+    "summaryReceipt": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-venue-identity-super-refactor-20261115-045330\\venue-identity-super-refactor.finalize-summary.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-15T02:54:12.464Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 6624,
+  "browserCheck": {
+    "requested": false,
+    "ran": false
+  }
+}

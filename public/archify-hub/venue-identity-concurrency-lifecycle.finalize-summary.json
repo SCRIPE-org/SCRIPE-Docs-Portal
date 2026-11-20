@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "lifecycle",
+  "quality": "showcase",
+  "specification": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-venue-identity-super-refactor-20261115-045330\\venue-identity-concurrency-lifecycle.lifecycle.json",
+    "sha256": "d1f82b241a6c7f8635f6fc775e394c4c1d6bb0da09f5977ee254bae42a041520",
+    "bytes": 5962
+  },
+  "artifact": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-venue-identity-super-refactor-20261115-045330\\venue-identity-concurrency-lifecycle.html",
+    "sha256": "8252af9a17ff13fd569bfd4669545307c2b7ca99b118890c21185f6da223d830",
+    "bytes": 845290
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-venue-identity-super-refactor-20261115-045330\\venue-identity-concurrency-lifecycle.finalize.json",
+    "summaryReceipt": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-venue-identity-super-refactor-20261115-045330\\venue-identity-concurrency-lifecycle.finalize-summary.json",
+    "browserCheckReceipt": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-venue-identity-super-refactor-20261115-045330\\venue-identity-concurrency-lifecycle.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-15T02:54:12.464Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 4415,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

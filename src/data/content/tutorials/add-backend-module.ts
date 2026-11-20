@@ -18,7 +18,7 @@ const sections: DocSection[] = [
     items: [
       ".NET 10 SDK installed",
       "Oracle or SQL Server database configured",
-      "Understanding of CQRS, AstraFlow mediator, and Clean Architecture",
+      "Understanding of CQRS, AstraFlow, and Clean Architecture",
     ],
   },
 

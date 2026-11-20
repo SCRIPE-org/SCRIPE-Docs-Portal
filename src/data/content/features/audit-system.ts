@@ -31,7 +31,7 @@ const sections: DocSection[] = [
       },
       {
         id: "mediator",
-        label: "AstraFlow Mediator Behaviors",
+        label: "AstraFlow Pipeline Behaviors",
         type: "default",
         description: "LoggingBehavior & FeatureCheckBehavior pipeline execution",
       },

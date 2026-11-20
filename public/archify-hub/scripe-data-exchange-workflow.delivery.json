@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "aaa01ce2-bcd9-4782-b899-5df19272855d",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\.archify\\workflow-data-exchange\\candidate.json",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-data-exchange-workflow.html",
+  "specification": {
+    "sha256": "f5bb7337e4c5a7b321d537bcb6c31f8614b84ac1af5ade1954d8009529535c2c",
+    "bytes": 7463
+  },
+  "artifact": {
+    "sha256": "cb71eae0eb70947f8e8661b8b847efe6911d22e78dd9c1c826d4b6da234e48a1",
+    "bytes": 855454
+  }
+}

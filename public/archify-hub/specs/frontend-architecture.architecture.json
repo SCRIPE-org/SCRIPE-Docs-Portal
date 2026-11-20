@@ -1,0 +1,566 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "SCRIPE-Frontend Next.js 16 + React 19 SOLID MVVM Architecture",
+    "locale": "en",
+    "output": "public/archify-hub/frontend-architecture.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Frontend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "f7d148d6630baadee15b5b41b1933cc4fdd9a75f"
+    },
+    "views": [
+      {
+        "id": "mvvm_pipeline",
+        "label": "1. 5-Layer SOLID MVVM Pipeline",
+        "focus": [
+          "feature_view",
+          "viewmodel_hook",
+          "domain_repo",
+          "data_service",
+          "api_service",
+          "backend_api"
+        ],
+        "note": "Mandatory 5-layer isolation: View -> ViewModel (hook) -> Repository -> Service -> IApiService -> HTTP."
+      },
+      {
+        "id": "edge_pbac_i18n",
+        "label": "2. Edge Proxy, PBAC & RTL Providers",
+        "focus": [
+          "edge_proxy",
+          "route_guard",
+          "i18n_provider",
+          "feature_view",
+          "signalr_hub"
+        ],
+        "note": "Edge cookie verification (proxy.ts), client PBAC RouteGuard, UserFeatureGate, and EN/AR RTL hydration."
+      },
+      {
+        "id": "crud_state_engine",
+        "label": "3. @core/ui/* & Generic CRUD Engine",
+        "focus": [
+          "core_ui",
+          "crud_engine",
+          "feature_view",
+          "viewmodel_hook",
+          "query_zustand"
+        ],
+        "note": "100% @core/ui/* primitives, GenericCrudView, useCrudViewModel, TanStack Query v5, and Zustand store."
+      },
+      {
+        "id": "single_flight_refresh",
+        "label": "4. 401 Mutex & SignalR Real-Time Sync",
+        "focus": [
+          "viewmodel_hook",
+          "api_service",
+          "backend_api",
+          "signalr_hub",
+          "query_zustand"
+        ],
+        "note": "ApiService queues concurrent 401 requests behind a single-flight refresh mutex while SignalR pushes live domain events."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "edge_proxy",
+      "type": "security",
+      "label": "Next.js Edge Proxy",
+      "sublabel": "src/proxy.ts cookie gate",
+      "tag": "Edge Guard",
+      "pos": [
+        40,
+        155
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/proxy.ts",
+          "line": 21,
+          "end_line": 56,
+          "label": "Edge Auth Cookie Proxy"
+        }
+      ]
+    },
+    {
+      "id": "route_guard",
+      "type": "security",
+      "label": "RouteGuard & PBAC",
+      "sublabel": "Permission + Feature Gate",
+      "tag": "PAGE_PERMISSIONS",
+      "pos": [
+        265,
+        155
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/core/providers/route-guard.tsx",
+          "line": 1,
+          "end_line": 100,
+          "label": "RouteGuard Provider"
+        },
+        {
+          "path": "src/core/providers/permission-provider.tsx",
+          "line": 1,
+          "end_line": 95,
+          "label": "PermissionProvider"
+        }
+      ]
+    },
+    {
+      "id": "i18n_provider",
+      "type": "cloud",
+      "label": "I18n & Nexus Theme",
+      "sublabel": "EN/AR + dir=ltr|rtl",
+      "tag": "100% Parity",
+      "pos": [
+        40,
+        30
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/core/providers/i18n-provider.tsx",
+          "line": 1,
+          "end_line": 95,
+          "label": "I18nProvider & RTL Sync"
+        }
+      ]
+    },
+    {
+      "id": "core_ui",
+      "type": "frontend",
+      "label": "@core/ui System",
+      "sublabel": "Button / Card / Dialog",
+      "tag": "Nexus Tokens",
+      "pos": [
+        40,
+        295
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/core/ui/card.tsx",
+          "line": 28,
+          "end_line": 90,
+          "label": "Flat Matte Card Primitive"
+        },
+        {
+          "path": "src/core/ui/button.tsx",
+          "line": 1,
+          "end_line": 90,
+          "label": "Signal Lime Button Primitive"
+        }
+      ]
+    },
+    {
+      "id": "feature_view",
+      "type": "frontend",
+      "label": "1. Feature View",
+      "sublabel": "BookingWorkspaceView",
+      "tag": "React 19",
+      "pos": [
+        500,
+        155
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/modules/venue/booking/src/presentation/views/BookingWorkspaceView.tsx",
+          "line": 1,
+          "end_line": 95,
+          "label": "BookingWorkspaceView.tsx"
+        },
+        {
+          "path": "src/modules/venue/booking/locales/booking.en.ts",
+          "line": 1,
+          "end_line": 60,
+          "label": "Co-located EN Locale"
+        }
+      ]
+    },
+    {
+      "id": "crud_engine",
+      "type": "frontend",
+      "label": "Generic CRUD Engine",
+      "sublabel": "GenericCrudView + Hook",
+      "tag": "Declarative",
+      "pos": [
+        265,
+        295
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/core/crud/hooks/useCrudViewModel.ts",
+          "line": 27,
+          "end_line": 86,
+          "label": "useCrudViewModel.ts"
+        },
+        {
+          "path": "src/core/crud/components/generic-crud-view.tsx",
+          "line": 1,
+          "end_line": 90,
+          "label": "GenericCrudView.tsx"
+        }
+      ]
+    },
+    {
+      "id": "viewmodel_hook",
+      "type": "frontend",
+      "label": "2. ViewModel Hook",
+      "sublabel": "useBookingWorkspaceVM",
+      "tag": "Zero Direct HTTP",
+      "pos": [
+        500,
+        295
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/modules/venue/booking/src/presentation/viewmodels/useBookingWorkspaceViewModel.ts",
+          "line": 1,
+          "end_line": 95,
+          "label": "useBookingWorkspaceViewModel.ts"
+        }
+      ]
+    },
+    {
+      "id": "query_zustand",
+      "type": "database",
+      "label": "TanStack & Zustand",
+      "sublabel": "Server Cache + AppStore",
+      "tag": "Optimistic UI",
+      "pos": [
+        265,
+        455
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/core/crud/hooks/useGenericMutations.ts",
+          "line": 1,
+          "end_line": 90,
+          "label": "useGenericMutations"
+        },
+        {
+          "path": "src/core/store/useAppStore.ts",
+          "line": 1,
+          "end_line": 90,
+          "label": "useAppStore Zustand"
+        }
+      ]
+    },
+    {
+      "id": "domain_repo",
+      "type": "backend",
+      "label": "3. Domain Repository",
+      "sublabel": "BookingRepository",
+      "tag": "DTO -> Entity",
+      "pos": [
+        740,
+        295
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/modules/venue/booking/src/data/repositories/BookingRepository.ts",
+          "line": 1,
+          "end_line": 90,
+          "label": "BookingRepository.ts"
+        },
+        {
+          "path": "src/modules/venue/booking/src/domain/entities/Booking.ts",
+          "line": 1,
+          "end_line": 90,
+          "label": "Booking Domain Entity"
+        }
+      ]
+    },
+    {
+      "id": "data_service",
+      "type": "backend",
+      "label": "4. Data Service",
+      "sublabel": "BookingService + DI",
+      "tag": "InversifyJS",
+      "pos": [
+        740,
+        155
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/modules/venue/booking/src/data/services/BookingService.ts",
+          "line": 1,
+          "end_line": 90,
+          "label": "BookingService.ts"
+        },
+        {
+          "path": "src/core/di.ts",
+          "line": 1,
+          "end_line": 55,
+          "label": "Core Inversify DI Container"
+        }
+      ]
+    },
+    {
+      "id": "api_service",
+      "type": "security",
+      "label": "5. ApiService Adapter",
+      "sublabel": "401 Mutex + Idem Key",
+      "tag": "IApiService",
+      "pos": [
+        740,
+        30
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/core/services/api.service.ts",
+          "line": 58,
+          "end_line": 120,
+          "label": "ApiService Request Interceptor"
+        },
+        {
+          "path": "src/core/services/api.service.ts",
+          "line": 200,
+          "end_line": 310,
+          "label": "Single-Flight 401 Refresh Queue"
+        }
+      ]
+    },
+    {
+      "id": "signalr_hub",
+      "type": "messagebus",
+      "label": "SignalRProvider",
+      "sublabel": "Live WebSocket Events",
+      "tag": "Real-Time",
+      "pos": [
+        740,
+        455
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/core/providers/signalr-provider.tsx",
+          "line": 1,
+          "end_line": 90,
+          "label": "SignalRProvider"
+        }
+      ]
+    },
+    {
+      "id": "backend_api",
+      "type": "external",
+      "label": "SCRIPE-Backend API",
+      "sublabel": ".NET 10 + AstraFlow 2.3.0",
+      "pos": [
+        1015,
+        155
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/core/interfaces/api.interface.ts",
+          "line": 1,
+          "end_line": 90,
+          "label": "IApiService & Result Envelope"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "SCRIPE-Frontend Portal (Next.js 16 + React 19 Shell & Sub-Modules)",
+      "wraps": [
+        "edge_proxy",
+        "route_guard",
+        "i18n_provider",
+        "core_ui",
+        "crud_engine",
+        "query_zustand",
+        "feature_view",
+        "viewmodel_hook",
+        "domain_repo",
+        "data_service",
+        "api_service",
+        "signalr_hub"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "Isolated Sub-Module 5-Layer MVVM Core",
+      "wraps": [
+        "feature_view",
+        "viewmodel_hook",
+        "domain_repo",
+        "data_service"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "fc_edge_guard",
+      "from": "edge_proxy",
+      "to": "route_guard",
+      "label": "cookie ok",
+      "variant": "security"
+    },
+    {
+      "id": "fc_guard_view",
+      "from": "route_guard",
+      "to": "feature_view",
+      "label": "PBAC ok",
+      "variant": "security"
+    },
+    {
+      "id": "fc_i18n_view",
+      "from": "i18n_provider",
+      "to": "route_guard",
+      "label": "t() + dir",
+      "variant": "dashed"
+    },
+    {
+      "id": "fc_ui_view",
+      "from": "core_ui",
+      "to": "crud_engine",
+      "label": "@core/ui",
+      "variant": "default"
+    },
+    {
+      "id": "fc_crud_view",
+      "from": "crud_engine",
+      "to": "viewmodel_hook",
+      "label": "useCrudVM",
+      "variant": "default"
+    },
+    {
+      "id": "fc_view_vm",
+      "from": "feature_view",
+      "to": "viewmodel_hook",
+      "label": "1 -> 2 hook",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fc_vm_query",
+      "from": "viewmodel_hook",
+      "to": "query_zustand",
+      "label": "TanStack",
+      "variant": "default"
+    },
+    {
+      "id": "fc_vm_repo",
+      "from": "viewmodel_hook",
+      "to": "domain_repo",
+      "label": "2 -> 3 repo",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fc_repo_svc",
+      "from": "domain_repo",
+      "to": "data_service",
+      "label": "3 -> 4 DTO",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fc_svc_api",
+      "from": "data_service",
+      "to": "api_service",
+      "label": "4 -> 5 API",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fc_api_be",
+      "from": "api_service",
+      "to": "backend_api",
+      "label": "HTTPS + Idem",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fc_be_sig",
+      "from": "backend_api",
+      "to": "signalr_hub",
+      "label": "WS push",
+      "variant": "dashed"
+    },
+    {
+      "id": "fc_sig_query",
+      "from": "signalr_hub",
+      "to": "query_zustand",
+      "label": "invalidate",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Strict 5-Layer SOLID MVVM Data Flow",
+      "items": [
+        "1. View renders @core/ui primitives and calls t('...') for bilingual copy.",
+        "2. ViewModel Hook orchestrates UI state and TanStack Query without importing IApiService or DTOs.",
+        "3. Repository maps backend wire DTOs into clean frontend Domain Entities; 4. Service calls 5. IApiService."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Edge Guard, PBAC & Single-Flight 401 Mutex",
+      "items": [
+        "proxy.ts guards routes at the Next.js Edge; RouteGuard enforces PAGE_PERMISSIONS and Edition features.",
+        "ApiService queues concurrent 401 responses in failedQueue while a single refresh token request executes."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Nexus Token System & 100% EN/AR Parity",
+      "items": [
+        "Surfaces map to --nx-ground, --nx-surface, and --nx-raised; flat matte cards use 1px border-nx-line.",
+        "Signal Lime primary buttons always use dark ink text (text-nx-on-fill), never white text.",
+        "All static strings live in co-located locales/*.en.ts and *.ar.ts dictionaries verified by scripe validate-locales."
+      ]
+    }
+  ]
+}

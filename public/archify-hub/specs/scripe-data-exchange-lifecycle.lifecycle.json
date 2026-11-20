@@ -1,0 +1,264 @@
+{
+  "schema_version": 3,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "SCRIPE Portal Studio Exit Guard (StudioConfirmExitDialog) & Sileo dx-job-{id} Morphing Lifecycle",
+    "locale": "en",
+    "output": "SCRIPE-Docs-Portal/public/archify-hub/scripe-data-exchange-lifecycle.html",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "studio_dirty_guard",
+        "label": "1. StudioConfirmExitDialog State Machine",
+        "focus": [
+          "portal_upload",
+          "mapping_dirty",
+          "confirm_exit",
+          "discarded_closed",
+          "dryrun_ready",
+          "tooltip_hold"
+        ],
+        "note": "Intercepts X, Escape, Step 2 -> Step 1 Back, and Replace File when inspectResult is active, while Step 3 -> Step 2 Back skips prompts."
+      },
+      {
+        "id": "sileo_toast_morphing",
+        "label": "2. Sileo dx-job-{id} In-Place Morphing",
+        "focus": [
+          "dryrun_ready",
+          "worker_running",
+          "sileo_completed",
+          "job_cancelled",
+          "job_failed"
+        ],
+        "note": "Single toast id dx-job-{id} morphs Queued -> Running -> Completed, Failed, or Cancelled with localized entity names and zero toast pile-up."
+      },
+      {
+        "id": "ephemeral_vault_guard",
+        "label": "3. Ephemeral Credential Vault Guard",
+        "focus": [
+          "worker_running",
+          "sileo_completed",
+          "vault_guarded",
+          "discarded_closed"
+        ],
+        "note": "Prevents closing Step 4 Results without confirmation while one-time Identity onboarding credentials remain un-dismissed."
+      }
+    ]
+  },
+  "mainPath": [
+    "portal_upload",
+    "mapping_dirty",
+    "dryrun_ready",
+    "worker_running",
+    "sileo_completed"
+  ],
+  "states": [
+    {
+      "id": "portal_upload",
+      "type": "start",
+      "label": "Portal Upload",
+      "sublabel": "z-900 scroll lock",
+      "tag": "Step 1",
+      "step": "01"
+    },
+    {
+      "id": "mapping_dirty",
+      "type": "active",
+      "label": "17-Rule Mapping",
+      "sublabel": "z-950 Smart Popover",
+      "tag": "Step 2 Dirty",
+      "step": "02"
+    },
+    {
+      "id": "dryrun_ready",
+      "type": "decision",
+      "label": "5-Sheet Dry-Run",
+      "sublabel": "DAG & quota verified",
+      "tag": "Step 3",
+      "step": "03"
+    },
+    {
+      "id": "worker_running",
+      "type": "active",
+      "label": "Queued -> Running",
+      "sublabel": "2h lease + 250 chunks",
+      "tag": "AmbientCtx",
+      "step": "04"
+    },
+    {
+      "id": "sileo_completed",
+      "type": "success",
+      "label": "Sileo: Completed",
+      "sublabel": "Outbox event emitted",
+      "tag": "Step 4",
+      "step": "05"
+    },
+    {
+      "id": "confirm_exit",
+      "type": "decision",
+      "label": "ConfirmExitDialog",
+      "sublabel": "z-960 Keep vs Discard",
+      "tag": "Exit Guard"
+    },
+    {
+      "id": "discarded_closed",
+      "type": "neutral",
+      "label": "Discarded",
+      "sublabel": "Overflow restored",
+      "tag": "Unmounted"
+    },
+    {
+      "id": "tooltip_hold",
+      "type": "waiting",
+      "label": "Tooltip / Quota Hold",
+      "sublabel": "Fix via z-950 preset",
+      "tag": "Blocked"
+    },
+    {
+      "id": "job_cancelled",
+      "type": "neutral",
+      "label": "Sileo: Cancelled",
+      "sublabel": "Lease + DetachOutbox",
+      "tag": "Morphed"
+    },
+    {
+      "id": "job_failed",
+      "type": "failure",
+      "label": "Sileo: Failed",
+      "sublabel": "Rejected .xlsx ready",
+      "tag": "Morphed"
+    },
+    {
+      "id": "vault_guarded",
+      "type": "waiting",
+      "label": "Vault Exit Guard",
+      "sublabel": "One-time CSV open",
+      "tag": "Protected"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "t_inspect",
+      "from": "portal_upload",
+      "to": "mapping_dirty",
+      "label": "inspect",
+      "variant": "emphasis"
+    },
+    {
+      "id": "t_dryrun",
+      "from": "mapping_dirty",
+      "to": "dryrun_ready",
+      "label": "dry-run",
+      "variant": "emphasis"
+    },
+    {
+      "id": "t_back_lossless",
+      "from": "dryrun_ready",
+      "to": "mapping_dirty",
+      "label": "edit map",
+      "variant": "dashed"
+    },
+    {
+      "id": "t_enqueue",
+      "from": "dryrun_ready",
+      "to": "worker_running",
+      "label": "enqueue",
+      "variant": "emphasis"
+    },
+    {
+      "id": "t_complete",
+      "from": "worker_running",
+      "to": "sileo_completed",
+      "label": "done",
+      "variant": "emphasis"
+    },
+    {
+      "id": "t_dirty_exit",
+      "from": "mapping_dirty",
+      "to": "confirm_exit",
+      "label": "X / Esc",
+      "variant": "security"
+    },
+    {
+      "id": "t_keep_editing",
+      "from": "confirm_exit",
+      "to": "mapping_dirty",
+      "label": "keep",
+      "variant": "emphasis"
+    },
+    {
+      "id": "t_discard",
+      "from": "confirm_exit",
+      "to": "discarded_closed",
+      "label": "discard",
+      "variant": "security"
+    },
+    {
+      "id": "t_blocker",
+      "from": "dryrun_ready",
+      "to": "tooltip_hold",
+      "label": "blocked",
+      "variant": "security"
+    },
+    {
+      "id": "t_fix_rule",
+      "from": "tooltip_hold",
+      "to": "mapping_dirty",
+      "label": "preset"
+    },
+    {
+      "id": "t_cancel_running",
+      "from": "worker_running",
+      "to": "job_cancelled",
+      "label": "cancel",
+      "variant": "security"
+    },
+    {
+      "id": "t_fail",
+      "from": "worker_running",
+      "to": "job_failed",
+      "label": "error",
+      "variant": "security"
+    },
+    {
+      "id": "t_vault_guard",
+      "from": "sileo_completed",
+      "to": "vault_guarded",
+      "label": "creds",
+      "variant": "security"
+    },
+    {
+      "id": "t_vault_keep",
+      "from": "vault_guarded",
+      "to": "sileo_completed",
+      "label": "stay"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "StudioConfirmExitDialog (z-960) & TenantRequired Guard",
+      "items": [
+        "Activates whenever inspectResult !== null and step !== 'results' (or ephemeralCredentials remain un-dismissed), keeping Step 3 -> Step 2 Back completely prompt-free.",
+        "Intercepts Header Close (X), Escape, Step 2 -> Step 1 Back, and Replace File; DataTransferMenuProvider enforces RequiresTenantContext: true and DataExchangeTenantRequiredCard handles global Platform Super Admin navigation cleanly."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Outbox Event, Cooperative Cancel & Idiomatic Sileo ID-Morphing",
+      "items": [
+        "Terminal Completed / CompletedWithErrors commits publish DataExchangeJobCompletedEvent to datatransfer.outbox_messages and reconcile quota via ReconcileReservationLeaseAsync; no destructive post-completion global rollback job exists.",
+        "Cooperative cancel (POST /jobs/{id}/cancel) invokes DetachPendingOutboxMessages() and releases unused slots, while id: 'dx-job-' + job.id morphs one Sileo toast pill across all states with localized entity display names."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "7-Role [Authorize] PBAC, Quota Guard & Ephemeral Vault Protection",
+      "items": [
+        "DataTransferController uses [Authorize] + [PermissionRequired] across 7 standard roles (6 excluding CRM_SALES_REP for migrations.execute; no [AdminOnly]), returning DataTransfer.UnknownEntity (404) on invalid keys.",
+        "Step 4 guards accidental modal dismissal until bulk Identity one-time onboarding credentials are downloaded or explicitly dismissed."
+      ]
+    }
+  ]
+}

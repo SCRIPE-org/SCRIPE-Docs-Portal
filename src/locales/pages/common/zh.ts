@@ -109,6 +109,7 @@ export const zh = {
     commercialWorkManagement: "工作与任务管理",
     commercialAnalytics: "分析与事件流",
     identityModule: "身份与访问控制",
+    crmModule: "商业 CRM 与交易管理",
     venueModule: "场馆运营",
     catalogPricingModule: "目录与定价",
     financeModule: "财务与结算",
@@ -122,5 +123,7 @@ export const zh = {
     crosscuttingModule: "系统通信与文件服务",
     marketplace: "应用市场",
     recycleBin: "生态回收站",
+    dataTransfer: "数据交换工作室",
+    commercialDataExchange: "数据交换工作室",
   },
 };

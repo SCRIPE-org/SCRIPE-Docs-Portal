@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "f85f420a-bec5-45c3-b5fd-143a72ad8aa4",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\data-exchange-360-audit-resilient-pipeline.archify.md",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\data-exchange-360-audit-resilient-pipeline.html",
+  "specification": {
+    "sha256": "22a240300cc4ee62ef05f7fddc5a6855214679cc2f73c1d9e13337f3b4e7e5ef",
+    "bytes": 13453
+  },
+  "artifact": {
+    "sha256": "217a73d3b3dd3d8c1d7794d5c0ff8342f3aeeebbe84a4132fcc0f5c5c07410ea",
+    "bytes": 1435406
+  },
+  "explainer": {
+    "preparedSha256": "67d695811c5907706985b6dae3c51d029e223caaf80157594f71dcc5d669f790",
+    "dependencies": [
+      {
+        "kind": "diagram-spec",
+        "id": "resilient-inspect-seq",
+        "inline": true,
+        "sha256": "03a7ae3e40ce4c9bb1a4ff77f7bfea0f9eb96dee2a6e105334f67f37c9ec2c57",
+        "bytes": 1556
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "security-gate-flow",
+        "inline": true,
+        "sha256": "88eebccb34f49271000060d05d6e9ec9eecb3bfe9779c40acf48085c844014d5",
+        "bytes": 1918
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "dx-system-arch",
+        "inline": true,
+        "sha256": "f070c0859d747c101f33a33e5d864892593f7a809944611f9ff005a4e7dbbfc4",
+        "bytes": 2000
+      }
+    ]
+  }
+}

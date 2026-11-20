@@ -90,11 +90,11 @@ const sections: DocSection[] = [
     language: "text",
     filename: "Double-Entry Transaction Balance Sheet",
     code: `Transaction: TX-2026-8812 (Reservation Confirmation)
-├── Debit:  Accounts Receivable (Asset 1100)        \$93.75
-└── Credit: Venue Booking Revenue (Revenue 4100)    \$85.23
-└── Credit: Sales Tax Payable (Liability 2200)       \$8.52
+├── Debit:  Accounts Receivable (Asset 1100)        $93.75
+└── Credit: Venue Booking Revenue (Revenue 4100)    $85.23
+└── Credit: Sales Tax Payable (Liability 2200)       $8.52
 ─────────────────────────────────────────────────────────────
-SUM DEBITS = \$93.75 | SUM CREDITS = \$93.75 (BALANCED: OK)`,
+SUM DEBITS = $93.75 | SUM CREDITS = $93.75 (BALANCED: OK)`,
   },
 ];
 

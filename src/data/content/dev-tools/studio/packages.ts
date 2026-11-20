@@ -109,7 +109,7 @@ const sections: DocSection[] = [
       {
             "titleKey": "devTools.studio.packages.title",
             "contentKey": "devTools.studio.packages.description",
-            "code": "scripe add-pkg backend MediatR",
+            "code": "scripe add-pkg backend AstraFlow.Mediator",
             "codeLanguage": "bash",
             "codeFilename": "Step 2: Install NuGet Package"
       },

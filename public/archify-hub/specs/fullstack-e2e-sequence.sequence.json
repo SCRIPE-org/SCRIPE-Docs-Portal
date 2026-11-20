@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Full-Stack Reservation & Quote Confirmation Sequence",
+    "output": "public/archify-hub/fullstack-e2e-sequence.html",
+    "column_fit": "spread",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "ffc972a40a448abee3f41b394bd3e823457fc346"
+    }
+  },
+  "participants": [
+    {
+      "id": "view",
+      "type": "frontend",
+      "label": "BookingView",
+      "sublabel": "React 19 UI",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 95,
+          "end_line": 105,
+          "label": "Frontend View Layer"
+        }
+      ]
+    },
+    {
+      "id": "vm_repo",
+      "type": "frontend",
+      "label": "VM + Repo",
+      "sublabel": "MVVM Domain",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 95,
+          "end_line": 105,
+          "label": "MVVM Hook & Repo"
+        }
+      ]
+    },
+    {
+      "id": "api_svc",
+      "type": "frontend",
+      "label": "ApiService",
+      "sublabel": "401 Mutex",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 98,
+          "end_line": 102,
+          "label": "IApiService Boundary"
+        }
+      ]
+    },
+    {
+      "id": "mw_pipe",
+      "type": "security",
+      "label": "Security Gate",
+      "sublabel": "29-Stage Pipe",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 139,
+          "end_line": 152,
+          "label": "5-Layer Defense"
+        }
+      ]
+    },
+    {
+      "id": "astraflow",
+      "type": "messagebus",
+      "label": "AstraFlow 2.3.0",
+      "sublabel": "3-TX Idem",
+      "sources": [
+        {
+          "path": ".agents/rules/astraflow-ecosystem-and-evolution.md",
+          "line": 13,
+          "end_line": 34,
+          "label": "AstraFlow Mediator"
+        }
+      ]
+    },
+    {
+      "id": "db_ctx",
+      "type": "database",
+      "label": "BaseDbContext",
+      "sublabel": "Schema + Outbox",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 81,
+          "end_line": 94,
+          "label": "Dual-Mode Persistence"
+        }
+      ]
+    },
+    {
+      "id": "signalr",
+      "type": "cloud",
+      "label": "Outbox & Hub",
+      "sublabel": "Async Push",
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 85,
+          "end_line": 91,
+          "label": "Per-Module Outbox"
+        }
+      ]
+    }
+  ],
+  "segments": [
+    {
+      "from": 145,
+      "to": 280,
+      "label": "1. Client MVVM & Single-Flight 401 Refresh"
+    },
+    {
+      "from": 295,
+      "to": 475,
+      "label": "2. 29-Stage Security & 3-TX Atomic Commit"
+    },
+    {
+      "from": 490,
+      "to": 610,
+      "label": "3. Response Unwrap & Async SignalR Sync"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "from": "view",
+      "to": "vm_repo",
+      "y": 162,
+      "label": "confirmBooking(slotId, quoteId)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m2",
+      "from": "vm_repo",
+      "to": "api_svc",
+      "y": 194,
+      "label": "repo.create() -> service.post()",
+      "variant": "default"
+    },
+    {
+      "id": "m3",
+      "from": "api_svc",
+      "to": "mw_pipe",
+      "y": 228,
+      "label": "POST /auth/refresh (if 401 queued)",
+      "variant": "security"
+    },
+    {
+      "id": "m4",
+      "from": "mw_pipe",
+      "to": "api_svc",
+      "y": 262,
+      "label": "rotated 15m JWT + cookie",
+      "variant": "return"
+    },
+    {
+      "id": "m5",
+      "from": "api_svc",
+      "to": "mw_pipe",
+      "y": 312,
+      "label": "POST /api/v1/venue/reservations",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m6",
+      "from": "mw_pipe",
+      "to": "astraflow",
+      "y": 346,
+      "label": "PBAC + Replay OK -> Send(Command)",
+      "variant": "security"
+    },
+    {
+      "id": "m7",
+      "from": "astraflow",
+      "to": "db_ctx",
+      "y": 382,
+      "label": "TX-1 Reserve Receipt -> TX-2 Save + Outbox",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m8",
+      "from": "db_ctx",
+      "to": "astraflow",
+      "y": 418,
+      "label": "ACID Commit + [AstraGenerateMapping]",
+      "variant": "return"
+    },
+    {
+      "id": "m9",
+      "from": "astraflow",
+      "to": "db_ctx",
+      "y": 452,
+      "label": "TX-3 Complete Receipt (AES-GCM)",
+      "variant": "security"
+    },
+    {
+      "id": "m10",
+      "from": "astraflow",
+      "to": "api_svc",
+      "y": 508,
+      "label": "200 OK Result<ReservationDto>",
+      "variant": "return"
+    },
+    {
+      "id": "m11",
+      "from": "api_svc",
+      "to": "view",
+      "y": 540,
+      "label": "Invalidate Query + Toast Success",
+      "variant": "return"
+    },
+    {
+      "id": "m12",
+      "from": "db_ctx",
+      "to": "signalr",
+      "y": 570,
+      "label": "poll venue.outbox_messages",
+      "variant": "dashed"
+    },
+    {
+      "id": "m13",
+      "from": "signalr",
+      "to": "view",
+      "y": 600,
+      "label": "SignalR Broadcast: ReservationConfirmed",
+      "variant": "dashed"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "view",
+      "from": 155,
+      "to": 605,
+      "type": "frontend"
+    },
+    {
+      "participant": "vm_repo",
+      "from": 162,
+      "to": 535,
+      "type": "frontend"
+    },
+    {
+      "participant": "api_svc",
+      "from": 190,
+      "to": 515,
+      "type": "frontend"
+    },
+    {
+      "participant": "mw_pipe",
+      "from": 222,
+      "to": 355,
+      "type": "security"
+    },
+    {
+      "participant": "astraflow",
+      "from": 340,
+      "to": 512,
+      "type": "messagebus"
+    },
+    {
+      "participant": "db_ctx",
+      "from": 376,
+      "to": 460,
+      "type": "database"
+    },
+    {
+      "participant": "signalr",
+      "from": 565,
+      "to": 604,
+      "type": "cloud"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "5-Layer MVVM Client Discipline",
+      "items": [
+        "BookingView triggers the ViewModel hook without importing DTOs or HTTP services.",
+        "ApiService attaches X-Tenant-Id and X-Idempotency-Key automatically.",
+        "Single-flight 401 refresh mutex prevents token refresh storms across concurrent widgets."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "3-TX Idempotency & Security",
+      "items": [
+        "MiddlewarePipeline validates JWT revocation, CSRF, replay nonce, and PBAC before controller entry.",
+        "TX-1 claims the idempotency key; TX-2 commits domain rows and outbox_messages; TX-3 seals the encrypted receipt."
+      ]
+    },
+    {
+      "dot": "orange",
+      "title": "Asynchronous Outbox & SignalR",
+      "items": [
+        "Outbox polling is decoupled from the synchronous HTTP response path.",
+        "SignalR pushes real-time calendar updates to all connected operators in the tenant."
+      ]
+    }
+  ]
+}

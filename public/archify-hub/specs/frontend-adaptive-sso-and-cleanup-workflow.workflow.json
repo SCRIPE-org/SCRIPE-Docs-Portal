@@ -1,0 +1,167 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "SCRIPE-Frontend Smart Adaptive SSO, RTL Polish & Store Cleanup Workflow",
+    "locale": "en",
+    "output": "SCRIPE-Docs-Portal/public/archify-hub/frontend-adaptive-sso-and-cleanup-workflow.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Frontend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "91232f19bed60374deb98a1cdcc72f0f78d6db7d"
+    }
+  },
+  "lanes": [
+    { "id": "discovery", "label": "Tenant & IdP Discovery" },
+    { "id": "adaptive", "label": "Adaptive SSO & RTL UI" },
+    { "id": "guard", "label": "Fail-Closed & HUD", "variant": "exception" },
+    { "id": "cleanup", "label": "Sign-Out & Store Isolation" }
+  ],
+  "phases": [
+    { "id": "resolve", "label": "Resolve Tenant", "fromCol": 0, "toCol": 1 },
+    { "id": "render", "label": "Adaptive Layout + RTL", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "session", "label": "Session & Cleanup", "fromCol": 4, "toCol": 5, "variant": "security" }
+  ],
+  "groups": [
+    { "id": "sso_layout_grp", "label": "SsoProviderButtons Rules", "lane": "adaptive", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "store_purge_grp", "label": "Zero-Bleed Cleanup", "lane": "cleanup", "fromCol": 4, "toCol": 5, "variant": "security" }
+  ],
+  "mainPath": ["route_entry", "idp_query", "hero_grid", "rtl_polish", "real_logout", "store_purge"],
+  "nodes": [
+    {
+      "id": "route_entry",
+      "lane": "discovery",
+      "col": 0,
+      "type": "frontend",
+      "label": "Login Entry",
+      "sublabel": "?_tenant or subdomain",
+      "tag": "Root / 6 Tenants",
+      "sources": [
+        { "path": "src/core/providers/route-guard.tsx", "line": 1, "end_line": 40, "label": "Route Entry" }
+      ]
+    },
+    {
+      "id": "idp_query",
+      "lane": "discovery",
+      "col": 1,
+      "type": "backend",
+      "label": "Live IdP Query",
+      "sublabel": "GET /oidc/providers",
+      "tag": "DB Active Only",
+      "sources": [
+        { "path": "src/core/services/api.service.ts", "line": 1, "end_line": 40, "label": "API Discovery" }
+      ]
+    },
+    {
+      "id": "fail_closed",
+      "lane": "guard",
+      "col": 1,
+      "type": "security",
+      "label": "Fail-Closed 404",
+      "sublabel": "UNKNOWN_999 blocked",
+      "tag": "0 SSO Buttons",
+      "sources": [
+        { "path": "src/core/providers/route-guard.tsx", "line": 1, "end_line": 40, "label": "Fail-Closed Guard" }
+      ]
+    },
+    {
+      "id": "hero_grid",
+      "lane": "adaptive",
+      "col": 2,
+      "type": "frontend",
+      "label": "Adaptive Grid",
+      "sublabel": "Org Hero + 2-Col Global",
+      "tag": "AHLY/ACFC/FALCON",
+      "sources": [
+        { "path": "src/modules/shared/auth/signin/src/presentation/components/SsoProviderButtons.tsx", "line": 1, "end_line": 58, "label": "Adaptive Layout" }
+      ]
+    },
+    {
+      "id": "rtl_polish",
+      "lane": "adaptive",
+      "col": 3,
+      "type": "frontend",
+      "label": "Compact & RTL",
+      "sublabel": "Concise + Logical RTL",
+      "tag": "0px Clip · 375px",
+      "sources": [
+        { "path": "src/modules/shared/auth/signin/src/presentation/components/SsoProviderButtons.tsx", "line": 60, "end_line": 101, "label": "Prefix Strip & i18n" }
+      ]
+    },
+    {
+      "id": "hud_theme",
+      "lane": "guard",
+      "col": 3,
+      "type": "frontend",
+      "label": "HUD & Theme Sync",
+      "sublabel": "1-Row Chips + Sun/Moon",
+      "tag": "<bdi> Isolation",
+      "sources": [
+        { "path": "src/core/ui/layout/common/theme-switcher.tsx", "line": 1, "end_line": 40, "label": "Theme Sync" }
+      ]
+    },
+    {
+      "id": "real_logout",
+      "lane": "cleanup",
+      "col": 4,
+      "type": "security",
+      "label": "Real Sign-Out",
+      "sublabel": "AccountLayout POST /logout",
+      "tag": "Finding #34",
+      "sources": [
+        { "path": "src/app/(account)/layout.tsx", "line": 1, "end_line": 40, "label": "Account Sign-Out" }
+      ]
+    },
+    {
+      "id": "store_purge",
+      "lane": "cleanup",
+      "col": 5,
+      "type": "security",
+      "label": "Store & Tab Purge",
+      "sublabel": "Sudo + PAT + Broadcast",
+      "tag": "Findings #35/#36",
+      "sources": [
+        { "path": "src/core/common/broadcast-auth.ts", "line": 1, "end_line": 40, "label": "Cross-Tab Broadcast" }
+      ]
+    }
+  ],
+  "edges": [
+    { "id": "e_entry_query", "from": "route_entry", "to": "idp_query", "label": "resolve", "variant": "emphasis" },
+    { "id": "e_query_fail", "from": "idp_query", "to": "fail_closed", "label": "unknown", "variant": "security", "role": "error" },
+    { "id": "e_query_grid", "from": "idp_query", "to": "hero_grid", "label": "active IdPs", "variant": "emphasis" },
+    { "id": "e_grid_rtl", "from": "hero_grid", "to": "rtl_polish", "label": "format", "variant": "emphasis" },
+    { "id": "e_rtl_hud", "from": "rtl_polish", "to": "hud_theme", "label": "sign in", "variant": "default", "role": "branch" },
+    { "id": "e_rtl_logout", "from": "rtl_polish", "to": "real_logout", "label": "session end", "variant": "security" },
+    { "id": "e_logout_purge", "from": "real_logout", "to": "store_purge", "label": "wipe", "variant": "security" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Smart Adaptive Hierarchy & RTL Parity",
+      "items": [
+        "1 provider (FALCON custom): full-width hero; 2 global (Root/CITY/APEX/COMMUNITY): 2-col concise Google | Microsoft",
+        "3+ providers (AHLY OIDC, ACFC SAML): [Org] hero col-span-2 on top + 2-col global underneath with 0px clipping",
+        "Arabic RTL localizes full-width hero prefix via auth.sso.signInWithProvider + logical ps-4 pe-12 password input"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Frontend Security Findings #34, #35 & #36",
+      "items": [
+        "#34: AccountLayout delegates Sign Out to useAuthLogout().handleLogout('/login') revoking backend refresh token",
+        "#35: ImpersonationRepository purges useAppStore, scr_tenant_ctx & breadcrumbs; authBroadcast cleans sibling tabs",
+        "#36: usePatOneTimeSecretStore binds ownerUserId and resets with useSudoStore on logout & unmount"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Live Playwright & UX Sign-Off",
+      "items": [
+        "6/6 unmocked Chromium Playwright tests passing with 21 full-res PNGs, 0 pageerrors & 0 HTTP 5xx",
+        "ux-expert-v4 PASS across Desktop 1440px, Mobile 375px, Light/Dark & AR RTL (19,312 locale keys verified)"
+      ]
+    }
+  ]
+}

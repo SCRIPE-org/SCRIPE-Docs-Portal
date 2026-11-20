@@ -361,6 +361,12 @@ export const zh = {
       loggingTitle: "集中日志 (Serilog + Loki)",
       loggingIntro:
         "Serilog 用机器名称、环境、关联ID、租户ID和模块标签丰富每条日志条目。配置 Loki 后，日志实时推送。",
+      securityRedactionTitle: "敏感数据脱敏 (AstraFlow.Security)",
+      securityRedactionIntro:
+        "AstraFlow.Security 自动执行 19 项属性模式脱敏规则。敏感数据（密码、令牌、API 密钥、连接字符串）在所有导出的链路标签和指标中均被替换为 [redacted]，防止凭据泄漏。",
+      correlationTitle: "跨 Outbox 与 Inbox 的分布式链路关联",
+      correlationIntro:
+        "分布式关联在异步消息边界间保留端到端链路追踪上下文。W3C traceparent 请求头与 CorrelationId 保存在事务性 Outbox 中，并在处理事件时自动还原。",
       alertsTitle: "告警规则",
       alertsIntro:
         "预配置的 Prometheus 告警规则检测关键和警告条件。关键告警在高错误率、数据库故障和极端延迟时触发。",

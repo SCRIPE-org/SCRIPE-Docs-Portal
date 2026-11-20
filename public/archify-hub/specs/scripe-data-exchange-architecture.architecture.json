@@ -1,0 +1,402 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "SCRIPE Data Exchange Studio: 17-Rule MENA Normalizer, 5-Sheet CRM DAG & Worker Architecture (.NET 10)",
+    "locale": "en",
+    "output": "SCRIPE-Docs-Portal/public/archify-hub/scripe-data-exchange-architecture.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "owasp_mena_normalizer",
+        "label": "1. OWASP & 17-Rule O(n) Normalizer",
+        "focus": [
+          "client_studio",
+          "controller",
+          "owasp_validator",
+          "orchestrator",
+          "stream_engine"
+        ],
+        "note": "OwaspSpreadsheetSecurityValidator and O(n) SpreadsheetValueNormalizer apply 17 MENA, DateFormat, and SourceTimeZoneId rules."
+      },
+      {
+        "id": "crm_topological_dag",
+        "label": "2. 5-Sheet CRM Topological DAG",
+        "focus": [
+          "client_studio",
+          "orchestrator",
+          "stream_engine",
+          "crm_providers",
+          "blob_storage"
+        ],
+        "note": "Account -> Contact -> Lead -> Opportunity -> Activity DAG with PBAC RelatedMultiSheetEntityKeys, sessionResolvedKeys, and cascade deferral."
+      },
+      {
+        "id": "immediate_worker_cancellation",
+        "label": "3. Worker Context & Cancel Safety",
+        "focus": [
+          "controller",
+          "immediate_worker",
+          "orchestrator",
+          "datatransfer_db",
+          "client_studio"
+        ],
+        "note": "Worker claims via IgnoreQueryFilters, enters AmbientContext, emits Outbox completion (retracted on cancel), and handles TenantRequired."
+      },
+      {
+        "id": "quota_fls_providers",
+        "label": "4. Quota Lease, FLS & 10 Providers",
+        "focus": [
+          "orchestrator",
+          "quota_fls",
+          "crm_providers",
+          "party_provider",
+          "identity_provider"
+        ],
+        "note": "Reserves atomic edition quota leases, enforces FLS and RoleAssignabilityGuard, and batches across 10 domain providers."
+      },
+      {
+        "id": "portal_crud_sileo",
+        "label": "5. Portal Studio, CRUD & Sileo",
+        "focus": [
+          "client_studio",
+          "controller",
+          "orchestrator",
+          "datatransfer_db",
+          "blob_storage"
+        ],
+        "note": "z-900 Portal Studio, z-950 Normalizer Popover, z-960 Exit Guard, unified ⋯ CRUD menus, CardGrid slabs, and dx-job-{id} toasts."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "client_studio",
+      "type": "frontend",
+      "label": "Portal Studio & CRUD",
+      "sublabel": "z-900 Portal + ⋯ Menu + Sileo",
+      "tag": "5-Layer MVVM",
+      "pos": [
+        40,
+        230
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "owasp_validator",
+      "type": "security",
+      "label": "OWASP & 17-Rule Engine",
+      "sublabel": "O(n) MENA + Date/TZ Normalizer",
+      "tag": "ReDoS-Free O(n)",
+      "pos": [
+        285,
+        80
+      ],
+      "size": [
+        175,
+        64
+      ]
+    },
+    {
+      "id": "controller",
+      "type": "backend",
+      "label": "DataTransferController",
+      "sublabel": "16 PBAC + DefaultPreset",
+      "tag": "[Authorize] (7 Roles)",
+      "pos": [
+        285,
+        230
+      ],
+      "size": [
+        175,
+        64
+      ]
+    },
+    {
+      "id": "immediate_worker",
+      "type": "backend",
+      "label": "ImmediateWorker & Ctx",
+      "sublabel": "IgnoreFilters + AmbientContext",
+      "tag": "Channel<Guid>",
+      "pos": [
+        285,
+        380
+      ],
+      "size": [
+        175,
+        64
+      ]
+    },
+    {
+      "id": "stream_engine",
+      "type": "backend",
+      "label": "SpreadsheetStreamEngine",
+      "sublabel": "@ Text + Field Guide",
+      "tag": "Core Zero-Coupling",
+      "pos": [
+        545,
+        80
+      ],
+      "size": [
+        175,
+        64
+      ]
+    },
+    {
+      "id": "orchestrator",
+      "type": "backend",
+      "label": "DataExchangeOrchestrator",
+      "sublabel": "5-Sheet DAG & Outbox",
+      "tag": "RowVersion Safe",
+      "pos": [
+        545,
+        215
+      ],
+      "size": [
+        175,
+        96
+      ]
+    },
+    {
+      "id": "quota_fls",
+      "type": "security",
+      "label": "Quota & FLS Guards",
+      "sublabel": "IQuotaCounterService + FLS",
+      "tag": "Atomic Lease",
+      "pos": [
+        545,
+        380
+      ],
+      "size": [
+        175,
+        64
+      ]
+    },
+    {
+      "id": "crm_providers",
+      "type": "backend",
+      "label": "CRM DAG Providers (5)",
+      "sublabel": "Acc->Con->Lead->Opp->Act",
+      "tag": "Topological DAG",
+      "pos": [
+        825,
+        40
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "party_provider",
+      "type": "backend",
+      "label": "Party Providers (3)",
+      "sublabel": "Person/Org/contact-point",
+      "tag": "3 Providers",
+      "pos": [
+        825,
+        145
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "identity_provider",
+      "type": "security",
+      "label": "Identity Providers (2)",
+      "sublabel": "User/Admin Guard & Vault",
+      "tag": "2 Providers",
+      "pos": [
+        825,
+        231
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "datatransfer_db",
+      "type": "database",
+      "label": "DataTransferDbContext",
+      "sublabel": "Jobs, Presets, Outbox, Maps",
+      "tag": "datatransfer Schema",
+      "pos": [
+        825,
+        355
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "blob_storage",
+      "type": "cloud",
+      "label": "IBlobStorage Vault",
+      "sublabel": "Staged & Rejected .xlsx",
+      "tag": "Encrypted Vault",
+      "pos": [
+        825,
+        460
+      ],
+      "size": [
+        180,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "SCRIPE-Backend DataTransfer Module & Sovereign Host (.NET 10)",
+      "wraps": [
+        "owasp_validator",
+        "controller",
+        "immediate_worker",
+        "stream_engine",
+        "orchestrator",
+        "quota_fls",
+        "crm_providers",
+        "party_provider",
+        "identity_provider",
+        "datatransfer_db",
+        "blob_storage"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "5-Sheet Topological DAG, MENA Normalizer & Quota Core",
+      "wraps": [
+        "stream_engine",
+        "orchestrator",
+        "quota_fls"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "studio-to-controller",
+      "from": "client_studio",
+      "to": "controller",
+      "label": "REST + Stream",
+      "variant": "emphasis"
+    },
+    {
+      "id": "controller-to-owasp",
+      "from": "controller",
+      "to": "owasp_validator",
+      "label": "OWASP + 17 rules",
+      "variant": "security"
+    },
+    {
+      "id": "controller-to-worker",
+      "from": "controller",
+      "to": "immediate_worker",
+      "label": "enqueue / cancel",
+      "variant": "emphasis"
+    },
+    {
+      "id": "controller-to-orchestrator",
+      "from": "controller",
+      "to": "orchestrator",
+      "label": "dry-run / list",
+      "variant": "default"
+    },
+    {
+      "id": "worker-to-orchestrator",
+      "from": "immediate_worker",
+      "to": "orchestrator",
+      "label": "ambient job",
+      "variant": "emphasis"
+    },
+    {
+      "id": "orchestrator-to-stream",
+      "from": "orchestrator",
+      "to": "stream_engine",
+      "label": "OpenXML I/O",
+      "variant": "emphasis"
+    },
+    {
+      "id": "orchestrator-to-quota",
+      "from": "orchestrator",
+      "to": "quota_fls",
+      "label": "lease & FLS",
+      "variant": "security"
+    },
+    {
+      "id": "orchestrator-to-crm",
+      "from": "orchestrator",
+      "to": "crm_providers",
+      "label": "5-sheet DAG",
+      "variant": "emphasis"
+    },
+    {
+      "id": "orchestrator-to-party",
+      "from": "orchestrator",
+      "to": "party_provider",
+      "label": "Party batch",
+      "variant": "default"
+    },
+    {
+      "id": "orchestrator-to-identity",
+      "from": "orchestrator",
+      "to": "identity_provider",
+      "label": "User batch",
+      "variant": "security"
+    },
+    {
+      "id": "orchestrator-to-db",
+      "from": "orchestrator",
+      "to": "datatransfer_db",
+      "label": "RowVersion DB",
+      "variant": "emphasis"
+    },
+    {
+      "id": "orchestrator-to-blob",
+      "from": "orchestrator",
+      "to": "blob_storage",
+      "label": "rejected .xlsx",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Zero-Coupling Core, OWASP Bounds & 9-Stage O(n) Normalizer",
+      "items": [
+        "DataTransfer.*.csproj hold zero references to CRM, Identity, or PartyKernel — modules opt in via Core.Application IEntityDataExchangeProvider; OwaspSpreadsheetSecurityValidator enforces 25 MB upload / 100 MB uncompressed / 1,000 entries / 100x ratio, macro/DTD blocking, and CsvFormulaGuard.",
+        "SpreadsheetValueNormalizer runs 9 deterministic O(n) stages across 17 DataExchangeTransformRule toggles (NFKC/BiDi, digits, nulls, Tashkeel/Tatweel, Alef/ى/ک unification, currency/accounting, E.164, UTC) with zero user regexes."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Dynamic 5-Sheet DAG, cf:* Schema & Read-Only Entity Catalog",
+      "items": [
+        "Entity Catalog (/data-exchange) is auto-discovered read-only from DI providers, /custom-fields (cf:*), and Edition entitlements; ParentEntityKeys (DependsOnEntityKeys) drives dynamic RelatedMultiSheetEntityKeys cluster sorting.",
+        "Multi-sheet execution propagates sessionResolvedKeys across sheets, persists ExternalLegacyKeyMap idempotent lookups, runs Pass-2 self-FK resolution, and defers failed child rows (PARENT_ROW_FAILED / _CascadeParentRef) to Rejected .xlsx."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "7-Role [Authorize] PBAC, DataExchangeJobCompletedEvent Outbox & Leases",
+      "items": [
+        "DataTransferController enforces [Authorize] + [PermissionRequired] without [AdminOnly] across 7 standard roles (6 excluding CRM_SALES_REP for migrations.execute), returning DataTransfer.UnknownEntity (404) on invalid keys and DataTransfer.TenantRequired without tenant context.",
+        "Execution reserves 2h leases via TryReserveSlotsAsync, publishes DataExchangeJobCompletedEvent to datatransfer.outbox_messages, and reconciles via ReconcileReservationLeaseAsync + DetachPendingOutboxMessages() on cancel (no destructive post-completion global rollback job)."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Portal Studio (z-900), @core/data-exchange & 7-Lang Docs SSOT",
+      "items": [
+        "GenericCrudView entityTypeKey auto-mounts DataExchangeToolbarActions and z-[900] DataExchangeStudioOverlay without importing @modules/admin/data-transfer; Platform Super Admins without a tenant see DataExchangeTenantRequiredCard.",
+        "All Admin, CRM, and Party views standardize on GenericCrudView getActions ⋯ dropdowns, Showing 0-0 of 0 results pagination, flat matte Nexus CardGrid slabs, and 7-language SCRIPE-Docs-Portal documentation."
+      ]
+    }
+  ]
+}

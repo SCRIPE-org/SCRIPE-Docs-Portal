@@ -134,7 +134,7 @@ function CommercialFooter() {
           {footerCols.map((col) => (
             <div key={col.titleKey}>
               <h4 className="com-footer-col-title">{t(col.titleKey)}</h4>
-              <ul className="com-footer-links" role="list">
+              <ul className="com-footer-links" >
                 {col.links.map((link) => (
                   <li key={link.href}>
                     <Link

@@ -45,7 +45,7 @@ const sections: DocSection[] = [
 │   │       └── Middleware/             # Request logging, audit
 │   │
 │   ├── Core/
-│   │   ├── Core.Application/           # AstraFlow mediator, Behaviors, CQRS
+│   │   ├── Core.Application/           # AstraFlow, Behaviors, CQRS
 │   │   ├── Core.Domain/                # Base entities, Result<T>
 │   │   └── Core.Infrastructure/        # DI, Caching, Events, Blob
 │   │

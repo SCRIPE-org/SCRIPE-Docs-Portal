@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "diagram_type": "class",
+  "meta": {
+    "title": "SCRIPE-Frontend SOLID MVVM, DI & Generic CRUD Class Hierarchy",
+    "subtitle": "ViewModels depend on ICrudRepository / Domain Repositories; Data Services depend on IApiService via Inversify DI.",
+    "output": "public/archify-hub/frontend-class.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Frontend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "f7d148d6630baadee15b5b41b1933cc4fdd9a75f"
+    }
+  },
+  "layout": {
+    "mode": "grid"
+  },
+  "types": [
+    {
+      "id": "iapi_service",
+      "label": "IApiService",
+      "kind": "interface",
+      "sublabel": "Core HTTP contract in src/core/interfaces",
+      "row": 0,
+      "col": 0,
+      "sources": [
+        {
+          "path": "src/core/interfaces/api.interface.ts",
+          "line": 1,
+          "end_line": 90,
+          "label": "api.interface.ts"
+        }
+      ],
+      "methods": [
+        {
+          "name": "get",
+          "parameters": "url: string, cfg?: Config",
+          "returns": "Promise<T>",
+          "visibility": "public",
+          "abstract": true
+        },
+        {
+          "name": "post",
+          "parameters": "url: string, data?: unknown",
+          "returns": "Promise<T>",
+          "visibility": "public",
+          "abstract": true
+        }
+      ]
+    },
+    {
+      "id": "api_service_impl",
+      "label": "ApiService",
+      "kind": "class",
+      "sublabel": "Axios + 401 refresh mutex + IdempotencyKey",
+      "row": 1,
+      "col": 0,
+      "sources": [
+        {
+          "path": "src/core/services/api.service.ts",
+          "line": 58,
+          "end_line": 120,
+          "label": "api.service.ts"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "isRefreshing",
+          "type": "boolean",
+          "visibility": "private"
+        },
+        {
+          "name": "failedQueue",
+          "type": "QueuedCall[]",
+          "visibility": "private"
+        }
+      ],
+      "methods": [
+        {
+          "name": "processQueue",
+          "parameters": "err: unknown, token: string",
+          "returns": "void",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "id": "booking_service",
+      "label": "BookingService",
+      "kind": "class",
+      "sublabel": "4. Data Service (Inversify @injectable)",
+      "row": 0,
+      "col": 1,
+      "sources": [
+        {
+          "path": "src/modules/venue/booking/src/data/services/BookingService.ts",
+          "line": 1,
+          "end_line": 90,
+          "label": "BookingService.ts"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "api",
+          "type": "IApiService",
+          "visibility": "private"
+        }
+      ],
+      "methods": [
+        {
+          "name": "getReservations",
+          "parameters": "q: BookingFilterDto",
+          "returns": "Promise<BookingDto[]>",
+          "visibility": "public"
+        },
+        {
+          "name": "createReservation",
+          "parameters": "dto: CreateBookingDto",
+          "returns": "Promise<BookingDto>",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "icrud_repo",
+      "label": "ICrudRepository<T>",
+      "kind": "interface",
+      "sublabel": "Generic CRUD contract in src/core/crud",
+      "row": 0,
+      "col": 2,
+      "sources": [
+        {
+          "path": "src/core/crud/hooks/useCrudViewModel.ts",
+          "line": 1,
+          "end_line": 60,
+          "label": "useCrudViewModel.ts"
+        }
+      ],
+      "methods": [
+        {
+          "name": "getAll",
+          "parameters": "params: QueryParams",
+          "returns": "Promise<Paged<T>>",
+          "visibility": "public",
+          "abstract": true
+        },
+        {
+          "name": "create",
+          "parameters": "dto: Partial<T>",
+          "returns": "Promise<T>",
+          "visibility": "public",
+          "abstract": true
+        }
+      ]
+    },
+    {
+      "id": "booking_repo",
+      "label": "BookingRepository",
+      "kind": "class",
+      "sublabel": "3. Domain Repository (DTO <-> Booking Entity)",
+      "row": 1,
+      "col": 1,
+      "sources": [
+        {
+          "path": "src/modules/venue/booking/src/data/repositories/BookingRepository.ts",
+          "line": 1,
+          "end_line": 90,
+          "label": "BookingRepository.ts"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "service",
+          "type": "BookingService",
+          "visibility": "private"
+        }
+      ],
+      "methods": [
+        {
+          "name": "toDomain",
+          "parameters": "dto: BookingDto",
+          "returns": "Booking",
+          "visibility": "private"
+        },
+        {
+          "name": "create",
+          "parameters": "input: CreateBooking",
+          "returns": "Promise<Booking>",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "crud_viewmodel",
+      "label": "useCrudViewModel<T>",
+      "kind": "class",
+      "sublabel": "2. ViewModel Hook (TanStack Query + State)",
+      "row": 1,
+      "col": 2,
+      "sources": [
+        {
+          "path": "src/core/crud/hooks/useCrudViewModel.ts",
+          "line": 27,
+          "end_line": 86,
+          "label": "useCrudViewModel.ts"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "items",
+          "type": "T[]",
+          "visibility": "public"
+        },
+        {
+          "name": "page",
+          "type": "number",
+          "visibility": "public"
+        }
+      ],
+      "methods": [
+        {
+          "name": "handleCreate",
+          "parameters": "dto: Partial<T>",
+          "returns": "Promise<void>",
+          "visibility": "public"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "api_realizes_iapi",
+      "from": "api_service_impl",
+      "to": "iapi_service",
+      "kind": "realization"
+    },
+    {
+      "id": "svc_uses_iapi",
+      "from": "booking_service",
+      "to": "iapi_service",
+      "kind": "dependency",
+      "label": "injects"
+    },
+    {
+      "id": "repo_uses_svc",
+      "from": "booking_repo",
+      "to": "booking_service",
+      "kind": "composition",
+      "label": "delegates HTTP"
+    },
+    {
+      "id": "repo_realizes_icrud",
+      "from": "booking_repo",
+      "to": "icrud_repo",
+      "kind": "realization"
+    },
+    {
+      "id": "vm_uses_icrud",
+      "from": "crud_viewmodel",
+      "to": "icrud_repo",
+      "kind": "dependency",
+      "label": "orchestrates"
+    }
+  ]
+}

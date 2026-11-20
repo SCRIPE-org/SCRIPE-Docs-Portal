@@ -91,7 +91,7 @@ public class OutboxInterceptor : SaveChangesInterceptor
         label: "OutboxProcessor (every 30s): Fetch unprocessed messages",
         type: "default",
       },
-      { id: "n6", label: "IMediator.Publish(domainEvent)", type: "default" },
+      { id: "n6", label: "IPublisher.Publish(domainEvent)", type: "default" },
       { id: "n7", label: "INotificationHandlers execute", type: "success" },
       { id: "n8", label: "Mark OutboxMessage.ProcessedAt = UtcNow", type: "success" },
     ],

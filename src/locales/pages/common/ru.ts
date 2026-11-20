@@ -109,6 +109,7 @@ export const ru = {
     commercialWorkManagement: "Управление работой",
     commercialAnalytics: "Аналитика и поток событий",
     identityModule: "Идентификация и доступ",
+    crmModule: "Коммерческая CRM и сделки",
     venueModule: "Управление площадками",
     catalogPricingModule: "Каталог и ценообразование",
     financeModule: "Финансы и расчеты",
@@ -122,5 +123,7 @@ export const ru = {
     crosscuttingModule: "Коммуникации и файлы",
     marketplace: "Маркетплейс",
     recycleBin: "Корзина Экосистемы",
+    dataTransfer: "Студия обмена данными",
+    commercialDataExchange: "Студия обмена данными",
   },
 };

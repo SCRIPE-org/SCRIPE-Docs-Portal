@@ -1,0 +1,216 @@
+{
+  "schema_version": 3,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "3-Provider Optimistic Concurrency & Profile Conflict Recovery Lifecycle",
+    "subtitle": "IConcurrencyAwareEntity.AdvanceRowVersion() across SQL Server, Oracle, PostgreSQL, and SCRIPE-Frontend Profile MVVM",
+    "locale": "en",
+    "output": "venue-identity-concurrency-lifecycle.html",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "happy_cas_commit",
+        "label": "1. Happy Path Token Advance",
+        "focus": [
+          "hydrated_dto",
+          "client_edited",
+          "concurrency_gate",
+          "db_commit_tx",
+          "cache_synced"
+        ],
+        "note": "Client sends RowVersion from GET into PUT; BaseDbContext verifies and rotates a 16-byte token across SQL Server, Oracle, and PostgreSQL."
+      },
+      {
+        "id": "conflict_409_recovery",
+        "label": "2. 409 Stale Token Recovery",
+        "focus": [
+          "concurrency_gate",
+          "stale_conflict",
+          "cache_invalidated",
+          "hydrated_dto"
+        ],
+        "note": "Stale writes return HTTP 409 instead of overwriting sibling edits; Frontend invalidateOnConcurrencyConflict clears cache and notifies."
+      },
+      {
+        "id": "validation_and_outbox",
+        "label": "3. Result Validation & Outbox",
+        "focus": [
+          "client_edited",
+          "validation_rejected",
+          "db_commit_tx",
+          "outbox_queued"
+        ],
+        "note": "FluentValidation returns typed Result errors without business exceptions; valid commits append atomic outbox messages."
+      }
+    ]
+  },
+  "mainPath": [
+    "hydrated_dto",
+    "client_edited",
+    "concurrency_gate",
+    "db_commit_tx",
+    "cache_synced"
+  ],
+  "states": [
+    {
+      "id": "hydrated_dto",
+      "type": "start",
+      "label": "DTO Hydrated",
+      "sublabel": "rowVersion attached",
+      "tag": "GET",
+      "step": "01"
+    },
+    {
+      "id": "client_edited",
+      "type": "active",
+      "label": "Profile Mutated",
+      "sublabel": "PUT carries token",
+      "tag": "MVVM",
+      "step": "02"
+    },
+    {
+      "id": "concurrency_gate",
+      "type": "decision",
+      "label": "Token Matches?",
+      "sublabel": "IsConcurrencyToken",
+      "tag": "CAS",
+      "step": "03"
+    },
+    {
+      "id": "db_commit_tx",
+      "type": "active",
+      "label": "Commit & Rotate",
+      "sublabel": "AdvanceRowVersion",
+      "tag": "3-DB",
+      "step": "04"
+    },
+    {
+      "id": "cache_synced",
+      "type": "success",
+      "label": "Committed Fresh",
+      "sublabel": "IInvalidatesCache",
+      "tag": "200 OK",
+      "step": "05"
+    },
+    {
+      "id": "validation_rejected",
+      "type": "failure",
+      "label": "400 Result Error",
+      "sublabel": "FluentValidation gate",
+      "tag": "Result<T>"
+    },
+    {
+      "id": "stale_conflict",
+      "type": "failure",
+      "label": "409 Conflict",
+      "sublabel": "token mismatch",
+      "tag": "stale"
+    },
+    {
+      "id": "cache_invalidated",
+      "type": "waiting",
+      "label": "Cache Invalidated",
+      "sublabel": "TanStack refetch",
+      "tag": "recover"
+    },
+    {
+      "id": "outbox_queued",
+      "type": "external",
+      "label": "Outbox Queued",
+      "sublabel": "atomic ACID log",
+      "tag": "event"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "t_hydrate_edit",
+      "from": "hydrated_dto",
+      "to": "client_edited",
+      "label": "edit form"
+    },
+    {
+      "id": "t_edit_gate",
+      "from": "client_edited",
+      "to": "concurrency_gate",
+      "label": "send PUT",
+      "variant": "emphasis"
+    },
+    {
+      "id": "t_edit_reject",
+      "from": "client_edited",
+      "to": "validation_rejected",
+      "label": "invalid",
+      "variant": "security"
+    },
+    {
+      "id": "t_gate_commit",
+      "from": "concurrency_gate",
+      "to": "db_commit_tx",
+      "label": "match",
+      "variant": "emphasis"
+    },
+    {
+      "id": "t_gate_stale",
+      "from": "concurrency_gate",
+      "to": "stale_conflict",
+      "label": "mismatch",
+      "variant": "security"
+    },
+    {
+      "id": "t_stale_recover",
+      "from": "stale_conflict",
+      "to": "cache_invalidated",
+      "label": "invalidate",
+      "variant": "dashed"
+    },
+    {
+      "id": "t_recover_hydrate",
+      "from": "cache_invalidated",
+      "to": "hydrated_dto",
+      "label": "reload",
+      "variant": "emphasis"
+    },
+    {
+      "id": "t_commit_synced",
+      "from": "db_commit_tx",
+      "to": "cache_synced",
+      "label": "evict L1",
+      "variant": "emphasis"
+    },
+    {
+      "id": "t_commit_outbox",
+      "from": "db_commit_tx",
+      "to": "outbox_queued",
+      "label": "emit event",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Provider-Agnostic 16-Byte Tokens",
+      "items": [
+        "19 Identity + Core tables use ValueGenerated.Never and HasMaxLength(16).IsConcurrencyToken() updated in BaseDbContext.HandleAuditableEntities().",
+        "Avoids PostgreSQL bytea rowVersion trigger limitations while staying identical across SqlServer, Oracle, and PostgreSQL."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Frontend 409 Conflict Recovery",
+      "items": [
+        "ProfileMapper and SovereignAccountRepository round-trip rowVersion across Dossier, Security, Preferences, and Notifications.",
+        "isConcurrencyConflictError() clears stale TanStack queries via invalidateOnConcurrencyConflict() instead of swallowing errors."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Venue CAS & Signup Hardening",
+      "items": [
+        "Venue GuestReservationAccess adds IsRowVersion() alongside VenueDbContext.UpdateRowVersions() rotation.",
+        "SignupSession enforces protected constructors, static Create(...), and [Timestamp] byte[] RowVersion guards."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,330 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "SCRIPE-Frontend Edge Guard, PBAC Authorization & RTL Hydration Workflow",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "public/archify-hub/frontend-routing-workflow.html",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Frontend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "f7d148d6630baadee15b5b41b1933cc4fdd9a75f"
+    }
+  },
+  "lanes": [
+    {
+      "id": "edge_lane",
+      "label": "1. Next.js 16 Edge (proxy.ts)"
+    },
+    {
+      "id": "pbac_lane",
+      "label": "2. PBAC & Feature Entitlements"
+    },
+    {
+      "id": "fallback_lane",
+      "label": "3. Redirect & Upgrade Fallbacks",
+      "variant": "exception"
+    },
+    {
+      "id": "render_lane",
+      "label": "4. EN/AR RTL & MVVM Hydration"
+    }
+  ],
+  "phases": [
+    {
+      "id": "fp_edge",
+      "label": "Edge Cookie Gate",
+      "fromCol": 0,
+      "toCol": 1
+    },
+    {
+      "id": "fp_pbac",
+      "label": "PBAC & Edition Gate",
+      "fromCol": 2,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "fp_mount",
+      "label": "RTL & View Mount",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "groups": [
+    {
+      "id": "fg_pbac",
+      "label": "Client Authorization & Entitlements",
+      "lane": "pbac_lane",
+      "fromCol": 2,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "fg_stops",
+      "label": "Clean Security & Commercial Fallbacks",
+      "lane": "fallback_lane",
+      "fromCol": 1,
+      "toCol": 3,
+      "variant": "security"
+    },
+    {
+      "id": "fg_mount",
+      "label": "Bilingual Nexus UI Hydration",
+      "lane": "render_lane",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "mainPath": [
+    "nav_req",
+    "edge_check",
+    "route_guard",
+    "feature_gate",
+    "i18n_rtl",
+    "mount_view"
+  ],
+  "nodes": [
+    {
+      "id": "nav_req",
+      "lane": "edge_lane",
+      "col": 0,
+      "type": "external",
+      "label": "Route Request",
+      "sublabel": "/venue/booking",
+      "width": 136,
+      "sources": [
+        {
+          "path": "src/proxy.ts",
+          "line": 21,
+          "end_line": 56,
+          "label": "src/proxy.ts"
+        }
+      ]
+    },
+    {
+      "id": "edge_check",
+      "lane": "edge_lane",
+      "col": 1,
+      "type": "security",
+      "label": "Edge proxy.ts",
+      "sublabel": "Check auth cookies",
+      "tag": "Edge",
+      "width": 136,
+      "sources": [
+        {
+          "path": "src/proxy.ts",
+          "line": 21,
+          "end_line": 56,
+          "label": "Cookie Check"
+        }
+      ]
+    },
+    {
+      "id": "login_redir",
+      "lane": "fallback_lane",
+      "col": 1,
+      "type": "security",
+      "label": "/login Redirect",
+      "sublabel": "?callbackUrl=...",
+      "width": 136,
+      "sources": [
+        {
+          "path": "src/proxy.ts",
+          "line": 40,
+          "end_line": 54,
+          "label": "Login Redirect"
+        }
+      ]
+    },
+    {
+      "id": "route_guard",
+      "lane": "pbac_lane",
+      "col": 2,
+      "type": "security",
+      "label": "RouteGuard",
+      "sublabel": "PAGE_PERMISSIONS + 2FA",
+      "tag": "PBAC",
+      "width": 136,
+      "sources": [
+        {
+          "path": "src/core/providers/route-guard.tsx",
+          "line": 1,
+          "end_line": 100,
+          "label": "RouteGuard"
+        }
+      ]
+    },
+    {
+      "id": "deny_403",
+      "lane": "fallback_lane",
+      "col": 2,
+      "type": "security",
+      "label": "403 Access Denied",
+      "sublabel": "or 2FA Challenge",
+      "width": 136,
+      "sources": [
+        {
+          "path": "src/core/providers/route-guard.tsx",
+          "line": 1,
+          "end_line": 100,
+          "label": "403 Fallback"
+        }
+      ]
+    },
+    {
+      "id": "feature_gate",
+      "lane": "pbac_lane",
+      "col": 3,
+      "type": "backend",
+      "label": "UserFeatureGate",
+      "sublabel": "Edition entitlement",
+      "tag": "Edition",
+      "width": 136,
+      "sources": [
+        {
+          "path": "src/core/providers/permission-provider.tsx",
+          "line": 1,
+          "end_line": 95,
+          "label": "Permission & Feature Provider"
+        }
+      ]
+    },
+    {
+      "id": "upgrade_banner",
+      "lane": "fallback_lane",
+      "col": 3,
+      "type": "messagebus",
+      "label": "Edition Upgrade UI",
+      "sublabel": "Clean commercial gate",
+      "width": 136,
+      "sources": [
+        {
+          "path": "src/core/providers/permission-provider.tsx",
+          "line": 1,
+          "end_line": 95,
+          "label": "Feature Fallback"
+        }
+      ]
+    },
+    {
+      "id": "i18n_rtl",
+      "lane": "render_lane",
+      "col": 4,
+      "type": "cloud",
+      "label": "I18n & Theme Sync",
+      "sublabel": "EN/AR + dir=ltr|rtl",
+      "tag": "Nexus Tokens",
+      "width": 136,
+      "sources": [
+        {
+          "path": "src/core/providers/i18n-provider.tsx",
+          "line": 1,
+          "end_line": 95,
+          "label": "I18nProvider"
+        }
+      ]
+    },
+    {
+      "id": "mount_view",
+      "lane": "render_lane",
+      "col": 5,
+      "type": "frontend",
+      "label": "Mount Sub-Module",
+      "sublabel": "@core/ui + SignalR",
+      "tag": "UAT Ready",
+      "width": 136,
+      "sources": [
+        {
+          "path": "src/modules/venue/booking/src/presentation/views/BookingWorkspaceView.tsx",
+          "line": 1,
+          "end_line": 95,
+          "label": "BookingWorkspaceView"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "fwe1",
+      "from": "nav_req",
+      "to": "edge_check",
+      "variant": "default"
+    },
+    {
+      "id": "fwe2",
+      "from": "edge_check",
+      "to": "route_guard",
+      "label": "cookie valid",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fwe3",
+      "from": "edge_check",
+      "to": "login_redir",
+      "label": "no session",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "fwe4",
+      "from": "route_guard",
+      "to": "feature_gate",
+      "label": "permission ok",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fwe5",
+      "from": "route_guard",
+      "to": "deny_403",
+      "label": "missing PBAC",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "fwe6",
+      "from": "feature_gate",
+      "to": "i18n_rtl",
+      "label": "feature active",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fwe7",
+      "from": "feature_gate",
+      "to": "upgrade_banner",
+      "label": "edition locked",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "fwe8",
+      "from": "i18n_rtl",
+      "to": "mount_view",
+      "label": "hydrate view",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Defense-in-Depth Route Protection",
+      "items": [
+        "Unauthenticated requests are stopped at the Next.js Edge (src/proxy.ts) before loading client bundles.",
+        "RouteGuard verifies both PBAC permissions (PAGE_PERMISSIONS) and 2FA session status."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Entitlements & Bilingual Hydration",
+      "items": [
+        "Disabled Edition features render a clean commercial upgrade fallback instead of broken pages.",
+        "I18nProvider loads co-located EN/AR dictionaries and sets document direction (ltr/rtl) automatically."
+      ]
+    }
+  ]
+}

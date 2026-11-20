@@ -227,6 +227,7 @@ export const ar = {
     commercialWorkManagement: "إدارة العمل والمهام",
     commercialAnalytics: "التحليلات وتدفق الأحداث",
     identityModule: "الهوية والوصول",
+    crmModule: "إدارة علاقات العملاء والصفقات التجارية",
     venueModule: "عمليات المنشآت",
     catalogPricingModule: "الكتالوج والتسعير",
     financeModule: "المالية والتسويات",
@@ -240,6 +241,8 @@ export const ar = {
     crosscuttingModule: "الاتصالات وملفات النظام",
     marketplace: "المتجر والتطبيقات",
     recycleBin: "سلة المحذوفات العالمية",
+    dataTransfer: "استوديو تبادل البيانات",
+    commercialDataExchange: "استوديو تبادل البيانات",
   },
   // Commercial header mega-menu — 4 sections x (label + N items x title/desc).
   commercialMegaMenu: {

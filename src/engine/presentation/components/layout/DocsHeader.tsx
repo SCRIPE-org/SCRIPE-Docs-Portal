@@ -15,6 +15,8 @@ import {
   Sun,
   Code2,
   Github,
+  Cpu,
+  Sparkles,
 } from "lucide-react";
 import { useDocsI18n } from "../../providers/DocsI18nProvider";
 import { BRAND } from "@/lib/branding";
@@ -30,103 +32,190 @@ export function DocsHeader({
 }: DocsHeaderProps) {
   const { t } = useDocsI18n();
   const pathname = usePathname();
+  const isTechnical = pathname?.startsWith("/technical");
   const isCommercial = pathname?.startsWith("/commercial");
+  const isUnderstand = pathname?.startsWith("/understand");
+  const isArchify = pathname?.startsWith("/archify");
 
   return (
-    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-border bg-background/85 backdrop-blur-md px-4 sm:px-6 py-3">
-      <div className="flex items-center gap-4 sm:gap-6">
-        {/* Mobile hamburger */}
+    <header className="sticky top-0 z-40 h-14 border-b border-border bg-background/90 backdrop-blur-md">
+      <div className="flex items-center justify-between h-full px-4 sm:px-6">
+        <div className="flex items-center gap-4 sm:gap-5">
+          {/* Mobile hamburger */}
+          <button
+            className="flex sm:hidden items-center justify-center p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted"
+            onClick={onMobileMenuOpen}
+            aria-label={t("common.menu")}
+          >
+            <Menu size={20} aria-hidden="true" />
+          </button>
+
+          {/* Logo */}
+          <Link
+            href="/"
+            prefetch={false}
+            className="flex items-center gap-2.5 group shrink-0"
+          >
+            <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-muted/50 border border-border transition-transform group-hover:scale-105">
+              <Image
+                src="/brand/app-logo-1024.png"
+                alt={BRAND.namePascal}
+                width={22}
+                height={22}
+                priority
+                className="object-contain"
+              />
+            </div>
+            <span className="font-bold text-foreground tracking-tight text-base group-hover:text-primary transition-colors">
+              {BRAND.nameUpper}
+              <span className="ml-1.5 text-[10px] px-1.5 py-0.5 rounded bg-muted border border-border text-foreground font-mono font-semibold">
+                DOCS
+              </span>
+            </span>
+          </Link>
+
+          {/* Section Navigation Switcher (Desktop) */}
+          <nav className="hidden md:flex items-center gap-1 bg-muted/50 p-1 rounded-lg border border-border text-xs font-medium">
+            <Link
+              href="/technical"
+              prefetch={false}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md transition-all ${
+                isTechnical
+                  ? "bg-background text-foreground font-semibold shadow-2xs border border-border"
+                  : "text-muted-foreground hover:text-foreground hover:bg-background/40"
+              }`}
+            >
+              <Code2 size={13} className={isTechnical ? "text-primary" : ""} />
+              <span>Technical</span>
+            </Link>
+            <Link
+              href="/commercial"
+              prefetch={false}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md transition-all ${
+                isCommercial
+                  ? "bg-background text-foreground font-semibold shadow-2xs border border-border"
+                  : "text-muted-foreground hover:text-foreground hover:bg-background/40"
+              }`}
+            >
+              <Building size={13} className={isCommercial ? "text-primary" : ""} />
+              <span>Commercial Ops</span>
+            </Link>
+            <Link
+              href="/archify"
+              prefetch={false}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md transition-all ${
+                isArchify
+                  ? "bg-background text-foreground font-semibold shadow-2xs border border-primary/40"
+                  : "text-muted-foreground hover:text-foreground hover:bg-background/40"
+              }`}
+            >
+              <Sparkles size={13} className="text-primary" />
+              <span>Archify SSOT</span>
+              <span className="px-1 py-0.2 rounded bg-primary/15 text-primary text-[10px] font-mono font-bold">
+                23
+              </span>
+            </Link>
+            <Link
+              href="/understand"
+              prefetch={false}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md transition-all ${
+                isUnderstand
+                  ? "bg-background text-foreground font-semibold shadow-2xs border border-primary/40"
+                  : "text-muted-foreground hover:text-foreground hover:bg-background/40"
+              }`}
+            >
+              <Cpu size={13} className={isUnderstand ? "text-primary" : "text-sky-400"} />
+              <span>Understand Hub</span>
+            </Link>
+          </nav>
+        </div>
+
+        {/* Search Trigger */}
         <button
-          className="flex sm:hidden items-center justify-center p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted"
-          onClick={onMobileMenuOpen}
-          aria-label={t("common.menu")}
+          className="flex items-center gap-3 px-3.5 py-1.5 rounded-lg border border-border bg-muted/30 hover:border-primary/50 hover:bg-muted text-muted-foreground hover:text-foreground transition-all text-sm w-44 sm:w-64 max-w-full justify-between"
+          onClick={onSearchOpen}
+          aria-label={t("common.search")}
         >
-          <Menu size={20} aria-hidden="true" />
+          <div className="flex items-center gap-2">
+            <Search size={14} className="text-muted-foreground" />
+            <span className="text-xs">{t("common.search")}</span>
+          </div>
+          <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono rounded bg-muted border border-border text-muted-foreground">
+            ⌘K
+          </kbd>
         </button>
 
-        {/* Logo */}
-        <Link
-          href="/"
-          prefetch={false}
-          className="flex items-center gap-2.5 group"
-        >
-          <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-muted/50 border border-border transition-transform group-hover:scale-105">
-            <Image
-              src="/brand/app-logo-1024.png"
-              alt={BRAND.namePascal}
-              width={22}
-              height={22}
-              priority
-              className="object-contain"
-            />
-          </div>
-          <span className="font-bold text-foreground tracking-tight text-base group-hover:text-primary transition-colors">
-            {BRAND.nameUpper}
-            <span className="ml-1 text-xs px-1.5 py-0.5 rounded bg-primary/15 text-primary font-mono font-medium">
-              DOCS
-            </span>
-          </span>
-        </Link>
-
-        {/* Section Navigation Switcher */}
-        <nav className="hidden md:flex items-center gap-1 bg-muted/40 p-1 rounded-lg border border-border text-xs font-medium">
-          <Link
-            href="/technical"
-            prefetch={false}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-all ${
-              !isCommercial
-                ? "bg-primary text-primary-foreground font-semibold shadow-sm"
-                : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-            }`}
+        {/* Header Actions */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <a
+            href="https://github.com/SCRIPE-org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:flex items-center justify-center h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+            aria-label="GitHub Repository"
           >
-            <Code2 size={13} />
-            <span>Technical</span>
-          </Link>
-          <Link
-            href="/commercial"
-            prefetch={false}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-all ${
-              isCommercial
-                ? "bg-primary text-primary-foreground font-semibold shadow-sm"
-                : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-            }`}
-          >
-            <Building size={13} />
-            <span>Commercial Ops</span>
-          </Link>
-        </nav>
-      </div>
+            <Github size={16} />
+          </a>
 
-      {/* Search Trigger */}
-      <button
-        className="flex items-center gap-3 px-3.5 py-1.5 rounded-lg border border-border bg-muted/30 hover:border-primary/50 hover:bg-muted text-muted-foreground hover:text-foreground transition-all text-sm w-44 sm:w-64 max-w-full justify-between"
-        onClick={onSearchOpen}
-        aria-label={t("common.search")}
-      >
-        <div className="flex items-center gap-2">
-          <Search size={14} className="text-muted-foreground" />
-          <span className="text-xs">{t("common.search")}</span>
+          <DocsLangSwitcher />
+          <DocsThemeToggle />
         </div>
-        <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono rounded bg-muted border border-border text-muted-foreground">
-          ⌘K
-        </kbd>
-      </button>
-
-      {/* Header Actions */}
-      <div className="flex items-center gap-2 sm:gap-3">
-        <a
-          href="https://github.com/SCRIPE-org"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden sm:flex items-center justify-center h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-          aria-label="GitHub Repository"
-        >
-          <Github size={16} />
-        </a>
-
-        <DocsLangSwitcher />
-        <DocsThemeToggle />
       </div>
+
+      {/* Responsive Mobile Mode Switcher (< md) */}
+      <nav
+        aria-label="Documentation Modes"
+        className="flex md:hidden items-center gap-1.5 overflow-x-auto px-4 pb-2.5 pt-0.5 text-xs font-medium"
+      >
+        <Link
+          href="/technical"
+          prefetch={false}
+          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md whitespace-nowrap transition-all ${
+            !isCommercial && !isUnderstand && !isArchify
+              ? "bg-primary text-primary-foreground font-semibold"
+              : "text-muted-foreground hover:text-foreground bg-muted/40"
+          }`}
+        >
+          <Code2 size={12} />
+          <span>Technical</span>
+        </Link>
+        <Link
+          href="/commercial"
+          prefetch={false}
+          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md whitespace-nowrap transition-all ${
+            isCommercial
+              ? "bg-primary text-primary-foreground font-semibold"
+              : "text-muted-foreground hover:text-foreground bg-muted/40"
+          }`}
+        >
+          <Building size={12} />
+          <span>Commercial</span>
+        </Link>
+        <Link
+          href="/understand"
+          prefetch={false}
+          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md whitespace-nowrap transition-all ${
+            isUnderstand
+              ? "bg-primary text-primary-foreground font-semibold"
+              : "text-primary bg-primary/10 border border-primary/25"
+          }`}
+        >
+          <Cpu size={12} />
+          <span>Understand</span>
+        </Link>
+        <Link
+          href="/archify"
+          prefetch={false}
+          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md whitespace-nowrap transition-all ${
+            isArchify
+              ? "bg-primary text-primary-foreground font-semibold"
+              : "text-primary bg-primary/10 border border-primary/30"
+          }`}
+        >
+          <Sparkles size={12} />
+          <span>Archify SSOT (23)</span>
+        </Link>
+      </nav>
     </header>
   );
 }

@@ -1,0 +1,268 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "SCRIPE-Frontend Portal Studio (z-900), 17-Rule Smart Popover, Unified ⋯ CRUD & Sileo Morphing Workflow",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "SCRIPE-Docs-Portal/public/archify-hub/scripe-data-exchange-workflow.html"
+  },
+  "lanes": [
+    {
+      "id": "crud_lane",
+      "label": "1. Unified GenericCrudView ⋯ Menus & Nexus CardGrid"
+    },
+    {
+      "id": "studio_lane",
+      "label": "2. Portal Studio (z-900), 17-Rule Popover & 5-Sheet DAG"
+    },
+    {
+      "id": "guard_lane",
+      "label": "3. Exit Guard (z-960), Tooltip Errors & Quota Locks",
+      "variant": "exception"
+    },
+    {
+      "id": "vault_lane",
+      "label": "4. Sileo dx-job-{id} Morphing, 3-Route Admin & Vault"
+    }
+  ],
+  "phases": [
+    {
+      "id": "dx_init",
+      "label": "1. Trigger & Portal (z-900)",
+      "fromCol": 0,
+      "toCol": 1
+    },
+    {
+      "id": "dx_validate",
+      "label": "2. 17-Rule Popover & 5-Sheet DAG",
+      "fromCol": 2,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "dx_commit",
+      "label": "3. Commit, Sileo & CardGrid",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "mainPath": [
+    "crud_toolbar",
+    "step1_template",
+    "step2_map",
+    "step3_dryrun",
+    "step4_commit",
+    "ephemeral_vault"
+  ],
+  "nodes": [
+    {
+      "id": "crud_toolbar",
+      "lane": "crud_lane",
+      "col": 0,
+      "type": "frontend",
+      "label": "1-Button & ⋯ Menus",
+      "sublabel": "GenericCrudView entityTypeKey",
+      "tag": "@core/data-exchange"
+    },
+    {
+      "id": "step1_template",
+      "lane": "studio_lane",
+      "col": 1,
+      "type": "frontend",
+      "label": "Step 1: Portal Upload",
+      "sublabel": "createPortal z-900 + Lock",
+      "tag": "Step 1"
+    },
+    {
+      "id": "exit_guard",
+      "lane": "guard_lane",
+      "col": 1,
+      "type": "security",
+      "label": "ConfirmExitDialog",
+      "sublabel": "z-960 Guard on X/Esc/Back",
+      "tag": "Dirty Guard"
+    },
+    {
+      "id": "step2_map",
+      "lane": "studio_lane",
+      "col": 2,
+      "type": "frontend",
+      "label": "Step 2: 17-Rule Popover",
+      "sublabel": "Smart Preset + DAG Tabs",
+      "tag": "z-950 Rules"
+    },
+    {
+      "id": "compat_lock",
+      "lane": "guard_lane",
+      "col": 2,
+      "type": "security",
+      "label": "Tooltip Error & Hash",
+      "sublabel": "z-950 Hint + Jump-to-Row"
+    },
+    {
+      "id": "step3_dryrun",
+      "lane": "studio_lane",
+      "col": 3,
+      "type": "backend",
+      "label": "Step 3: 5-Sheet DAG",
+      "sublabel": "Acc->Con->Lead->Opp->Act",
+      "tag": "Step 3"
+    },
+    {
+      "id": "quota_block",
+      "lane": "guard_lane",
+      "col": 3,
+      "type": "security",
+      "label": "Edition Quota Block",
+      "sublabel": "422 Finite Lease Guard"
+    },
+    {
+      "id": "step4_commit",
+      "lane": "studio_lane",
+      "col": 4,
+      "type": "backend",
+      "label": "Step 4: Partial Commit",
+      "sublabel": "sessionKeys + Cascade",
+      "tag": "Step 4"
+    },
+    {
+      "id": "rejected_xlsx",
+      "lane": "crud_lane",
+      "col": 4,
+      "type": "messagebus",
+      "label": "Rejected Rows .xlsx",
+      "sublabel": "Fix errors & re-upload"
+    },
+    {
+      "id": "cooperative_cancel",
+      "lane": "guard_lane",
+      "col": 5,
+      "type": "security",
+      "label": "Cooperative Cancel",
+      "sublabel": "ReconcileLease + DetachOutbox",
+      "tag": "No Global Undo"
+    },
+    {
+      "id": "ephemeral_vault",
+      "lane": "vault_lane",
+      "col": 5,
+      "type": "security",
+      "label": "Sileo Morph & Cards",
+      "sublabel": "dx-job-{id} + Matte Slabs",
+      "tag": "Sileo & MVVM"
+    }
+  ],
+  "edges": [
+    {
+      "id": "dxe1",
+      "from": "crud_toolbar",
+      "to": "step1_template",
+      "label": "open portal",
+      "variant": "emphasis"
+    },
+    {
+      "id": "dxe_exit",
+      "from": "step1_template",
+      "to": "exit_guard",
+      "label": "dirty exit",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "dxe2",
+      "from": "step1_template",
+      "to": "step2_map",
+      "label": "inspect .xlsx",
+      "variant": "emphasis"
+    },
+    {
+      "id": "dxe3",
+      "from": "step2_map",
+      "to": "compat_lock",
+      "label": "type / hash",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "dxe4",
+      "from": "step2_map",
+      "to": "step3_dryrun",
+      "label": "17 rules ok",
+      "variant": "emphasis"
+    },
+    {
+      "id": "dxe5",
+      "from": "step3_dryrun",
+      "to": "quota_block",
+      "label": "quota full",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "dxe6",
+      "from": "step3_dryrun",
+      "to": "step4_commit",
+      "label": "DAG dry-run",
+      "variant": "emphasis"
+    },
+    {
+      "id": "dxe7",
+      "from": "step4_commit",
+      "to": "rejected_xlsx",
+      "label": "cascade err",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "dxe8",
+      "from": "rejected_xlsx",
+      "to": "crud_toolbar",
+      "label": "re-upload fixed",
+      "variant": "dashed",
+      "role": "return"
+    },
+    {
+      "id": "dxe9",
+      "from": "step4_commit",
+      "to": "cooperative_cancel",
+      "label": "cancel race",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "dxe10",
+      "from": "step4_commit",
+      "to": "ephemeral_vault",
+      "label": "morph toast",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Zero-Coupling @core/data-exchange, Portal Studio (z-900) & Exit Guard",
+      "items": [
+        "GenericCrudView entityTypeKey auto-mounts DataExchangeToolbarActions and z-[900] DataExchangeStudioOverlay without importing @modules/admin/data-transfer; DataExchangeTenantRequiredCard guides Platform Super Admins when TenantRequired hits.",
+        "StudioConfirmExitDialog (z-[960]) guards Close, Escape, Step 2 -> Step 1 Back, Replace File, and un-dismissed credentials while keeping Step 3 -> Step 2 Back prompt-free."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "9-Stage / 17-Rule Normalizer, cf:* Fields & 4 DAG Unlock Gates",
+      "items": [
+        "ColumnNormalizationPopover (z-[950], overflow-y-auto overscroll-contain) runs all 17 DataExchangeTransformRule toggles (Alef/ى/ک, Tashkeel/Tatweel, E.164, DateFormat, UTC) with live preview and dynamic /custom-fields (cf:*).",
+        "useDataExchangeToolbarViewModel enables Multi-Sheet Migration automatically when all 4 gates pass: datatransfer.migrations.execute, DataTransfer.MultiSheetMigration, supportsImport, and >= 2 relatedMultiSheetEntityKeys."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Read-Only Catalog, Jobs/Presets Lifecycle, Outbox & Sileo Morphing",
+      "items": [
+        "/data-exchange Entity Catalog is DI + Edition read-only; /jobs records module toolbar + Launch Studio runs; /presets saves Step 2 mappings (initialPresetId & POST /presets/{id}/default); no destructive post-completion global rollback job exists.",
+        "Jobs emit DataExchangeJobCompletedEvent to datatransfer.outbox_messages (retracted via DetachPendingOutboxMessages on cancel) and morph single id: 'dx-job-' + job.id Sileo toasts with localized entity display names."
+      ]
+    }
+  ]
+}

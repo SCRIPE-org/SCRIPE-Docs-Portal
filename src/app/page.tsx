@@ -165,9 +165,9 @@ export default function DocsLandingHub() {
           </motion.div>
         </motion.div>
 
-        {/* ── Signature Dual Portal Gateway Bento ───────────────────── */}
+        {/* ── Signature Portal Gateway Bento (Technical, Commercial, Understand Super Hub, Archify SSOT) ── */}
         <motion.div
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-40px" }}
@@ -286,6 +286,142 @@ export default function DocsLandingHub() {
                 />
               </div>
             </Link>
+          </motion.div>
+
+          {/* Card 3: Understand-Anything Super Architecture Hub */}
+          <motion.div variants={itemVariants}>
+            <Link
+              href="/understand"
+              className="group relative rounded-2xl border border-primary/50 bg-card/90 hover:border-primary p-8 transition-all duration-300 hover:shadow-[0_12px_36px_rgba(198,255,0,0.18)] flex flex-col justify-between overflow-hidden h-full block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-bl from-primary/20 via-primary/5 to-transparent rounded-full -mr-20 -mt-20 pointer-events-none group-hover:from-primary/30 transition-all duration-500" />
+
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <div className="h-12 w-12 rounded-xl bg-primary/15 border border-primary/40 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-200">
+                    <Cpu size={24} />
+                  </div>
+                  <span className="text-xs font-mono text-primary bg-primary/15 px-3 py-1 rounded-full border border-primary/30 font-bold tracking-wide">
+                    LIVE KNOWLEDGE GRAPHS
+                  </span>
+                </div>
+
+                <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors duration-200">
+                  Understand Super Hub
+                </h2>
+                <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+                  Interactive 25,504-node full-stack knowledge graphs, 18-module
+                  Backend symbol explorer, 36 business flows, Karpathy LLM Wiki,
+                  and auto-authenticated live dashboards.
+                </p>
+
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {[
+                    "16,242 Backend Nodes",
+                    "18 Domains & 36 Flows",
+                    "991 HTTP Endpoints",
+                    "Karpathy Wiki Graph",
+                    "25,504 Full-Stack Nodes",
+                    "Vercel Static CDN Ready",
+                  ].map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-2.5 py-1 rounded-md bg-muted/60 border border-border text-xs text-foreground/90 font-mono"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 text-sm font-semibold text-primary pt-4 border-t border-border">
+                <span>Launch Understand Super Hub</span>
+                <ArrowRight
+                  size={16}
+                  className="group-hover:translate-x-2 transition-transform duration-200"
+                />
+              </div>
+            </Link>
+          </motion.div>
+
+          {/* Card 4: Archify Single Source of Truth Mode (/archify) */}
+          <motion.div variants={itemVariants}>
+            <div className="group relative rounded-2xl border border-primary bg-card/95 p-8 transition-all duration-300 hover:shadow-[0_12px_36px_rgba(198,255,0,0.22)] flex flex-col justify-between overflow-hidden h-full">
+              <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-bl from-primary/25 via-primary/10 to-transparent rounded-full -mr-20 -mt-20 pointer-events-none" />
+
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <div className="h-12 w-12 rounded-xl bg-primary/20 border border-primary/50 flex items-center justify-center text-primary">
+                    <Sparkles size={24} />
+                  </div>
+                  <span className="text-xs font-mono text-primary bg-primary/15 px-3 py-1 rounded-full border border-primary/40 font-bold tracking-wide">
+                    NEW INTEGRATED SSOT MODE
+                  </span>
+                </div>
+
+                <Link href="/archify" className="block">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors duration-200">
+                    Archify Single Source of Truth
+                  </h2>
+                </Link>
+                <p className="text-muted-foreground text-sm leading-relaxed mb-5">
+                  23 showcase-verified interactive Explainer Boards and native
+                  diagrams across all 11 Archify modes (Architecture, Sequence,
+                  Workflow, ERD, Class, Lifecycle, Dataflow, Tree, Timeline,
+                  Waterfall) with Split Compare and live comet animations.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-6">
+                  <Link
+                    href="/archify?pillar=fullstack&artifact=fullstack-master-explainer"
+                    className="px-3 py-2 rounded-lg border border-primary/40 bg-primary/10 hover:bg-primary/20 text-xs font-mono font-semibold text-primary transition-colors"
+                  >
+                    1. Super Full-Stack (7) →
+                  </Link>
+                  <Link
+                    href="/archify?pillar=backend&artifact=backend-master-explainer"
+                    className="px-3 py-2 rounded-lg border border-border bg-muted/60 hover:border-primary/50 text-xs font-mono font-semibold text-foreground transition-colors"
+                  >
+                    2. Backend .NET 10 (8) →
+                  </Link>
+                  <Link
+                    href="/archify?pillar=frontend&artifact=frontend-master-explainer"
+                    className="px-3 py-2 rounded-lg border border-border bg-muted/60 hover:border-primary/50 text-xs font-mono font-semibold text-foreground transition-colors"
+                  >
+                    3. Frontend Next 16 (8) →
+                  </Link>
+                </div>
+
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {[
+                    "23 Verified Pages",
+                    "11 Archify Modes",
+                    "4 Style Switchers",
+                    "Route Probe & Lens",
+                    "Split Compare Mode",
+                    "Pinned Git Citations",
+                  ].map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-2.5 py-1 rounded-md bg-muted/60 border border-border text-xs text-foreground/90 font-mono"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <Link
+                href="/archify"
+                className="flex items-center gap-2 text-sm font-semibold text-primary pt-4 border-t border-border"
+              >
+                <span>Open Archify Single Source of Truth Mode (/archify)</span>
+                <ArrowRight
+                  size={16}
+                  className="group-hover:translate-x-2 transition-transform duration-200"
+                />
+              </Link>
+            </div>
           </motion.div>
         </motion.div>
 

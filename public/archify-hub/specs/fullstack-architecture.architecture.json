@@ -1,0 +1,477 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "SCRIPE v6.0 Full-Stack Operating System Architecture",
+    "locale": "en",
+    "output": "public/archify-hub/fullstack-architecture.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "ffc972a40a448abee3f41b394bd3e823457fc346"
+    },
+    "views": [
+      {
+        "id": "full_stack_overview",
+        "label": "1. Complete Full-Stack OS",
+        "focus": [
+          "edge_guard",
+          "mvvm_ui",
+          "mvvm_data",
+          "api_service",
+          "http_security",
+          "astraflow_bus",
+          "domain_modules",
+          "base_db",
+          "outbox_signalr",
+          "redis_cluster"
+        ],
+        "note": "Complete end-to-end topology across Next.js 16 MVVM, .NET 10 AstraFlow 2.3.0 Monolith, Dual-Mode Persistence, and Real-Time SignalR."
+      },
+      {
+        "id": "mvvm_to_cqrs_write",
+        "label": "2. 5-Layer MVVM -> 3-TX Command Path",
+        "focus": [
+          "mvvm_ui",
+          "mvvm_data",
+          "api_service",
+          "http_security",
+          "astraflow_bus",
+          "domain_modules",
+          "base_db"
+        ],
+        "note": "Traces a mutating command from the React 19 View through ApiService idempotency headers, 29-stage security, and 3-TX backend commit."
+      },
+      {
+        "id": "outbox_realtime_loop",
+        "label": "3. Transactional Outbox & SignalR Loop",
+        "focus": [
+          "domain_modules",
+          "base_db",
+          "outbox_signalr",
+          "mvvm_ui",
+          "astraflow_bus"
+        ],
+        "note": "Shows how domain events saved in BaseDbContext are polled by OutboxProcessorJob and pushed live to React 19 Views via SignalR."
+      },
+      {
+        "id": "zero_trust_security",
+        "label": "4. 5-Layer Security & Tenant Isolation",
+        "focus": [
+          "edge_guard",
+          "api_service",
+          "http_security",
+          "redis_cluster",
+          "base_db"
+        ],
+        "note": "Highlights Next.js Edge proxy, RouteGuard, single-flight 401 refresh mutex, 29-stage middleware, Redis revocation, and DB tenant filters."
+      },
+      {
+        "id": "cli_governance_gate",
+        "label": "5. CLI Toolchain & Universal Check Gate",
+        "focus": [
+          "scripe_cli",
+          "mvvm_ui",
+          "domain_modules",
+          "base_db"
+        ],
+        "note": "Demonstrates how scripe-cli (193 commands) governs scaffolding, migrations, locale parity, and Clean Architecture boundaries."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "edge_guard",
+      "type": "security",
+      "label": "Edge Proxy & RouteGuard",
+      "sublabel": "proxy.ts + PBAC Gate",
+      "tag": "Layer 1-3 Client",
+      "pos": [
+        40,
+        60
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 95,
+          "end_line": 115,
+          "label": "Frontend MVVM & Route Invariants"
+        }
+      ]
+    },
+    {
+      "id": "mvvm_ui",
+      "type": "frontend",
+      "label": "Views & @core/ui/*",
+      "sublabel": "Next.js 16 + React 19",
+      "tag": "Nexus Tokens",
+      "pos": [
+        40,
+        200
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 102,
+          "end_line": 130,
+          "label": "@core/ui/* & Bilingual EN/AR Laws"
+        }
+      ]
+    },
+    {
+      "id": "mvvm_data",
+      "type": "frontend",
+      "label": "ViewModel & Repository",
+      "sublabel": "TanStack + Zustand + DI",
+      "tag": "5-Layer MVVM",
+      "pos": [
+        260,
+        200
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 95,
+          "end_line": 108,
+          "label": "View -> VM -> Repo -> Service"
+        }
+      ]
+    },
+    {
+      "id": "api_service",
+      "type": "frontend",
+      "label": "ApiService Gateway",
+      "sublabel": "401 Mutex + Idempotency",
+      "tag": "Single-Flight",
+      "pos": [
+        260,
+        60
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 98,
+          "end_line": 101,
+          "label": "IApiService HTTP boundary"
+        }
+      ]
+    },
+    {
+      "id": "scripe_cli",
+      "type": "cloud",
+      "label": "scripe-cli Toolchain",
+      "sublabel": "193 Commands + Check Gate",
+      "tag": "CLI-First",
+      "pos": [
+        40,
+        360
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 32,
+          "end_line": 64,
+          "label": "Core Development & Verification Commands"
+        }
+      ]
+    },
+    {
+      "id": "http_security",
+      "type": "security",
+      "label": "29-Stage Security Gate",
+      "sublabel": "JWT + CSRF + Replay + PBAC",
+      "tag": "Zero-Trust",
+      "pos": [
+        510,
+        60
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 139,
+          "end_line": 152,
+          "label": "5-Layer Defense Architecture"
+        }
+      ]
+    },
+    {
+      "id": "astraflow_bus",
+      "type": "messagebus",
+      "label": "AstraFlow 2.3.0 Mediator",
+      "sublabel": "6 Behaviors + 3-TX Idem",
+      "tag": "927+ Handlers",
+      "pos": [
+        510,
+        200
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "sources": [
+        {
+          "path": ".agents/rules/astraflow-ecosystem-and-evolution.md",
+          "line": 13,
+          "end_line": 34,
+          "label": "AstraFlow 15-Package Ecosystem"
+        }
+      ]
+    },
+    {
+      "id": "redis_cluster",
+      "type": "database",
+      "label": "Redis L1 & Locks",
+      "sublabel": "Revocation + HybridCache",
+      "tag": "Sub-2ms",
+      "pos": [
+        760,
+        60
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 131,
+          "end_line": 137,
+          "label": "Performance & Caching Invariants"
+        }
+      ]
+    },
+    {
+      "id": "domain_modules",
+      "type": "backend",
+      "label": "18 Domain Modules",
+      "sublabel": "Venue / CRM / Pricing / Fin",
+      "tag": "Result<T>",
+      "pos": [
+        760,
+        200
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 69,
+          "end_line": 80,
+          "label": "3-Project Module Boundary & Result Pattern"
+        }
+      ]
+    },
+    {
+      "id": "base_db",
+      "type": "database",
+      "label": "BaseDbContext & Schemas",
+      "sublabel": "PG / SQL Server / Oracle",
+      "tag": "Dual-Mode DB",
+      "pos": [
+        1000,
+        200
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 81,
+          "end_line": 94,
+          "label": "Dual-Mode Enterprise Persistence"
+        }
+      ]
+    },
+    {
+      "id": "outbox_signalr",
+      "type": "cloud",
+      "label": "Outbox & SignalR Hub",
+      "sublabel": "Transactional Event Push",
+      "tag": "At-Least-Once",
+      "pos": [
+        760,
+        360
+      ],
+      "size": [
+        155,
+        64
+      ],
+      "sources": [
+        {
+          "path": "AGENTS.md",
+          "line": 85,
+          "end_line": 91,
+          "label": "Per-Module Outbox/Inbox & Eventing"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "SCRIPE-Frontend (Next.js 16 + React 19 SOLID MVVM)",
+      "wraps": [
+        "edge_guard",
+        "mvvm_ui",
+        "mvvm_data",
+        "api_service"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "SCRIPE-Backend (.NET 10 Modular Monolith & AstraFlow 2.3.0)",
+      "wraps": [
+        "http_security",
+        "astraflow_bus",
+        "redis_cluster",
+        "domain_modules",
+        "base_db",
+        "outbox_signalr"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "c_edge_ui",
+      "from": "edge_guard",
+      "to": "mvvm_ui",
+      "label": "authorized route",
+      "variant": "security"
+    },
+    {
+      "id": "c_ui_vm",
+      "from": "mvvm_ui",
+      "to": "mvvm_data",
+      "label": "UI action",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c_vm_api",
+      "from": "mvvm_data",
+      "to": "api_service",
+      "label": "repo -> service",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c_api_sec",
+      "from": "api_service",
+      "to": "http_security",
+      "label": "HTTPS + JWT + Key",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c_sec_af",
+      "from": "http_security",
+      "to": "astraflow_bus",
+      "label": "ISender.Send",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c_af_redis",
+      "from": "astraflow_bus",
+      "to": "redis_cluster",
+      "label": "L1 receipt & cache"
+    },
+    {
+      "id": "c_af_mod",
+      "from": "astraflow_bus",
+      "to": "domain_modules",
+      "label": "dispatch handler",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c_mod_db",
+      "from": "domain_modules",
+      "to": "base_db",
+      "label": "atomic SaveChanges",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c_db_outbox",
+      "from": "base_db",
+      "to": "outbox_signalr",
+      "label": "poll outbox_messages",
+      "variant": "dashed"
+    },
+    {
+      "id": "c_outbox_ui",
+      "from": "outbox_signalr",
+      "to": "mvvm_ui",
+      "label": "SignalR push",
+      "variant": "dashed"
+    },
+    {
+      "id": "c_cli_fe",
+      "from": "scripe_cli",
+      "to": "mvvm_ui",
+      "label": "validate-locales",
+      "variant": "dashed"
+    },
+    {
+      "id": "c_cli_be",
+      "from": "scripe_cli",
+      "to": "domain_modules",
+      "label": "arch-check & seed",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Symmetrical Full-Stack Invariants",
+      "items": [
+        "Frontend enforces 5-layer SOLID MVVM (View -> ViewModel -> Repository -> Service -> IApiService) with 100% @core/ui/* primitives.",
+        "Backend enforces 3-project Clean Architecture (Domain, Application, Infrastructure) across 18 schema-isolated modules.",
+        "Both tiers forbid raw exceptions on business paths, communicating via structured Result<T> envelopes."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "5-Layer Zero-Trust Security",
+      "items": [
+        "Edge proxy.ts and client RouteGuard validate cookies, PAGE_PERMISSIONS, and Edition entitlements before hydration.",
+        "ApiService queues concurrent 401 calls behind a single-flight refresh mutex and injects X-Idempotency-Key.",
+        "Backend 29-stage MiddlewarePipeline enforces JWT revocation, CSRF, replay nonces, PBAC, and BaseDbContext TenantId filters."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Transactional Outbox & CLI Governance",
+      "items": [
+        "BaseDbContext commits entity changes, AuditLog diffs, and outbox_messages in one atomic database transaction.",
+        "OutboxProcessorJob dispatches integration events and real-time SignalR notifications to connected React clients.",
+        "scripe-cli (193 commands) enforces 0 architectural violations via scripe arch-check and scripe check."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "0ebd7dc6-365b-4ed0-911f-f31c3b726616",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-identity-sso-security-remediation-v2-20261119-195800\\candidate.archify.md",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\identity-sso-security-remediation-v2.html",
+  "specification": {
+    "sha256": "300ade2ddeb0461cc42ec9841cd80892e32693210ffa208389b2e600113b5015",
+    "bytes": 17551
+  },
+  "artifact": {
+    "sha256": "20ad50a8ef0bd6034ea4a7739ad31b409eb7b4956bfe18e1377ec48c3b3dc57d",
+    "bytes": 1455570
+  },
+  "explainer": {
+    "preparedSha256": "000ef13d4054497c62bc1c49954f9b027b9ad489f3c97ec54ebb56dd40a752c4",
+    "dependencies": [
+      {
+        "kind": "diagram-spec",
+        "id": "v2-remediation-arch",
+        "inline": true,
+        "sha256": "d643822a9e878a975092deec749482119db795ea1e23acbf7a8f82a95b8ad307",
+        "bytes": 1957
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "v2-sudo-logout-seq",
+        "inline": true,
+        "sha256": "7770f25d92f69d531a3ff8b2a1e04179ad2a43cd398f6caa249242a48763ea06",
+        "bytes": 1742
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "v2-cli-workflow",
+        "inline": true,
+        "sha256": "7dfa1cedaff9e2a0f3a7b5d3e9c8a6dc4798d2db88fe7ca22b606d40fd698353",
+        "bytes": 1300
+      }
+    ]
+  }
+}

@@ -1,0 +1,237 @@
+{
+  "schema_version": 3,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "SCRIPE-Backend Venue Reservation & Commercial Quote Lifecycle",
+    "output": "public/archify-hub/backend-lifecycle.html",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Backend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "f941b1500a9ef98b0f81bdb473d1306f554d6526"
+    }
+  },
+  "mainPath": [
+    "slot_hold",
+    "quote_frozen",
+    "confirmed",
+    "checked_in",
+    "settled"
+  ],
+  "states": [
+    {
+      "id": "slot_hold",
+      "type": "start",
+      "label": "SlotHold",
+      "sublabel": "TTL lock active",
+      "tag": "entry",
+      "step": "01",
+      "sources": [
+        {
+          "path": "src/Modules/Venue/Venue.Domain/Entities/BookingHold.cs",
+          "line": 1,
+          "end_line": 43,
+          "label": "BookingHold.cs"
+        }
+      ]
+    },
+    {
+      "id": "quote_frozen",
+      "type": "active",
+      "label": "QuoteFrozen",
+      "sublabel": "PriceQuote bound",
+      "tag": "pricing",
+      "step": "02",
+      "sources": [
+        {
+          "path": "src/Modules/CatalogPricing/CatalogPricing.Domain/Entities/PriceQuote.cs",
+          "line": 1,
+          "end_line": 70,
+          "label": "PriceQuote.cs"
+        }
+      ]
+    },
+    {
+      "id": "confirmed",
+      "type": "active",
+      "label": "Confirmed",
+      "sublabel": "3-TX + Outbox",
+      "tag": "booked",
+      "step": "03",
+      "sources": [
+        {
+          "path": "src/Modules/Venue/Venue.Domain/Entities/ReservationLifecycle.cs",
+          "line": 1,
+          "end_line": 90,
+          "label": "ReservationLifecycle.cs"
+        }
+      ]
+    },
+    {
+      "id": "checked_in",
+      "type": "decision",
+      "label": "CheckedIn",
+      "sublabel": "arrival gate",
+      "tag": "in-play",
+      "step": "04",
+      "sources": [
+        {
+          "path": "src/Modules/Venue/Venue.Domain/Entities/Reservation.cs",
+          "line": 1,
+          "end_line": 90,
+          "label": "Reservation.cs"
+        }
+      ]
+    },
+    {
+      "id": "settled",
+      "type": "success",
+      "label": "Settled",
+      "sublabel": "invoice closed",
+      "tag": "done",
+      "step": "05",
+      "sources": [
+        {
+          "path": "src/Modules/Finance/Finance.Domain/Entities/CustomerInvoice.cs",
+          "line": 1,
+          "end_line": 60,
+          "label": "CustomerInvoice.cs"
+        }
+      ]
+    },
+    {
+      "id": "approval_wait",
+      "type": "waiting",
+      "label": "Credit Gate",
+      "sublabel": "sponsor review",
+      "tag": "pause"
+    },
+    {
+      "id": "payment_retry",
+      "type": "failure",
+      "label": "Declined",
+      "sublabel": "gateway retry",
+      "tag": "retryable"
+    },
+    {
+      "id": "rescheduled",
+      "type": "waiting",
+      "label": "Rescheduled",
+      "sublabel": "slot move wait",
+      "tag": "wait"
+    },
+    {
+      "id": "cancelled",
+      "type": "failure",
+      "label": "Cancelled",
+      "sublabel": "slot released",
+      "tag": "terminal"
+    },
+    {
+      "id": "expired",
+      "type": "failure",
+      "label": "Expired",
+      "sublabel": "TTL elapsed",
+      "tag": "terminal"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "t_hold_quote",
+      "from": "slot_hold",
+      "to": "quote_frozen",
+      "label": "quote"
+    },
+    {
+      "id": "t_quote_conf",
+      "from": "quote_frozen",
+      "to": "confirmed",
+      "label": "confirm"
+    },
+    {
+      "id": "t_conf_check",
+      "from": "confirmed",
+      "to": "checked_in",
+      "label": "check-in"
+    },
+    {
+      "id": "t_check_settled",
+      "from": "checked_in",
+      "to": "settled",
+      "label": "settle"
+    },
+    {
+      "id": "t_quote_approval",
+      "from": "quote_frozen",
+      "to": "approval_wait",
+      "label": "credit gate",
+      "variant": "security"
+    },
+    {
+      "id": "t_approval_conf",
+      "from": "approval_wait",
+      "to": "confirmed",
+      "label": "approved"
+    },
+    {
+      "id": "t_approval_cancel",
+      "from": "approval_wait",
+      "to": "cancelled",
+      "label": "denied",
+      "variant": "security"
+    },
+    {
+      "id": "t_quote_fail",
+      "from": "quote_frozen",
+      "to": "payment_retry",
+      "label": "declined",
+      "variant": "security"
+    },
+    {
+      "id": "t_fail_quote",
+      "from": "payment_retry",
+      "to": "quote_frozen",
+      "label": "retry",
+      "variant": "dashed"
+    },
+    {
+      "id": "t_conf_resched",
+      "from": "confirmed",
+      "to": "rescheduled",
+      "label": "move"
+    },
+    {
+      "id": "t_resched_conf",
+      "from": "rescheduled",
+      "to": "confirmed",
+      "label": "rebound"
+    },
+    {
+      "id": "t_resched_exp",
+      "from": "rescheduled",
+      "to": "expired",
+      "label": "timeout",
+      "variant": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Guarded Main Lifecycle Path",
+      "items": [
+        "Every reservation progresses through SlotHold -> QuoteFrozen -> Confirmed -> CheckedIn -> Settled.",
+        "Commercial pricing is frozen in CatalogPricing before Reservation confirmation."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Exception & Terminal Exits",
+      "items": [
+        "Payment failures can retry while the BookingHold TTL remains active.",
+        "Cancelled and Hold Expired release the schedulable resource back to venue inventory."
+      ]
+    }
+  ]
+}

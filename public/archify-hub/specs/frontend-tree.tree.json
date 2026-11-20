@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "diagram_type": "tree",
+  "meta": {
+    "title": "SCRIPE-Frontend Sub-Module & Core Foundation Hierarchy",
+    "subtitle": "Each sub-module belongs to one workspace and owns its presentation, data, domain, and bilingual locale folders.",
+    "output": "public/archify-hub/frontend-tree.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Frontend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "f7d148d6630baadee15b5b41b1933cc4fdd9a75f"
+    }
+  },
+  "nodes": [
+    {
+      "id": "fe_root",
+      "label": "SCRIPE-Frontend",
+      "sublabel": "Next.js 16 + React 19 MVVM Portal",
+      "sources": [
+        {
+          "path": "src/app/layout.tsx",
+          "line": 1,
+          "end_line": 95,
+          "label": "Root Layout"
+        }
+      ]
+    },
+    {
+      "id": "app_router",
+      "label": "src/app & proxy.ts",
+      "parent": "fe_root",
+      "sublabel": "Edge guard & App Router",
+      "sources": [
+        {
+          "path": "src/proxy.ts",
+          "line": 21,
+          "end_line": 56,
+          "label": "src/proxy.ts"
+        }
+      ]
+    },
+    {
+      "id": "core_foundation",
+      "label": "src/core",
+      "parent": "fe_root",
+      "sublabel": "Shared UI, CRUD, DI & Providers",
+      "sources": [
+        {
+          "path": "src/core/di.ts",
+          "line": 1,
+          "end_line": 55,
+          "label": "Core DI"
+        }
+      ]
+    },
+    {
+      "id": "workspaces",
+      "label": "src/modules",
+      "parent": "fe_root",
+      "sublabel": "65+ Isolated Feature Sub-Modules"
+    },
+    {
+      "id": "edge_middleware",
+      "label": "Edge Auth Proxy",
+      "parent": "app_router",
+      "sublabel": "Cookie & public route check"
+    },
+    {
+      "id": "workspace_routes",
+      "label": "Workspace Route Groups",
+      "parent": "app_router",
+      "sublabel": "Thin page wrappers"
+    },
+    {
+      "id": "core_ui_lib",
+      "label": "@core/ui/* Primitives",
+      "parent": "core_foundation",
+      "sublabel": "Button, Card, Dialog, Table",
+      "sources": [
+        {
+          "path": "src/core/ui/card.tsx",
+          "line": 28,
+          "end_line": 90,
+          "label": "Card Primitive"
+        }
+      ]
+    },
+    {
+      "id": "core_crud_eng",
+      "label": "Generic CRUD Engine",
+      "parent": "core_foundation",
+      "sublabel": "useCrudViewModel + GenericCrudView",
+      "sources": [
+        {
+          "path": "src/core/crud/hooks/useCrudViewModel.ts",
+          "line": 27,
+          "end_line": 86,
+          "label": "useCrudViewModel"
+        }
+      ]
+    },
+    {
+      "id": "core_providers",
+      "label": "Global Providers",
+      "parent": "core_foundation",
+      "sublabel": "RouteGuard, PBAC, I18n, SignalR",
+      "sources": [
+        {
+          "path": "src/core/providers/route-guard.tsx",
+          "line": 1,
+          "end_line": 100,
+          "label": "RouteGuard"
+        }
+      ]
+    },
+    {
+      "id": "core_api_svc",
+      "label": "ApiService & Inversify DI",
+      "parent": "core_foundation",
+      "sublabel": "401 Mutex + IdempotencyKey",
+      "sources": [
+        {
+          "path": "src/core/services/api.service.ts",
+          "line": 58,
+          "end_line": 120,
+          "label": "ApiService"
+        }
+      ]
+    },
+    {
+      "id": "mod_venue",
+      "label": "venue/booking Sub-Module",
+      "parent": "workspaces",
+      "sublabel": "5-Layer MVVM + EN/AR Locales",
+      "sources": [
+        {
+          "path": "src/modules/venue/booking/src/presentation/views/BookingWorkspaceView.tsx",
+          "line": 1,
+          "end_line": 95,
+          "label": "BookingWorkspaceView"
+        }
+      ]
+    },
+    {
+      "id": "mod_crm",
+      "label": "crm/* Sub-Modules",
+      "parent": "workspaces",
+      "sublabel": "Leads, Opportunities, Pipelines"
+    },
+    {
+      "id": "mod_sports",
+      "label": "academy & football/*",
+      "parent": "workspaces",
+      "sublabel": "Rosters, Tactical Pitch, Trials"
+    },
+    {
+      "id": "mod_enterprise",
+      "label": "identity & finance/*",
+      "parent": "workspaces",
+      "sublabel": "Tenants, RBAC, Invoices, Ledger"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "explainer",
+  "quality": "showcase",
+  "specification": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\crm-workflow-studio-and-kanban-architecture.archify.md",
+    "sha256": "ea5de421e7227ed4ed9e799839ec380148a6ed9d10671d3a7686eee150bb8548",
+    "bytes": 19030
+  },
+  "artifact": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-workflow-studio-and-kanban-architecture.html",
+    "sha256": "0428c48fcc0e459ce8140ba4c412ed52d8eaa1834da8e8c128e82c2e9cd2972f",
+    "bytes": 1508393
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "not-run"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-workflow-studio-and-kanban-architecture.finalize.json",
+    "summaryReceipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\crm-workflow-studio-and-kanban-architecture.finalize-summary.json"
+  },
+  "visualReview": "not-requested",
+  "durationMs": 4252,
+  "browserCheck": {
+    "requested": false,
+    "ran": false
+  }
+}

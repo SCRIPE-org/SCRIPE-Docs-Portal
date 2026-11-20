@@ -66,7 +66,7 @@ public abstract record DomainEvent : IDomainEvent
         type: "success",
         description: "Background job, polls every 5s",
       },
-      { id: "mediator", label: "AstraFlow mediator Publish", type: "primary" },
+      { id: "mediator", label: "AstraFlow Publish", type: "primary" },
       {
         id: "handler",
         label: "IDomainEventHandler<T>",
@@ -99,7 +99,7 @@ public abstract record DomainEvent : IDomainEvent
         filename: "IDomainEventPublisher.cs",
         code: `/// <summary>
 /// Abstraction for publishing domain events.
-/// Default implementation uses AstraFlow mediator for in-process pub/sub.
+/// Default implementation uses AstraFlow for in-process pub/sub.
 /// </summary>
 public interface IDomainEventPublisher
 {
@@ -109,7 +109,7 @@ public interface IDomainEventPublisher
 }`,
       },
       {
-        label: "AstraFlow mediator Implementation",
+        label: "AstraFlow Implementation",
         language: "csharp",
         filename: "ScripeDomainEventPublisher.cs",
         code: `public class ScripeDomainEventPublisher : IDomainEventPublisher
@@ -289,7 +289,7 @@ public class OutboxInterceptor : SaveChangesInterceptor
     filename: "Core.Infrastructure/Outbox/OutboxProcessor.cs — Simplified",
     code: `/// <summary>
 /// Background service that polls the Outbox table for unprocessed messages
-/// and publishes them via AstraFlow mediator. Runs every 5 seconds.
+/// and publishes them via AstraFlow. Runs every 5 seconds.
 /// </summary>
 public class OutboxProcessor : BackgroundService
 {
@@ -317,7 +317,7 @@ public class OutboxProcessor : BackgroundService
                     var domainEvent = (IDomainEvent)JsonSerializer
                         .Deserialize(message.Content, type)!;
 
-                    // 3. Publish via AstraFlow mediator
+                    // 3. Publish via AstraFlow
                     await publisher.PublishAsync(domainEvent, ct);
 
                     // 4. Mark as processed
@@ -407,7 +407,7 @@ public class OutboxCleanupJob : RecurringJobBase
       [
         "ScripeDomainEventPublisher",
         "Events/ScripeDomainEventPublisher.cs",
-        "In-process pub/sub via AstraFlow mediator",
+        "In-process pub/sub via AstraFlow",
       ],
       [
         "DomainEventNotification",

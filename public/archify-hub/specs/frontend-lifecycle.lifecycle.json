@@ -1,0 +1,245 @@
+{
+  "schema_version": 3,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "SCRIPE-Frontend Booking Workspace & Optimistic Query State Machine",
+    "output": "public/archify-hub/frontend-lifecycle.html",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Frontend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "f7d148d6630baadee15b5b41b1933cc4fdd9a75f"
+    }
+  },
+  "mainPath": [
+    "calendar_synced",
+    "slot_hold",
+    "quote_preview",
+    "optimistic_pending",
+    "confirmed_synced"
+  ],
+  "states": [
+    {
+      "id": "calendar_synced",
+      "type": "start",
+      "label": "Synced",
+      "sublabel": "Query + SignalR",
+      "tag": "entry",
+      "step": "01",
+      "sources": [
+        {
+          "path": "src/modules/venue/booking/src/presentation/viewmodels/useBookingWorkspaceViewModel.ts",
+          "line": 1,
+          "end_line": 95,
+          "label": "useBookingWorkspaceViewModel.ts"
+        }
+      ]
+    },
+    {
+      "id": "slot_hold",
+      "type": "active",
+      "label": "SlotHold",
+      "sublabel": "TTL countdown",
+      "tag": "hold",
+      "step": "02",
+      "sources": [
+        {
+          "path": "src/modules/venue/booking/src/presentation/views/BookingWorkspaceView.tsx",
+          "line": 1,
+          "end_line": 95,
+          "label": "BookingWorkspaceView.tsx"
+        }
+      ]
+    },
+    {
+      "id": "quote_preview",
+      "type": "active",
+      "label": "QuoteView",
+      "sublabel": "EN/AR breakdown",
+      "tag": "pricing",
+      "step": "03",
+      "sources": [
+        {
+          "path": "src/modules/venue/booking/src/data/repositories/BookingRepository.ts",
+          "line": 1,
+          "end_line": 90,
+          "label": "BookingRepository.ts"
+        }
+      ]
+    },
+    {
+      "id": "optimistic_pending",
+      "type": "decision",
+      "label": "Optimistic",
+      "sublabel": "cache + POST",
+      "tag": "in-flight",
+      "step": "04",
+      "sources": [
+        {
+          "path": "src/core/crud/hooks/useGenericMutations.ts",
+          "line": 1,
+          "end_line": 90,
+          "label": "useGenericMutations.ts"
+        }
+      ]
+    },
+    {
+      "id": "confirmed_synced",
+      "type": "success",
+      "label": "Confirmed",
+      "sublabel": "query + toast",
+      "tag": "done",
+      "step": "05",
+      "sources": [
+        {
+          "path": "src/core/providers/signalr-provider.tsx",
+          "line": 1,
+          "end_line": 90,
+          "label": "SignalRProvider.tsx"
+        }
+      ]
+    },
+    {
+      "id": "token_refresh",
+      "type": "waiting",
+      "label": "401 Mutex",
+      "sublabel": "refresh lock",
+      "tag": "pause",
+      "sources": [
+        {
+          "path": "src/core/services/api.service.ts",
+          "line": 200,
+          "end_line": 310,
+          "label": "401 Refresh Queue"
+        }
+      ]
+    },
+    {
+      "id": "rollback_error",
+      "type": "failure",
+      "label": "Rollback",
+      "sublabel": "restore cache",
+      "tag": "retryable"
+    },
+    {
+      "id": "conflict_wait",
+      "type": "waiting",
+      "label": "Conflict",
+      "sublabel": "alt pitch",
+      "tag": "wait"
+    },
+    {
+      "id": "user_discard",
+      "type": "failure",
+      "label": "Discarded",
+      "sublabel": "hold released",
+      "tag": "terminal"
+    },
+    {
+      "id": "hold_timeout",
+      "type": "failure",
+      "label": "Expired",
+      "sublabel": "TTL elapsed",
+      "tag": "terminal"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "ft1",
+      "from": "calendar_synced",
+      "to": "slot_hold",
+      "label": "hold"
+    },
+    {
+      "id": "ft2",
+      "from": "slot_hold",
+      "to": "quote_preview",
+      "label": "quote"
+    },
+    {
+      "id": "ft3",
+      "from": "quote_preview",
+      "to": "optimistic_pending",
+      "label": "confirm"
+    },
+    {
+      "id": "ft4",
+      "from": "optimistic_pending",
+      "to": "confirmed_synced",
+      "label": "200 OK"
+    },
+    {
+      "id": "ft5",
+      "from": "optimistic_pending",
+      "to": "token_refresh",
+      "label": "401 JWT",
+      "variant": "security"
+    },
+    {
+      "id": "ft6",
+      "from": "token_refresh",
+      "to": "optimistic_pending",
+      "label": "replay"
+    },
+    {
+      "id": "ft7",
+      "from": "token_refresh",
+      "to": "user_discard",
+      "label": "expired",
+      "variant": "security"
+    },
+    {
+      "id": "ft8",
+      "from": "optimistic_pending",
+      "to": "rollback_error",
+      "label": "409/422",
+      "variant": "security"
+    },
+    {
+      "id": "ft9",
+      "from": "rollback_error",
+      "to": "quote_preview",
+      "label": "retry",
+      "variant": "dashed"
+    },
+    {
+      "id": "ft10",
+      "from": "slot_hold",
+      "to": "conflict_wait",
+      "label": "peer hold"
+    },
+    {
+      "id": "ft11",
+      "from": "conflict_wait",
+      "to": "slot_hold",
+      "label": "alt slot"
+    },
+    {
+      "id": "ft12",
+      "from": "conflict_wait",
+      "to": "hold_timeout",
+      "label": "timeout",
+      "variant": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Optimistic UI & Single-Flight Recovery",
+      "items": [
+        "onMutate snapshots the TanStack Query cache so the booking appears immediately in the schedule.",
+        "If a 15m JWT expires mid-flight, the 401 Mutex refreshes the token and replays the mutation seamlessly."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Deterministic Rollback on Conflict",
+      "items": [
+        "If the backend returns a 409 Conflict or 422 Validation Result, onError restores the exact cache snapshot.",
+        "Live SignalR events notify the operator if a peer locks an overlapping slot."
+      ]
+    }
+  ]
+}

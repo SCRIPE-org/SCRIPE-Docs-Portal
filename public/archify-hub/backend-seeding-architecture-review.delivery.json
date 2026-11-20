@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "e50c50da-510e-4f57-8e2c-b3348a686dcd",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\backend-seeding-architecture-review.archify.md",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\backend-seeding-architecture-review.html",
+  "specification": {
+    "sha256": "be30b01aab0326f7c68b2d1ea3ad8c3f263276b88323dc2959418e26ae6bb3b3",
+    "bytes": 13329
+  },
+  "artifact": {
+    "sha256": "6dfaebb6c2ff787e4a2d1f61d0a900a5cd63cac190ae8bab58a2642f35e207c1",
+    "bytes": 637772
+  },
+  "explainer": {
+    "preparedSha256": "5b461e2454bf6c761445f6e5d22cbdc3a6ca99bab1aed4bfae0cf725ea91872a",
+    "dependencies": [
+      {
+        "kind": "diagram-spec",
+        "id": "seeding-flow",
+        "inline": true,
+        "sha256": "241abe09640d588ef6253143e8cdc248129eb0ad172ae4a5596b2fd01712a229",
+        "bytes": 1983
+      }
+    ]
+  }
+}
