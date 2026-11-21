@@ -51,7 +51,7 @@ export const ARCHIFY_PILLAR_META: Record<
     repoName: "SCRIPE-org/SCRIPE",
     commit: "960923d",
     accentColor: "#B7FF00",
-    count: 22,
+    count: 23,
   },
   backend: {
     label: "SCRIPE-Backend Deep Dive (.NET 10 & AstraFlow 2.4.7)",
@@ -94,7 +94,7 @@ export const ARCHIFY_MODE_META: Record<
 
 export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
   // ============================================================================
-  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 22 PAGES
+  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 23 PAGES
   // ============================================================================
   {
     id: "scripe-internal-sovereign-tenant-architecture",
@@ -123,6 +123,39 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
       "SCRIPE-Backend/src/Modules/Identity/Identity.Domain/Entities/Tenant.cs",
       "SCRIPE-Backend/src/Modules/Entitlements/Entitlements.Domain/Entities/Edition.cs",
       "SCRIPE-Backend/src/Modules/Entitlements/Entitlements.Infrastructure/Persistence/Seeding/EditionSeeder.cs",
+    ],
+  },
+  {
+    id: "post-login-routing-enterprise-brainstorm",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "ADMIN ROUTING · APPROVED DESIGN SPEC",
+    title: "Admin Post-Login Routing, /hub Personal Home & WorkManagement Audit: Approved Spec",
+    subtitle:
+      "6-Tier Deep-Link Precedence · Single-Pass GET /menus/navigation · Role.Priority Non-Regression · Unified NexusLayout · WM-1..WM-4 Fixes",
+    description:
+      "Approved specification for SCRIPE Admin post-login routing (strictly separated from external User auth), /hub Operational Personal Home, and independent WorkManagement security remediation: prioritizes authorized ?redirect= ahead of IsLandingEnforced without altering global Role.Priority ceilings, locks IsSystem menu slugs while cascading custom renames, ensures zero-loop error recovery, measures SQL queries via SqlCommandCounterInterceptor, fixes WM-1..WM-4 now (Tasks widget Phase 1b), and unifies /hub inside NexusLayout.",
+    htmlUrl: "/archify-hub/post-login-routing-enterprise-brainstorm.html",
+    specUrl: "/archify-hub/specs/post-login-routing-enterprise-brainstorm.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "Update/CRM",
+    featured: true,
+    highlights: [
+      "Locks 6-tier precedence (Tier 0 gates > Tier 1 authorized ?redirect= > Tier 2 non-Super IsLandingEnforced > context AdminPreference > Role/Super > 1-ws vs /hub) without altering Role.Priority ceilings",
+      "Coalesces bootstrap into one GET /menus/navigation pass, adds IsSystem slug lock + custom slug cascade + lazy fallback, and measures SQL counts against pre-refactor baseline",
+      "Remediates WorkManagement WorkManagement.Enabled read gates, tenant guards, own PermissionScopes, and Location URI in Phase 1 while deferring the Hub Tasks widget to Phase 1b",
+      "Unifies /hub inside NexusLayout (activeWorkspaceKey=null -> rootMenuItems=[]) with Passwordless billing gate parity, impersonation guards, zero-loop recovery, and EN/AR RTL search",
+    ],
+    keySources: [
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Application/Queries/Menu/GetAuthorizedNavigationQueryHandler.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Application/Services/ExternalAdminSessionService.cs",
+      "SCRIPE-Backend/src/Modules/Entitlements/Entitlements.Infrastructure/Services/FeatureChecker.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Persistence/Repositories/AdminRepository.RoleGraph.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Providers/IdentityMenuProvider.MyAccountGroup.cs",
+      "SCRIPE-Backend/src/Host/API/Controllers/WorkManagement/WorkItemsController.cs",
+      "SCRIPE-Frontend/src/core/ui/layout/nexus/nexus-layout.tsx",
+      "SCRIPE-Frontend/src/core/providers/workspace-provider.tsx",
+      "SCRIPE-Frontend/src/modules/shared/home/presentation/views/WorkspaceHubView.tsx",
     ],
   },
   {
