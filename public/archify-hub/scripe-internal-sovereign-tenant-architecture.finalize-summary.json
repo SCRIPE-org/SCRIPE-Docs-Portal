@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "explainer",
+  "quality": "showcase",
+  "specification": {
+    "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-internal-sovereign-tenant-architecture.archify.md",
+    "sha256": "a80e733d3855422eb7ab52037725f79dbfc32d298e64c987056c173f6a588e24",
+    "bytes": 8501
+  },
+  "artifact": {
+    "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-internal-sovereign-tenant-architecture.html",
+    "sha256": "9e4169ef372ad24537a238d2b54f2e1d56a3fa69c94b4c63eacb3f40b902604b",
+    "bytes": 996138
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "not-run"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-internal-sovereign-tenant-architecture.finalize.json",
+    "summaryReceipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-internal-sovereign-tenant-architecture.finalize-summary.json"
+  },
+  "visualReview": "not-requested",
+  "durationMs": 23543,
+  "browserCheck": {
+    "requested": false,
+    "ran": false
+  }
+}
