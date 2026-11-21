@@ -51,7 +51,7 @@ export const ARCHIFY_PILLAR_META: Record<
     repoName: "SCRIPE-org/SCRIPE",
     commit: "960923d",
     accentColor: "#B7FF00",
-    count: 21,
+    count: 22,
   },
   backend: {
     label: "SCRIPE-Backend Deep Dive (.NET 10 & AstraFlow 2.4.7)",
@@ -94,8 +94,37 @@ export const ARCHIFY_MODE_META: Record<
 
 export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
   // ============================================================================
-  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 21 PAGES
+  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 22 PAGES
   // ============================================================================
+  {
+    id: "scripe-internal-sovereign-tenant-architecture",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "INTERNAL TENANT · IDENTITY + ENTITLEMENTS",
+    title: "SCRIPE Internal Sovereign Tenant Architecture & Isolation Specification",
+    subtitle:
+      "TenantKind.Internal + EditionScope.Internal + Separate Bootstrap Admin + Hardened Safeguards + 3-DB Guardians & Security Backlog",
+    description:
+      "Architecture explainer documenting SCRIPE as a first-class internal tenant (SCRIPE, scripe.admin.scripe.org, EGP) alongside Platform Root via separate company email provisioning (seif@scripe.org), first-create-only complex bootstrap passwords with forced Production/Staging first-login rotation, TenantKind and EditionScope commercial isolation, hardened security/upload limits, 3-DB guardian triggers, CRM HQ routing, FIDO2 subdomain origins, and the prioritized deferred auth security backlog.",
+    htmlUrl: "/archify-hub/scripe-internal-sovereign-tenant-architecture.html",
+    specUrl: "/archify-hub/specs/scripe-internal-sovereign-tenant-architecture.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "Update/CRM",
+    featured: true,
+    highlights: [
+      "Separates Platform Root (admin-seif@scripe.org) from scripeadmin (seif@scripe.org / SCRIPE_TENANT_ADMIN_EMAIL) and documents deferred shared-email auth vulnerabilities",
+      "Introduces TenantKind (Customer/Internal) and EditionScope (Commercial/Internal) preserving Edition.IsSystem and Edition.IsFree across SQL Server, PostgreSQL, and Oracle",
+      "Grants 17 active tenant-operational modules and lock-free -1 capacity quotas while blocking platform-only flags, deferred modules, and negative upload/password bypasses",
+      "Enforces public signup rejection, KPI/Analytics/Connect exclusion, billing-suspension immunity, purge-job exclusion, 3-DB guardian triggers, and minimal Frontend guards",
+    ],
+    keySources: [
+      "docs/superpowers/specs/2026-11-20-scripe-internal-sovereign-tenant-design.md",
+      "docs/superpowers/plans/2026-11-20-scripe-internal-sovereign-tenant.md",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Domain/Entities/Tenant.cs",
+      "SCRIPE-Backend/src/Modules/Entitlements/Entitlements.Domain/Entities/Edition.cs",
+      "SCRIPE-Backend/src/Modules/Entitlements/Entitlements.Infrastructure/Persistence/Seeding/EditionSeeder.cs",
+    ],
+  },
   {
     id: "identity-sso-security-remediation-v2",
     pillar: "fullstack",
