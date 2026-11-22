@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "b54159b0-e32b-49c2-b86a-5f1e25f00f07",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-internal-sovereign-tenant-architecture.archify.md",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-internal-sovereign-tenant-architecture.html",
+  "specification": {
+    "sha256": "a8527c09d6d7e1902ac9cf3c94840b739078156587d10e7386744991ccd832fb",
+    "bytes": 8520
+  },
+  "artifact": {
+    "sha256": "6d324fdfcd046ed7eedf787a66f174d76947043522250c860a537aae205b557b",
+    "bytes": 996220
+  },
+  "explainer": {
+    "preparedSha256": "91c53d8167129be838c985c2af6ca6fdbf9a71f7f9a9501ff0a9181924d1bd6e",
+    "dependencies": [
+      {
+        "kind": "diagram-spec",
+        "id": "internal-tenant-topology",
+        "inline": true,
+        "sha256": "662d019e50714bc52679bfbc03408e7494dd5524cd8ad7a6a2852d8864266cfc",
+        "bytes": 2009
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "bootstrap-sequence",
+        "inline": true,
+        "sha256": "971c0ac692a54e333362bd11c1697c7d5f1438c390d8b7bcba69ce19ab94d097",
+        "bytes": 1363
+      }
+    ]
+  }
+}
