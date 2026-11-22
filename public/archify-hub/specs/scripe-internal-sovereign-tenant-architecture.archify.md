@@ -42,7 +42,7 @@ SCRIPE runs as a dedicated internal tenant (`Code = "SCRIPE"`, subdomain `scripe
 
 | Criterion | Platform Root (`superadmin`) | SCRIPE Internal (`scripeadmin`) | Commercial Clubs (6 Dev Tenants) |
 | --- | --- | --- | --- |
-| Tenant Scope | `TenantId = null` | `ScripeTenantId` (`Kind = Internal`) {good:Isolated} | Customer IDs (`Kind = Customer`) |
+| Tenant Scope | `TenantId = null` | `Guid.NewGuid()` (`Code = "SCRIPE"`, `Kind = Internal`) {good:Isolated} | Customer IDs (`Kind = Customer`) |
 | Admin Email | `admin-seif@scripe.org` | `seif@scripe.org` (`SCRIPE_TENANT_ADMIN_EMAIL`) {good:Separate} | Tenant admin emails |
 | Edition Classification | Not tenant-scoped | `scripe-internal` (`Scope = Internal`) {good:Non-Billable} | `sports-*` (`Scope = Commercial`) |
 | Capacity Quotas | Unrestricted operator | `-1` lock-free capacity + `TotalAdminPool = -1` {good:Unlimited} | Edition tier limits |

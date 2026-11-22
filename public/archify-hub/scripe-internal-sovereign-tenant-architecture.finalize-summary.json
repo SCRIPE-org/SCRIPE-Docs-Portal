@@ -7,13 +7,13 @@
   "quality": "showcase",
   "specification": {
     "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-internal-sovereign-tenant-architecture.archify.md",
-    "sha256": "a80e733d3855422eb7ab52037725f79dbfc32d298e64c987056c173f6a588e24",
-    "bytes": 8501
+    "sha256": "a8527c09d6d7e1902ac9cf3c94840b739078156587d10e7386744991ccd832fb",
+    "bytes": 8520
   },
   "artifact": {
     "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-internal-sovereign-tenant-architecture.html",
-    "sha256": "9e4169ef372ad24537a238d2b54f2e1d56a3fa69c94b4c63eacb3f40b902604b",
-    "bytes": 996138
+    "sha256": "6d324fdfcd046ed7eedf787a66f174d76947043522250c860a537aae205b557b",
+    "bytes": 996220
   },
   "gates": {
     "validate": "pass",
@@ -32,7 +32,7 @@
     "summaryReceipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-internal-sovereign-tenant-architecture.finalize-summary.json"
   },
   "visualReview": "not-requested",
-  "durationMs": 23543,
+  "durationMs": 3824,
   "browserCheck": {
     "requested": false,
     "ran": false
