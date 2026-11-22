@@ -112,7 +112,7 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
     repoCommit: "Update/CRM",
     featured: true,
     highlights: [
-      "Separates Platform Root (admin-seif@scripe.org) from scripeadmin (seif@scripe.org / SCRIPE_TENANT_ADMIN_EMAIL) and documents deferred shared-email auth vulnerabilities",
+      "Separates Platform Root (admin-seif@scripe.org) from scripeadmin (admin-seif@scripe.org / SCRIPE_TENANT_ADMIN_EMAIL) and documents deferred shared-email auth vulnerabilities",
       "Introduces TenantKind (Customer/Internal) and EditionScope (Commercial/Internal) preserving Edition.IsSystem and Edition.IsFree across SQL Server, PostgreSQL, and Oracle",
       "Grants 17 active tenant-operational modules and lock-free -1 capacity quotas while blocking platform-only flags, deferred modules, and negative upload/password bypasses",
       "Enforces public signup rejection, KPI/Analytics/Connect exclusion, billing-suspension immunity, purge-job exclusion, 3-DB guardian triggers, and minimal Frontend guards",
