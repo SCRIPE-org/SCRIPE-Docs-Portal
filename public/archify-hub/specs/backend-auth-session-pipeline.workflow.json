@@ -1,0 +1,189 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "SCRIPE-Backend Auth, Middleware & Session Hardening Workflow",
+    "subtitle": "From pre-auth tenant lookup and 33-stage pipeline gates through $s2$ policy, Hybrid MFA, dynamic cookies, and +5ms revocation.",
+    "locale": "en",
+    "output": "backend-auth-session-pipeline.html",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "visual_preset": "signal-flow",
+    "parentHref": "identity-auth-recovery-hardening-fullstack.html",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Backend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "1c1631172d447d311686211c07b52b84a6245678"
+    }
+  },
+  "lanes": [
+    { "id": "entry_ctrl", "label": "Controllers & Cookies" },
+    { "id": "pipeline_mw", "label": "Pipeline & JWT Gates" },
+    { "id": "domain_svc", "label": "Policy, Session & Sudo" },
+    { "id": "reject_stop", "label": "Fail-Closed Rejects", "variant": "exception" }
+  ],
+  "phases": [
+    { "id": "ph_ingress", "label": "1. Pre-Auth & Cookies", "fromCol": 0, "toCol": 1 },
+    { "id": "ph_gates", "label": "2. Token & Policy Walls", "fromCol": 2, "toCol": 3 },
+    { "id": "ph_session", "label": "3. Issuance & Revocation", "fromCol": 4, "toCol": 5, "variant": "emphasis" }
+  ],
+  "mainPath": [
+    "ctrl_entry",
+    "mw_cookie",
+    "mw_jwt",
+    "mw_walls",
+    "svc_session",
+    "svc_revoke"
+  ],
+  "nodes": [
+    {
+      "id": "ctrl_entry",
+      "lane": "entry_ctrl",
+      "col": 0,
+      "type": "backend",
+      "label": "Auth Controllers",
+      "sublabel": "Pre-auth & Parity",
+      "explanation": "AdminAuthController and UserAuthController enforce fail-closed tenant ID decryption (422 InvalidId), [AllowAnonymous] password-policy & user logout, password change SessionResponse parity, and 410 Gone on legacy /link routes.",
+      "sources": [
+        { "path": "src/Host/API/Controllers/Auth/AdminAuthController.ExternalAndReset.cs", "line": 120, "end_line": 220, "label": "Admin Reset & Policy" },
+        { "path": "src/Host/API/Controllers/Auth/UserAuthController.cs", "line": 141, "end_line": 235, "label": "User Logout & Password" }
+      ]
+    },
+    {
+      "id": "stop_422",
+      "lane": "reject_stop",
+      "col": 0,
+      "type": "security",
+      "label": "422 / 410 Stop",
+      "sublabel": "Malformed ID / Legacy",
+      "explanation": "Rejects malformed non-empty encrypted tenant IDs (BE-037 fail-closed) and returns 410 Gone on direct /external-logins/link."
+    },
+    {
+      "id": "mw_cookie",
+      "lane": "entry_ctrl",
+      "col": 1,
+      "type": "security",
+      "label": "CookieAuthMW",
+      "sublabel": "BrandingSettings",
+      "explanation": "Convention-driven HttpOnly cookie interceptor resolves BrandingSettings.RefreshTokenCookie ({CookiePrefix}_refresh_token) and OidcSessionCookie, stripping body refresh tokens across login, refresh, force-change-password, and change-password.",
+      "sources": [
+        { "path": "src/Host/API/Middleware/CookieAuthMiddleware.cs", "line": 60, "end_line": 148, "label": "Dynamic Cookie Lifecycle" }
+      ]
+    },
+    {
+      "id": "mw_jwt",
+      "lane": "pipeline_mw",
+      "col": 2,
+      "type": "security",
+      "label": "OnTokenValidated",
+      "sublabel": "scripe_iat_ms + jti",
+      "tag": "Fail-Closed",
+      "explanation": "Validates scripe_iat_ms (+5ms cutoff), Redis JTI denylist, and impersonator ('imp') revocation plus live admin/user active state bypassing global tenant filters via IgnoreQueryFilters().",
+      "sources": [
+        { "path": "src/Core/Core.Infrastructure/DependencyInjection.cs", "line": 650, "end_line": 715, "label": "JWT Revocation Validation" },
+        { "path": "src/Modules/Identity/Identity.Infrastructure/Services/JwtService.cs", "line": 56, "end_line": 156, "label": "HS256 Claims Issuance" }
+      ]
+    },
+    {
+      "id": "stop_401",
+      "lane": "reject_stop",
+      "col": 2,
+      "type": "security",
+      "label": "401 / 429 Stop",
+      "sublabel": "Revoked / Lockout",
+      "explanation": "Fails closed when JTI is denied, scripe_iat_ms precedes revocation +5ms, impersonator is revoked, or password-reset rate limit (5 req / 15m) triggers."
+    },
+    {
+      "id": "mw_walls",
+      "lane": "pipeline_mw",
+      "col": 3,
+      "type": "security",
+      "label": "Ordered Walls",
+      "sublabel": "mcp -> mfa_enroll",
+      "explanation": "MiddlewarePipeline stages 23-25 enforce TrustedCidr, MustChangePasswordMiddleware (mcp=true), and RequireMfaEnrollmentMiddleware (mfa_enroll=true) with strict allowlists and camelCase ErrorResponse 403s.",
+      "sources": [
+        { "path": "src/Host/API/Extensions/MiddlewarePipeline.cs", "line": 220, "end_line": 295, "label": "Ordered Security Walls" }
+      ]
+    },
+    {
+      "id": "stop_403",
+      "lane": "reject_stop",
+      "col": 3,
+      "type": "security",
+      "label": "403 Policy Wall",
+      "sublabel": "mcp / mfa_enroll",
+      "explanation": "Blocks general API routes with 403 Forbidden until password rotation or 2FA/Passkey enrollment completes; blocks DisableUser2FA when Require2FA lacks a passkey fallback."
+    },
+    {
+      "id": "svc_crypto",
+      "lane": "domain_svc",
+      "col": 3,
+      "yOffset": 95,
+      "type": "security",
+      "label": "$s2$ & OtpService",
+      "sublabel": "HMAC + History",
+      "explanation": "Hashes passwords with SHA-256 Base64 pre-hash + BCrypt wf 12, rejects 8,616 denylist words and 5 PasswordHistory entries, and stores keyed HMAC-SHA256 OTP verifiers (Verification:VerifierKey) plus SHA-256 ResetGrantToken records.",
+      "sources": [
+        { "path": "src/Modules/Identity/Identity.Infrastructure/Services/OtpService.cs", "line": 65, "end_line": 92, "label": "HMAC OTP Verifier" }
+      ]
+    },
+    {
+      "id": "svc_session",
+      "lane": "domain_svc",
+      "col": 4,
+      "type": "backend",
+      "label": "SessionIssuerSvc",
+      "sublabel": "30m JWT & Caps",
+      "tag": "Unified Core",
+      "explanation": "Orders HybridMfaPolicy (TwoFactorPendingToken 5m + TwoFactorAttemptLockHelper) before mcp and mfa_enroll, enforces MaxConcurrentSessions, and caps AbsoluteExpiresAt at 24h, >=30d StaySignedIn, or 8h impersonation.",
+      "sources": [
+        { "path": "src/Modules/Identity/Identity.Infrastructure/Services/SessionIssuerService.PolicyHelpers.cs", "line": 15, "end_line": 120, "label": "SessionPolicy & AbsoluteExpiry" },
+        { "path": "src/Modules/Identity/Identity.Application/DTOs/Auth/TokenResponse.cs", "line": 22, "end_line": 59, "label": "TokenResponse Contract" }
+      ]
+    },
+    {
+      "id": "svc_revoke",
+      "lane": "domain_svc",
+      "col": 5,
+      "type": "security",
+      "label": "Sudo & Revoke",
+      "sublabel": "+5ms & StopImp",
+      "explanation": "SudoService binds 15m HMAC tickets via distributed locks; StopImpersonation re-checks original & target revocation; logout/password-change call MarkRevokedAsync (+5ms cutoff), revoke sibling tokens, and clear BrandingSettings cookies.",
+      "sources": [
+        { "path": "src/Modules/Identity/Identity.Infrastructure/Services/SudoService.cs", "line": 24, "end_line": 80, "label": "Session-Bound Sudo Service" },
+        { "path": "src/Host/API/Controllers/Identity/AdminsController.CrudAndSecurity.cs", "line": 155, "end_line": 185, "label": "In-Place Password Rotation" }
+      ]
+    }
+  ],
+  "edges": [
+    { "id": "e_ctrl_cookie", "from": "ctrl_entry", "to": "mw_cookie", "label": "POST auth" },
+    { "id": "e_ctrl_stop422", "from": "ctrl_entry", "to": "stop_422", "label": "bad id/link", "variant": "security" },
+    { "id": "e_cookie_jwt", "from": "mw_cookie", "to": "mw_jwt", "label": "inject cookie" },
+    { "id": "e_jwt_stop401", "from": "mw_jwt", "to": "stop_401", "label": "revoked", "variant": "security" },
+    { "id": "e_jwt_walls", "from": "mw_jwt", "to": "mw_walls", "label": "valid claims" },
+    { "id": "e_walls_stop403", "from": "mw_walls", "to": "stop_403", "label": "blocked", "variant": "security" },
+    { "id": "e_walls_session", "from": "mw_walls", "to": "svc_session", "label": "cleared" },
+    { "id": "e_ctrl_crypto", "from": "ctrl_entry", "to": "svc_crypto", "label": "verify/reset", "variant": "dashed" },
+    { "id": "e_crypto_session", "from": "svc_crypto", "to": "svc_session", "label": "policy ok" },
+    { "id": "e_session_revoke", "from": "svc_session", "to": "svc_revoke", "label": "rotate/evict" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Unified Issuance & Dynamic Cookie Naming",
+      "items": [
+        "Every auth channel (Password, OIDC, SAML, Passkey, Magic Link, Phone OTP, ForceChange, ChangePassword) emits identical TokenResponse shapes via ISessionIssuerService.",
+        "BrandingSettings computes RefreshTokenCookie ({CookiePrefix}_refresh_token) and OidcSessionCookie without hardcoded cookie literals."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Fail-Closed Revocation & Impersonation Ceilings",
+      "items": [
+        "Impersonation requires X-Sudo-Token + admins.impersonate, hard-caps at 8 non-extendable hours, and fails closed in OnTokenValidated and StopImpersonation if either account is revoked.",
+        "MarkRevokedAsync applies a +5ms monotonic cutoff matched against signed scripe_iat_ms JWT claims alongside Redis JTI denial."
+      ]
+    }
+  ]
+}

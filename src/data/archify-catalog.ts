@@ -51,7 +51,7 @@ export const ARCHIFY_PILLAR_META: Record<
     repoName: "SCRIPE-org/SCRIPE",
     commit: "960923d",
     accentColor: "#B7FF00",
-    count: 23,
+    count: 24,
   },
   backend: {
     label: "SCRIPE-Backend Deep Dive (.NET 10 & AstraFlow 2.4.7)",
@@ -59,9 +59,9 @@ export const ARCHIFY_PILLAR_META: Record<
     tagline:
       "18 Isolated 3-Project Domain Modules, 29-Stage Security Gate, 927+ CQRS Handlers, 3-TX Idempotency & Multi-DB Persistence",
     repoName: "SCRIPE-org/SCRIPE-Backend",
-    commit: "e772fd54bb8d0b3361190a33f0137487310c8791",
+    commit: "1c1631172d447d311686211c07b52b84a6245678",
     accentColor: "#38BDF8",
-    count: 14,
+    count: 17,
   },
   frontend: {
     label: "SCRIPE-Frontend Deep Dive (Next.js 16 + React 19 MVVM)",
@@ -69,9 +69,9 @@ export const ARCHIFY_PILLAR_META: Record<
     tagline:
       "65+ Isolated Sub-Modules, 5-Layer SOLID MVVM Data Flow, Inversify DI, Sileo UI & Bilingual EN/AR Parity",
     repoName: "SCRIPE-org/SCRIPE-Frontend",
-    commit: "91232f19b",
+    commit: "d3978a00ea6a51f625bc14a9fd6bb52cef07a02f",
     accentColor: "#A78BFA",
-    count: 15,
+    count: 16,
   },
 };
 
@@ -793,9 +793,35 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
       ".agents/rules/archify-docs-portal-ssot.md",
     ],
   },
+  {
+    id: "identity-auth-recovery-hardening-fullstack",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "AUTH HARDENING · DRIFT-01..10 · SHOWCASE",
+    title: "End-to-End Authentication, Recovery & Session Governance Hardening",
+    subtitle:
+      "$s2$ Crypto + ResetGrantToken 204 Recovery -> ISessionIssuerService Caps & +5ms Revocation -> Next.js 16 Proxy & RouteGuard MVVM",
+    description:
+      "Full-stack Archify Explainer board uniting the finalized Backend security remediation, Frontend Next.js 16 MVVM lockdown, scripe-cli BE-037..039 & Verification.VerifierKey scanners, and 7-language DRIFT-01..10 documentation convergence.",
+    htmlUrl: "/archify-hub/identity-auth-recovery-hardening-fullstack.html",
+    specUrl: "/archify-hub/specs/identity-auth-recovery-hardening-fullstack.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "1c1631172 / d3978a00e / e838fe5",
+    featured: true,
+    highlights: [
+      "Covers 4 KPIs (30m JWT, 5-fail lockout, 5 PasswordHistory, 8,616 denylist), xychart-beta backlog distribution, and DRIFT-01..10 register",
+      "Traces ResetGrantToken no-auto-login recovery (204 No Content), HybridMfaPolicy, and mcp=true -> mfa_enroll=true ordering",
+      "Links dedicated child Workflow, Lifecycle, Physical ERD, and Frontend MVVM Architecture boards",
+    ],
+    keySources: [
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Services/SessionIssuerService.PolicyHelpers.cs",
+      "SCRIPE-Frontend/src/core/providers/route-guard.tsx",
+      "SCRIPE-Dev-Tools/scripe-cli/src/commands/arch-check-scanner.ts",
+    ],
+  },
 
   // ============================================================================
-  // PILLAR 2: BACKEND DEEP DIVE (.NET 10 & ASTRAFLOW 2.4.7) — 14 PAGES
+  // PILLAR 2: BACKEND DEEP DIVE (.NET 10 & ASTRAFLOW 2.4.7) — 17 PAGES
   // ============================================================================
   {
     id: "backend-seeding-architecture-review",
@@ -1158,9 +1184,85 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
       "src/Modules/Finance/Finance.Domain/Entities/CustomerInvoice.cs",
     ],
   },
+  {
+    id: "backend-auth-session-pipeline",
+    pillar: "backend",
+    mode: "workflow",
+    badge: "33-STAGE PIPELINE · STORY V2",
+    title: "SCRIPE-Backend Auth, Middleware & Session Hardening Workflow",
+    subtitle:
+      "Pre-Auth & BrandingSettings Cookies -> OnTokenValidated (+5ms / jti / imp) & mcp/mfa_enroll Walls -> SessionIssuerService & Sudo",
+    description:
+      "Native Archify Workflow v2 diagram with attached 3-scene interactive Story pinned to SCRIP-Backend commit 1c1631172, modeling controller parity, dynamic BrandingSettings cookies, fail-closed revocation fences, $s2$ + HMAC OTP validation, and SessionPolicy ceilings.",
+    htmlUrl: "/archify-hub/backend-auth-session-pipeline.html",
+    specUrl: "/archify-hub/specs/backend-auth-session-pipeline.workflow.json",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "1c1631172d447d311686211c07b52b84a6245678",
+    featured: true,
+    highlights: [
+      "Pinned to AdminAuthController, UserAuthController, CookieAuthMiddleware, DependencyInjection OnTokenValidated & SudoService",
+      "Documents BrandingSettings dynamic cookies, +5ms MarkRevokedAsync cutoff, 8h impersonation ceiling & StopImpersonation revocation checks",
+      "Includes 3-scene Story playback walking ingress, security walls, and atomic session revocation",
+    ],
+    keySources: [
+      "src/Host/API/Middleware/CookieAuthMiddleware.cs",
+      "src/Core/Core.Infrastructure/DependencyInjection.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Services/SessionIssuerService.PolicyHelpers.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Services/SudoService.cs",
+    ],
+  },
+  {
+    id: "auth-recovery-lifecycle",
+    pillar: "backend",
+    mode: "lifecycle",
+    badge: "9 STATES · STORY V2",
+    title: "Identity Authentication, Recovery & Session Lifecycle",
+    subtitle:
+      "Pre-Auth .IgnoreQueryFilters() -> $s2$ + Lockout -> TwoFactorPendingToken -> mcp/mfa_enroll -> Active Session -> +5ms Revoke",
+    description:
+      "Native Archify Lifecycle v3 state machine with interactive Story playback tracking login, Hybrid MFA pending tickets, ResetGrantToken 204 no-auto-login recovery, lockout exits, and AbsoluteExpiresAt session termination.",
+    htmlUrl: "/archify-hub/auth-recovery-lifecycle.html",
+    specUrl: "/archify-hub/specs/auth-recovery-lifecycle.lifecycle.json",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "1c1631172d447d311686211c07b52b84a6245678",
+    highlights: [
+      "Models 6 primary checkpoints plus Recovery Grant (204), Lockout (5/15m), and Ceiling Hit (24h/30d/8h) exits",
+      "Strictly orders HybridMfaPolicy -> MustChangePassword (mcp=true) -> RequireMfaEnrollment (mfa_enroll=true)",
+    ],
+    keySources: [
+      "src/Host/API/Controllers/Auth/AdminAuthController.ExternalAndReset.cs",
+      "src/Host/API/Extensions/MiddlewarePipeline.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Services/SessionIssuerService.PolicyHelpers.cs",
+    ],
+  },
+  {
+    id: "identity-auth-security-erd",
+    pillar: "backend",
+    mode: "erd",
+    badge: "9 TABLES · IDENTITY SCHEMA · STORY V2",
+    title: "Identity Authentication, Password History & Session Security Schema (ERD)",
+    subtitle:
+      "identity.Tenants, TenantSettings, Admins, Users, admin_security_profiles, RefreshTokens, OtpCodes, PasswordResetTokens & PasswordHistories",
+    description:
+      "Physical EF Core entity-relationship diagram inside identity.* with 0 crossings and 9/9 verified configuration sources, detailing $s2$ password history indexing, HMAC OTP storage, SHA-256 refresh hashing, and ResetGrantToken scoping.",
+    htmlUrl: "/archify-hub/identity-auth-security-erd.html",
+    specUrl: "/archify-hub/specs/identity-auth-security-erd.erd.json",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "1c1631172d447d311686211c07b52b84a6245678",
+    highlights: [
+      "Models Admin vs User isolation, polymorphic PasswordHistories (PrincipalType, PrincipalId), and AdminSecurityProfiles",
+      "Documents SHA-256 RefreshToken hashing on SaveChangesAsync and unique 64-char PasswordResetTokens TokenHash",
+    ],
+    keySources: [
+      "src/Modules/Identity/Identity.Infrastructure/Persistence/IdentityDbContext.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Persistence/Configurations/RefreshTokenConfiguration.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Persistence/Configurations/PasswordResetTokenConfiguration.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Persistence/Configurations/PasswordHistoryConfiguration.cs",
+    ],
+  },
 
   // ============================================================================
-  // PILLAR 3: FRONTEND DEEP DIVE (NEXT.JS 16 + REACT 19 MVVM) — 14 PAGES
+  // PILLAR 3: FRONTEND DEEP DIVE (NEXT.JS 16 + REACT 19 MVVM) — 16 PAGES
   // ============================================================================
   {
     id: "frontend-adaptive-sso-and-cleanup-workflow",
@@ -1565,6 +1667,33 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
       "src/core/ui/dropdown-menu.tsx",
       "src/core/ui/select.tsx",
       "src/core/ui/notification/NotificationBell.tsx",
+    ],
+  },
+  {
+    id: "frontend-auth-recovery-mvvm",
+    pillar: "frontend",
+    mode: "architecture",
+    badge: "NEXT.JS 16 MVVM · STORY V2",
+    title: "SCRIPE-Frontend Auth, Recovery & MFA Boundary Architecture",
+    subtitle:
+      "next.config.ts CSP -> proxy.ts Edge -> RouteGuard (mcp/mfa_enroll) -> useAppStore Memory JWT & api-factory 401 Mutex",
+    description:
+      "Native Archify Architecture diagram with attached 3-scene Story pinned to SCRIPE-Frontend commit d3978a00e, mapping CSP headers, scr_auth_state edge gating, RouteGuard exemption/remediation routing, URL hash recovery handling, memory-only JWT state, and shared axios mutex refresh.",
+    htmlUrl: "/archify-hub/frontend-auth-recovery-mvvm.html",
+    specUrl: "/archify-hub/specs/frontend-auth-recovery-mvvm.architecture.json",
+    repoName: "SCRIPE-org/SCRIPE-Frontend",
+    repoCommit: "d3978a00ea6a51f625bc14a9fd6bb52cef07a02f",
+    featured: true,
+    highlights: [
+      "12/12 verified source references across next.config.ts, proxy.ts, route-guard.tsx, useAppStore.ts, api-factory.ts & signalr-provider.tsx",
+      "Details removal of persisted defaultRedirectPath, RequireMfaEnrollment routing to /account/security?setupMfa=1, and SignalR gating",
+    ],
+    keySources: [
+      "next.config.ts",
+      "src/proxy.ts",
+      "src/core/store/useAppStore.ts",
+      "src/core/providers/route-guard.tsx",
+      "src/core/services/api-factory.ts",
     ],
   },
 ];

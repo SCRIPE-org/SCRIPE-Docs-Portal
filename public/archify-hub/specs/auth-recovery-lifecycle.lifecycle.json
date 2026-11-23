@@ -1,0 +1,145 @@
+{
+  "schema_version": 3,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Identity Authentication, Recovery & Session Lifecycle",
+    "output": "auth-recovery-lifecycle.html",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "parentHref": "identity-auth-recovery-hardening-fullstack.html",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Backend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "1c1631172d447d311686211c07b52b84a6245678"
+    }
+  },
+  "mainPath": [
+    "pre_auth",
+    "primary_verify",
+    "mfa_pending",
+    "policy_wall",
+    "active_session",
+    "revoked_closed"
+  ],
+  "states": [
+    {
+      "id": "pre_auth",
+      "type": "start",
+      "label": "Pre-Auth",
+      "sublabel": "Login / Reset / SSO",
+      "tag": "entry",
+      "step": "01",
+      "explanation": "Anonymous auth channels reject malformed non-empty encrypted tenantIds (422 InvalidId) and apply .IgnoreQueryFilters() with explicit !IsDeleted, tenant, active, and lockout guards.",
+      "sources": [
+        { "path": "src/Host/API/Controllers/Auth/AdminAuthController.ExternalAndReset.cs", "line": 120, "end_line": 220, "label": "Pre-Auth Reset & Policy" }
+      ]
+    },
+    {
+      "id": "primary_verify",
+      "type": "decision",
+      "label": "Verify",
+      "sublabel": "$s2$ + Lock",
+      "tag": "policy",
+      "step": "02",
+      "explanation": "PasswordHasher validates versioned $s2$ hashes (SHA-256 pre-hash + BCrypt wf 12), breached-password denylist (8,616 entries), PasswordHistory (0-24, default 5), and LoginLockoutThreshold (5)."
+    },
+    {
+      "id": "mfa_pending",
+      "type": "waiting",
+      "label": "MFA Gate",
+      "sublabel": "Pending 5m",
+      "tag": "hybrid mfa",
+      "step": "03",
+      "explanation": "HybridMfaPolicy suppresses session tokens and issues a single-use 5-minute TwoFactorPendingToken. TOTP/backup checks serialize via TwoFactorAttemptLockHelper."
+    },
+    {
+      "id": "policy_wall",
+      "type": "decision",
+      "label": "Policy Wall",
+      "sublabel": "mcp -> mfa",
+      "tag": "middleware",
+      "step": "04",
+      "explanation": "ISessionIssuerService evaluates MustChangePassword (mcp=true) strictly before RequireMfaEnrollment (mfa_enroll=true); stages 23-25 enforce TrustedCidr, MustChangePasswordMiddleware, and RequireMfaEnrollmentMiddleware.",
+      "sources": [
+        { "path": "src/Host/API/Extensions/MiddlewarePipeline.cs", "line": 220, "end_line": 295, "label": "Ordered Security Walls" }
+      ]
+    },
+    {
+      "id": "active_session",
+      "type": "active",
+      "label": "Session",
+      "sublabel": "30m JWT",
+      "tag": "runtime",
+      "step": "05",
+      "explanation": "SessionIssuerService binds 30m default HS256 JWT (JTI + scripe_iat_ms), BrandingSettings HttpOnly refresh cookie, MaxConcurrentSessions oldest-first eviction, and StaySignedIn vs SessionTimeoutMinutes.",
+      "sources": [
+        { "path": "src/Modules/Identity/Identity.Infrastructure/Services/SessionIssuerService.PolicyHelpers.cs", "line": 15, "end_line": 120, "label": "Session Ceilings" }
+      ]
+    },
+    {
+      "id": "revoked_closed",
+      "type": "success",
+      "label": "Revoked",
+      "sublabel": "+5ms + JTI",
+      "tag": "closed",
+      "step": "06",
+      "explanation": "Logout, password change, StopImpersonation, or revocation stamps IAccountRevocationCache (MarkRevokedAsync +5ms cutoff), blacklists JTI in Redis, revokes refresh families, and clears HttpOnly cookies."
+    },
+    {
+      "id": "recovery_grant",
+      "type": "waiting",
+      "label": "Reset Grant",
+      "sublabel": "HMAC OTP -> 204",
+      "tag": "no auto-login",
+      "explanation": "OtpService stores HMAC-SHA256 verifiers (Verification:VerifierKey, 5 max attempts, 10m/30m Prod). verify-reset-otp emits single-use ResetGrantToken; reset-password revokes all sessions and returns 204 without auto-login."
+    },
+    {
+      "id": "locked_out",
+      "type": "failure",
+      "label": "Locked Out",
+      "sublabel": "5 Fails / 15m",
+      "tag": "lockout",
+      "explanation": "Exceeding LoginLockoutThreshold locks admin/user sign-ins for LoginLockoutMinutes (default 15m) with uniform error signaling and Redis-backed rate limits."
+    },
+    {
+      "id": "ceiling_expired",
+      "type": "failure",
+      "label": "Ceiling Hit",
+      "sublabel": "24h / 30d / 8h",
+      "tag": "terminal",
+      "explanation": "AbsoluteExpiresAt hard-caps every refresh family: 24h for non-persistent sessions, Max(refreshDays*4, 30)d for StaySignedIn, and non-extendable 8h for impersonation."
+    }
+  ],
+  "transitions": [
+    { "id": "t_entry_verify", "from": "pre_auth", "to": "primary_verify", "label": "ok" },
+    { "id": "t_verify_mfa", "from": "primary_verify", "to": "mfa_pending", "label": "mfa" },
+    { "id": "t_mfa_wall", "from": "mfa_pending", "to": "policy_wall", "label": "pass" },
+    { "id": "t_wall_active", "from": "policy_wall", "to": "active_session", "label": "ok" },
+    { "id": "t_active_revoked", "from": "active_session", "to": "revoked_closed", "label": "end" },
+    { "id": "t_verify_wall", "from": "primary_verify", "to": "policy_wall", "label": "direct" },
+    { "id": "t_entry_recovery", "from": "pre_auth", "to": "recovery_grant", "label": "reset" },
+    { "id": "t_recovery_entry", "from": "recovery_grant", "to": "pre_auth", "label": "re-login", "variant": "dashed" },
+    { "id": "t_verify_locked", "from": "primary_verify", "to": "locked_out", "label": "5 fails", "variant": "security" },
+    { "id": "t_locked_entry", "from": "locked_out", "to": "pre_auth", "label": "15m", "variant": "dashed" },
+    { "id": "t_active_expired", "from": "active_session", "to": "ceiling_expired", "label": "expired", "variant": "security" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Ordered Post-Login Gates & Session Bounds",
+      "items": [
+        "Authentication proceeds strictly: Primary Factor -> Hybrid MFA (TwoFactorPendingToken) -> MustChangePassword (mcp=true) -> RequireMfaEnrollment (mfa_enroll=true)",
+        "ISessionIssuerService computes Access JWT (30m default), rolling refresh, and immutable AbsoluteExpiresAt caps (24h, >=30d persistent, 8h impersonation)"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "No Auto-Login Recovery & Instant Revocation",
+      "items": [
+        "Password reset emits ResetGrantToken from verify-reset-otp and returns 204 No Content on reset-password so users re-authenticate cleanly",
+        "Account lockouts (5 attempts / 15m), MaxConcurrentSessions eviction, JTI blacklist, StopImpersonation revocation checks, and +5ms MarkRevokedAsync enforce fail-closed cutoff"
+      ]
+    }
+  ]
+}
