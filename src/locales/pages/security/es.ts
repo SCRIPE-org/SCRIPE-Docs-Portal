@@ -46,21 +46,21 @@ export const es = {
       jwtLifecycleIntro:
         "Acceso ultracorto (15 min) respaldado por refrescos (7 días) que se destruyen y renuevan en cada solicitud exitosa.",
       tokenStructureTitle: "Estructura del JWT",
-      bcryptTitle: "Hash de Contraseña BCrypt",
+      bcryptTitle: "Hash de Contraseña $s2$ SHA-256 + BCrypt",
       bcryptIntro:
-        "Uso de factor de trabajo de carga (work factor = 12) intencionalmente lento para rechazar la fuerza bruta masiva (tarda ~250ms por verificación).",
+        "Las contraseñas usan pre-hash SHA-256 Base64 ($s2$) + BCrypt (factor 12) evitando el truncamiento de 72 bytes, junto con PasswordHistory (5 contraseñas) y una lista de 8,616 contraseñas filtradas.",
       lockoutTitle: "Bloqueo de Cuentas",
       lockoutIntro:
-        "5 intentos de contraseña fallidos generan 15 minutos de bloqueo ineludible o hasta ser liberado manualmente.",
+        "5 intentos fallidos de acceso o 2FA (LoginLockoutThreshold) generan 15 minutos de bloqueo (LoginLockoutMinutes) o hasta desbloqueo administrativo.",
       tfaTitle: "Autenticación de Dos Factores (TOTP)",
       tfaIntro:
-        "Mecanismo estándar con comprobación de la ventana temporal de autenticadores (Google, Authy).",
+        "Compatible con Google Authenticator y Authy; devuelve un twoFactorPendingToken de un solo uso y mfa_enroll=true cuando Require2FA exige registro.",
       externalAuthTitle: "Autenticación Externa (OAuth)",
       externalAuthIntro:
         "Soporte oficial y validación en servidor para tokens recibidos de Google, Facebook, Microsoft y Apple.",
-      otpTitle: "Sistema OTP (Contraseñas de Un Solo Uso)",
+      otpTitle: "Sistema OTP y Credenciales de Recuperación",
       otpIntro:
-        "Códigos de 6 dígitos con hash BCrypt transitorio para confirmación de correos, SMS o resets de contraseñas.",
+        "Códigos de 6 dígitos verificados con HMAC-SHA256 (Verification:VerifierKey, 10 min / 30 min en Producción, máximo 5 intentos) y tokens PasswordResetToken SHA-256 de un solo uso.",
       impersonationTitle: "Suplantación de Administrador (Impersonation)",
       impersonationIntro:
         "Tokens especiales emitidos a un SuperAdmin para visualizar y depurar el panel como otro usuario, con rastreo en auditoría adjunto.",
@@ -221,8 +221,8 @@ export const es = {
     middlewarePipeline: {
       title: "Pipeline de Middleware",
       description:
-        "11 componentes ejecutados en riguroso orden para orquestar de manera limpia cada solicitud al servidor.",
-      intro: "La cinta transportadora del sistema en ASP.NET Core y el corazón de SCRIPE.",
+        "33 etapas ordenadas en MiddlewarePipeline.cs: cabeceras, autenticación JWT/API Key, Rate Limiting post-auth, Trusted CIDR, mcp=true, mfa_enroll=true y proyección de campos.",
+      intro: "La canalización HTTP de SCRIPE ejecuta 33 etapas en orden estricto dentro de MiddlewarePipeline.cs.",
       overviewTitle: "Visión General del Pipeline",
       overviewIntro:
         "El proceso es de caída libre: un error superior cancelará la ejecución de las capas subyacentes.",
@@ -253,7 +253,7 @@ export const es = {
       observabilityIntro: "Levanta métricas con OpenTelemetry y Prometheus.",
       registrationTitle: "Orden de Registro de Middleware",
       registrationIntro:
-        "Alterar el Program.cs requiere validación profunda del comportamiento del Pipeline.",
+        "Definido en MiddlewarePipeline.cs: ApiKeyUsageMiddleware y Rate Limiting dependen de UseAuthentication(), mientras que TrustedCidrEnforcementMiddleware, MustChangePasswordMiddleware y RequireMfaEnrollmentMiddleware se ejecutan tras UseAuthorization().",
       summaryTitle: "Resumen del Middleware",
       orderWarning:
         "Mueve el registro bajo tu propio riesgo: esto causará fallas en cascada y comportamientos impredecibles.",

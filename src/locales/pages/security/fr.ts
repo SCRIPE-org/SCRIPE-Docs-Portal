@@ -45,18 +45,19 @@ export const fr = {
       jwtLifecycleIntro:
         "Les jetons d'accès ont une durée de vie très courte et sont renouvelés via un processus de rotation à usage unique.",
       tokenStructureTitle: "Structure des Jetons JWT",
-      bcryptTitle: "Hachage de Mot de Passe BCrypt",
+      bcryptTitle: "Hachage de Mot de Passe ($s2$ SHA-256 + BCrypt)",
       bcryptIntro:
-        "Chaque vérification prend intentionnellement environ 250 ms (facteur de charge : 12) pour anéantir les attaques par force brute.",
+        "Chaque mot de passe est pré-haché en SHA-256 Base64 puis haché avec BCrypt (facteur de charge 12, préfixe $s2$), avec vérification contre une liste de 8 616 mots de passe compromis et un historique de 5 mots de passe (PasswordHistory).",
       lockoutTitle: "Verrouillage de Compte",
       lockoutIntro: "Après 5 tentatives infructueuses, le compte est verrouillé pour 15 minutes.",
-      tfaTitle: "Authentification à Deux Facteurs (TOTP)",
-      tfaIntro: "Les jetons de session 2FA temporaires exigent une validation TOTP finale.",
+      tfaTitle: "Authentification Multi-Facteurs Hybride (TOTP / Passkeys / Email / SMS)",
+      tfaIntro:
+        "Les connexions soumises au MFA retournent un twoFactorPendingToken temporaire ; la politique mfa_enroll=true bloque l'accès jusqu'à l'enrôlement via RequireMfaEnrollmentMiddleware.",
       externalAuthTitle: "Authentification Externe (OAuth)",
       externalAuthIntro: "S'intègre avec Google, Facebook, Apple et Microsoft.",
-      otpTitle: "Système OTP (Mots de Passe à Usage Unique)",
+      otpTitle: "Système OTP et Réinitialisation (Hachage HMAC-SHA256)",
       otpIntro:
-        "Codes à 6 chiffres pour les réinitialisations et vérifications d'e-mail/téléphone.",
+        "Codes à 6 chiffres stockés sous forme de vérificateurs HMAC-SHA256 (Verification:VerifierKey), limités à 5 tentatives max et expirant après 10 min (30 min en Prod), complétés par PasswordResetToken et limitation password-reset (5 req/15 min).",
       impersonationTitle: "Usurpation d'Identité (Impersonation)",
       impersonationIntro:
         "Les SuperAdmins peuvent usurper l'identité d'autres comptes pour le support technique, tout en conservant une trace d'audit détaillée.",
@@ -219,9 +220,9 @@ export const fr = {
     middlewarePipeline: {
       title: "Pipeline de Middlewares",
       description:
-        "11 composants middleware exécutés dans un ordre strict allant de la gestion des exceptions au contexte du locataire.",
+        "33 étapes ordonnées dans MiddlewarePipeline.cs — de l'authentification JWT/clé API et limitation de débit post-auth aux filtres Trusted CIDR, mcp=true et mfa_enroll=true.",
       intro:
-        "Le pipeline de requêtes HTTP de SCRIPE garantit que chaque flux subit le bon traitement contextuel avant d'atteindre votre code métier.",
+        "Le pipeline HTTP de SCRIPE exécute 33 étapes dans un ordre strict via MiddlewarePipeline.cs, avec court-circuit immédiat en cas de refus.",
       overviewTitle: "Aperçu du Pipeline",
       overviewIntro:
         "L'ordre d'exécution (de haut en bas) est primordial et un court-circuit empêche les couches suivantes d'être exécutées.",
@@ -252,7 +253,8 @@ export const fr = {
       observabilityIntro:
         "Expose des métriques structurées OpenTelemetry au format Prometheus sur l'endpoint /metrics.",
       registrationTitle: "Ordre d'Enregistrement",
-      registrationIntro: "Défini dans la classe Program.cs principale.",
+      registrationIntro:
+        "Défini dans MiddlewarePipeline.cs : ApiKeyUsageMiddleware et Rate Limiting s'exécutent après UseAuthentication(), tandis que TrustedCidrEnforcementMiddleware, MustChangePasswordMiddleware et RequireMfaEnrollmentMiddleware s'exécutent après UseAuthorization().",
       summaryTitle: "Résumé des Middlewares",
       orderWarning:
         "La modification de cet ordre déclenchera probablement des pannes critiques ou des failles de sécurité.",

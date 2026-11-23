@@ -43,19 +43,20 @@ export const ru = {
       jwtLifecycleIntro:
         "Refresh-токены одноразовые и ротируются (обновляются) при каждом использовании для предотвращения кражи.",
       tokenStructureTitle: "Структура токена JWT",
-      bcryptTitle: "Хэширование паролей BCrypt",
+      bcryptTitle: "Хэширование паролей ($s2$ SHA-256 + BCrypt)",
       bcryptIntro:
-        "Умышленно медленный алгоритм (work factor = 12) делает атаки перебором нерентабельными (каждый хэш занимает ~250 мс).",
+        "Предварительное хэширование SHA-256 Base64 + BCrypt (work factor = 12, префикс $s2$) с проверкой по базе из 8 616 скомпрометированных паролей и историей из 5 паролей (PasswordHistory).",
       lockoutTitle: "Блокировка аккаунта (Account Lockout)",
       lockoutIntro: "5 последовательных неудачных попыток входа блокируют аккаунт на 15 минут.",
-      tfaTitle: "Двухфакторная аутентификация (TOTP)",
-      tfaIntro: "Генерация секретов и интеграция с приложениями-аутентификаторами.",
+      tfaTitle: "Гибридная MFA (TOTP / Passkeys / Email / SMS)",
+      tfaIntro:
+        "При включённой MFA вход возвращает временный twoFactorPendingToken; при mfa_enroll=true доступ к API блокируется RequireMfaEnrollmentMiddleware до завершения настройки.",
       externalAuthTitle: "Внешняя аутентификация (OAuth)",
       externalAuthIntro:
         "Интеграция с Google, Facebook, Apple и Microsoft с серверной валидацией токенов.",
-      otpTitle: "Система OTP (Одноразовые пароли)",
+      otpTitle: "Система OTP и сброса пароля (HMAC-SHA256)",
       otpIntro:
-        "6-значные коды для подтверждения почты, телефона и сброса пароля (живут 15 минут).",
+        "6-значные коды хранятся как HMAC-SHA256 верификаторы (Verification:VerifierKey), ограничены 5 попытками и действуют 10 мин (30 мин в Prod); для сброса также используются PasswordResetToken и лимит password-reset (5 запр./15 мин).",
       impersonationTitle: "Имперсонация (Impersonation)",
       impersonationIntro:
         "SuperAdmin может временно переключиться в профиль другого администратора для техподдержки.",
@@ -222,9 +223,9 @@ export const ru = {
     middlewarePipeline: {
       title: "Конвейер промежуточного ПО (Middleware Pipeline)",
       description:
-        "11 компонентов middleware, выполняемых в строгом порядке, от перехвата исключений до контекста тенанта.",
+        "33 этапа в строгом порядке в MiddlewarePipeline.cs — от JWT/API-Key аутентификации и пост-авторизационного rate limiting до проверок Trusted CIDR, mcp=true и mfa_enroll=true.",
       intro:
-        "Пайплайн запросов SCRIPE — это сердце приложения. Порядок исполнения имеет критическое значение.",
+        "HTTP-конвейер SCRIPE выполняет 33 строго упорядоченных этапа в MiddlewarePipeline.cs и немедленно прерывает запрос при нарушении политики.",
       overviewTitle: "Обзор пайплайна",
       overviewIntro:
         "Каждый компонент выполняет единственную ответственность и может «замкнуть» (Short-circuit) запрос.",
@@ -252,7 +253,8 @@ export const ru = {
       observabilityTitle: "Middleware наблюдаемости (Observability)",
       observabilityIntro: "Сбор метрик OpenTelemetry и экспорт в Prometheus (/metrics).",
       registrationTitle: "Порядок регистрации",
-      registrationIntro: "Файл Program.cs организует этот строгий порядок.",
+      registrationIntro:
+        "Порядок задаётся в MiddlewarePipeline.cs: ApiKeyUsageMiddleware и Rate Limiting зависят от UseAuthentication(), а TrustedCidrEnforcementMiddleware, MustChangePasswordMiddleware и RequireMfaEnrollmentMiddleware выполняются после UseAuthorization().",
       summaryTitle: "Резюме Middleware",
       orderWarning: "Не меняйте порядок Middleware, это приведет к каскадным сбоям и уязвимостям.",
     },

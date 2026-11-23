@@ -40,16 +40,20 @@ export const de = {
       jwtLifecycleTitle: "JWT Token-Lebenszyklus",
       jwtLifecycleIntro: "Rotierende Refresh-Tokens nach jeder Benutzung.",
       tokenStructureTitle: "JWT Token-Struktur",
-      bcryptTitle: "BCrypt Passwort-Hashing",
-      bcryptIntro: "Konfigurierbarer Work Factor zum Schutz vor Brute-Force.",
+      bcryptTitle: "$s2$ SHA-256 Pre-Hash + BCrypt Passwort-Hashing",
+      bcryptIntro:
+        "Passwörter werden über einen SHA-256 Base64 Pre-Hash ($s2$) plus BCrypt (Work Factor 12) gehasht (kein 72-Byte-Limit, Abwärtskompatibilität für $2a$/$2b$/$2y$), ergänzt durch PasswordHistory (5 Einträge) und 8.616 bekannte geleakte Passwörter.",
       lockoutTitle: "Account-Lockout (Sperre)",
-      lockoutIntro: "5 Minuten Sperre nach 5 Fehlversuchen.",
+      lockoutIntro:
+        "15 Minuten Sperre (LoginLockoutMinutes) nach 5 Fehlversuchen (LoginLockoutThreshold / Identity.Login.MaxAttempts).",
       tfaTitle: "Zwei-Faktor-Authentifizierung (TOTP)",
-      tfaIntro: "Kompatibel mit Google Authenticator und Authy.",
+      tfaIntro:
+        "Kompatibel mit Google Authenticator und Authy; gibt ein einmaliges twoFactorPendingToken zurück und setzt bei erzwungener Einrichtung mfa_enroll=true.",
       externalAuthTitle: "Externe Authentifizierung (OAuth)",
       externalAuthIntro: "Integration von Google, Facebook, Apple, Microsoft.",
-      otpTitle: "OTP System (Einmalpasswörter)",
-      otpIntro: "Für E-Mail-Verifizierung und Passwort-Resets.",
+      otpTitle: "OTP-System & Recovery-Tokens",
+      otpIntro:
+        "6-stellige OTPs werden mit HMAC-SHA256 (Verification:VerifierKey) statt Klartext oder BCrypt verifiziert (10 Min. bzw. 30 Min. Prod-Reset, max. 5 Versuche); Admin-Resets nutzen einmalige PasswordResetToken-Grants.",
       impersonationTitle: "Admin-Impersonation (Identitätsannahme)",
       impersonationIntro: "Erlaubt SuperAdmins Fehlerbehebung mit angehängtem Audit-Trail.",
       impersonationWarning: "Alle Aktionen werden der Identität des Impersonators zugeordnet.",
@@ -193,8 +197,10 @@ export const de = {
     },
     middlewarePipeline: {
       title: "Middleware-Pipeline",
-      description: "11 Middleware-Komponenten in strikter Ausführungsreihenfolge.",
-      intro: "Jede Komponente ist für einen spezifischen Sicherheits- oder Kontext-Task zuständig.",
+      description:
+        "33 geordnete Pipeline-Stufen in MiddlewarePipeline.cs — von Security-Headern und JWT/API-Key-Auth über Post-Auth Rate Limiting bis Trusted CIDR, mcp=true und mfa_enroll=true.",
+      intro:
+        "SCRIPEs HTTP-Pipeline durchläuft 33 streng geordnete Stufen in MiddlewarePipeline.cs und bricht bei Richtlinienverstößen sofort ab.",
       overviewTitle: "Pipeline-Übersicht",
       overviewIntro: "Der Flow verläuft von oben nach unten. Die Reihenfolge ist heilig.",
       globalExceptionTitle: "1. Global Exception Handler",
@@ -217,7 +223,8 @@ export const de = {
       observabilityTitle: "Observability Middleware",
       observabilityIntro: "OpenTelemetry und Prometheus /metrics-Endpunkt.",
       registrationTitle: "Registrierungsreihenfolge",
-      registrationIntro: "Wird in Program.cs definiert.",
+      registrationIntro:
+        "Die Registrierung in MiddlewarePipeline.cs ist strikt geordnet: ApiKeyUsageMiddleware und Rate Limiting folgen auf UseAuthentication(), während TrustedCidrEnforcementMiddleware, MustChangePasswordMiddleware und RequireMfaEnrollmentMiddleware nach UseAuthorization() greifen.",
       summaryTitle: "Middleware Zusammenfassung",
       orderWarning: "Ändern Sie diese Reihenfolge niemals leichtfertig.",
     },

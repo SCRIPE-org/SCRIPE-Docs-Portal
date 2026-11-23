@@ -45,12 +45,15 @@ export const ar = {
       jwtLifecycleTitle: "دورة حياة رمز JWT",
       jwtLifecycleIntro: "رموز وصول قصيرة العمر مع رموز تحديث تُدار لمنع الهجمات.",
       tokenStructureTitle: "هيكل رمز JWT",
-      bcryptTitle: "تشفير BCrypt لكلمة المرور",
-      bcryptIntro: "تشفير كلمات المرور باستخدام BCrypt لبطء مقصود لتجنب الهجمات.",
+      bcryptTitle: "تشفير $s2$ SHA-256 + BCrypt لكلمة المرور",
+      bcryptIntro:
+        "تُجزَّأ كلمات المرور بتمريرها عبر SHA-256 Base64 ببادئة $s2$ ثم BCrypt بعامل 12 لمنع الاقتطاع عند 72 بايت مع التوافق العكسي، بالتوازي مع PasswordHistory (5 كلمات سابقة) وقائمة كلمات المرور المخترقة (8,616 مدخلاً).",
       lockoutTitle: "قفل الحساب",
-      lockoutIntro: "بعد 5 محاولات متتالية يتم الإغلاق للحماية.",
+      lockoutIntro:
+        "بعد 5 محاولات دخول أو تحقق ثنائي فاشلة متتالية (TenantSettings.LoginLockoutThreshold)، يُقفَل الحساب لمدة 15 دقيقة (TenantSettings.LoginLockoutMinutes)، ويُعاد ضبط العداد عند النجاح.",
       tfaTitle: "المصادقة الثنائية (TOTP)",
-      tfaIntro: "دعم لبرامج المصادقة (Google, Authy, Microsoft).",
+      tfaIntro:
+        "يدعم SCRIPE تطبيقات TOTP، ومع تفعيلها يُرجع تسجيل الدخول رمز twoFactorPendingToken أحادي الاستخدام، بينما تتلقى حسابات Require2FA غير المُسجّلة mfa_enroll=true.",
       passwordExpiryTitle: "فرض انتهاء صلاحية كلمة المرور",
       passwordExpiryIntro:
         "بعد التحقق من بيانات الاعتماد وفحص قفل الحساب، يستدعي معالج تسجيل الدخول ITenantPasswordValidator.IsPasswordExpiredAsync للتحقق مما إذا كانت كلمة مرور المستخدم قد تجاوزت أيام انتهاء الصلاحية المُعَدَّة للوحدة (PasswordExpiryDays). إذا انتهت الصلاحية، يتضمن الاستجابة MustChangePassword = true، مما يُجبر الواجهة الأمامية على إعادة التوجيه إلى صفحة تغيير كلمة المرور.",
@@ -58,8 +61,9 @@ export const ar = {
         "انتهاء صلاحية كلمة المرور هو إعداد لكل وحدة عبر TenantSettings.PasswordExpiryDays. القيمة 0 تُعطّل الميزة. لا يتم قفل حساب المستخدم — يحصل على رمز JWT صالح لكن مع علامة MustChangePassword التي تفرضها الواجهة الأمامية كإعادة توجيه.",
       externalAuthTitle: "المصادقة الخارجية (OAuth)",
       externalAuthIntro: "تكامل مع Google, Facebook, Apple, Microsoft.",
-      otpTitle: "نظام OTP (كلمات المرور لمرة واحدة)",
-      otpIntro: "للتحقق من البريد والهواتف وتعيين كلمات مرور جديدة.",
+      otpTitle: "نظام OTP وبيانات الاستعادة",
+      otpIntro:
+        "رموز OTP المكونة من 6 أرقام تُخزَّن كمُتحققات HMAC-SHA256 عبر Verification:VerifierKey (لا نص صريح أو BCrypt) بمدة 10 دقائق (30 دقيقة لاستعادة الإنتاج) و5 محاولات، مع منح PasswordResetToken أحادية الاستخدام.",
       impersonationTitle: "انتحال شخصية المستخدم",
       impersonationIntro:
         "المستخدم العام (SuperAdmin) يمكنه الانتحال للمساعدة الفنية مع ربط التدقيق الصارم.",
@@ -131,8 +135,10 @@ export const ar = {
     },
     middlewarePipeline: {
       title: "مسار البرمجيات الوسيطة (Middleware)",
-      description: "11 برمجية وسيطة تنفذ بالترتيب من التقاط الأخطاء لعزل البيانات.",
-      intro: "كل برمجية لها دور واحد محدد ويُنفذ وفق ترتيب دقيق وصارم.",
+      description:
+        "33 مرحلة مرتبة في MiddlewarePipeline.cs — بدءًا من الترويسات والمصادقة وتقييد المعدل بعد التحقق وصولاً إلى قيود CIDR وبوابات mcp=true وmfa_enroll=true.",
+      intro:
+        "ينفّذ خط معالجة طلبات HTTP في SCRIPE ٣٣ مرحلة صارمة الترتيب في MiddlewarePipeline.cs، مع إيقاف فوري عند أي مخالفة أمان.",
       overviewTitle: "نظرة عامة على المسار",
       overviewIntro: "يتدفق الطلب من الأعلى إلى الأسفل، تغيير الترتيب يُدمر العمليات.",
       globalExceptionTitle: "1. معالج الأخطاء العام",
@@ -153,7 +159,8 @@ export const ar = {
       observabilityTitle: "برمجية المراقبة",
       observabilityIntro: "تتبع الوقت المستغرق والمقاييس الأخرى لـ Prometheus.",
       registrationTitle: "ترتيب تسجيل Middleware",
-      registrationIntro: "ترتيب ملف Program.cs حاسم لنجاح العملية.",
+      registrationIntro:
+        "ترتيب التسجيل في MiddlewarePipeline.cs حاسم: تعمل ApiKeyUsageMiddleware وتقييد المعدل بعد UseAuthentication()، وتنفّذ TrustedCidrEnforcementMiddleware وMustChangePasswordMiddleware وRequireMfaEnrollmentMiddleware بعد UseAuthorization().",
       summaryTitle: "ملخص الـ Middleware",
       orderWarning: "تغيير الترتيب سيؤدي لأعطال. اختبر دائمًا بعد التعديل.",
     },

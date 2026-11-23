@@ -54,15 +54,15 @@ export const en = {
       jwtLifecycleIntro:
         "Access tokens are short-lived (15 minutes) JWT tokens signed with HMAC-SHA256. When an access token expires, the client uses the refresh token to obtain a new token pair. Refresh tokens are single-use and rotated on every use.",
       tokenStructureTitle: "JWT Token Structure",
-      bcryptTitle: "BCrypt Password Hashing",
+      bcryptTitle: "$s2$ SHA-256 Pre-Hash + BCrypt Password Hashing",
       bcryptIntro:
-        "Passwords are hashed using BCrypt with a configurable work factor (default: 12). BCrypt is intentionally slow to resist brute-force attacks — each hash takes ~250ms, making mass password cracking impractical.",
+        "Passwords are hashed with a versioned SHA-256 Base64 pre-hash ($s2$ prefix) followed by BCrypt (work factor 12), eliminating 72-byte and NUL truncation while retaining backward compatibility with legacy $2a$/$2b$/$2y$ hashes. Password mutations also enforce PasswordHistory (default 5 previous hashes) and an 8,616-entry breached password denylist.",
       lockoutTitle: "Account Lockout",
       lockoutIntro:
-        "After 5 consecutive failed login attempts, the account is locked for 5 minutes. The counter resets on successful login. Admins can manually unlock accounts via the admin panel.",
+        "After 5 consecutive failed login or 2FA attempts (TenantSettings.LoginLockoutThreshold, bounded by Identity.Login.MaxAttempts), the account is locked for 15 minutes (TenantSettings.LoginLockoutMinutes). The counter resets on successful verification, and admins can manually unlock accounts.",
       tfaTitle: "Two-Factor Authentication (TOTP)",
       tfaIntro:
-        "SCRIPE supports TOTP-based 2FA compatible with Google Authenticator, Authy, and Microsoft Authenticator. When enabled, users must enter a 6-digit time-based code after password verification.",
+        "SCRIPE supports TOTP-based 2FA compatible with Google Authenticator, Authy, and Microsoft Authenticator. When enabled, login returns a single-use twoFactorPendingToken instead of JWTs until verified; accounts with TenantSettings.Require2FA = true receive mfa_enroll=true and must enroll before general access.",
       passwordExpiryTitle: "Password Expiry Enforcement",
       passwordExpiryIntro:
         "After credentials are validated and lockout checks pass, the login handler invokes ITenantPasswordValidator.IsPasswordExpiredAsync to check if the admin's password has exceeded the tenant's configured PasswordExpiryDays. If expired, the TokenResponse includes MustChangePassword = true, which forces the frontend to redirect the admin to the change-password page before granting dashboard access. This check uses the admin's PasswordLastChanged field against the tenant's security policy.",
@@ -71,9 +71,9 @@ export const en = {
       externalAuthTitle: "External Authentication (OAuth)",
       externalAuthIntro:
         "SCRIPE integrates with Google, Facebook, Apple, and Microsoft OAuth providers. External tokens are validated server-side before creating or linking local accounts.",
-      otpTitle: "OTP System (One-Time Passwords)",
+      otpTitle: "OTP System & Recovery Credentials",
       otpIntro:
-        "OTP codes are used for email verification, phone verification, and password reset flows. Codes are 6-digit, cryptographically random, stored as BCrypt hashes, and expire after 15 minutes with a maximum of 3 verification attempts.",
+        "OTP codes are 6-digit cryptographically random challenges stored as keyed HMAC-SHA256 verifiers via Verification:VerifierKey (never BCrypt or plaintext), defaulting to 10-minute expiry (30-minute Production password reset) and 5 verification attempts. Multi-workspace admin password recovery issues single-use SHA-256 PasswordResetToken records without consuming the OTP until step 3 validates complexity and history.",
       impersonationTitle: "Admin Impersonation",
       impersonationIntro:
         "SuperAdmins can impersonate other admins to troubleshoot issues. An impersonation token carries the target admin's claims plus an impersonator_id claim. All actions during impersonation are audited with the original admin's identity.",
@@ -168,9 +168,9 @@ export const en = {
     middlewarePipeline: {
       title: "Middleware Pipeline",
       description:
-        "11 middleware components in execution order  from exception handling through tenant context to field projection.",
+        "33 ordered stages in MiddlewarePipeline.cs — from edge headers, JWT/API-key auth, and post-auth rate limiting to Trusted CIDR, mcp=true, mfa_enroll=true, and field projection.",
       intro:
-        "SCRIPE's HTTP request pipeline consists of 11 middleware components executed in a specific order. Each middleware has a single responsibility and can short-circuit the pipeline on failure. Understanding the order is critical for debugging and extending the system.",
+        "SCRIPE's HTTP request pipeline executes 33 ordered stages in MiddlewarePipeline.cs. Each stage enforces a single boundary—including post-auth rate limiting, Trusted CIDR checks, MustChangePasswordMiddleware, and RequireMfaEnrollmentMiddleware—and short-circuits on failure.",
       overviewTitle: "Pipeline Overview",
       overviewIntro:
         "Requests flow through the middleware pipeline from top to bottom. Each middleware can process the request, modify it, or short-circuit by returning a response directly. The order matters  tenant context must be established before any tenant-scoped operation.",
@@ -202,7 +202,7 @@ export const en = {
         "Collects request metrics (duration, status codes, error rates) and exposes them via a /metrics endpoint for Prometheus scraping. Includes distributed tracing with OpenTelemetry integration.",
       registrationTitle: "Middleware Registration Order",
       registrationIntro:
-        "The middleware registration order in Program.cs determines execution order. Changing the order can break functionality  for example, registering TenantContext before Authentication would fail because the JWT hasn't been validated yet.",
+        "The registration order in MiddlewarePipeline.cs determines execution order. Changing the order breaks invariants—for example, ApiKeyUsageMiddleware and Rate Limiting rely on UseAuthentication() running first, while TrustedCidrEnforcementMiddleware, MustChangePasswordMiddleware (mcp=true), and RequireMfaEnrollmentMiddleware (mfa_enroll=true) run right after UseAuthorization().",
       summaryTitle: "Middleware Summary",
       orderWarning:
         "Changing middleware registration order can cause cascading failures. Always test the full request pipeline after modifying middleware order.",

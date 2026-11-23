@@ -1764,19 +1764,25 @@ export const ar = {
       "ep.export": "تصدير الفواتير والاشتراكات إلى CSV/Excel",
     },
     identityAuthSessions: {
-      title: "جلسات المصادقة وإدارة الرموز",
+      title: "جلسات المصادقة وبيانات الاستعادة وإدارة الرموز",
       description:
-        "تعمق في كيانات الجلسة والمصادقة الستة: RefreshToken وOtpCode وQrLoginSession وWebAuthnChallenge وAdminPasskey وExternalLogin — بما في ذلك جميع الحقول والدلالات الأمنية وتدفق تسجيل الدخول عبر QR.",
+        "تعمق في كيانات الجلسة والمصادقة والاستعادة: RefreshToken وOtpCode وPasswordResetToken وPasswordHistory وQrLoginSession وWebAuthnChallenge وAdminPasskey وExternalLogin.",
       intro:
-        "يدعم SCRIPE آليات مصادقة متزامنة متعددة. لكل آلية كيان مخصص في وحدة Identity. يدير RefreshToken نوافذ الجلسة المتجددة. يتعامل OtpCode مع الرموز ذات الاستخدام الواحد محدودة الوقت. يتيح QrLoginSession تسجيل الدخول عبر الأجهزة بمسح QR. يشغّل WebAuthnChallenge مراسم passkey بـ FIDO2. يخزن AdminPasskey بيانات اعتماد FIDO2 المسجلة. يربط ExternalLogin مزودي الهوية الخارجيين بحسابات Admin والمستخدم.",
+        "يدعم SCRIPE آليات مصادقة واستعادة متعددة في وحدة Identity. يدير RefreshToken عائلات الجلسات المتجددة، ويخزن OtpCode مُتحققات HMAC-SHA256 بدون نص صريح، ويدير PasswordResetToken روابط السحر ومنح إعادة التعيين أحادية الاستخدام عبر المستأجرين، ويمنع PasswordHistory إعادة استخدام كلمات المرور، بينما تدعم QrLoginSession وWebAuthnChallenge وAdminPasskey وExternalLogin تسجيل الدخول المتقدم والاتحاد.",
       refreshTokenTitle: "كيان RefreshToken",
       refreshTokenIntro:
         "يخزن RefreshToken رمزًا مبهمًا طويل الأمد صادرًا مع رمز JWT. تُدار الرموز بالتناوب عند كل استخدام — يُلغى الرمز القديم مع مؤشر ReplacedByToken ويُصدر رمز جديد. تُتتبع جلسات الانتحال عبر ImpersonatorAdminId لتمكين تدفق StopImpersonation لاستعادة جلسة المسؤول الأصلية.",
       otpCodeTitle: "كيان OtpCode",
       otpCodeIntro:
-        "OtpCode هو رمز ذو استخدام واحد متعدد الأشكال يخدم المستخدمين والمسؤولين معًا. تعيين Purpose يشير إلى enum (التحقق من البريد الإلكتروني، إعادة تعيين كلمة المرور، 2FA، إلخ). تُلغى الرموز عبر Invalidate() بعد الاستخدام الناجح. يُنفذ الزوج Attempts/MaxAttempts الحماية من القوة الغاشمة.",
+        "يخزن OtpCode تحديات التحقق محدودة الوقت للمستخدمين والمشرفين دون حفظ الرمز الصريح: يحفظ حقل Code مُتحقّق HMAC-SHA256 محسوبًا عبر Verification:VerifierKey، وتزداد Attempts حتى MaxAttempts (الافتراضي 5) قبل الإلغاء.",
       otpCodeNote:
-        "يُخزَّن OtpCode.Purpose كعدد صحيح لكفاءة قاعدة البيانات. الـ enum على مستوى التطبيق معرَّف في Identity.Application. تحقق دائمًا من IsUsed وExpiresAt قبل الوثوق برمز — لا تعتمد فقط على قيمة الرمز.",
+        "لا يتم تخزين رموز OTP النصية مطلقًا. في تدفق الاستعادة، يتحقق الخادم من الرمز دون حرقه في الخطوة الثانية ثم يستهلك ResetGrantToken وOtpCode معًا ذريًا داخل معاملة ExecuteInTransactionAsync بعد اجتياز سياسة كلمة المرور.",
+      passwordResetTokenTitle: "كيان PasswordResetToken",
+      passwordResetTokenIntro:
+        "يحفظ PasswordResetToken سجلات استعادة دائمة قبل المصادقة بدون فلاتر مستأجر عامة، لدعم روابط الاستعادة السحرية ومنح ResetGrant أحادية الاستخدام مع AllowedTenantIdsJson وSourceCredentialId وحد أقصى 5 محاولات فاشلة.",
+      passwordHistoryTitle: "كيان PasswordHistory",
+      passwordHistoryIntro:
+        "يحفظ PasswordHistory تجزئات كلمات المرور السابقة بصيغة `$s2$` (تجزئة أولية SHA-256 + BCrypt بعامل 12) لكل حساب لمنع إعادة استخدام آخر 5 كلمات مرور افتراضيًا (0..24 عبر TenantSettings).",
       qrLoginTitle: "كيان QrLoginSession",
       qrLoginIntro:
         "ينسق QrLoginSession تسجيل الدخول عبر الأجهزة: ينشئ متصفح سطح المكتب جلسة (الحالة = Pending) ويعرض رمز QR يحتوي على SessionToken. يمسح جهاز محمول مُصادق QR (Scanned)، يوافق المستخدم (Approved)، تُنشئ الخلفية الرموز، ويستلمها متصفح سطح المكتب الذي يستطلع (Consumed). تُنظف الجلسات بواسطة QrSessionCleanupJob بعد مهلة 5 دقائق.",
