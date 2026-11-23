@@ -51,9 +51,9 @@ export const de = {
       tokenValidationTitle: "Kryptografische Token-Validierung",
       tokenValidationIntro:
         "Prüfung von Signatur, Ablaufzeit und Geräte-Fingerabdrücken zur Abwehr von Session-Hijacking.",
-      mcpMiddlewareTitle: "MCP-Sicherheits-Middleware",
+      mcpMiddlewareTitle: "Post-Login Policy-Gates (MustChangePassword & RequireMfaEnrollment)",
       mcpMiddlewareIntro:
-        "Sichere Kapselung aller Ein- und Ausgaben des Model Context Protocols für KI-gestützte Schnittstellen.",
+        "Bei erzwungener Passwortänderung (`mcp: true`) oder fehlender Pflicht-MFA-Registrierung (`mfa_enroll: true`) blockieren `MustChangePasswordMiddleware` und `RequireMfaEnrollmentMiddleware` allgemeine API-Aufrufe mit `403 Forbidden` und erlauben nur Self-Service-Endpunkte (`change-password`, `force-change-password`, `2fa/enable|confirm|status`, `passkeys/registration/*`, `sudo/*`, `account/security`, `principal`, `refresh`, `logout`, `revoke`, `password-policy`, `customization/resolve`, `/hubs/*`, `/health`).",
       ssoCallbackTitle: "SSO-Callback-Verarbeitung",
       ssoCallbackIntro:
         "Verschlüsselter Token-Austausch und automatische Kontenverknüpfung über verifizierte E-Mail-Adressen.",

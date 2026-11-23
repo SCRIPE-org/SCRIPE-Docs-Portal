@@ -62,7 +62,7 @@ export const ru = {
       getExternalLoginsDesc:
         "Список внешних провайдеров SSO и сервисов аутентификации, привязанных к учетной записи.",
       linkExternalLoginDesc:
-        "Привязка учетных данных внешнего OAuth/OIDC к подтвержденной учетной записи администратора.",
+        "Запуск Sudo-защищённой федеративной привязки OIDC/SAML (/external-logins/link возвращает 410 Gone).",
       unlinkExternalLoginDesc:
         "Отвязка внешнего сервиса аутентификации от учетной записи администратора.",
       requestPasswordResetDesc:
@@ -70,7 +70,7 @@ export const ru = {
       verifyResetOtpDesc:
         "Проверка одноразового пароля (OTP) для подтверждения восстановления доступа.",
       resetPasswordDesc:
-        "Завершение смены пароля администратора с использованием проверенного токена.",
+        "Завершение сброса пароля по ResetGrantToken; возвращает 204 No Content без автовхода.",
     },
     userAuthApi: {
       title: "API аутентификации пользователей",
@@ -119,7 +119,7 @@ export const ru = {
       getExternalLoginsDesc:
         "Список всех внешних учетных записей, привязанных к данному пользователю.",
       linkExternalLoginDesc:
-        "Привязка внешнего социального или OIDC токена к профилю пользователя.",
+        "Прямой endpoint /external-logins/link удалён (410 Gone); привязка выполняется через вход провайдера.",
       unlinkExternalLoginDesc: "Отвязка внешней службы авторизации от учетной записи пользователя.",
     },
     adminApi: {

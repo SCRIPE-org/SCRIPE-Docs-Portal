@@ -54,13 +54,14 @@ export const de = {
         "Alle aktiven Sitzungen und Refresh-Tokens geräteübergreifend sofort widerrufen.",
       getExternalLoginsDesc: "Verknüpfte externe SSO- und Identitätsanbieter des Kontos auflisten.",
       linkExternalLoginDesc:
-        "Externes OAuth/OIDC-Konto mit dem authentifizierten Administratorkonto verknüpfen.",
+        "Sudo-geschützte föderierte OIDC/SAML-Verknüpfung starten (/external-logins/link liefert 410 Gone).",
       unlinkExternalLoginDesc:
         "Externen Authentifizierungsanbieter vom Administratorkonto trennen.",
       requestPasswordResetDesc:
         "Kennwortzurücksetzung für Administratoren mit zeitlich begrenzter Challenge anfordern.",
       verifyResetOtpDesc: "Einmalpasswort-Challenge zur Kennwortwiederherstellung verifizieren.",
-      resetPasswordDesc: "Administratives Kennwort mit validiertem Challenge-Token neu setzen.",
+      resetPasswordDesc:
+        "Admin-Kennwort per ResetGrantToken zurücksetzen; liefert 204 No Content ohne Auto-Login.",
     },
     userAuthApi: {
       title: "User Authentifizierungs-API",
@@ -103,7 +104,8 @@ export const de = {
       sendPhoneVerificationDesc: "SMS-Einmalkennwort an die hinterlegte Mobilfunknummer senden.",
       getExternalLoginsDesc:
         "Alle mit diesem Benutzerkonto verknüpften externen Anmeldedienste auflisten.",
-      linkExternalLoginDesc: "Externes Social- oder OIDC-Konto mit dem Benutzerprofil verknüpfen.",
+      linkExternalLoginDesc:
+        "Direktes /external-logins/link entfernt (410 Gone); Verknüpfung erfolgt über Provider-Anmeldung.",
       unlinkExternalLoginDesc:
         "Verknüpfung zu externem Identitätsanbieter aus Benutzerkonto aufheben.",
     },

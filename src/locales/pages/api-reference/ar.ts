@@ -55,12 +55,14 @@ export const ar = {
       revokeAllSessionsDesc: "إلغاء جميع الجلسات النشطة ورموز التحديث عبر كافة الأجهزة في آن واحد.",
       getExternalLoginsDesc:
         "سرد وسائل الدخول الموحد SSO ومزودي الهوية الخارجية المرتبطة بهذا الحساب.",
-      linkExternalLoginDesc: "ربط بيانات اعتماد OAuth/OIDC خارجية بحساب المسؤول المصادق عليه.",
+      linkExternalLoginDesc:
+        "بدء ربط موحّد محمي بـ Sudo عبر OIDC/SAML (المسار المباشر /link يُرجع 410 Gone).",
       unlinkExternalLoginDesc: "إلغاء ربط مزود مصادقة خارجي من الحساب.",
       requestPasswordResetDesc:
         "بدء إجراءات استعادة كلمة المرور الإدارية برمز تحقق ذي صلاحية محددة.",
       verifyResetOtpDesc: "التحقق من رمز المرور لمرة واحدة OTP الخاص بمسار استعادة كلمة المرور.",
-      resetPasswordDesc: "إتمام إعادة تعيين كلمة المرور الإدارية باستخدام رمز التحدي المؤكد.",
+      resetPasswordDesc:
+        "إتمام إعادة تعيين كلمة المرور عبر ResetGrantToken وإرجاع 204 No Content دون تسجيل دخول تلقائي.",
     },
     userAuthApi: {
       title: "واجهة مصادقة المستخدمين",
@@ -101,7 +103,8 @@ export const ar = {
       sendPhoneVerificationDesc:
         "إرسال رمز مرور لمرة واحدة عبر SMS إلى رقم الجوال المسجل للمستخدم.",
       getExternalLoginsDesc: "سرد جميع مزودي تسجيل الدخول الخارجيين المرتبطين بهذا المستخدم.",
-      linkExternalLoginDesc: "ربط رمز مصادقة اجتماعي أو OIDC خارجي بملف المستخدم الشخصي.",
+      linkExternalLoginDesc:
+        "تمت إزالة /external-logins/link المباشر (410 Gone)؛ يتم الربط عبر تسجيل الدخول الموحد للمزود.",
       unlinkExternalLoginDesc: "إزالة ارتباط هوية خارجية من حساب المستخدم.",
     },
     adminApi: {

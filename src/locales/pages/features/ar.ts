@@ -39,7 +39,7 @@ export const ar = {
       passwordPolicyTitle: "سياسة كلمة المرور الخاصة بالوحدة",
       passwordPolicyIntro: "متطلبات كلمة المرور قابلة للتكوين لكل وحدة عبر TenantSettings.",
       endpointsTitle: "نقاط نهاية واجهة برمجة تطبيقات المصادقة",
-      endpointsAdminTitle: "نقاط نهاية مصادقة المستخدم",
+      endpointsAdminTitle: "نقاط نهاية مصادقة المشرفين",
       endpointsUserTitle: "نقاط نهاية مصادقة المستخدم",
       rateLimitingTitle: "تقييد معدل الطلبات (Rate Limiting)",
       rateLimitingIntro:
@@ -48,9 +48,9 @@ export const ar = {
       tokenValidationTitle: "التحقق من صحة الرموز المميزة (JWT)",
       tokenValidationIntro:
         "تشفير وتوقيع رقمي متقدم لرموز JWT مع فحص صلاحية الأجهزة وبصمات الأصابع لمنع سرقة الجلسات.",
-      mcpMiddlewareTitle: "الطبقة الوسيطة لحماية أدوات MCP",
+      mcpMiddlewareTitle: "بوابات ما بعد تسجيل الدخول (MustChangePassword و RequireMfaEnrollment)",
       mcpMiddlewareIntro:
-        "عزل كامل وتفويض دقيق للطلبات الصادرة والواردة عبر بروتوكول Model Context Protocol للأدوات الذكية.",
+        "عند فرض تغيير كلمة المرور (`mcp: true`) أو اشتراط تفعيل MFA/Passkey (`mfa_enroll: true`)، تحظر `MustChangePasswordMiddleware` و`RequireMfaEnrollmentMiddleware` جميع طلبات API العامة برمز `403 Forbidden` ولا تسمح إلا بمسارات المعالجة الذاتية (`change-password`، `force-change-password`، `2fa/enable|confirm|status`، `passkeys/registration/*`، `sudo/*`، `account/security`، `principal`، `refresh`، `logout`، `revoke`، `password-policy`، `customization/resolve`، `/hubs/*`، و`/health`).",
       ssoCallbackTitle: "مسار استدعاء SSO ومعالجة الردود",
       ssoCallbackIntro:
         "معالجة مشفرة وسريعة لردود تسجيل الدخول الموحد مع ربط الحسابات تلقائيًا بناءً على البريد الإلكتروني المؤكد.",

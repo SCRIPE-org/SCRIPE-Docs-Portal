@@ -67,12 +67,13 @@ export const en = {
       getExternalLoginsDesc:
         "List external SSO and social identity provider connections linked to this account.",
       linkExternalLoginDesc:
-        "Link a third-party OAuth/OIDC credential to the authenticated admin account.",
+        "Initiate Sudo-gated federated OIDC/SAML linking (direct /external-logins/link returns 410 Gone).",
       unlinkExternalLoginDesc: "Unlink an external authentication provider from the account.",
       requestPasswordResetDesc:
         "Initiate administrative password recovery with an expiring verification challenge.",
       verifyResetOtpDesc: "Verify one-time passcode challenge for password recovery workflow.",
-      resetPasswordDesc: "Finalize administrative password reset with verified challenge token.",
+      resetPasswordDesc:
+        "Finalize administrative password reset with ResetGrantToken; returns 204 No Content with no auto-login.",
     },
     userAuthApi: {
       title: "User Authentication API",
@@ -125,7 +126,7 @@ export const en = {
       getExternalLoginsDesc:
         "List all third-party social and enterprise login providers linked to this user.",
       linkExternalLoginDesc:
-        "Associate an external social or OIDC login token with the user's profile.",
+        "Direct /external-logins/link removed (410 Gone); sign in via federated provider callback to link.",
       unlinkExternalLoginDesc: "Remove an external identity link from the user account.",
     },
     adminApi: {

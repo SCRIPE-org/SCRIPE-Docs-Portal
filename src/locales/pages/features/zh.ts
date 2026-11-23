@@ -47,8 +47,9 @@ export const zh = {
       tokenValidationTitle: "JWT 令牌深度密码学校验",
       tokenValidationIntro:
         "全流程校验签名完整性、签发有效期及设备数字指纹，严密防范会话劫持风险。",
-      mcpMiddlewareTitle: "Model Context Protocol (MCP) 安全中继中间件",
-      mcpMiddlewareIntro: "为 AI 智能体接入提供强隔离的上下文授权、指令安全过滤及调用审计。",
+      mcpMiddlewareTitle: "登录后策略拦截门 (MustChangePassword 与 RequireMfaEnrollment)",
+      mcpMiddlewareIntro:
+        "当需要强制修改密码 (`mcp: true`) 或强制绑定 MFA/Passkey (`mfa_enroll: true`) 时，`MustChangePasswordMiddleware` 与 `RequireMfaEnrollmentMiddleware` 会以 `403 Forbidden` 拦截常规 API 请求，仅放行自助处理端点（`change-password`、`force-change-password`、`2fa/enable|confirm|status`、`passkeys/registration/*`、`sudo/*`、`account/security`、`principal`、`refresh`、`logout`、`revoke`、`password-policy`、`customization/resolve`、`/hubs/*` 与 `/health`）。",
       ssoCallbackTitle: "SSO 认证回调与账户聚合",
       ssoCallbackIntro:
         "基于加密握手协议处理回调响应，依据权威验证邮箱自动完成本地账户的安全绑定。",

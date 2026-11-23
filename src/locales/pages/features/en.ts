@@ -51,9 +51,9 @@ export const en = {
       tokenValidationTitle: "Token Validation & Claim Checks",
       tokenValidationIntro:
         "Both authentication pipelines share the same JWT token validation process. The middleware verifies name identifier claims, checks the 'admin' flag, and queries the database bypassing global query filters using `IgnoreQueryFilters()` to verify the admin or user account is still active and has not been soft-deleted.",
-      mcpMiddlewareTitle: "MustChangePassword Middleware & Whitelist",
+      mcpMiddlewareTitle: "Post-Login Policy Gates (MustChangePassword & RequireMfaEnrollment)",
       mcpMiddlewareIntro:
-        "When a password expires, the user's JWT receives the `mcp: true` claim. The `MustChangePasswordMiddleware` blocks all incoming requests with 403 Forbidden unless the request matches the whitelist: password change endpoint `/api/v1/admins/{adminId}/change-password`, profile details `/api/v1/auth/admin/me`, token refresh `/api/v1/auth/admin/refresh`, session logouts `/api/v1/auth/admin/logout` or `/api/v1/auth/admin/revoke`, and the system `/health` endpoint.",
+        "When a password must be rotated (`mcp: true`) or mandatory 2FA/Passkey enrollment is missing (`mfa_enroll: true`), `MustChangePasswordMiddleware` and `RequireMfaEnrollmentMiddleware` reject general API calls with `403 Forbidden` (camelCase `ErrorResponse` with `errorCode`) and only permit self-service remediation routes (`change-password`, `force-change-password`, `2fa/enable|confirm|status`, `passkeys/registration/*`, `sudo/*`, `account/security`, `auth/{admin,user}/principal`, `refresh`, `logout`, `revoke`, `password-policy`, `customization/resolve`, `/hubs/*`, and `/health`).",
       ssoCallbackTitle: "OIDC/SSO Callback & Workspace Selection",
       ssoCallbackIntro:
         "For Single Sign-On (OIDC/SAML) callbacks, the system resolves the email and checks if multiple workspaces are linked. If there are multiple candidate workspaces, a temporary workspace selection token is generated and stored in a cache under `sso-login-selection:{token}`. The user is redirected to choose a workspace, which then dispatches `CompleteOidcWorkspaceSelectionCommand` to decrypt the selected tenant ID and issue final JWTs.",

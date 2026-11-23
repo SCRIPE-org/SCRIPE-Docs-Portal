@@ -56,11 +56,11 @@ export const zh = {
       discoverWorkspacesDesc: "根据当前用户认证凭据智能发现并检索其被授权访问的全部工作空间与组织",
       revokeAllSessionsDesc: "一键原子注销当前用户在所有已登录设备上的全部活跃会话与刷新凭据",
       getExternalLoginsDesc: "调阅与当前管理员账户已关联绑定的外部企业级 SSO 与第三方社交身份源",
-      linkExternalLoginDesc: "将合法的外部 OAuth/OIDC 第三方身份凭证绑定至已登录的管理员主账户",
+      linkExternalLoginDesc: "发起受 Sudo 保护的联邦 OIDC/SAML 绑定（直接调用 /external-logins/link 返回 410 Gone）",
       unlinkExternalLoginDesc: "从管理员主账户中安全解除并解绑指定的第三方外部身份认证源",
       requestPasswordResetDesc: "发起管理员密码重置找回流程并签发受短时效保护的安全挑战凭证",
       verifyResetOtpDesc: "校验密码重置验证流程中向管理员手机或邮箱下发的一次性动态口令 OTP",
-      resetPasswordDesc: "基于已通过多重验证的安全挑战令牌最终执行管理员账户登录凭据的密码重置",
+      resetPasswordDesc: "凭单次 ResetGrantToken 完成管理员密码重置，返回 204 No Content 且不自动登录",
     },
     userAuthApi: {
       title: "客户端认证 API",
@@ -103,7 +103,7 @@ export const zh = {
       sendEmailVerificationDesc: "向用户已登记的主注册电子邮箱下发账户激活与身份所有权验证凭证",
       sendPhoneVerificationDesc: "向用户已绑定的手机号码下发短信一次性动态安全验证码（OTP）",
       getExternalLoginsDesc: "调阅与该普通用户账号绑定的所有第三方社交或企业级单点登录关联",
-      linkExternalLoginDesc: "将合法的外部社交或标准 OIDC 登录身份令牌关联绑定至当前用户档案",
+      linkExternalLoginDesc: "直接绑定接口 /external-logins/link 已下线（410 Gone），请通过外部身份源登录回调完成绑定",
       unlinkExternalLoginDesc: "从该用户账户中解绑并移除指定的外部单点登录第三方身份关联",
     },
     adminApi: {

@@ -68,13 +68,14 @@ export const es = {
       getExternalLoginsDesc:
         "Listar conexiones de proveedores externos de SSO e identidad vinculadas a esta cuenta.",
       linkExternalLoginDesc:
-        "Vincular credencial OAuth/OIDC externa a la cuenta del administrador autenticado.",
+        "Iniciar vinculación federada OIDC/SAML protegida por Sudo (/external-logins/link devuelve 410 Gone).",
       unlinkExternalLoginDesc: "Desvincular un proveedor externo de autenticación de la cuenta.",
       requestPasswordResetDesc:
         "Iniciar recuperación de contraseña administrativa con reto de expiración temporal.",
       verifyResetOtpDesc:
         "Verificar código de un solo uso (OTP) para el flujo de restablecimiento de clave.",
-      resetPasswordDesc: "Completar restablecimiento de contraseña con token verificado.",
+      resetPasswordDesc:
+        "Completar restablecimiento con ResetGrantToken; devuelve 204 No Content sin inicio de sesión automático.",
     },
     userAuthApi: {
       title: "API de Autenticación de Usuario",
@@ -125,7 +126,8 @@ export const es = {
       sendPhoneVerificationDesc:
         "Enviar código OTP de verificación por SMS al teléfono móvil registrado del usuario.",
       getExternalLoginsDesc: "Listar proveedores externos vinculados al perfil del usuario.",
-      linkExternalLoginDesc: "Asociar credencial externa social o de OIDC al perfil del usuario.",
+      linkExternalLoginDesc:
+        "Endpoint directo /external-logins/link eliminado (410 Gone); inicia sesión con el proveedor para vincular.",
       unlinkExternalLoginDesc: "Desvincular identidad externa de la cuenta de usuario.",
     },
     adminApi: {

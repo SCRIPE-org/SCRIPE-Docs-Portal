@@ -8,7 +8,7 @@ export const ru = {
     authentication: {
       title: "Аутентификация",
       description:
-        "Двойная аутентификация (Админ + Пользователь), маршрутизация между рабочими областями, JWT-токены, 2FA с резервными кодами, принудительное изменение пароля, بوابة تعليق SSO и политики паролей для тенантов.",
+        "Двойная аутентификация (Админ + Пользователь), маршрутизация между рабочими областями, JWT-токены, 2FA с резервными кодами, принудительное изменение пароля, шлюз приостановки SSO и политики паролей для тенантов.",
       intro:
         "SCRIPE предоставляет безопасную систему аутентификации с JWT access-токенами, ротацией refresh-токенов, опциональной двухфакторной аутентификацией, автоопределением рабочей области, принудительной сменой пароля и полным лимитированием запросов. Система поддерживает отдельные конвейеры для администраторов и пользователей с различными наборами JWT-утверждений и разрешений.",
       flowTitle: "Процесс аутентификации",
@@ -51,9 +51,9 @@ export const ru = {
       tokenValidationTitle: "Криптографическая Проверка Токенов",
       tokenValidationIntro:
         "Контроль подписи, времени жизни и отпечатков устройств для защиты от перехвата сессий.",
-      mcpMiddlewareTitle: "Защитный Middleware для MCP",
+      mcpMiddlewareTitle: "Ограничения после входа (MustChangePassword и RequireMfaEnrollment)",
       mcpMiddlewareIntro:
-        "Изоляция и авторизация вызовов Model Context Protocol при взаимодействии с ИИ-агентами.",
+        "При обязательной смене пароля (`mcp: true`) или привязке MFA/Passkey (`mfa_enroll: true`) `MustChangePasswordMiddleware` и `RequireMfaEnrollmentMiddleware` отклоняют общие API-запросы с `403 Forbidden` и разрешают только маршруты завершения настройки (`change-password`, `force-change-password`, `2fa/enable|confirm|status`, `passkeys/registration/*`, `sudo/*`, `account/security`, `principal`, `refresh`, `logout`, `revoke`, `password-policy`, `customization/resolve`, `/hubs/*`, `/health`).",
       ssoCallbackTitle: "Обработка Ответов SSO",
       ssoCallbackIntro:
         "Безопасный обмен кодами авторизации и связывание профилей по подтвержденным адресам электронной почты.",

@@ -51,9 +51,9 @@ export const fr = {
       tokenValidationTitle: "Validation Cryptographique des Jetons",
       tokenValidationIntro:
         "Contrôle des signatures, délais d'expiration et empreintes de périphériques contre le vol de sessions.",
-      mcpMiddlewareTitle: "Middleware de Sécurité MCP",
+      mcpMiddlewareTitle: "Filtres Post-Connexion (MustChangePassword & RequireMfaEnrollment)",
       mcpMiddlewareIntro:
-        "Encadrement et filtrage stricts des communications Model Context Protocol pour les fonctionnalités d'IA.",
+        "Lorsqu'un changement de mot de passe (`mcp: true`) ou un enrôlement MFA/Passkey obligatoire (`mfa_enroll: true`) est requis, `MustChangePasswordMiddleware` et `RequireMfaEnrollmentMiddleware` bloquent l'API avec `403 Forbidden` et n'autorisent que les routes de remédiation (`change-password`, `force-change-password`, `2fa/enable|confirm|status`, `passkeys/registration/*`, `sudo/*`, `account/security`, `principal`, `refresh`, `logout`, `revoke`, `password-policy`, `customization/resolve`, `/hubs/*`, `/health`).",
       ssoCallbackTitle: "Traitement des Retours SSO",
       ssoCallbackIntro:
         "Échange sécurisé de jetons et association automatique de profils d'après les e-mails certifiés.",

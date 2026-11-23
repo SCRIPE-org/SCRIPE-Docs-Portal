@@ -51,9 +51,9 @@ export const es = {
       tokenValidationTitle: "Validación Criptográfica de Tokens",
       tokenValidationIntro:
         "Comprobación estricta de firmas, vigencia y huellas digitales del dispositivo para evitar secuestros de sesión.",
-      mcpMiddlewareTitle: "Middleware de Seguridad para MCP",
+      mcpMiddlewareTitle: "Barreras Post-Login (MustChangePassword y RequireMfaEnrollment)",
       mcpMiddlewareIntro:
-        "Aislamiento y autorización rigurosa de llamadas basadas en Model Context Protocol para integraciones de IA.",
+        "Cuando se exige cambio de contraseña (`mcp: true`) o registro obligatorio de MFA/Passkey (`mfa_enroll: true`), `MustChangePasswordMiddleware` y `RequireMfaEnrollmentMiddleware` bloquean el resto de la API con `403 Forbidden` y solo permiten rutas de remediación (`change-password`, `force-change-password`, `2fa/enable|confirm|status`, `passkeys/registration/*`, `sudo/*`, `account/security`, `principal`, `refresh`, `logout`, `revoke`, `password-policy`, `customization/resolve`, `/hubs/*`, `/health`).",
       ssoCallbackTitle: "Canalización de Respuestas SSO",
       ssoCallbackIntro:
         "Intercambio seguro de tokens y vinculación automática de cuentas basada en direcciones de correo verificadas.",

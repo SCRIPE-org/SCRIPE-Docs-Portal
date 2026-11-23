@@ -73,12 +73,13 @@ export const fr = {
       getExternalLoginsDesc:
         "Lister les connexions SSO et fournisseurs d'identité externes liés à ce compte.",
       linkExternalLoginDesc:
-        "Lier un compte externe OAuth/OIDC au compte administrateur authentifié.",
+        "Initier une liaison fédérée OIDC/SAML protégée par Sudo (/external-logins/link retourne 410 Gone).",
       unlinkExternalLoginDesc: "Dissocier un fournisseur d'authentification externe du compte.",
       requestPasswordResetDesc:
         "Initier la récupération du mot de passe administrateur avec défi temporaire.",
       verifyResetOtpDesc: "Valider le mot de passe à usage unique (OTP) pour la réinitialisation.",
-      resetPasswordDesc: "Finaliser la réinitialisation du mot de passe avec le jeton vérifié.",
+      resetPasswordDesc:
+        "Finaliser la réinitialisation via ResetGrantToken ; retourne 204 No Content sans connexion automatique.",
     },
     userAuthApi: {
       title: "API d'Authentification des Utilisateurs (Clients)",
@@ -130,7 +131,8 @@ export const fr = {
         "Envoyer un code OTP de vérification par SMS au numéro de mobile renseigné.",
       getExternalLoginsDesc:
         "Lister l'ensemble des services de connexion externes liés à cet utilisateur.",
-      linkExternalLoginDesc: "Associer un compte externe social ou OIDC au profil utilisateur.",
+      linkExternalLoginDesc:
+        "Endpoint direct /external-logins/link supprimé (410 Gone) ; connectez-vous via le fournisseur fédéré.",
       unlinkExternalLoginDesc: "Supprimer une liaison d'identité externe du compte utilisateur.",
     },
     adminApi: {
