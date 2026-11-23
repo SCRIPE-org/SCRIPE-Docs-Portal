@@ -13,7 +13,7 @@ const sections: DocSection[] = [
       ["Token Algorithm", "HS256 (HMAC-SHA256) for API Bearer JWTs; RS256 for OpenIddict OIDC Server"],
       ["Access Token Lifetime", "Configurable (default: 30 minutes via Jwt:ExpiryMinutes / SessionPolicy)"],
       ["Refresh Token Lifetime", "Configurable (default: 7 days; AbsoluteExpiresAt 24h / >=30d / 8h imp)"],
-      ["Token Storage", "Access token in client memory; refresh token in HttpOnly SameSite cookie ({CookiePrefix}_refresh_token)"],
+      ["Token Storage", "Access token in client memory; refresh token in HttpOnly SameSite=Lax cookie ({CookiePrefix}_refresh_token or __Host-scripe_refresh_token relay)"],
       ["Claims", "jti, sub, admin, tenantId, mcp, mfa_enroll, scripe_iat_ms (roles/permissions live via IAdminPermissionCache)"],
       ["Revocation & Cookies", "JTI denylist + 5ms millisecond cutoff + BrandingSettings dynamic cookies"],
     ],

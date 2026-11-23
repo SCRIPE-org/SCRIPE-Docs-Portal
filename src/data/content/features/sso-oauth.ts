@@ -91,16 +91,49 @@ const sections: DocSection[] = [
     type: "list",
     variant: "ordered",
     items: [
-      "User navigates to /login — the login page automatically fetches available SSO providers",
-      "If providers exist, branded SSO buttons appear below the sign-in form with an 'or continue with' divider",
-      "User clicks a provider button → frontend calls POST /auth/oidc/challenge → gets authorization URL with PKCE parameters",
-      "PKCE state (code_verifier, state, providerId) is stored in sessionStorage — frontend redirects to the IdP",
-      "User authenticates at the external IdP (Azure AD, Google, etc.) and grants consent",
-      "IdP redirects back to /sso/callback?code=...&state=...",
-      "Callback page retrieves PKCE state from sessionStorage, validates state matches (CSRF protection)",
-      "Frontend calls POST /auth/oidc/callback with code + codeVerifier → backend exchanges code for user info",
-      "Backend evaluates HybridMfaPolicy, issues TwoFactorPendingToken if required, or returns session claims + sets scripe-auth / refresh HttpOnly cookies",
-      "Frontend keeps bearer tokens in memory (never localStorage), hydrates non-secret navigation/store state, and redirects to dashboard or MFA setup",
+      "User visits https://auth.scripe.org (or tenant login origin) — OriginRouting and Tenancy:AuthBaseUrl discover enabled SSO providers via GET /api/v1/auth/oidc/providers/admin",
+      "User clicks a provider button → frontend calls POST /api/v1/auth/oidc/challenge → backend stores code_verifier, nonce, state, and validated returnOrigin in server-side ExternalAuthStateTicket (never sessionStorage)",
+      "Browser redirects to the external IdP (Azure AD, Google, Okta, etc.) with redirect_uri pinned to central https://api.scripe.org/api/v1/auth/oidc/callback (or /api/v1/auth/saml/acs/{providerId})",
+      "IdP returns authorization code / SAML assertion centrally to api.scripe.org; backend exchanges code server-side using the stored code_verifier and validates tenant status + HybridMfaPolicy",
+      "Backend mints a 120s single-use SHA-256 ExternalAuthHandoffTicket (auth:ext-handoff:{sha256}) and 302-redirects to https://auth.scripe.org/sso/continue (workspace picker / 2FA) or verified {ReturnOrigin}/sso/callback?code=&state=",
+      "Destination callback calls POST /api/v1/auth/sso/handoff (or Next.js /api/auth/session/establish HMAC micro-relay on verified custom domains) to atomically claim auth:ext-handoff-used:{sha256}",
+      "Custom domains receive a first-party __Host-scripe_refresh_token (HttpOnly, Secure, SameSite=Lax) cookie, while platform origins use {CookiePrefix}_refresh_token + memory JWT",
+      "Frontend keeps bearer tokens in memory (useAppStore), validates tab principal scope via BroadcastChannel + ActivePrincipal, and routes cleanly while preserving scr.oidc.session across app-scoped logouts",
+    ],
+  },
+
+  // ── Central Federation & Custom-Domain Relay ──
+  {
+    type: "heading",
+    level: 2,
+    titleKey: "features.ssoOauth.centralFederationTitle",
+    id: "central-federation",
+  },
+  { type: "paragraph", contentKey: "features.ssoOauth.centralFederationContent" },
+  {
+    type: "table",
+    headers: ["Setting / Route", "Role", "Security Invariant"],
+    rows: [
+      [
+        "Authentication:CentralFederation",
+        "Master feature-flag block in CentralFederationOptions.cs",
+        "Enables central callbacks, SHA-256 handoff, dynamic CORS/CSRF, custom-domain relay, and keeps EnableCentralNativeAndPasskeyMigration = false",
+      ],
+      [
+        "Tenancy:AuthBaseUrl & OpenIddict:FrontendBaseUrl",
+        "Decoupled interactive UI origin (https://auth.scripe.org)",
+        "Separates central Auth/Consent UI from https://api.scripe.org external callbacks and workspace dashboards",
+      ],
+      [
+        "/api/auth/session/{establish,refresh,logout}",
+        "First-party Next.js BFF HMAC micro-relay for custom domains",
+        "Enforces Sec-Fetch-Site/Origin + HMAC-SHA256 (30s skew, 60s atomic nonce in SessionRelayAuthenticator); issues __Host-scripe_refresh_token",
+      ],
+      [
+        "IVerifiedOriginEvaluator",
+        "60s generation-cached custom-domain verifier",
+        "Authorizes active non-suspended verified tenant origins dynamically in DynamicVerifiedCorsPolicyProvider and CSRF guards",
+      ],
     ],
   },
 

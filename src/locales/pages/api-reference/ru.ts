@@ -36,7 +36,7 @@ export const ru = {
         "Обменивает действительный refresh-токен на новую пару токенов. Ротация (single-use rotation) обязательна.",
       logoutTitle: "Выход (Logout)",
       logoutDesc:
-        "[AllowAnonymous] Отзывает текущий refresh-токен и очищает сеансовые cookie BrandingSettings (204 No Content).",
+        "[AllowAnonymous] Отзывает текущий refresh-токен и очищает cookie BrandingSettings; поддерживает logoutScope ('app' сохраняет scr.oidc.session, 'central' очищает её) (204 No Content).",
       tfaTitle: "Двухфакторная аутентификация (2FA)",
       tfaIntro: "Поддержка TOTP (Google Authenticator) для дополнительной безопасности входа.",
       tfaEnableDesc: "Генерация секрета и URI QR-кода.",
@@ -62,7 +62,20 @@ export const ru = {
       discoverWorkspacesDesc:
         "Поиск всех доступных рабочих областей и организаций, связанных с учетными данными.",
       revokeAllSessionsDesc:
-        "Одновременный отзыв всех активных сеансов и токенов обновления на всех устройствах.",
+        "Отзыв всех остальных активных сеансов по чёрному списку соседних JTI при сохранении текущей активной сессии.",
+      federationEndpointsTitle: "Центральная федерация и Session Micro-Relay для доменов",
+      centralOidcCallbackDesc:
+        "[AllowAnonymous] Центральный callback OIDC на api.scripe.org для погашения ExternalAuthStateTicket и выдачи 120s ExternalAuthHandoffTicket.",
+      centralSamlAcsDesc:
+        "[AllowAnonymous] Центральный SAML 2.0 ACS-обработчик, выпускающий 120s SHA-256 ExternalAuthHandoffTicket на auth.scripe.org или проверенный домен.",
+      ssoHandoffDesc:
+        "[AllowAnonymous] Атомарное однократное погашение ExternalAuthHandoffTicket (auth:ext-handoff-used:{sha256}) в токены или 2FA/выбор области.",
+      relayEstablishDesc:
+        "First-party Next.js BFF HMAC micro-relay (X-Scripe-Session-Relay-*) для создания сессии и записи __Host-scripe_refresh_token.",
+      relayRefreshDesc:
+        "First-party Next.js BFF HMAC micro-relay для ротации __Host-scripe_refresh_token на кастомных доменах.",
+      relayLogoutDesc:
+        "First-party Next.js BFF micro-relay для передачи logoutScope ('app' или 'central') и очистки __Host-scripe_refresh_token.",
       getExternalLoginsDesc:
         "Список внешних провайдеров SSO и сервисов аутентификации, привязанных к учетной записи.",
       linkExternalLoginDesc:
@@ -106,7 +119,7 @@ export const ru = {
       tokenTitle: "Управление токенами",
       refreshDesc: "Бесшовное обновление access-токенов (Refresh).",
       logoutDesc:
-        "[AllowAnonymous] Отзыв текущего refresh-токена и очистка сеансовых cookie (204 No Content).",
+        "[AllowAnonymous] Отзыв текущего refresh-токена и очистка cookie; logoutScope ('app' сохраняет scr.oidc.session, 'central' очищает её) (204 No Content).",
       tfaTitle: "2FA для пользователей",
       tfaEnableDesc: "Генерация TOTP-секрета.",
       tfaConfirmDesc: "Подтверждение 2FA и выдача резервных кодов.",

@@ -30,7 +30,8 @@ export const ar = {
       refreshTitle: "تحديث الرمز (Refresh)",
       refreshDesc: "استبدال الرمز المنتهي بآخر جديد للاستمرار.",
       logoutTitle: "تسجيل الخروج",
-      logoutDesc: "[AllowAnonymous] إبطال رمز التحديث الحالي ومسح ملفات تعريف الارتباط للجلسة (204 No Content).",
+      logoutDesc:
+        "[AllowAnonymous] إبطال رمز التحديث الحالي ومسح ملفات تعريف ارتباط الجلسة؛ يدعم logoutScope ('app' يحافظ على scr.oidc.session و 'central' يمسحه) مع إرجاع 204 No Content.",
       tfaTitle: "المصادقة الثنائية",
       tfaIntro: "دعم لـ TOTP لحماية إضافية من الهجمات والاختراقات.",
       tfaEnableDesc: "توليد كود QR ورمز التأسيس للتفعيل.",
@@ -52,7 +53,21 @@ export const ar = {
         "يمكن للمستخدمين العامين رؤية الأحداث الأمنية لجميع الإداريين عبر /api/v1/audit.",
       discoverWorkspacesDesc:
         "اكتشاف جميع مساحات العمل والمؤسسات المتاحة للمستخدم بناءً على بيانات اعتماده.",
-      revokeAllSessionsDesc: "إلغاء جميع الجلسات النشطة ورموز التحديث عبر كافة الأجهزة في آن واحد.",
+      revokeAllSessionsDesc:
+        "إلغاء جميع الجلسات النشطة الأخرى عبر حظر معرفات JTI الشقيقة مع الحفاظ على الجلسة الحالية النشطة للمتصل.",
+      federationEndpointsTitle: "نقاط الاتحاد المركزي ومرحل جلسات النطاقات المخصصة",
+      centralOidcCallbackDesc:
+        "[AllowAnonymous] استدعاء OIDC المركزي على api.scripe.org لاستهلاك ExternalAuthStateTicket وإصدار تذكرة ExternalAuthHandoffTicket بمهلة 120 ثانية.",
+      centralSamlAcsDesc:
+        "[AllowAnonymous] مستلم تأكيدات SAML 2.0 المركزي لإصدار تذكرة تسليم SHA-256 بمهلة 120 ثانية والتوجيه لـ auth.scripe.org أو النطاق الموثق.",
+      ssoHandoffDesc:
+        "[AllowAnonymous] استرداد تذكرة ExternalAuthHandoffTicket أحادية الاستخدام ذرياً للحصول على رموز الجلسة أو حالة 2FA واختيار مساحة العمل.",
+      relayEstablishDesc:
+        "مرحل Next.js BFF للنطاق المخصص (HMAC-SHA256 X-Scripe-Session-Relay-*) لتأسيس الجلسة وتعيين __Host-scripe_refresh_token.",
+      relayRefreshDesc:
+        "مرحل Next.js BFF لتدوير __Host-scripe_refresh_token على النطاقات المخصصة عبر طلب موقع بـ HMAC.",
+      relayLogoutDesc:
+        "مرحل Next.js BFF لتمرير logoutScope ('app' افتراضياً أو 'central') ومسح __Host-scripe_refresh_token.",
       getExternalLoginsDesc:
         "سرد وسائل الدخول الموحد SSO ومزودي الهوية الخارجية المرتبطة بهذا الحساب.",
       linkExternalLoginDesc:
@@ -89,7 +104,8 @@ export const ar = {
       resetPasswordDesc: "تعيين كلمة المرور باستخدام الرمز السري المرسل.",
       tokenTitle: "إدارة الرموز",
       refreshDesc: "تدوير الرموز القديمة.",
-      logoutDesc: "[AllowAnonymous] إبطال رمز التحديث الحالي ومسح ملفات تعريف الارتباط للجلسة (204 No Content).",
+      logoutDesc:
+        "[AllowAnonymous] إبطال رمز التحديث الحالي ومسح ملفات تعريف ارتباط الجلسة؛ يدعم logoutScope ('app' يحافظ على scr.oidc.session و 'central' يمسحه) مع إرجاع 204 No Content.",
       tfaTitle: "مصادقة ثنائية للمستخدم",
       tfaEnableDesc: "توليد كود QR للمستخدم.",
       tfaConfirmDesc: "تأكيد وتوليد رموز بديلة للمستخدم.",

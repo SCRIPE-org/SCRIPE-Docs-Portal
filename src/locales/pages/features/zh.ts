@@ -415,8 +415,12 @@ export const zh = {
     ssoOauth: {
       samlTitle: "SAML 2.0 企业级联合身份认证",
       samlContent: "无缝对接主流企业 IdP 身份提供商，支持基于 SCIM 协议的组织账户自动同步。",
-      oidcCallbackTitle: "OpenID Connect 标准回调管线",
-      oidcCallbackContent: "严格核验 ID Token 签名与 Claims 有效性，安全完成授权码密码学置换。",
+      oidcCallbackTitle: "中央 OIDC/SAML 回调与单次 Handoff 票据",
+      oidcCallbackContent:
+        "外部 IdP 回调统一收敛至 https://api.scripe.org（GET /api/v1/auth/oidc/callback 与 POST /api/v1/auth/saml/acs/{providerId}），在服务端核销 ExternalAuthStateTicket（禁用浏览器 sessionStorage）并签发 120 秒 SHA-256 ExternalAuthHandoffTicket 重定向至 auth.scripe.org/sso/continue 或 {ReturnOrigin}/sso/callback，随后经 POST /api/v1/auth/sso/handoff 一次性兑换。",
+      centralFederationTitle: "中央身份联邦与自定义域名会话微中继",
+      centralFederationContent:
+        "在 Authentication:CentralFederation 架构下（Tenancy:AuthBaseUrl 与 OpenIddict:FrontendBaseUrl 指向 https://auth.scripe.org），已验证自定义域名通过 HMAC 签名的 Next.js 会话中继（/api/auth/session/establish、/refresh、/logout -> __Host-scripe_refresh_token）与 IVerifiedOriginEvaluator 动态 CORS/CSRF 运行，而原生登录与双 RP 通行密钥锁定在 admin.scripe.org（EnableCentralNativeAndPasskeyMigration: false）。",
       oauthMirroringTitle: "OAuth 社交账户档案镜像同步",
       oauthMirroringContent: "在用户通过第三方登录时，自动平滑同步头像、昵称及认证邮箱至系统档案。",
       title: "SSO 与 OAuth 服务器 (Keycloak 的企业级替代方案)",

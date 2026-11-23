@@ -478,9 +478,12 @@ export const fr = {
       samlTitle: "Authentification d'Entreprise SAML 2.0",
       samlContent:
         "Interconnexion Single Sign-On avec les fournisseurs d'identité des grandes organisations.",
-      oidcCallbackTitle: "Gestionnaire de Callback OpenID Connect",
+      oidcCallbackTitle: "Callback Central OIDC/SAML et Ticket Handoff à Usage Unique",
       oidcCallbackContent:
-        "Contrôle d'intégrité des jetons ID Token et échange sécurisé de codes d'autorisation.",
+        "Les callbacks IdP externes convergent sur https://api.scripe.org (GET /api/v1/auth/oidc/callback et POST /api/v1/auth/saml/acs/{providerId}), consomment le ExternalAuthStateTicket côté serveur (sans sessionStorage) et émettent un ExternalAuthHandoffTicket SHA-256 de 120s vers auth.scripe.org/sso/continue ou {ReturnOrigin}/sso/callback pour échange unique via POST /api/v1/auth/sso/handoff.",
+      centralFederationTitle: "Fédération Centrale d'Identité et Relais de Domaine Personnalisé",
+      centralFederationContent:
+        "Avec Authentication:CentralFederation (https://auth.scripe.org et https://api.scripe.org), les domaines personnalisés vérifiés utilisent le micro-relais HMAC Next.js (/api/auth/session/establish, /refresh, /logout -> __Host-scripe_refresh_token) et CORS/CSRF dynamique IVerifiedOriginEvaluator, tout en verrouillant la connexion native et les passkeys Dual-RP sur admin.scripe.org (EnableCentralNativeAndPasskeyMigration: false).",
       oauthMirroringTitle: "Synchronisation de Profil OAuth",
       oauthMirroringContent:
         "Mise à jour en continu des données d'identité et avatars à chaque authentification externe.",

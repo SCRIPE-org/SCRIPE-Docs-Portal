@@ -36,7 +36,7 @@ export const en = {
         "Exchange a valid refresh token for a new access + refresh token pair. Single-use rotation.",
       logoutTitle: "Logout",
       logoutDesc:
-        "[AllowAnonymous] Revoke the current refresh token and evict BrandingSettings session cookies (204 No Content).",
+        "[AllowAnonymous] Revoke the current refresh token and evict BrandingSettings session cookies; accepts logoutScope ('app' default preserves scr.oidc.session, 'central' clears it) returning 204 No Content.",
       tfaTitle: "Two-Factor Authentication",
       tfaIntro:
         "SCRIPE supports TOTP-based 2FA using authenticator apps (Google Authenticator, Authy, Microsoft Authenticator). When enabled, login returns a single-use twoFactorPendingToken instead of JWT tokens until verified.",
@@ -63,7 +63,20 @@ export const en = {
       discoverWorkspacesDesc:
         "Discover all accessible workspaces and organizations associated with user credentials.",
       revokeAllSessionsDesc:
-        "Revoke all active sessions and refresh tokens across all devices simultaneously.",
+        "Revoke all other active sessions by blacklisting sibling session JTIs (BlacklistSessionJtisAsync) while preserving the caller's active refresh session.",
+      federationEndpointsTitle: "Central Federation & Custom-Domain Session Relay",
+      centralOidcCallbackDesc:
+        "[AllowAnonymous] Central OIDC callback on api.scripe.org consuming ExternalAuthStateTicket and minting a 120s SHA-256 ExternalAuthHandoffTicket.",
+      centralSamlAcsDesc:
+        "[AllowAnonymous] Central SAML 2.0 ACS handler minting a 120s SHA-256 ExternalAuthHandoffTicket and redirecting to auth.scripe.org or verified custom domain.",
+      ssoHandoffDesc:
+        "[AllowAnonymous] Atomically redeem a single-use ExternalAuthHandoffTicket (auth:ext-handoff-used:{sha256}) into session tokens or 2FA/workspace continuation state.",
+      relayEstablishDesc:
+        "First-party Next.js BFF micro-relay redeeming handoff/login with HMAC-SHA256 X-Scripe-Session-Relay-* headers and setting __Host-scripe_refresh_token.",
+      relayRefreshDesc:
+        "First-party Next.js BFF micro-relay rotating __Host-scripe_refresh_token on verified custom domains over HMAC-signed API call.",
+      relayLogoutDesc:
+        "First-party Next.js BFF micro-relay forwarding logoutScope ('app' default or 'central') and clearing __Host-scripe_refresh_token.",
       getExternalLoginsDesc:
         "List external SSO and social identity provider connections linked to this account.",
       linkExternalLoginDesc:
@@ -108,7 +121,7 @@ export const en = {
       tokenTitle: "Token Management",
       refreshDesc: "Exchange a valid refresh token for a new token pair. Single-use rotation.",
       logoutDesc:
-        "[AllowAnonymous] Revoke the current refresh token and evict session cookies (204 No Content).",
+        "[AllowAnonymous] Revoke the current refresh token and evict session cookies; supports logoutScope ('app' preserves scr.oidc.session, 'central' clears it) returning 204 No Content.",
       tfaTitle: "User Two-Factor Authentication",
       tfaEnableDesc: "Generate TOTP secret and QR code for authenticator app setup.",
       tfaConfirmDesc: "Confirm 2FA by verifying the first TOTP code. Returns 10 backup codes.",

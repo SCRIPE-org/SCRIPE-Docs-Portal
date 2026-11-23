@@ -348,6 +348,16 @@ const sections: DocSection[] = [
         "bool",
         "true = resident credential enabling passwordless login without a username",
       ],
+      [
+        "RpId",
+        "string (max 253)",
+        "Bound WebAuthn Relying Party ID (Dual-RP validated via AllowedRpIds; existing rows backfilled to 'admin.scripe.org')",
+      ],
+      [
+        "RegistrationOrigin",
+        "string? (max 255)",
+        "Validated registration ceremony origin stored on credential creation (EnableCentralNativeAndPasskeyMigration = false)",
+      ],
     ],
   },
   {

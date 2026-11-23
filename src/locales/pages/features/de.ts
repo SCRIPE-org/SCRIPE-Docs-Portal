@@ -488,9 +488,12 @@ export const de = {
       samlTitle: "SAML 2.0 Enterprise-Authentifizierung",
       samlContent:
         "Enterprise-Single-Sign-On für Identitätsanbieter mit automatischer Benutzerbereitstellung.",
-      oidcCallbackTitle: "OpenID Connect Callback-Pipeline",
+      oidcCallbackTitle: "Zentrale OIDC/SAML-Callback-Pipeline & Einmal-Handoff",
       oidcCallbackContent:
-        "Sicherer Abgleich von ID-Tokens und kryptografischer Austausch von Authorization-Codes.",
+        "Externe IdP-Callbacks landen zentral unter https://api.scripe.org (GET /api/v1/auth/oidc/callback, POST /api/v1/auth/saml/acs/{providerId}), verbrauchen das serverseitige ExternalAuthStateTicket (kein sessionStorage) und stellen ein 120s SHA-256 ExternalAuthHandoffTicket für auth.scripe.org/sso/continue oder {ReturnOrigin}/sso/callback aus (einmalige Einlösung über POST /api/v1/auth/sso/handoff).",
+      centralFederationTitle: "Central Identity Federation & Custom-Domain-Relay",
+      centralFederationContent:
+        "Mit Authentication:CentralFederation (https://auth.scripe.org für Auth/Consent, https://api.scripe.org für Callbacks) authentifizieren verifizierte Custom-Domains über HMAC-signierte Next.js-Relay-Routen (/api/auth/session/establish, /refresh, /logout -> __Host-scripe_refresh_token) und dynamisches CORS via IVerifiedOriginEvaluator, während natives Login und Dual-RP WebAuthn auf admin.scripe.org gesperrt bleiben (EnableCentralNativeAndPasskeyMigration: false).",
       oauthMirroringTitle: "Profilsynchronisierung via OAuth",
       oauthMirroringContent:
         "Automatische Aktualisierung von Benutzerstammdaten und Profilbildern beim externen Login.",

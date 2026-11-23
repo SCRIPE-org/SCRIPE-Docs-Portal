@@ -474,9 +474,12 @@ export const ru = {
       samlTitle: "Корпоративная Авторизация SAML 2.0",
       samlContent:
         "Интеграция с корпоративными провайдерами идентификации (IdP) для единого входа.",
-      oidcCallbackTitle: "Обработчик OpenID Connect",
+      oidcCallbackTitle: "Центральный Callback OIDC/SAML и одноразовый Handoff",
       oidcCallbackContent:
-        "Проверка подлинности токенов ID Token и защищенный обмен авторизационными кодами.",
+        "Внешние IdP-колбеки обрабатываются центрально на https://api.scripe.org (GET /api/v1/auth/oidc/callback и POST /api/v1/auth/saml/acs/{providerId}), погашая серверный ExternalAuthStateTicket (без sessionStorage) и выпуская 120s SHA-256 ExternalAuthHandoffTicket на auth.scripe.org/sso/continue или {ReturnOrigin}/sso/callback для одноразового обмена через POST /api/v1/auth/sso/handoff.",
+      centralFederationTitle: "Центральная федерация идентичности и Session Micro-Relay",
+      centralFederationContent:
+        "При Authentication:CentralFederation (https://auth.scripe.org для Auth/Consent и https://api.scripe.org для колбеков) проверенные кастомные домены работают через HMAC-подписанные маршруты Next.js (/api/auth/session/establish, /refresh, /logout -> __Host-scripe_refresh_token) и динамический CORS IVerifiedOriginEvaluator, тогда как нативный вход и Dual-RP passkeys остаются на admin.scripe.org (EnableCentralNativeAndPasskeyMigration: false).",
       oauthMirroringTitle: "Синхронизация Профилей OAuth",
       oauthMirroringContent:
         "Автоматическое обновление имени и аватара пользователя из внешнего сервиса при авторизации.",

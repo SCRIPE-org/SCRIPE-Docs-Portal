@@ -201,17 +201,27 @@ const sections: DocSection[] = [
 ]`,
       },
       {
+        label: "POST /logout (Split Scope)",
+        language: "json",
+        filename: "POST /api/v1/auth/admin/logout — Request & Response (204 No Content)",
+        code: `// Request Body — 'app' preserves scr.oidc.session; 'central' revokes central SSO session too
+{
+  "refreshToken": "optional-when-sent-via-httponly-cookie",
+  "logoutScope": "app" // "app" (default) | "central"
+}`,
+      },
+      {
         label: "POST /sessions/revoke-all",
         language: "json",
         filename: "POST /api/v1/auth/admin/sessions/revoke-all — Request & Response",
-        code: `// Request Body
+        code: `// Request Body (current caller session is preserved; sibling session JTIs are blacklisted)
 {
-  "refreshToken": "dGhpcyBpcyBhIHJlZnJlc2ggdG9rZW4..."
+  "refreshToken": "optional-when-sent-via-httponly-cookie"
 }
 
-// Response (200 OK)
+// Response (200 OK — sibling revoked count)
 {
-  "revokedCount": 1
+  "revokedCount": 2
 }`,
       },
     ],
@@ -468,6 +478,55 @@ const sections: DocSection[] = [
   "protocol": "Oidc",
   "state": "signed-state-ticket"
 }`,
+      },
+    ],
+  },
+
+  // ─── Central Identity Federation & Custom-Domain Relay ────
+  {
+    type: "heading",
+    level: 2,
+    titleKey: "apiReference.authApi.federationEndpointsTitle",
+    id: "central-federation-relay",
+  },
+  {
+    type: "api-table",
+    endpoints: [
+      {
+        method: "GET",
+        path: "/api/v1/auth/oidc/callback",
+        descriptionKey: "apiReference.authApi.centralOidcCallbackDesc",
+        auth: "None ([AllowAnonymous], consumes ExternalAuthStateTicket)",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/saml/acs/{providerId}",
+        descriptionKey: "apiReference.authApi.centralSamlAcsDesc",
+        auth: "None ([AllowAnonymous], XML Signature + RelayState)",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/sso/handoff",
+        descriptionKey: "apiReference.authApi.ssoHandoffDesc",
+        auth: "None ([AllowAnonymous], 120s SHA-256 Handoff Ticket)",
+      },
+      {
+        method: "POST",
+        path: "/api/auth/session/establish",
+        descriptionKey: "apiReference.authApi.relayEstablishDesc",
+        auth: "Same-Origin BFF Relay + HMAC-SHA256 (X-Scripe-Session-Relay-*)",
+      },
+      {
+        method: "POST",
+        path: "/api/auth/session/refresh",
+        descriptionKey: "apiReference.authApi.relayRefreshDesc",
+        auth: "__Host-scripe_refresh_token + HMAC-SHA256 BFF Relay",
+      },
+      {
+        method: "POST",
+        path: "/api/auth/session/logout",
+        descriptionKey: "apiReference.authApi.relayLogoutDesc",
+        auth: "__Host-scripe_refresh_token + HMAC-SHA256 BFF Relay",
       },
     ],
   },

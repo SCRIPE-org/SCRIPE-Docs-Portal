@@ -459,8 +459,8 @@ public async Task InvokeAsync(HttpContext context)
       {
         method: "POST",
         path: "/api/v1/auth/admin/logout",
-        descriptionKey: "Revoke current refresh token and clear session",
-        auth: "Public",
+        descriptionKey: "Revoke current refresh token and clear session cookies; logoutScope: 'app' (default) preserves scr.oidc.session, 'central' clears it (204)",
+        auth: "Public ([AllowAnonymous])",
       },
       {
         method: "GET",
@@ -477,7 +477,7 @@ public async Task InvokeAsync(HttpContext context)
       {
         method: "POST",
         path: "/api/v1/auth/admin/sessions/revoke-all",
-        descriptionKey: "Revoke all sessions except the current one",
+        descriptionKey: "Blacklist sibling session JTIs (BlacklistSessionJtisAsync) while preserving caller's active refresh session",
         auth: "JWT",
       },
       {

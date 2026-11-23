@@ -37,7 +37,7 @@ export const fr = {
         "Consomme le Refresh Token valide stocké et émet une nouvelle paire cryptographique.",
       logoutTitle: "Déconnexion (Logout)",
       logoutDesc:
-        "[AllowAnonymous] Révoque le Refresh Token courant et efface les cookies de session BrandingSettings (204 No Content).",
+        "[AllowAnonymous] Révoque le Refresh Token courant et efface les cookies BrandingSettings ; accepte logoutScope ('app' préserve scr.oidc.session, 'central' la supprime) (204 No Content).",
       tfaTitle: "Authentification à Deux Facteurs (2FA)",
       tfaIntro:
         "Les protocoles TOTP intégrés aux applications d'authentification classiques (Google, Microsoft, Authy).",
@@ -70,7 +70,20 @@ export const fr = {
       discoverWorkspacesDesc:
         "Découvrir tous les espaces de travail et organisations accessibles avec les identifiants.",
       revokeAllSessionsDesc:
-        "Révoquer instantanément toutes les sessions actives et jetons de rafraîchissement sur tous les appareils.",
+        "Révoquer toutes les autres sessions actives par mise sur liste noire des JTI frères tout en préservant la session courante.",
+      federationEndpointsTitle: "Fédération Centrale et Relais de Session sur Domaine Personnalisé",
+      centralOidcCallbackDesc:
+        "[AllowAnonymous] Callback central OIDC sur api.scripe.org consommant ExternalAuthStateTicket et émettant un ExternalAuthHandoffTicket SHA-256 (120s).",
+      centralSamlAcsDesc:
+        "[AllowAnonymous] Point ACS SAML 2.0 central générant un ExternalAuthHandoffTicket SHA-256 (120s) vers auth.scripe.org ou domaine vérifié.",
+      ssoHandoffDesc:
+        "[AllowAnonymous] Échange atomique unique d'un ExternalAuthHandoffTicket (auth:ext-handoff-used:{sha256}) contre jetons ou état 2FA/espace.",
+      relayEstablishDesc:
+        "Micro-relais HMAC Next.js BFF (X-Scripe-Session-Relay-*) établissant la session et posant __Host-scripe_refresh_token.",
+      relayRefreshDesc:
+        "Micro-relais HMAC Next.js BFF assurant la rotation de __Host-scripe_refresh_token sur domaine personnalisé.",
+      relayLogoutDesc:
+        "Micro-relais Next.js BFF transmettant logoutScope ('app' ou 'central') et supprimant __Host-scripe_refresh_token.",
       getExternalLoginsDesc:
         "Lister les connexions SSO et fournisseurs d'identité externes liés à ce compte.",
       linkExternalLoginDesc:
@@ -115,7 +128,7 @@ export const fr = {
       tokenTitle: "Gestion des Accès",
       refreshDesc: "Appel de rotation silencieuse invisible pour le client Web.",
       logoutDesc:
-        "[AllowAnonymous] Révoque le Refresh Token courant et purge les cookies de session (204 No Content).",
+        "[AllowAnonymous] Révoque le Refresh Token courant et purge les cookies ; logoutScope ('app' préserve scr.oidc.session, 'central' l'efface) (204 No Content).",
       tfaTitle: "2FA Utilisateur Final",
       tfaEnableDesc: "QR générateur de la graine secrète du client.",
       tfaConfirmDesc: "Émission des jetons de récupération hors-ligne.",

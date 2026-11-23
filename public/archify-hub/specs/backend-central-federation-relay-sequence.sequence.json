@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "SCRIPE-Backend Central Identity Federation, HMAC Session Relay & Dual-RP Sequence",
+    "locale": "en",
+    "output": "SCRIPE-Docs-Portal/public/archify-hub/backend-central-federation-relay-sequence.html",
+    "quality_profile": "showcase",
+    "parentHref": "central-identity-federation-fullstack.html",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Backend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "970806205bbf3d81a5cee892ed3841d34d6b2ae6"
+    }
+  },
+  "participants": [
+    {
+      "id": "client",
+      "type": "external",
+      "label": "Browser / Tenant BFF",
+      "sublabel": "auth & custom host"
+    },
+    {
+      "id": "idp",
+      "type": "external",
+      "label": "External IdP",
+      "sublabel": "OIDC / SAML 2.0"
+    },
+    {
+      "id": "relay_cors",
+      "type": "security",
+      "label": "Relay & CORS Gate",
+      "sublabel": "HMAC + VerifiedOrigin",
+      "sources": [
+        { "path": "src/Host/API/Middleware/SessionRelayAuthenticator.cs", "line": 105, "end_line": 194, "label": "HMAC + Replay Validation" },
+        { "path": "src/Modules/Identity/Identity.Infrastructure/Services/VerifiedOriginEvaluator.cs", "line": 53, "end_line": 125, "label": "60s Origin Cache" },
+        { "path": "src/Host/API/Extensions/CorsConfiguration.cs", "line": 114, "end_line": 121, "label": "Dynamic CORS Provider" }
+      ]
+    },
+    {
+      "id": "ctrl",
+      "type": "backend",
+      "label": "Central Auth API",
+      "sublabel": "OidcCentral + Handoff",
+      "sources": [
+        { "path": "src/Host/API/Controllers/Auth/OidcClientController.Central.cs", "line": 39, "end_line": 145, "label": "Central OIDC Callback" },
+        { "path": "src/Host/API/Controllers/Auth/SsoHandoffController.cs", "line": 18, "end_line": 57, "label": "POST /sso/handoff" },
+        { "path": "src/Modules/Identity/Identity.Application/Options/CentralFederationOptions.cs", "line": 10, "end_line": 48, "label": "Federation Feature Flags" }
+      ]
+    },
+    {
+      "id": "handoff",
+      "type": "security",
+      "label": "Handoff & Cookies",
+      "sublabel": "SHA-256 + LogoutScope",
+      "sources": [
+        { "path": "src/Modules/Identity/Identity.Infrastructure/Services/ExternalAuthHandoffStore.cs", "line": 15, "end_line": 100, "label": "120s Atomic Handoff" },
+        { "path": "src/Host/API/Middleware/CookieAuthMiddleware.Relay.cs", "line": 140, "end_line": 222, "label": "Relay Cookie Stripper" },
+        { "path": "src/Host/API/Security/AuthLogoutScopeHelper.cs", "line": 15, "end_line": 36, "label": "Split Logout Scope" }
+      ]
+    },
+    {
+      "id": "security",
+      "type": "security",
+      "label": "Sudo & Passkey/JTI",
+      "sublabel": "Dual-RP + Sibling JTI",
+      "sources": [
+        { "path": "src/Modules/Identity/Identity.Application/Behaviors/SovereignAccountSecurityBehavior.cs", "line": 80, "end_line": 133, "label": "Sudo Pipeline Gate" },
+        { "path": "src/Modules/Identity/Identity.Infrastructure/Services/Fido2PasskeyService.cs", "line": 152, "end_line": 225, "label": "Dual-RP Validation" },
+        { "path": "src/Modules/Identity/Identity.Application/Commands/Auth/RevokeAllSessionsCommandHandler.cs", "line": 64, "end_line": 135, "label": "Sibling JTI Blacklist" }
+      ]
+    }
+  ],
+  "segments": [
+    { "from": 148, "to": 280, "label": "1. Central Callback -> 120s SHA-256 Handoff" },
+    { "from": 292, "to": 424, "label": "2. HMAC BFF Session Relay & Cookie Exchange" },
+    { "from": 436, "to": 584, "label": "3. Dual-RP Passkey, Sudo, Revoke & Split Logout" }
+  ],
+  "messages": [
+    { "id": "idp_cb", "from": "idp", "to": "ctrl", "y": 170, "label": "GET /oidc/callback or POST /saml/acs", "variant": "emphasis" },
+    { "id": "origin_check", "from": "ctrl", "to": "relay_cors", "y": 202, "label": "validate ReturnOrigin (IVerifiedOriginEvaluator)", "variant": "security" },
+    { "id": "mint_handoff", "from": "ctrl", "to": "handoff", "y": 234, "label": "mint 120s SHA-256 ExternalAuthHandoffTicket", "variant": "security" },
+    { "id": "redirect_302", "from": "ctrl", "to": "client", "y": 266, "label": "302 auth.scripe.org/sso/continue or /sso/callback", "variant": "return" },
+    { "id": "relay_post", "from": "client", "to": "relay_cors", "y": 314, "label": "POST /sso/handoff (X-Scripe-Session-Relay-*)", "variant": "emphasis" },
+    { "id": "verify_hmac", "from": "relay_cors", "to": "ctrl", "y": 346, "label": "30s skew + 60s nonce HMAC verified", "variant": "security" },
+    { "id": "claim_ticket", "from": "ctrl", "to": "handoff", "y": 378, "label": "TryAddAsync auth:ext-handoff-used:{sha256}", "variant": "security" },
+    { "id": "strip_refresh", "from": "handoff", "to": "client", "y": 410, "label": "Access JWT + refreshToken JSON for BFF cookie", "variant": "return" },
+    { "id": "sudo_call", "from": "client", "to": "security", "y": 458, "label": "ISovereignSudoProtectedCommand (X-Sudo-Token)", "variant": "security" },
+    { "id": "passkey_reg", "from": "client", "to": "security", "y": 490, "label": "Passkey /revoke-all (RpId + sibling JTI blacklist)", "variant": "emphasis" },
+    { "id": "logout_app", "from": "client", "to": "handoff", "y": 522, "label": "POST /logout (logoutScope: app default)", "variant": "default" },
+    { "id": "preserve_oidc", "from": "handoff", "to": "client", "y": 554, "label": "204 clear refresh cookie (keep scr.oidc.session)", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "ctrl", "from": 166, "to": 272, "type": "backend" },
+    { "participant": "relay_cors", "from": 310, "to": 352, "type": "security" },
+    { "participant": "ctrl", "from": 342, "to": 416, "type": "backend" },
+    { "participant": "handoff", "from": 374, "to": 414, "type": "security" },
+    { "participant": "security", "from": 454, "to": 496, "type": "security" },
+    { "participant": "handoff", "from": 518, "to": 560, "type": "security" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Central Ingress & SHA-256 Handoff",
+      "items": [
+        "External OIDC/SAML callbacks terminate on api.scripe.org without touching client sessionStorage",
+        "ExternalAuthHandoffStore keys tickets by SHA-256 digest with a 120s TTL and atomic TryAddAsync replay lock",
+        "VerifiedOriginEvaluator caches verified active non-suspended custom tenant hosts for 60s"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "HMAC Relay & Dual-RP Safety",
+      "items": [
+        "SessionRelayAuthenticator fails closed on 30s skew, 60s nonce replay, or <32-char HMAC secrets",
+        "CookieAuthMiddleware strips refreshToken from JSON bodies except authenticated BFF relay calls",
+        "AdminPasskey.RpId and WebAuthnChallenge.RpId enforce AllowedRpIds while migration flag stays false"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Sibling-JTI Revoke & Split Logout",
+      "items": [
+        "RevokeAllSessionsCommandHandler preserves caller's active refresh session and blacklists sibling JTIs",
+        "AuthLogoutScopeHelper preserves scr.oidc.session during /refresh, /sso/handoff, and 'app' logouts",
+        "Only explicit logoutScope: 'central' clears the central OpenIddict session cookie"
+      ]
+    }
+  ]
+}

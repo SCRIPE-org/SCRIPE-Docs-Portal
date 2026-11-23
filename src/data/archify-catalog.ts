@@ -51,7 +51,7 @@ export const ARCHIFY_PILLAR_META: Record<
     repoName: "SCRIPE-org/SCRIPE",
     commit: "960923d",
     accentColor: "#B7FF00",
-    count: 24,
+    count: 25,
   },
   backend: {
     label: "SCRIPE-Backend Deep Dive (.NET 10 & AstraFlow 2.4.7)",
@@ -59,9 +59,9 @@ export const ARCHIFY_PILLAR_META: Record<
     tagline:
       "18 Isolated 3-Project Domain Modules, 29-Stage Security Gate, 927+ CQRS Handlers, 3-TX Idempotency & Multi-DB Persistence",
     repoName: "SCRIPE-org/SCRIPE-Backend",
-    commit: "1c1631172d447d311686211c07b52b84a6245678",
+    commit: "970806205bbf3d81a5cee892ed3841d34d6b2ae6",
     accentColor: "#38BDF8",
-    count: 17,
+    count: 18,
   },
   frontend: {
     label: "SCRIPE-Frontend Deep Dive (Next.js 16 + React 19 MVVM)",
@@ -69,9 +69,9 @@ export const ARCHIFY_PILLAR_META: Record<
     tagline:
       "65+ Isolated Sub-Modules, 5-Layer SOLID MVVM Data Flow, Inversify DI, Sileo UI & Bilingual EN/AR Parity",
     repoName: "SCRIPE-org/SCRIPE-Frontend",
-    commit: "d3978a00ea6a51f625bc14a9fd6bb52cef07a02f",
+    commit: "a9748503c43815e42ee78dd7a9b9d8470a181a17",
     accentColor: "#A78BFA",
-    count: 16,
+    count: 17,
   },
 };
 
@@ -819,9 +819,36 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
       "SCRIPE-Dev-Tools/scripe-cli/src/commands/arch-check-scanner.ts",
     ],
   },
+  {
+    id: "central-identity-federation-fullstack",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "CENTRAL FEDERATION · HMAC RELAY · DUAL-RP",
+    title: "Central Identity Federation, Custom-Domain HMAC Relay & Dual-RP WebAuthn",
+    subtitle:
+      "auth.scripe.org + api.scripe.org -> 120s SHA-256 Handoff -> Custom-Domain __Host-scripe_refresh_token Relay -> Split Logout & Sibling-JTI Revoke",
+    description:
+      "Full-stack Archify Explainer uniting Stage 6B Central Identity Federation across SCRIPE-Backend (970806205), SCRIPE-Frontend (a9748503c), and SCRIPE-Dev-Tools (23abe79): server-held PKCE ExternalAuthStateTicket, 120s ExternalAuthHandoffTicket, HMAC BFF micro-relay, IVerifiedOriginEvaluator dynamic CORS, Decision 2 Dual-RP passkey lock, expanded Sudo 403 retry, sibling-JTI RevokeAllSessions, and split logoutScope ('702/702' API tests, '200/200' AuthzGates, '90/90' BE build, '208/208' FE build, '9/9' Live E2E, 94 BE / 92 FE arch scores).",
+    htmlUrl: "/archify-hub/central-identity-federation-fullstack.html",
+    specUrl: "/archify-hub/specs/central-identity-federation-fullstack.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "970806205 / a9748503c / 23abe79",
+    featured: true,
+    highlights: [
+      "Reconciles verified Stage 5/6 metrics: 702/702 API.UnitTests, 200/200 AuthorizationGates, 90/90 BE build, 208/208 FE build, 9/9 Live E2E, 94 BE / 92 FE arch scores",
+      "Covers Decision 2 (EnableCentralNativeAndPasskeyMigration: false lock), custom-domain __Host-scripe_refresh_token relay, Sudo retry expansion & split scr.oidc.session logout",
+      "Cross-links Backend Relay Sequence (backend-central-federation-relay-sequence.html) & Frontend Central Auth MVVM (frontend-central-auth-sudo-mvvm.html)",
+    ],
+    keySources: [
+      "SCRIPE-Backend/src/Host/API/Controllers/Auth/OidcClientController.Central.cs",
+      "SCRIPE-Backend/src/Host/API/Middleware/SessionRelayAuthenticator.cs",
+      "SCRIPE-Frontend/src/core/services/session-relay-hmac.ts",
+      "SCRIPE-Frontend/src/core/common/origin-routing.ts",
+    ],
+  },
 
   // ============================================================================
-  // PILLAR 2: BACKEND DEEP DIVE (.NET 10 & ASTRAFLOW 2.4.7) — 17 PAGES
+  // PILLAR 2: BACKEND DEEP DIVE (.NET 10 & ASTRAFLOW 2.4.7) — 18 PAGES
   // ============================================================================
   {
     id: "backend-seeding-architecture-review",
@@ -1260,9 +1287,35 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
       "src/Modules/Identity/Identity.Infrastructure/Persistence/Configurations/PasswordHistoryConfiguration.cs",
     ],
   },
+  {
+    id: "backend-central-federation-relay-sequence",
+    pillar: "backend",
+    mode: "sequence",
+    badge: "FEDERATION SEQUENCE · STORY V2",
+    title: "SCRIPE-Backend Central Identity Federation, HMAC Session Relay & Dual-RP Sequence",
+    subtitle:
+      "api.scripe.org OIDC/SAML -> ExternalAuthHandoffStore (120s SHA-256) -> SessionRelayAuthenticator (30s/60s) -> Dual-RP WebAuthn & Split Logout",
+    description:
+      "Native Archify Sequence diagram with attached 2-scene Story pinned to SCRIPE-Backend commit 970806205bbf3d81a5cee892ed3841d34d6b2ae6 (12/12 verified source citations, 702/702 API.UnitTests, 200/200 AuthorizationGates, 90/90 builds, 94 arch score), tracing central callbacks, IVerifiedOriginEvaluator 60s dynamic CORS, CookieAuthMiddleware.Relay, sibling-JTI RevokeAllSessions, and AuthLogoutScopeHelper.",
+    htmlUrl: "/archify-hub/backend-central-federation-relay-sequence.html",
+    specUrl: "/archify-hub/specs/backend-central-federation-relay-sequence.sequence.json",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "970806205bbf3d81a5cee892ed3841d34d6b2ae6",
+    featured: true,
+    highlights: [
+      "12/12 verified SCRIPE-Backend sources across OidcClientController.Central, SsoHandoffController, SessionRelayAuthenticator, VerifiedOriginEvaluator, CookieAuthMiddleware.Relay & Fido2PasskeyService",
+      "Traces 120s SHA-256 ExternalAuthHandoffTicket TryAddAsync lock, 30s/60s fail-closed HMAC relay validation, Dual-RP AdminPasskey.RpId checks & split scr.oidc.session teardown",
+    ],
+    keySources: [
+      "src/Host/API/Controllers/Auth/OidcClientController.Central.cs",
+      "src/Host/API/Middleware/SessionRelayAuthenticator.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Services/ExternalAuthHandoffStore.cs",
+      "src/Modules/Identity/Identity.Application/Commands/Auth/RevokeAllSessionsCommandHandler.cs",
+    ],
+  },
 
   // ============================================================================
-  // PILLAR 3: FRONTEND DEEP DIVE (NEXT.JS 16 + REACT 19 MVVM) — 16 PAGES
+  // PILLAR 3: FRONTEND DEEP DIVE (NEXT.JS 16 + REACT 19 MVVM) — 17 PAGES
   // ============================================================================
   {
     id: "frontend-adaptive-sso-and-cleanup-workflow",
@@ -1694,6 +1747,34 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
       "src/core/store/useAppStore.ts",
       "src/core/providers/route-guard.tsx",
       "src/core/services/api-factory.ts",
+    ],
+  },
+  {
+    id: "frontend-central-auth-sudo-mvvm",
+    pillar: "frontend",
+    mode: "architecture",
+    badge: "CUSTOM DOMAIN RELAY · STORY V2",
+    title: "SCRIPE-Frontend Central Auth, HMAC Session Relay, Principal Isolation & Sudo MVVM",
+    subtitle:
+      "OriginRouting -> ssoHandoffDispatch & ActivePrincipal -> Next.js BFF /api/auth/session/* HMAC Relay -> ApiService Sudo 403 Retry & useAuthLogout",
+    description:
+      "Native Archify Architecture diagram with attached 3-scene Story and 3 Guided Views pinned to SCRIPE-Frontend commit a9748503c43815e42ee78dd7a9b9d8470a181a17 (11/11 verified source citations, 208/208 build, 92 arch score, 9/9 Live E2E), detailing custom-domain __Host-scripe_refresh_token HMAC relay, cross-tab ActivePrincipal + BroadcastChannel isolation, expanded 403 Sudo retry, and split logoutScope.",
+    htmlUrl: "/archify-hub/frontend-central-auth-sudo-mvvm.html",
+    specUrl: "/archify-hub/specs/frontend-central-auth-sudo-mvvm.architecture.json",
+    repoName: "SCRIPE-org/SCRIPE-Frontend",
+    repoCommit: "a9748503c43815e42ee78dd7a9b9d8470a181a17",
+    featured: true,
+    viewsCount: 3,
+    highlights: [
+      "11/11 verified SCRIPE-Frontend sources covering origin-routing.ts, session-relay-hmac.ts, /api/auth/session/{establish,refresh,logout}, ssoHandoffDispatch.ts, active-principal.ts & SudoVerificationModal.tsx",
+      "Models 3 Guided Views: Origin Routing & HMAC Relay, Handoff Dispatch & Tab Isolation, and Sudo 403 Retry & Split Logout",
+    ],
+    keySources: [
+      "src/core/common/origin-routing.ts",
+      "src/core/services/session-relay-hmac.ts",
+      "src/app/api/auth/session/establish/route.ts",
+      "src/core/services/api.service.ts",
+      "src/modules/shared/auth/core/src/presentation/viewmodels/useAuthLogout.ts",
     ],
   },
 ];

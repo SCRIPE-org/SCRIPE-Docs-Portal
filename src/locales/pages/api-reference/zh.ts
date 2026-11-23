@@ -32,7 +32,7 @@ export const zh = {
       refreshDesc:
         "交换合法的长效刷新令牌，获取新一套令牌。采用一次性置换 (Single-use rotation) 设计。",
       logoutTitle: "安全注销",
-      logoutDesc: "[AllowAnonymous] 注销当前 Refresh Token 并清除 BrandingSettings 会话 Cookie（204 No Content）。",
+      logoutDesc: "[AllowAnonymous] 注销当前 Refresh Token 并清除 BrandingSettings 会话 Cookie；支持 logoutScope（默认 'app' 保留 scr.oidc.session，'central' 全量清除）（204 No Content）。",
       tfaTitle: "2FA 双因素强制认证",
       tfaIntro:
         "利用 TOTP (兼容 Google/Microsoft 验证器) 进行安全加固。在激活的情况下，系统将先签发临时的 2FA Session 而非最终访问权限。",
@@ -54,7 +54,14 @@ export const zh = {
       securityTip:
         "安全日志保留策略默认为 90 天。此类端点仅限操作自身数据；总审计日志在另一个模块内供审查。",
       discoverWorkspacesDesc: "根据当前用户认证凭据智能发现并检索其被授权访问的全部工作空间与组织",
-      revokeAllSessionsDesc: "一键原子注销当前用户在所有已登录设备上的全部活跃会话与刷新凭据",
+      revokeAllSessionsDesc: "按同级会话 JTI 批量拉黑其余全部活跃会话与刷新凭据，同时保留调用者当前活跃会话",
+      federationEndpointsTitle: "中央身份联邦与自定义域名会话中继端点",
+      centralOidcCallbackDesc: "[AllowAnonymous] api.scripe.org 中央 OIDC 回调端点，核销 ExternalAuthStateTicket 并签发 120 秒 SHA-256 ExternalAuthHandoffTicket",
+      centralSamlAcsDesc: "[AllowAnonymous] 中央 SAML 2.0 ACS 端点，签发 120 秒 ExternalAuthHandoffTicket 并重定向至 auth.scripe.org 或已验证租户域名",
+      ssoHandoffDesc: "[AllowAnonymous] 原子核销单次 ExternalAuthHandoffTicket（auth:ext-handoff-used:{sha256}）并返回会话令牌或 2FA/工作区选择状态",
+      relayEstablishDesc: "Next.js BFF 自定义域名一方微中继，通过 HMAC-SHA256（X-Scripe-Session-Relay-*）兑换握手并写入 __Host-scripe_refresh_token",
+      relayRefreshDesc: "Next.js BFF 一方微中继，经 HMAC 签名调用轮换自定义域名的 __Host-scripe_refresh_token",
+      relayLogoutDesc: "Next.js BFF 一方微中继，转发 logoutScope（'app' 或 'central'）并清除本域 __Host-scripe_refresh_token",
       getExternalLoginsDesc: "调阅与当前管理员账户已关联绑定的外部企业级 SSO 与第三方社交身份源",
       linkExternalLoginDesc: "发起受 Sudo 保护的联邦 OIDC/SAML 绑定（直接调用 /external-logins/link 返回 410 Gone）",
       unlinkExternalLoginDesc: "从管理员主账户中安全解除并解绑指定的第三方外部身份认证源",
@@ -87,7 +94,7 @@ export const zh = {
       resetPasswordDesc: "以 OTP 口令为引，重置成新密码以恢复权限。",
       tokenTitle: "令牌控制",
       refreshDesc: "用刷新令牌延长会话活性。",
-      logoutDesc: "[AllowAnonymous] 注销当前刷新令牌并清除会话 Cookie（204 No Content）。",
+      logoutDesc: "[AllowAnonymous] 注销当前刷新令牌并清除会话 Cookie；支持 logoutScope（'app' 保留 scr.oidc.session，'central' 清除）（204 No Content）。",
       tfaTitle: "消费者 2FA 功能",
       tfaEnableDesc: "生成客户端专用的动态口令密钥和 QR 二维码图。",
       tfaConfirmDesc: "第一组验证及打印备用应急码。",

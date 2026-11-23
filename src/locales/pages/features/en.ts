@@ -483,9 +483,12 @@ export const en = {
       samlTitle: "SAML 2.0 & Cryptographic Assertion Security",
       samlContent:
         "In addition to OIDC, the platform integrates SAML 2.0 authentication using the ITfoxtec.Identity.Saml2 library. For inbound SSO, public X.509 certificates are loaded from base64 string configurations to validate SAML response signatures while ignoring certificate chain validations. Outbound client connections use platform-wide signing certificates to issue secure SAML assertions.",
-      oidcCallbackTitle: "OIDC Callback & Workspace Caching Flow",
+      oidcCallbackTitle: "Central OIDC/SAML Callback & Single-Use Handoff",
       oidcCallbackContent:
-        "The callback handler validates incoming credentials and manages workspace selection for administrators with access to multiple tenants. A temporary token caches the login profile (SsoTempLoginData) in Redis for 15 minutes, allowing safe workspace selection in the frontend without transferring raw user variables.",
+        "External IdP callbacks terminate centrally at https://api.scripe.org (GET /api/v1/auth/oidc/callback and POST /api/v1/auth/saml/acs/{providerId}), consuming the server-held ExternalAuthStateTicket (never browser sessionStorage), gating suspended tenants and HybridMfaPolicy, and issuing a 120s SHA-256 ExternalAuthHandoffTicket for https://auth.scripe.org/sso/continue or verified {ReturnOrigin}/sso/callback?code=&state= (redeemed once via POST /api/v1/auth/sso/handoff).",
+      centralFederationTitle: "Central Identity Federation & Custom-Domain Relay",
+      centralFederationContent:
+        "Under Authentication:CentralFederation (Tenancy:AuthBaseUrl & OpenIddict:FrontendBaseUrl -> https://auth.scripe.org), verified custom tenant domains authenticate seamlessly through Next.js HMAC-signed session relay routes (/api/auth/session/establish, /refresh, /logout -> __Host-scripe_refresh_token) and IVerifiedOriginEvaluator dynamic CORS/CSRF, while native admin login and Dual-RP WebAuthn passkeys remain intentionally locked on admin.scripe.org / *.admin.scripe.org (EnableCentralNativeAndPasskeyMigration: false).",
       oauthMirroringTitle: "OAuth Application Mirroring & Subscription Quotas",
       oauthMirroringContent:
         "Administrators can register custom client applications to use SCRIPE as their primary OIDC server. New application creations are gated by tenant-scoped quotas. Once validated, client details are registered in OpenIddict and mirrored locally in the platform's OAuthApplication database table for fast performance, masking confidential client secrets.",

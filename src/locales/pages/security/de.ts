@@ -58,8 +58,13 @@ export const de = {
       impersonationIntro: "Erlaubt SuperAdmins Fehlerbehebung mit angehängtem Audit-Trail.",
       impersonationWarning: "Alle Aktionen werden der Identität des Impersonators zugeordnet.",
       sessionTitle: "Sitzungsmanagement (Session Management)",
-      sessionIntro: "Zustandsloses JWT-Modell, Refresh-Tokens in der DB.",
-      cookieAuthTip: "Senden Sie Refresh-Tokens als HttpOnly, Secure, SameSite=Strict Cookies.",
+      sessionIntro:
+        "Zustandsloses JWT-Modell kombiniert mit einmalig rotierenden Refresh-Tokens in der Datenbank. Access-Tokens verbleiben im Client-Speicher, Refresh-Tokens liegen in HttpOnly Secure SameSite=Lax Cookies ({CookiePrefix}_refresh_token oder __Host-scripe_refresh_token über das Custom-Domain-Micro-Relay), und RevokeAllSessions sperrt nur Geschwister-JTIs unter Beibehaltung der aktuellen Sitzung.",
+      cookieAuthTip:
+        "Arbeitsbereichs- und Custom-Domain-Sitzungen nutzen HttpOnly Secure SameSite=Lax Refresh-Cookies (__Host-scripe_refresh_token per HMAC-Relay), damit Top-Level-SSO-Weiterleitungen funktionieren und Cross-Site-Unteranfragen blockiert bleiben.",
+      federationControlsTitle: "Dual-RP WebAuthn & Sudo Step-Up Governance",
+      federationControlsContent:
+        "Im Rahmen der Central Federation bleiben native Admin-Logins und WebAuthn-Passkeys strikt auf admin.scripe.org und *.admin.scripe.org beschränkt (EnableCentralNativeAndPasskeyMigration = false). AdminPasskey.RpId (varchar(253)) und AllowedRpIds werden durch Fido2PasskeyService validiert; ISovereignSudoProtectedCommand-Befehle erzwingen 15-Minuten X-Sudo-Token HMAC-Prüfungen mit automatischem <SudoVerificationModal /> Retry.",
       workspaceRoutingTitle: "Multi-Workspace-Login-Routing",
       workspaceRoutingIntro:
         "Beim Anmelden über die Plattform-Domain ohne vorab festgelegten Mandanten führt der Handler einen 3-Wege-Algorithmus aus: Mandanten-Login bei übergebener ID, Plattform-Admin-Direktlogin bei gesetztem isPlatformAdmin-Flag und Workspace-Suche anhand der E-Mail-Adresse.",
@@ -99,29 +104,35 @@ export const de = {
       howItWorksTitle: "How SSO Works",
       howItWorksContent:
         "SCRIPE uses the Authorization Code Flow with PKCE (Proof Key for Code Exchange) for SSO. This is the most secure OAuth2 flow, recommended by the OAuth 2.1 specification for all client types.",
-      step1Title: "1. Provider Discovery",
+      step1Title: "1. Anbieter-Erkennung",
       step1Content:
-        "The login page fetches available SSO providers via GET /auth/oidc/providers/admin. Only enabled providers for the current login context (admin/user) are returned.",
-      step2Title: "2. PKCE Challenge",
+        "Die Anmeldeoberfläche auf https://auth.scripe.org lädt verfügbare SSO-Anbieter über GET /api/v1/auth/oidc/providers/admin gemäß Tenancy:AuthBaseUrl und OriginRouting.",
+      step2Title: "2. Serverseitiges PKCE & State-Ticket",
       step2Content:
-        "When the user clicks an SSO button, the frontend calls POST /auth/oidc/challenge. The backend generates a code_verifier, computes the code_challenge (SHA-256), and returns the authorization URL.",
-      step3Title: "3. IdP Redirect",
+        "Beim Klick auf einen SSO-Anbieter ruft das Frontend POST /api/v1/auth/oidc/challenge auf. Das Backend speichert code_verifier, nonce, state und validierte returnOrigin im serverseitigen ExternalAuthStateTicket (niemals im Browser-sessionStorage).",
+      step3Title: "3. IdP-Weiterleitung mit zentralem Callback",
       step3Content:
-        "The frontend stores PKCE state (code_verifier, state, providerId) in sessionStorage, then redirects the user to the external IdP's authorization endpoint.",
-      step4Title: "4. User Authentication",
+        "Der Browser leitet direkt zum externen IdP weiter, wobei redirect_uri fest auf das zentrale https://api.scripe.org/api/v1/auth/oidc/callback (bzw. /api/v1/auth/saml/acs/{providerId}) verweist.",
+      step4Title: "4. Zentraler Callback & Handoff-Ticket",
       step4Content:
-        "The user authenticates at the external IdP (Azure AD, Google, Okta, etc.) and grants consent for the requested scopes.",
-      step5Title: "5. Callback & Token Exchange",
+        "Nach Anmeldung am externen IdP empfängt api.scripe.org den Callback, prüft ExternalAuthStateTicket, Mandantenstatus und HybridMfaPolicy und erstellt ein 120s SHA-256 ExternalAuthHandoffTicket (auth:ext-handoff:{sha256}, atomarer Replay-Schutz auth:ext-handoff-used:{sha256}) mit Redirect zu auth.scripe.org/sso/continue oder {ReturnOrigin}/sso/callback.",
+      step5Title: "5. Einmaliger Handoff & Sitzungsaufbau",
       step5Content:
-        "The IdP redirects to /sso/callback with an authorization code. The frontend retrieves PKCE state from sessionStorage, validates the state parameter, and calls POST /auth/oidc/callback. The backend exchanges the code for tokens using the code_verifier.",
-      pkceTitle: "PKCE Security Model",
+        "Die Zielseite löst das Ticket einmalig über POST /api/v1/auth/sso/handoff (auf Custom-Domains über /api/auth/session/establish HMAC-Relay) ein und initialisiert Memory-JWT sowie HttpOnly Lax Refresh-Cookie.",
+      pkceTitle: "PKCE & Central Handoff Sicherheitsmodell",
       pkceContent:
-        "PKCE prevents authorization code interception attacks by ensuring that only the client that initiated the flow can exchange the code. The code_verifier is never sent over the network — only its SHA-256 hash (code_challenge) is sent during the challenge step.",
+        "Serverseitige ExternalAuthStateTicket-Verwaltung verhindert sessionStorage-Manipulationen. Einmalige 120s SHA-256 ExternalAuthHandoffTicket-Payloads binden returnOrigin gegen IVerifiedOriginEvaluator und verhindern Open-Redirects sowie Code-Interception.",
       entityModelTitle: "Identity Provider Entity",
       entityModelContent:
         "The IdentityProvider entity stores all OIDC configuration for an external IdP. Each provider is optionally scoped to a tenant (TenantId = null means system-wide).",
       linkingContent:
-        "Before SSO login works, a SCRIPE admin/user must link their account to the external identity. This creates an ExternalLogin record mapping the provider's subject ID to the SCRIPE account.",
+        "Die Verknüpfung eines bestehenden Kontos erfordert Sudo-Erhöhung (X-Sudo-Token) über POST /api/v1/auth/admin/external-logins/initiate-link (direktes /external-logins/link liefert 410 Gone) und schließt über zentralen Callback plus Handoff ab.",
+      centralRelayTitle: "Custom-Domain First-Party Session Micro-Relay & Dynamisches CORS",
+      centralRelayContent:
+        "Verifizierte Custom-Domains teilen keine Cross-Site-Cookies mit api.scripe.org; daher stellt Next.js BFF drei Fail-Closed-Routen bereit (/api/auth/session/establish, /refresh, /logout), geschützt durch Sec-Fetch-Site/Origin-Prüfungen und HMAC-SHA256-Header (X-Scripe-Session-Relay-*, 30s Zeitfenster, 60s Nonce-Schutz in SessionRelayAuthenticator), die __Host-scripe_refresh_token lokal setzen. IVerifiedOriginEvaluator speist dynamisches CORS und CSRF mit 60s Cache-Generierungsschlüssel.",
+      splitLogoutTitle: "Getrennter App- vs. Zentral-Logout (scr.oidc.session)",
+      splitLogoutContent:
+        "Logout unterstützt logoutScope ('app' Standard oder 'central'). AuthLogoutScopeHelper und CookieAuthMiddleware erhalten das zentrale OpenIddict-Cookie scr.oidc.session bei /refresh, /sso/handoff, /complete-workspace-selection und 'app'-Logouts; erst 'central' löscht es.",
       oauthAppsTitle: "OAuth Applications",
       oauthAppsContent:
         "OAuth Applications are third-party apps that authenticate against SCRIPE as an OIDC server. Each app gets a Client ID and Client Secret, with configurable redirect URIs, scopes, and PKCE enforcement.",

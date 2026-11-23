@@ -34,7 +34,7 @@ export const es = {
       refreshDesc: "Entrega un nuevo Access token en vida rotando la credencial a la par.",
       logoutTitle: "Cierre de Sesión",
       logoutDesc:
-        "Desvincula las cookies y desautoriza inmediatamente el Refresh Token desde la base de datos.",
+        "[AllowAnonymous] Revoca el refresh token actual y limpia cookies de sesión; soporta logoutScope ('app' preserva scr.oidc.session, 'central' la elimina) (204 No Content).",
       tfaTitle: "Validación y Operación 2FA",
       tfaIntro:
         "Mecanismo para evitar suplantaciones de identidades a niveles super-administrativos.",
@@ -66,7 +66,20 @@ export const es = {
       discoverWorkspacesDesc:
         "Descubrir todos los espacios de trabajo y organizaciones accesibles con las credenciales.",
       revokeAllSessionsDesc:
-        "Revocar simultáneamente todas las sesiones activas y tokens de actualización en todos los equipos.",
+        "Revocar el resto de sesiones activas mediante lista negra de JTI hermanas preservando la sesión actual.",
+      federationEndpointsTitle: "Federación Central y Relay de Sesión en Dominio Propio",
+      centralOidcCallbackDesc:
+        "[AllowAnonymous] Callback central OIDC en api.scripe.org que consume ExternalAuthStateTicket y emite ExternalAuthHandoffTicket (120s SHA-256).",
+      centralSamlAcsDesc:
+        "[AllowAnonymous] Receptor SAML 2.0 ACS central que emite un ExternalAuthHandoffTicket (120s SHA-256) hacia auth.scripe.org o dominio verificado.",
+      ssoHandoffDesc:
+        "[AllowAnonymous] Canje atómico único de ExternalAuthHandoffTicket (auth:ext-handoff-used:{sha256}) por tokens o estado 2FA/espacio.",
+      relayEstablishDesc:
+        "Micro-relay HMAC-SHA256 en Next.js BFF (X-Scripe-Session-Relay-*) para establecer sesión y emitir __Host-scripe_refresh_token.",
+      relayRefreshDesc:
+        "Micro-relay HMAC Next.js BFF para rotar __Host-scripe_refresh_token en dominios propios verificados.",
+      relayLogoutDesc:
+        "Micro-relay Next.js BFF que reenvía logoutScope ('app' o 'central') y limpia __Host-scripe_refresh_token.",
       getExternalLoginsDesc:
         "Listar conexiones de proveedores externos de SSO e identidad vinculadas a esta cuenta.",
       linkExternalLoginDesc:
@@ -112,7 +125,7 @@ export const es = {
       refreshDesc:
         "Igual que el sistema admin, rota las llaves expiradas en milisegundos sin cerrar la pantalla.",
       logoutDesc:
-        "[AllowAnonymous] Revoca el refresh token actual y limpia las cookies de sesión (204 No Content).",
+        "[AllowAnonymous] Revoca el refresh token actual y limpia cookies de sesión; soporta logoutScope ('app' preserva scr.oidc.session, 'central' la elimina) (204 No Content).",
       tfaTitle: "2FA para Usuarios Comunes",
       tfaEnableDesc: "QR generador.",
       tfaConfirmDesc: "Emisor de Tokens de respaldo.",

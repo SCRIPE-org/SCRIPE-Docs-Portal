@@ -69,8 +69,13 @@ export const ar = {
         "المستخدم العام (SuperAdmin) يمكنه الانتحال للمساعدة الفنية مع ربط التدقيق الصارم.",
       impersonationWarning: "عملية خطيرة ومقيدة جداً.",
       sessionTitle: "إدارة الجلسة",
-      sessionIntro: "SCRIPE تستخدم جلسات عديمة الحالة (Stateless JWT).",
-      cookieAuthTip: "للأمان الأقصى، يتم تعيين الـ Cookies لتكون HttpOnly.",
+      sessionIntro:
+        "تعتمد SCRIPE نموذج جلسة JWT عديم الحالة مقترناً برموز تحديث أحادية الاستخدام قابلة للتدوير في قاعدة البيانات. تُحفظ رموز الوصول في ذاكرة العميل فقط، بينما تنتقل رموز التحديث في ملفات تعريف ارتباط HttpOnly Secure SameSite=Lax ({CookiePrefix}_refresh_token أو __Host-scripe_refresh_token عبر مرحّل النطاق المخصص)، ويُبطل RevokeAllSessions معرفات JTI للجلسات الشقيقة مع الإبقاء على الجلسة الحالية للمتصل.",
+      cookieAuthTip:
+        "تستخدم جلسات مساحات العمل والنطاقات المخصصة ملفات تعريف ارتباط HttpOnly Secure SameSite=Lax (__Host-scripe_refresh_token عبر مرحّل HMAC) لدعم إعادة توجيه SSO الآمنة مع منع الطلبات الفرعية العابرة للمواقع.",
+      federationControlsTitle: "حوكمة مفاتيح المرور ثنائية النطاق (Dual-RP) والتحقق التصعيدي Sudo",
+      federationControlsContent:
+        "تحت نظام الاتحاد المركزي، تبقى مصادقة المسؤولين الأصلية ومفاتيح المرور محصورة في admin.scripe.org و *.admin.scripe.org (EnableCentralNativeAndPasskeyMigration = false). يتحقق Fido2PasskeyService من AdminPasskey.RpId و AllowedRpIds، بينما تفرض الأوامر الحساسة ISovereignSudoProtectedCommand رمز X-Sudo-Token لـ 15 دقيقة مع نافذة <SudoVerificationModal /> التلقائية لأكواد السماح والتراجع.",
       ssoSuspensionTitle: "بوابة تعليق SSO للوحدة",
       ssoSuspensionIntro:
         "يتضمن معالج المصادقة الخارجية (ExternalLoginCommandHandler) الآن بوابة أمان لتعليق الوحدة. قبل إصدار رمز JWT بعد مصادقة SSO/OIDC، يتحقق المعالج من حالة وحدة المستخدم. إذا كان الوحدة مُعلَّقاً أو مُلغى، يُرفض تسجيل الدخول برسالة خطأ مُترجمة — مما يمنع المستخدمين المُعطَّلين من تجاوز فحوصات تسجيل الدخول القياسية عبر SSO.",
@@ -214,9 +219,9 @@ export const ar = {
       samlTitle: "تكامل SAML 2.0 والتحقق التشفيري",
       samlContent:
         "تدعم المنصة تسجيل الدخول الموحد SAML 2.0 باستخدام مكتبة ITfoxtec.Identity.Saml2. عند العمل كموفر خدمة (SP)، يتم إنشاء طلبات AuthnRequest وإرسالها عبر ربط إعادة التوجيه. بالنسبة لاستدعاءات ACS، يتم التحقق من توقيعات XML باستخدام شهادات X.509 العامة المخزنة بصيغة base64 (بواسطة X509CertificateLoader). يتم تجاوز التحقق من سلسلة الشهادات وفحوصات الإلغاء (None/NoCheck) لتسهيل استخدام شهادات المؤسسات الموقعة ذاتياً. عند العمل كموفر هوية (IdP)، يتم إصدار تأكيدات SAML XML الموقعة للتطبيقات الخارجية.",
-      oidcCallbackTitle: "استدعاء OIDC وتخزين اختيار مساحات العمل مؤقتاً",
+      oidcCallbackTitle: "استدعاء OIDC/SAML المركزي وتذكرة التسليم أحادية الاستخدام",
       oidcCallbackContent:
-        "يتعامل معالج ProcessOidcCallbackCommandHandler مع استدعاءات تحدي OIDC الواردة عن طريق فك تشفير معرف الموفر باستخدام AES-256 واستبدال الكود بالمطالبات. إذا كان البريد الإلكتروني للمستخدم يطابق عدة مساحات عمل للمسؤولين، يتم تخزين حالة اختيار تسجيل دخول SSO (SsoTempLoginData) مؤقتاً في Redis تحت مفتاح 'sso-login-selection:{tempToken}' بصلاحية 15 دقيقة لمنع التلاعب بالمعاملات الخام. التطابق مع مساحة عمل واحدة يتخطى هذا الاختيار ويصدر مباشرة رموز JWT النهائية للوصول والتحديث لمدة 7 أيام.",
+        "تستقبل نقاط الاستدعاء المركزية في https://api.scripe.org (GET /api/v1/auth/oidc/callback و POST /api/v1/auth/saml/acs/{providerId}) استجابات موفري الهوية، وتتحقق من تذكرة الحالة الخادمية ExternalAuthStateTicket (مع code_verifier و nonce و returnOrigin)، وتفحص تعليق المستأجر و HybridMfaPolicy، ثم تصدر تذكرة ExternalAuthHandoffTicket قصيرة الأمد (120 ثانية بمفتاح SHA-256 في auth:ext-handoff:{sha256} وقفل auth:ext-handoff-used:{sha256}) وتعيد التوجيه إلى https://auth.scripe.org/sso/continue أو النطاق الموثق {ReturnOrigin}/sso/callback لاستردادها مرة واحدة عبر POST /api/v1/auth/sso/handoff.",
       oauthMirroringTitle: "محاكاة عملاء OAuth والتحقق من الحصص",
       oauthMirroringContent:
         "تتحقق تسجيلات تطبيقات OAuth الصادرة من حصص الاشتراك المحددة للوحدة عبر QuotaService. يتم إلحاق معرفات العملاء ببادئة إعدادات الهوية الخاصة بالوحدة، ويتم إنشاء أسرار عملاء سرية آمنة (256 بت عشوائي تشفيرياً) وتُعرض مرة واحدة فقط. تتم مزامنة تسجيلات التطبيقات بالكامل مع متجر تطبيقات OpenIddict، ومحاكاتها في جدول قاعدة بيانات OAuthApplication المحلي مع إخفاء الأسرار لضمان الأداء وعزل الاستعلامات.",
@@ -241,29 +246,35 @@ export const ar = {
       howItWorksTitle: "How SSO Works",
       howItWorksContent:
         "SCRIPE uses the Authorization Code Flow with PKCE (Proof Key for Code Exchange) for SSO. This is the most secure OAuth2 flow, recommended by the OAuth 2.1 specification for all client types.",
-      step1Title: "1. Provider Discovery",
+      step1Title: "1. اكتشاف الموفر",
       step1Content:
-        "The login page fetches available SSO providers via GET /auth/oidc/providers/admin. Only enabled providers for the current login context (admin/user) are returned.",
-      step2Title: "2. PKCE Challenge",
+        "تجلب صفحة الدخول في https://auth.scripe.org الموفرين المتاحين عبر GET /api/v1/auth/oidc/providers/admin وفق Tenancy:AuthBaseUrl و OriginRouting.",
+      step2Title: "2. تذكرة الحالة و PKCE على الخادم",
       step2Content:
-        "When the user clicks an SSO button, the frontend calls POST /auth/oidc/challenge. The backend generates a code_verifier, computes the code_challenge (SHA-256), and returns the authorization URL.",
-      step3Title: "3. IdP Redirect",
+        "عند اختيار موفر SSO، يستدعي العميل POST /api/v1/auth/oidc/challenge ليُنشئ الخادم code_verifier و nonce و state و returnOrigin الموثق داخل ExternalAuthStateTicket على الخادم (دون sessionStorage في المتصفح).",
+      step3Title: "3. التوجيه إلى موفر الهوية باستدعاء مركزي",
       step3Content:
-        "The frontend stores PKCE state (code_verifier, state, providerId) in sessionStorage, then redirects the user to the external IdP's authorization endpoint.",
-      step4Title: "4. User Authentication",
+        "يُعاد توجيه المتصفح إلى موفر الهوية الخارجي مع تثبيت redirect_uri على https://api.scripe.org/api/v1/auth/oidc/callback (أو /api/v1/auth/saml/acs/{providerId}).",
+      step4Title: "4. الاستدعاء المركزي وإصدار تذكرة التسليم",
       step4Content:
-        "The user authenticates at the external IdP (Azure AD, Google, Okta, etc.) and grants consent for the requested scopes.",
-      step5Title: "5. Callback & Token Exchange",
+        "بعد مصادقة المستخدم يعود إلى api.scripe.org؛ يستهلك الخادم ExternalAuthStateTicket، ويستبدل الكود بالـ code_verifier الخادمي، ويُصدر تذكرة ExternalAuthHandoffTicket بمهلة 120 ثانية ثم يوجه إلى auth.scripe.org/sso/continue أو {ReturnOrigin}/sso/callback.",
+      step5Title: "5. الاسترداد أحادي الاستخدام وتأسيس الجلسة",
       step5Content:
-        "The IdP redirects to /sso/callback with an authorization code. The frontend retrieves PKCE state from sessionStorage, validates the state parameter, and calls POST /auth/oidc/callback. The backend exchanges the code for tokens using the code_verifier.",
-      pkceTitle: "PKCE Security Model",
+        "تستدعي صفحة العودة POST /api/v1/auth/sso/handoff (أو /api/auth/session/establish على النطاق المخصص) لاستهلاك تذكرة التسليم مرة واحدة وتهيئة JWT في الذاكرة وملف تعريف التحديث HttpOnly Lax.",
+      pkceTitle: "نموذج أمان PKCE والتسليم المركزي",
       pkceContent:
-        "PKCE prevents authorization code interception attacks by ensuring that only the client that initiated the flow can exchange the code. The code_verifier is never sent over the network — only its SHA-256 hash (code_challenge) is sent during the challenge step.",
+        "يمنع تخزين ExternalAuthStateTicket على الخادم انكشاف PKCE في sessionStorage، بينما يضمن الاسترداد الذري لـ ExternalAuthHandoffTicket عبر SHA-256 (auth:ext-handoff-used:{sha256}) وفحص IVerifiedOriginEvaluator منع اختطاف الأكواد وإعادة التوجيه المفتوحة.",
       entityModelTitle: "Identity Provider Entity",
       entityModelContent:
         "The IdentityProvider entity stores all OIDC configuration for an external IdP. Each provider is optionally scoped to a tenant (TenantId = null means system-wide).",
       linkingContent:
-        "Before SSO login works, a SCRIPE admin/user must link their account to the external identity. This creates an ExternalLogin record mapping the provider's subject ID to the SCRIPE account.",
+        "يتطلب ربط الحساب المصادق عليه تصعيد Sudo (X-Sudo-Token) عبر POST /api/v1/auth/admin/external-logins/initiate-link (تم إيقاف المسار المباشر /external-logins/link برمز 410 Gone)، ويكتمل الربط عبر الاستدعاء المركزي وتذكرة التسليم.",
+      centralRelayTitle: "مرحل جلسات النطاقات المخصصة (HMAC Micro-Relay) و CORS الديناميكي",
+      centralRelayContent:
+        "لأن النطاقات المخصصة لا تشارك ملفات تعريف الارتباط مع api.scripe.org، يوفر Next.js BFF مسارات /api/auth/session/establish و /refresh و /logout المحمية بفحص Sec-Fetch-Site/Origin وتوقيع HMAC-SHA256 (رؤوس X-Scripe-Session-Relay-* بمهلة 30ث وقفل Nonce 60ث في SessionRelayAuthenticator) لإصدار ملف تعريف ارتباط __Host-scripe_refresh_token محلي، مع تحقق IVerifiedOriginEvaluator و DynamicVerifiedCorsPolicyProvider المخبأ لـ 60 ثانية.",
+      splitLogoutTitle: "فصل تسجيل الخروج التطبيقي عن المركزي (scr.oidc.session)",
+      splitLogoutContent:
+        "يدعم تسجيل الخروج معامل logoutScope ('app' افتراضياً أو 'central'). يحافظ AuthLogoutScopeHelper و CookieAuthMiddleware على ملف تعريف الخادم المركزي scr.oidc.session أثناء /refresh و /sso/handoff وخروج التطبيق، بينما يمحوه فقط عند طلب logoutScope: 'central'.",
       oauthAppsTitle: "OAuth Applications",
       oauthAppsContent:
         "OAuth Applications are third-party apps that authenticate against SCRIPE as an OIDC server. Each app gets a Client ID and Client Secret, with configurable redirect URIs, scopes, and PKCE enforcement.",

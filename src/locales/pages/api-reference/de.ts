@@ -30,7 +30,7 @@ export const de = {
       refreshDesc: "Tauscht ein gültiges Refresh-Token gegen ein neues Token-Paar.",
       logoutTitle: "Logout",
       logoutDesc:
-        "[AllowAnonymous] Widerruft das aktuelle Refresh-Token und löscht BrandingSettings-Sitzungscookies (204 No Content).",
+        "[AllowAnonymous] Widerruft das aktuelle Refresh-Token und löscht BrandingSettings-Sitzungscookies; unterstützt logoutScope ('app' erhält scr.oidc.session, 'central' löscht es) mit 204 No Content.",
       tfaTitle: "Zwei-Faktor-Authentifizierung",
       tfaIntro: "TOTP-basiertes 2FA für zusätzliche Sicherheit.",
       tfaEnableDesc: "Generiert einen QR-Code für Authenticator-Apps.",
@@ -53,7 +53,20 @@ export const de = {
       discoverWorkspacesDesc:
         "Alle mit den Anmeldedaten zugänglichen Workspaces und Organisationen ermitteln.",
       revokeAllSessionsDesc:
-        "Alle aktiven Sitzungen und Refresh-Tokens geräteübergreifend sofort widerrufen.",
+        "Alle anderen aktiven Sitzungen durch Blacklisting von Geschwister-JTIs widerrufen und dabei die aktuelle Sitzung des Aufrufers erhalten.",
+      federationEndpointsTitle: "Zentrale Federation & Custom-Domain Session-Relay",
+      centralOidcCallbackDesc:
+        "[AllowAnonymous] Zentraler OIDC-Callback auf api.scripe.org zum Einlösen von ExternalAuthStateTicket und Ausstellen eines 120s ExternalAuthHandoffTicket.",
+      centralSamlAcsDesc:
+        "[AllowAnonymous] Zentraler SAML 2.0 ACS-Handler zum Erzeugen eines 120s SHA-256 ExternalAuthHandoffTicket Richtung auth.scripe.org oder Custom-Domain.",
+      ssoHandoffDesc:
+        "[AllowAnonymous] Atomares einmaliges Einlösen eines ExternalAuthHandoffTicket (auth:ext-handoff-used:{sha256}) in Sitzungstokens oder 2FA-/Workspace-Status.",
+      relayEstablishDesc:
+        "First-Party Next.js BFF Micro-Relay mit HMAC-SHA256 X-Scripe-Session-Relay-* Headern zum Setzen von __Host-scripe_refresh_token.",
+      relayRefreshDesc:
+        "First-Party Next.js BFF Micro-Relay zur Rotation von __Host-scripe_refresh_token über HMAC-signierten API-Aufruf.",
+      relayLogoutDesc:
+        "First-Party Next.js BFF Micro-Relay zur Weiterleitung von logoutScope ('app' oder 'central') und Löschung von __Host-scripe_refresh_token.",
       getExternalLoginsDesc: "Verknüpfte externe SSO- und Identitätsanbieter des Kontos auflisten.",
       linkExternalLoginDesc:
         "Sudo-geschützte föderierte OIDC/SAML-Verknüpfung starten (/external-logins/link liefert 410 Gone).",
@@ -90,7 +103,8 @@ export const de = {
       resetPasswordDesc: "Setzt das Passwort per Code zurück.",
       tokenTitle: "Token-Management",
       refreshDesc: "Aktualisiert das Token-Paar.",
-      logoutDesc: "[AllowAnonymous] Aktuelles Refresh-Token widerrufen und Sitzungscookies löschen (204 No Content).",
+      logoutDesc:
+        "[AllowAnonymous] Aktuelles Refresh-Token widerrufen und Sitzungscookies löschen; logoutScope ('app' schützt scr.oidc.session, 'central' löscht es) (204 No Content).",
       tfaTitle: "User Zwei-Faktor-Authentifizierung",
       tfaEnableDesc: "Generiert das TOTP-Secret.",
       tfaConfirmDesc: "Bestätigt 2FA.",

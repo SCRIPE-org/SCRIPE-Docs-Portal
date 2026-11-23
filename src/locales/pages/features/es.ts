@@ -479,9 +479,12 @@ export const es = {
       samlTitle: "Autenticación Empresarial SAML 2.0",
       samlContent:
         "Acceso único empresarial (SSO) compatible con proveedores de identidad corporativos.",
-      oidcCallbackTitle: "Gestión de Respuestas OpenID Connect",
+      oidcCallbackTitle: "Callback Central OIDC/SAML y Ticket Handoff Único",
       oidcCallbackContent:
-        "Validación segura de tokens de identidad e intercambio criptográfico de códigos de autorización.",
+        "Los callbacks de IdP externos terminan centralmente en https://api.scripe.org (GET /api/v1/auth/oidc/callback y POST /api/v1/auth/saml/acs/{providerId}), consumiendo ExternalAuthStateTicket en servidor (sin sessionStorage) y emitiendo un ExternalAuthHandoffTicket SHA-256 de 120s hacia auth.scripe.org/sso/continue o {ReturnOrigin}/sso/callback para canje único en POST /api/v1/auth/sso/handoff.",
+      centralFederationTitle: "Federación Central de Identidad y Relay de Dominio Propio",
+      centralFederationContent:
+        "Bajo Authentication:CentralFederation (https://auth.scripe.org para Auth/Consent y https://api.scripe.org para callbacks), los dominios personalizados verificados operan con rutas Next.js firmadas por HMAC (/api/auth/session/establish, /refresh, /logout -> __Host-scripe_refresh_token) y CORS/CSRF dinámico vía IVerifiedOriginEvaluator, manteniendo login nativo y passkeys Dual-RP bloqueados en admin.scripe.org (EnableCentralNativeAndPasskeyMigration: false).",
       oauthMirroringTitle: "Sincronización de Perfiles OAuth",
       oauthMirroringContent:
         "Actualización automática de nombres y avatares del usuario desde el proveedor externo al iniciar sesión.",

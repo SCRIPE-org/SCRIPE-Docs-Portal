@@ -567,9 +567,9 @@ public record ExternalUserInfo(
       ],
       [
         "Refresh Token",
-        "HttpOnly SameSite cookie ({CookiePrefix}_refresh_token) + SHA-256 DB hash",
+        "HttpOnly SameSite=Lax cookie ({CookiePrefix}_refresh_token or __Host-scripe_refresh_token via BFF relay) + SHA-256 DB hash",
         "Rolling (SessionTimeoutMinutes / 7d) capped by AbsoluteExpiresAt (24h standard, >=30d StaySignedIn)",
-        "Single-use atomic rotation; evicts excess sessions beyond MaxConcurrentSessions",
+        "Single-use atomic rotation; RevokeAllSessions blacklists sibling JTIs while preserving caller's current session",
       ],
       [
         "2FA Pending Token",
@@ -585,9 +585,15 @@ public record ExternalUserInfo(
       ],
       [
         "Sudo Step-Up Ticket",
-        "X-Sudo-Token / scripe_sudo_token HMAC + Distributed Lock",
+        "X-Sudo-Token / scripe_sudo_token HMAC + Distributed Lock (ISovereignSudoProtectedCommand)",
         "15 minutes (900s)",
-        "Bound to (AdminId, SessionIdHash, Method); anti-downgrade passkey/TOTP enforcement",
+        "Bound to (AdminId, SessionIdHash, Method); FE <SudoVerificationModal /> expands 403 retry across SudoRevokedOrExpired / SudoPolicyDowngradeRefused / SudoTokenInvalid",
+      ],
+      [
+        "Split Logout & OIDC Session",
+        "logoutScope ('app' default | 'central') in AuthLogoutScopeHelper + CookieAuthMiddleware.Relay",
+        "Preserved during silent /refresh, /sso/handoff & 'app' logout",
+        "Only explicit logoutScope: 'central' clears scr.oidc.session across auth.scripe.org",
       ],
     ],
   },
@@ -596,6 +602,13 @@ public record ExternalUserInfo(
     variant: "tip",
     contentKey: "security.authDeep.cookieAuthTip",
   },
+  {
+    type: "heading",
+    level: 3,
+    titleKey: "security.authDeep.federationControlsTitle",
+    id: "federation-controls",
+  },
+  { type: "paragraph", contentKey: "security.authDeep.federationControlsContent" },
 
   // ─── SSO Tenant Suspension Gate ──────────────────────────
   {

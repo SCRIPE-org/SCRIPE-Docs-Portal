@@ -53,9 +53,13 @@ export const zh = {
         "超级管理员可切换至其他管理员的视角以排查问题，并保留了不可篡改的模拟者审计日志。",
       impersonationWarning: "一项极高权限的操作，具有限制条件且无法模拟同级或拥有保护标签的账户。",
       sessionTitle: "会话管理",
-      sessionIntro: "采用无状态 JWT 机制，不在服务器内存中保留用户会话，提高了并发性能。",
+      sessionIntro:
+        "采用无状态 JWT 与数据库单次轮换刷新令牌相结合的模式。Access Token 仅保留在客户端内存中，Refresh Token 通过 HttpOnly Secure SameSite=Lax Cookie 传输（{CookiePrefix}_refresh_token 或自定义域名微中继 __Host-scripe_refresh_token），且 RevokeAllSessions 按 JTI 拉黑同级会话同时保留调用者当前活跃会话。",
       cookieAuthTip:
-        "为获得最佳安全性，请配置通过 HttpOnly 且 SameSite=Strict 的 Cookie 来传输 Refresh Token。",
+        "工作区与自定义域名浏览器会话采用 SameSite=Lax HttpOnly Secure Cookie（自定义域名经由 HMAC 微中继下发 __Host-scripe_refresh_token），在保障顶层跨源 SSO 重定向的同时拦截跨站子请求。",
+      federationControlsTitle: "双 RP WebAuthn 与 Sudo 提权治理",
+      federationControlsContent:
+        "在中央联邦认证下，原生管理员登录与 WebAuthn 通行密钥锁定保留于 admin.scripe.org 与 *.admin.scripe.org（EnableCentralNativeAndPasskeyMigration = false）。AdminPasskey.RpId (varchar(253)) 与 AllowedRpIds 由 Fido2PasskeyService 校验；标注 ISovereignSudoProtectedCommand 的高危命令强制校验 15 分钟 HMAC X-Sudo-Token 并在前端触发 <SudoVerificationModal /> 自动重试。",
       workspaceRoutingTitle: "多工作区登录智能发现与分流算法",
       workspaceRoutingIntro:
         "当管理员从平台根域访问时，登录处理器执行三路路由算法：携带明确租户 ID 登录、平台超管标识 (isPlatformAdmin) 直连绕过发现，以及按邮箱智能发现全量关联租户并弹出工作区切换面板。",
@@ -76,9 +80,9 @@ export const zh = {
       samlTitle: "SAML 2.0 集成与加密验证",
       samlContent:
         "平台支持使用 ITfoxtec.Identity.Saml2 库进行 SAML 2.0 单点登录 (SSO)。当作为服务提供商 (SP) 时，将生成并通过重定向绑定发送 AuthnRequest。对于 ACS 回调，使用以 base64 格式存储的公共 X.509 证书（使用 X509CertificateLoader）验证 XML 签名。跳过证书链验证和吊销检查 (None/NoCheck)，以允许企业自签名证书。当作为身份提供商 (IdP) 时，向第三方应用发布已签名的 SAML XML 断言。",
-      oidcCallbackTitle: "OIDC 回调与工作区选择缓存",
+      oidcCallbackTitle: "中央 OIDC/SAML 回调与单次 Handoff 票据",
       oidcCallbackContent:
-        "ProcessOidcCallbackCommandHandler 通过 AES-256 解密提供商 ID 并使用授权码交换声明来处理传入 of OIDC 回调。如果用户邮箱对应多个活动管理员工作区，SSO 登录选择状态 (SsoTempLoginData) 将缓存在 Redis 的 'sso-login-selection:{tempToken}' 下，有效期 15 分钟，以防止原始参数篡改。单一工作区匹配将绕过此选择，直接签发最终的 7 天 JWT 访问和刷新令牌。",
+        "https://api.scripe.org 上的中央回调端点（GET /api/v1/auth/oidc/callback 与 POST /api/v1/auth/saml/acs/{providerId}）解密提供商引用、校验服务端 ExternalAuthStateTicket（包含 PKCE code_verifier、nonce 与已校验 returnOrigin）、执行租户停用与 HybridMfaPolicy 检查，签发 120 秒 SHA-256 ExternalAuthHandoffTicket（auth:ext-handoff:{sha256} 配合原子锁 auth:ext-handoff-used:{sha256} 防重放），并 302 重定向至 https://auth.scripe.org/sso/continue 或已认证租户的 {ReturnOrigin}/sso/callback，随后由 POST /api/v1/auth/sso/handoff 一次性核销。",
       oauthMirroringTitle: "OAuth 客户端镜像与配额验证",
       oauthMirroringContent:
         "出站 OAuth 应用程序的注册通过 QuotaService 验证租户范围的订阅配额。客户端 ID 使用租户特定的品牌设置作为前缀，机密客户端密钥安全生成（256 位加密随机数）且仅显示一次。应用程序注册与 OpenIddict 存储完全同步，并镜像到本地 OAuthApplication 数据库表中，其中的密钥已屏蔽以提高性能和租户隔离。",
@@ -103,29 +107,35 @@ export const zh = {
       howItWorksTitle: "How SSO Works",
       howItWorksContent:
         "SCRIPE uses the Authorization Code Flow with PKCE (Proof Key for Code Exchange) for SSO. This is the most secure OAuth2 flow, recommended by the OAuth 2.1 specification for all client types.",
-      step1Title: "1. Provider Discovery",
+      step1Title: "1. 提供商发现",
       step1Content:
-        "The login page fetches available SSO providers via GET /auth/oidc/providers/admin. Only enabled providers for the current login context (admin/user) are returned.",
-      step2Title: "2. PKCE Challenge",
+        "https://auth.scripe.org 上的登录页遵循 Tenancy:AuthBaseUrl 与 OriginRouting，通过 GET /api/v1/auth/oidc/providers/admin 获取已启用的外部提供商。",
+      step2Title: "2. 服务端 PKCE 与状态票据",
       step2Content:
-        "When the user clicks an SSO button, the frontend calls POST /auth/oidc/challenge. The backend generates a code_verifier, computes the code_challenge (SHA-256), and returns the authorization URL.",
-      step3Title: "3. IdP Redirect",
+        "点击 SSO 按钮后前端调用 POST /api/v1/auth/oidc/challenge。后端在服务端 ExternalAuthStateTicket 中生成并保存 code_verifier、nonce、state 与已校验 returnOrigin（绝不写入浏览器 sessionStorage）。",
+      step3Title: "3. 跳转外部 IdP（固定中央回调）",
       step3Content:
-        "The frontend stores PKCE state (code_verifier, state, providerId) in sessionStorage, then redirects the user to the external IdP's authorization endpoint.",
-      step4Title: "4. User Authentication",
+        "浏览器直接跳转至外部 IdP，并将 redirect_uri 固定指向中央端点 https://api.scripe.org/api/v1/auth/oidc/callback（或 /api/v1/auth/saml/acs/{providerId}）。",
+      step4Title: "4. 中央回调与 Handoff 票据签发",
       step4Content:
-        "The user authenticates at the external IdP (Azure AD, Google, Okta, etc.) and grants consent for the requested scopes.",
-      step5Title: "5. Callback & Token Exchange",
+        "用户在外部 IdP 认证后返回 api.scripe.org；后端核销 ExternalAuthStateTicket 并使用服务端 code_verifier 换取声明，校验 MFA 门禁后签发 120 秒 SHA-256 ExternalAuthHandoffTicket，随后 302 重定向至 auth.scripe.org/sso/continue 或 {ReturnOrigin}/sso/callback。",
+      step5Title: "5. 单次 Handoff 核销与源站会话建立",
       step5Content:
-        "The IdP redirects to /sso/callback with an authorization code. The frontend retrieves PKCE state from sessionStorage, validates the state parameter, and calls POST /auth/oidc/callback. The backend exchanges the code for tokens using the code_verifier.",
-      pkceTitle: "PKCE Security Model",
+        "目标页面调用 POST /api/v1/auth/sso/handoff（自定义域名经由 /api/auth/session/establish HMAC 微中继）原子消费 120 秒票据，建立内存 JWT 与 HttpOnly Lax 刷新 Cookie。",
+      pkceTitle: "PKCE 与中央 Handoff 安全模型",
       pkceContent:
-        "PKCE prevents authorization code interception attacks by ensuring that only the client that initiated the flow can exchange the code. The code_verifier is never sent over the network — only its SHA-256 hash (code_challenge) is sent during the challenge step.",
+        "服务端持久化 ExternalAuthStateTicket 彻底消除了浏览器 sessionStorage PKCE 暴露；120 秒 SHA-256 ExternalAuthHandoffTicket 通过 auth:ext-handoff-used:{sha256} 原子消费，并由 IVerifiedOriginEvaluator 绑定 returnOrigin 以阻断开放重定向与授权码劫持。",
       entityModelTitle: "Identity Provider Entity",
       entityModelContent:
         "The IdentityProvider entity stores all OIDC configuration for an external IdP. Each provider is optionally scoped to a tenant (TenantId = null means system-wide).",
       linkingContent:
-        "Before SSO login works, a SCRIPE admin/user must link their account to the external identity. This creates an ExternalLogin record mapping the provider's subject ID to the SCRIPE account.",
+        "已登录账户绑定外部身份需先完成 Sudo 提权（X-Sudo-Token）并调用 POST /api/v1/auth/admin/external-logins/initiate-link（直接调用 /external-logins/link 返回 410 Gone），经中央回调与 Handoff 票据完成关联。",
+      centralRelayTitle: "自定义域名一方会话微中继 (HMAC) 与动态 CORS",
+      centralRelayContent:
+        "已验证的自定义域名无法与 api.scripe.org 共享跨站 Cookie，因此 Next.js BFF 提供三组故障关闭中继路由（/api/auth/session/establish、/refresh、/logout），受同源 Sec-Fetch-Site/Origin 与 HMAC-SHA256（X-Scripe-Session-Relay-* 头部、30 秒时间窗与 SessionRelayAuthenticator 60 秒原子 Nonce 防重放）保护并下发本域 __Host-scripe_refresh_token；IVerifiedOriginEvaluator 为动态 CORS 与 CSRF 提供 60 秒代际缓存。",
+      splitLogoutTitle: "应用级与中央级拆分注销 (scr.oidc.session)",
+      splitLogoutContent:
+        "注销支持 logoutScope 参数（默认 'app' 或 'central'）。AuthLogoutScopeHelper 与 CookieAuthMiddleware 在静默 /refresh、/sso/handoff、/complete-workspace-selection 与 'app' 注销时保留中央 OpenIddict 会话 Cookie（scr.oidc.session），仅在 'central' 时全量清除。",
       oauthAppsTitle: "OAuth Applications",
       oauthAppsContent:
         "OAuth Applications are third-party apps that authenticate against SCRIPE as an OIDC server. Each app gets a Client ID and Client Secret, with configurable redirect URIs, scopes, and PKCE enforcement.",
