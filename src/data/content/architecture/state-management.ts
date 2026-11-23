@@ -22,8 +22,8 @@ const sections: DocSection[] = [
       ["Is it for this component only?", "useState", "Form inputs, modal open/close, toggles"],
       [
         "Does it need persistence?",
-        "Zustand with persist middleware",
-        "Auth token, language preference",
+        "Zustand partialize (non-secret hints only)",
+        "User profile hints, UI prefs, language (tokens stay memory/cookie-only)",
       ],
       [
         "Does it need caching/refetch?",
@@ -107,44 +107,47 @@ export function useCreateEmployee() {
     headers: ["Store", "Purpose", "Persistence", "Location"],
     rows: [
       [
-        "useAuthStore",
-        "User session, tokens, permissions",
-        "localStorage (persist)",
-        "@core/store/useAuthStore",
+        "useAppStore + SecureTokenService",
+        "Non-secret session hints, permissions & flags (tokens kept strictly in memory)",
+        "Partialized UI/user hints only (never secrets)",
+        "@core/store/useAppStore",
       ],
-      ["useAppStore", "Sidebar, theme, mobile menu", "None", "@core/store/useAppStore"],
+      ["useAppStore (UI) / useSudoStore", "Sidebar, density, theme, in-memory Sudo elevation", "None / Memory", "@core/store/useSudoStore"],
       ["useToastStore", "Toast notification queue", "None", "@core/store/useToastStore"],
     ],
   },
   {
     type: "code",
     language: "typescript",
-    filename: "Auth Store — Zustand with persist",
-    code: `export const useAuthStore = create<AuthState>()(
+    filename: "useAppStore.ts + SecureTokenService — Zero Token Persistence",
+    code: `// Access JWTs live strictly in SecureTokenService module memory (never localStorage);
+// Refresh tokens stay in HttpOnly cookies managed by CookieAuthMiddleware.
+export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
       user: null,
-      token: null,
       isAuthenticated: false,
+      mustChangePassword: false,
+      requireMfaEnrollment: false,
 
-      login: (user, token) => set({
-        user, token, isAuthenticated: true,
-      }),
-
-      logout: () => set({
-        user: null, token: null, isAuthenticated: false,
-      }),
+      setAuth: (user, permissions, roles) => set({ user, permissions, roles, isAuthenticated: true }),
+      logout: () => {
+        secureTokenService.clearTokens();
+        set({ user: null, permissions: [], roles: [], isAuthenticated: false, requireMfaEnrollment: false });
+      },
     }),
     {
-      name: "auth-storage",
+      name: "app-storage",
       partialize: (state) => ({
-        token: state.token,
         user: state.user,
+        isAuthenticated: state.isAuthenticated,
+        mustChangePassword: state.mustChangePassword,
+        requireMfaEnrollment: state.requireMfaEnrollment,
       }),
     }
   )
 );`,
-    highlightLines: [2, 17, 18, 19, 20],
+    highlightLines: [1, 2, 17, 18, 19, 20, 21],
   },
   {
     type: "heading",

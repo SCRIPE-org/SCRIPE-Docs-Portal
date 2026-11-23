@@ -486,8 +486,8 @@ public class ReplayProtectionMiddleware
     rows: [
       [
         "Access Token Lifetime",
-        "15 minutes",
-        "Configured in Jwt:ExpiryMinutes. Short lifetime limits the window of opportunity for stolen tokens.",
+        "30 minutes (default)",
+        "Configured in Jwt:ExpiryMinutes and SessionPolicyDto. Short lifetime limits the window of opportunity for stolen tokens.",
         "Mitigate token theft / session hijacking",
       ],
       [

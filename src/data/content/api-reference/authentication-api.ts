@@ -90,22 +90,24 @@ const sections: DocSection[] = [
       {
         label: "Success Response (200)",
         language: "json",
-        filename: "Login Success — Response",
+        filename: "Login Success — Response (TokenResponse)",
         code: `{
   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "refreshToken": "dGhpcyBpcyBhIHJlZnJlc2ggdG9rZW4...",
-  "expiresIn": 3600,
-  "tokenType": "Bearer",
-  "requiresTwoFactor": false,
-  "user": {
-    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "refreshToken": "", // Stripped to HttpOnly cookie by CookieAuthMiddleware for web clients
+  "expiresAt": "2026-11-23T12:30:00Z", // Jwt:ExpiryMinutes (default 30 min)
+  "requires2FA": false,
+  "staySignedIn": true,
+  "mustChangePassword": false,
+  "requireMfaEnrollment": false,
+  "defaultRedirectPath": "/",
+  "userProfile": {
+    "id": "encrypted-admin-id",
     "email": "admin@example.com",
     "username": "admin",
     "firstName": "John",
     "lastName": "Doe",
-    "role": "SuperAdmin",
-    "tenantId": "f8e7d6c5-b4a3-2190-fedc-ba0987654321",
-    "tenantCode": "ACME",
+    "isSuperAdmin": true,
+    "tenantId": "encrypted-tenant-id",
     "permissions": ["admins.view", "tenants.view", "roles.manage"]
   }
 }`,
@@ -292,16 +294,22 @@ const sections: DocSection[] = [
         code: `// Request
 {
   "identifier": "admin@example.com",
-  "password": "P@ssw0rd123!",
+  "password": "P@ssw0rd123!", // Optional when redeeming twoFactorPendingToken
+  "twoFactorPendingToken": "single-use-5m-pending-ticket", // Optional passwordless flow
   "code": "654321",
-  "tenantId": "f8e7d6c5-b4a3-2190-fedc-ba0987654321" // Optional
+  "tenantId": "encrypted-tenant-id", // Optional
+  "staySignedIn": false
 }
 
-// Response (200 OK) — Same as TokenResponse
+// Response (200 OK) — TokenResponse (TwoFactorAttemptLockHelper enforces lockout)
 {
   "accessToken": "eyJhbGciOiJIUzI1NiJ9...",
-  "refreshToken": "cmVmcmVzaC10b2tlbg...",
-  "expiresIn": 3600
+  "refreshToken": "",
+  "expiresAt": "2026-11-23T12:30:00Z",
+  "requires2FA": false,
+  "staySignedIn": false,
+  "mustChangePassword": false,
+  "requireMfaEnrollment": false
 }`,
       },
       {
@@ -336,7 +344,7 @@ const sections: DocSection[] = [
         method: "POST",
         path: "/api/v1/auth/admin/impersonate/{id}",
         descriptionKey: "apiReference.adminApi.impersonateDesc",
-        auth: "Bearer Token",
+        auth: "Bearer Token + X-Sudo-Token",
         permission: "admins.impersonate",
       },
       {
@@ -353,36 +361,35 @@ const sections: DocSection[] = [
       {
         label: "Impersonate Response",
         language: "json",
-        filename: "POST /impersonate/{id} — Response",
+        filename: "POST /impersonate/{id} — Response (8h hard ceiling)",
         code: `{
-  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...", // Impersonated Admin JWT
-  "refreshToken": "impersonation_refresh_token_here...",
-  "expiresIn": 3600,
-  "tokenType": "Bearer",
-  "requiresTwoFactor": false,
-  "user": {
-    "id": "target-admin-uuid",
-    "email": "target@example.com",
-    "role": "TenantAdmin",
-    "tenantId": "target-tenant-uuid",
-    "impersonatorAdminId": "superadmin-uuid" // Auditing trail marker
-  }
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...", // Impersonated JWT (contains imp + scripe_iat_ms)
+  "refreshToken": "", // Stored in {CookiePrefix}_refresh_token (non-extendable 8h ceiling)
+  "expiresAt": "2026-11-23T12:30:00Z",
+  "requires2FA": false,
+  "staySignedIn": false,
+  "mustChangePassword": false,
+  "requireMfaEnrollment": false,
+  "defaultRedirectPath": "/"
 }`,
       },
       {
         label: "Stop Impersonation",
         language: "json",
-        filename: "POST /stop-impersonation — Request",
-        code: `// Request
+        filename: "POST /stop-impersonation — Request & Response",
+        code: `// Request (CookieAuthMiddleware injects refreshToken from HttpOnly cookie automatically)
 {
-  "refreshToken": "impersonation_refresh_token_here..."
+  "refreshToken": "optional-when-sent-via-httponly-cookie"
 }
 
-// Response (200 OK) — Restored Original Session TokenResponse
+// Response (200 OK) — Validates original & target revocation + active check before restoring TokenResponse
 {
   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...", // Original Admin JWT
-  "refreshToken": "original_restored_refresh_token...",
-  "expiresIn": 3600
+  "refreshToken": "",
+  "expiresAt": "2026-11-23T12:30:00Z",
+  "requires2FA": false,
+  "mustChangePassword": false,
+  "requireMfaEnrollment": false
 }`,
       },
     ],
@@ -476,6 +483,12 @@ const sections: DocSection[] = [
     type: "api-table",
     endpoints: [
       {
+        method: "GET",
+        path: "/api/v1/auth/admin/password-policy",
+        descriptionKey: "apiReference.authApi.passwordPolicyDesc",
+        auth: "None ([AllowAnonymous])",
+      },
+      {
         method: "POST",
         path: "/api/v1/auth/admin/request-password-reset",
         descriptionKey: "apiReference.authApi.requestPasswordResetDesc",
@@ -492,6 +505,12 @@ const sections: DocSection[] = [
         path: "/api/v1/auth/admin/reset-password",
         descriptionKey: "apiReference.authApi.resetPasswordDesc",
         auth: "None",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/admin/force-change-password",
+        descriptionKey: "apiReference.authApi.forceChangePasswordDesc",
+        auth: "Bearer Token",
       },
     ],
   },

@@ -240,9 +240,24 @@ public async Task InvokeAsync(HttpContext context)
     type: "table",
     headers: ["Token Type", "Lifetime", "Storage", "Rotation / Purpose"],
     rows: [
-      ["Access Token (JWT)", "15 minutes", "Memory / Cookie", "Refreshed automatically"],
-      ["Refresh Token", "7 days", "HttpOnly Cookie", "Rotated on each use (one-time use)"],
-      ["2FA Temporary Token", "5 minutes", "Memory", "Discarded after 2FA verification"],
+      [
+        "Access Token (JWT)",
+        "30 minutes (default via Jwt:ExpiryMinutes / SessionPolicy)",
+        "Client Memory (useAppStore)",
+        "Reissued on refresh; includes scripe_iat_ms & jti revocation claims",
+      ],
+      [
+        "Refresh Token",
+        "7 days rolling (AbsoluteExpiresAt: 24h standard, >=30d StaySignedIn, 8h impersonation)",
+        "HttpOnly Cookie ({CookiePrefix}_refresh_token)",
+        "Rotated on each use (single-use + SHA-256 persisted hash)",
+      ],
+      [
+        "2FA Pending Token",
+        "5 minutes",
+        "Encrypted Single-Use Ticket",
+        "Account-bound passwordless second-factor challenge (twoFactorPendingToken)",
+      ],
     ],
   },
   {
@@ -497,6 +512,24 @@ public async Task InvokeAsync(HttpContext context)
       },
       {
         method: "GET",
+        path: "/api/v1/auth/admin/password-policy",
+        descriptionKey: "Retrieve anonymous tenant-aware password policy rules before reset/setup",
+        auth: "Public",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/admin/force-change-password",
+        descriptionKey: "Rotate expired/mandatory password (mcp=true) and reissue TokenResponse",
+        auth: "JWT",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/Admins/{id}/change-password",
+        descriptionKey: "Self-service password change returning rotated 200 OK TokenResponse",
+        auth: "JWT",
+      },
+      {
+        method: "GET",
         path: "/api/v1/auth/admin/security-log",
         descriptionKey: "Get security activity log for the current admin",
         auth: "JWT",
@@ -557,6 +590,12 @@ public async Task InvokeAsync(HttpContext context)
         auth: "Public",
       },
       {
+        method: "GET",
+        path: "/api/v1/auth/user/password-policy",
+        descriptionKey: "Retrieve anonymous tenant-aware password complexity requirements",
+        auth: "Public",
+      },
+      {
         method: "POST",
         path: "/api/v1/auth/user/request-password-reset",
         descriptionKey: "Request password reset via email OTP",
@@ -577,7 +616,31 @@ public async Task InvokeAsync(HttpContext context)
       {
         method: "POST",
         path: "/api/v1/auth/user/logout",
-        descriptionKey: "Revoke current refresh token and log out",
+        descriptionKey: "Revoke current refresh token and clear session cookies (204 No Content)",
+        auth: "Public",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/user/change-password",
+        descriptionKey: "Self-service password change returning rotated TokenResponse",
+        auth: "JWT",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/user/force-change-password",
+        descriptionKey: "Rotate expired/mandatory password (mcp=true) and reissue TokenResponse",
+        auth: "JWT",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/user/2fa/verify",
+        descriptionKey: "Verify TOTP via password or single-use twoFactorPendingToken",
+        auth: "Public",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/user/2fa/disable",
+        descriptionKey: "Disable user 2FA with password + TOTP/backup code (blocked if Require2FA)",
         auth: "JWT",
       },
     ],
