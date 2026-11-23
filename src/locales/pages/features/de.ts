@@ -27,7 +27,7 @@ export const de = {
         "Verhindert, dass gesperrte Benutzer Kontobeschränkungen über externe Identitätsanbieter wie Google oder Azure AD umgehen.",
       jwtTitle: "JWT-Token Konfiguration",
       jwtIntro:
-        "Das System verwendet kurzlebige Access-Tokens (15 Minuten) und langlebige Refresh-Tokens (7 Tage). Refresh-Tokens werden bei jeder Verwendung rotiert, um Wiederverwendungsangriffe zu verhindern.",
+        "Das System verwendet kurzlebige Access-Tokens (Standard: 30 Minuten über Jwt:ExpiryMinutes und SessionPolicyDto) sowie rotierende Refresh-Tokens mit AbsoluteExpiresAt-Obergrenzen (24 Std. Standard, >= 30 Tage bei StaySignedIn, 8 Std. bei Impersonation).",
       dualAuthTitle: "Duale Authentifizierung (Admin & User)",
       dualAuthIntro:
         "SCRIPE verfügt über zwei separate Authentifizierungspipelines. Die Admin-Authentifizierung (AdminAuthController) stellt JWTs mit admin-spezifischen Claims (TenantId, IsSuperAdmin, Roles) aus. Die User-Authentifizierung (UserAuthController) stellt JWTs mit benutzerspezifischen Claims (NationalId, Gender, Country) aus. Jede Pipeline hat ihre eigenen Anmelde-, Registrierungs- und Token-Aktualisierungs-Endpunkte.",

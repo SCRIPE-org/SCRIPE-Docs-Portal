@@ -42,14 +42,16 @@ export const es = {
       tfaConfirmDesc:
         "Prueba definitiva para dar de alta un dispositivo celular y obtener la impresión de Backups.",
       tfaVerifyDesc:
-        "Continuación del endpoint de Login si la cuenta está amarrada a un dispositivo TOTP.",
-      tfaDisableDesc: "Desecha y retira la protección de la bóveda del administrador.",
+        "Completar acceso mediante contraseña + código o token único twoFactorPendingToken.",
+      tfaDisableDesc:
+        "Desactivar 2FA con contraseña + twoFactorCode (bloqueado si Require2FA sin respaldo passkey).",
       tfaBackupDesc:
         "Reseteo exhaustivo de claves de respaldo (Anula las impresas y crea una colección distinta).",
       profileTitle: "Autocontrol del Perfil",
       meDesc: "Datos adjuntos y generales de la estructura del admin en su contexto JWT.",
       updateProfileDesc: "Suministración de teléfonos y correcciones menores.",
-      changePasswordDesc: "Autocambio transaccional de contraseña desde la configuración.",
+      changePasswordDesc:
+        "Autocambio transaccional de contraseña que devuelve un TokenResponse rotado (200 OK).",
       uploadAvatarDesc:
         "Inyección de foto o gráfica para mostrar arriba a la derecha en el Panel (max 2 MB).",
       removeAvatarDesc: "Regresa a las iniciales genéricas.",
@@ -76,6 +78,10 @@ export const es = {
         "Verificar código de un solo uso (OTP) para el flujo de restablecimiento de clave.",
       resetPasswordDesc:
         "Completar restablecimiento con ResetGrantToken; devuelve 204 No Content sin inicio de sesión automático.",
+      passwordPolicyDesc:
+        "Consultar política de contraseñas del inquilino sin autenticación previa.",
+      forceChangePasswordDesc:
+        "Completar rotación obligatoria de contraseña (mcp=true) y devolver TokenResponse rotado.",
     },
     userAuthApi: {
       title: "API de Autenticación de Usuario",
@@ -105,20 +111,27 @@ export const es = {
       tokenTitle: "Controles de Accesibilidad",
       refreshDesc:
         "Igual que el sistema admin, rota las llaves expiradas en milisegundos sin cerrar la pantalla.",
-      logoutDesc: "Expulsa la firma.",
+      logoutDesc:
+        "[AllowAnonymous] Revoca el refresh token actual y limpia las cookies de sesión (204 No Content).",
       tfaTitle: "2FA para Usuarios Comunes",
       tfaEnableDesc: "QR generador.",
       tfaConfirmDesc: "Emisor de Tokens de respaldo.",
-      tfaVerifyDesc: "Completar la conexión del login bloqueado.",
-      tfaDisableDesc: "Sacar protección del usuario.",
+      tfaVerifyDesc:
+        "Completar acceso mediante contraseña + código o token único twoFactorPendingToken.",
+      tfaDisableDesc:
+        "Desactivar 2FA con contraseña + twoFactorCode (bloqueado si Require2FA sin passkey alternativo).",
       tfaBackupDesc: "Revolución de nuevos códigos impresos.",
       profileTitle: "Perfil de Cliente (Usuario Común)",
       meDesc: "Información y banderas de verificación de estados.",
       updateProfileDesc: "Edición simple.",
-      changePasswordDesc: "Control general de clave activa.",
+      changePasswordDesc:
+        "Cambio de contraseña de usuario con rotación in situ y retorno de TokenResponse (200 OK).",
+      passwordPolicyDesc: "Consultar política de contraseñas del inquilino sin autenticación.",
+      forceChangePasswordDesc:
+        "Completar rotación obligatoria de contraseña (mcp=true) y reemitir TokenResponse.",
       summaryTitle: "Aclaratoria de Rutas",
       diffNote:
-        "NUNCA debes cruzar y solicitar un Refresh Token Administrativo en un endpoint de usuario común. Ambos arrojan 401 entre sí para aislar a los clientes y administradores totalmente a nivel físico de base de datos.",
+        "La API de usuario (/api/v1/auth/user/*) está aislada de la de administración (/api/v1/auth/admin/*); ambas devuelven TokenResponse y cookies HttpOnly BrandingSettings sin tokens intercambiables.",
       loginProviderDesc:
         "Iniciar flujo de autenticación SSO o OAuth2 con proveedor externo de identidad.",
       sendEmailVerificationDesc:
@@ -172,7 +185,7 @@ export const es = {
       protectDesc:
         "Evitar que el usuario sufra borrados o bloqueos masivos por error inyectándole protección al sistema principal de bases de datos.",
       impersonationWarning:
-        "Toda alteración mientras estés en 'Impersonation' deja rastro en auditoría para certificar la manipulación del SuperAdmin y no culpar al Admin original de un daño causado en este estado.",
+        "Requiere SuperAdmin + X-Sudo-Token. Toda acción se audita con ambas identidades, falla en cerrado ante revocación y caduca al límite estricto no extensible de 8 horas.",
       queryParamsTitle: "Acerca de la Manipulación de Filtros URL",
     },
     tenantApi: {

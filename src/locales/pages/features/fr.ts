@@ -27,7 +27,7 @@ export const fr = {
         "Empêche les membres d'organisations suspendues de contourner les restrictions via des tiers comme Google ou Azure AD.",
       jwtTitle: "Configuration des Jetons JWT",
       jwtIntro:
-        "Le système utilise des jetons d'accès de courte durée (15 minutes) avec des jetons d'actualisation de longue durée (7 jours). Les jetons d'actualisation sont pivotés à chaque utilisation pour empêcher les attaques par rejeu.",
+        "Le système utilise des jetons d'accès de courte durée (30 minutes par défaut via Jwt:ExpiryMinutes et SessionPolicyDto) associés à des jetons d'actualisation rotatifs plafonnés par AbsoluteExpiresAt (24 h standard, >= 30 jours StaySignedIn, 8 h en usurpation).",
       dualAuthTitle: "Double Authentification (Admin et Utilisateur)",
       dualAuthIntro:
         "SCRIPE dispose de deux pipelines d'authentification distincts. L'authentification admin (AdminAuthController) émet des JWT avec des revendications spécifiques à l'admin (TenantId, IsSuperAdmin, Roles). L'authentification utilisateur (UserAuthController) émet des JWT avec des revendications spécifiques à l'utilisateur (NationalId, Gender, Country). Chacun a ses propres endpoints de connexion, d'inscription et de rafraîchissement de jeton.",

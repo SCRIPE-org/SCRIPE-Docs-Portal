@@ -15,7 +15,7 @@ export const en = {
       featuresTitle: "Security Features",
       featureJwt: "JWT Authentication",
       featureJwtDesc:
-        "Short-lived access tokens (15 min) with automatic refresh. HMAC-SHA256 signing with configurable secret.",
+        "Access tokens (30 min default via Jwt:ExpiryMinutes) with automatic refresh. HMAC-SHA256 signing and millisecond revocation cutoff.",
       feature2fa: "Two-Factor Auth",
       feature2faDesc:
         "TOTP-based 2FA with QR code setup. Optional per-user, enforceable per-tenant or globally.",
@@ -52,7 +52,7 @@ export const en = {
         "The isPlatformAdmin flag is set by the frontend when the user explicitly selects 'Platform Administration' from the workspace picker. This flag signals the backend to look up the admin with TenantId = null (platform-level) instead of running workspace discovery again.",
       jwtLifecycleTitle: "JWT Token Lifecycle",
       jwtLifecycleIntro:
-        "Access tokens are short-lived (15 minutes) JWT tokens signed with HMAC-SHA256. When an access token expires, the client uses the refresh token to obtain a new token pair. Refresh tokens are single-use and rotated on every use.",
+        "Access tokens default to 30 minutes (Jwt:ExpiryMinutes / SessionPolicyDto) signed with HMAC-SHA256 and carry jti + scripe_iat_ms for monotonic revocation checks (revokedAt + 5ms). Refresh tokens rotate once inside HttpOnly cookies ({CookiePrefix}_refresh_token) under AbsoluteExpiresAt bounds (24h, >=30d StaySignedIn, 8h impersonation).",
       tokenStructureTitle: "JWT Token Structure",
       bcryptTitle: "$s2$ SHA-256 Pre-Hash + BCrypt Password Hashing",
       bcryptIntro:
@@ -163,7 +163,7 @@ export const en = {
         "Test your security headers using securityheaders.com. SCRIPE's default configuration scores A+ when properly configured.",
       replayTitle: "Replay Attack Prevention",
       replayIntro:
-        "Short-lived access tokens (15 minutes), single-use refresh tokens with rotation, and TOTP time-step validation prevent replay attacks across all authentication flows.",
+        "Short-lived access tokens (30 minutes default via Jwt:ExpiryMinutes), JTI revocation denylists, single-use refresh tokens with rotation, and TOTP time-step validation prevent replay attacks across all authentication flows.",
     },
     middlewarePipeline: {
       title: "Middleware Pipeline",

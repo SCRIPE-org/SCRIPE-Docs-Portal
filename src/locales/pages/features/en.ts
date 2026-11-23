@@ -27,7 +27,7 @@ export const en = {
         "Without this gate, SSO users could authenticate via an external identity provider and receive a valid SCRIPE JWT even if their tenant has been suspended. All SSO login paths now enforce the same tenant status checks as the standard password login.",
       jwtTitle: "JWT Token Configuration",
       jwtIntro:
-        "The system uses short-lived access tokens (15 minutes) with long-lived refresh tokens (7 days). Refresh tokens are rotated on each use to prevent reuse attacks.",
+        "The system uses short-lived access tokens (30 minutes default via Jwt:ExpiryMinutes, reconciled with SessionPolicyDto) paired with rolling refresh tokens capped by AbsoluteExpiresAt (24 hours standard, >= 30 days StaySignedIn, 8 hours impersonation). Refresh tokens rotate on every use.",
       dualAuthTitle: "Dual Authentication (Admin & User)",
       dualAuthIntro:
         "SCRIPE has two separate authentication pipelines. Admin auth (AdminAuthController) issues JWTs with admin-specific claims (TenantId, IsSuperAdmin, Roles). User auth (UserAuthController) issues JWTs with user-specific claims (NationalId, Gender, Country). Each has its own login, register, and token refresh endpoints.",

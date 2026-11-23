@@ -13,7 +13,7 @@ export const zh = {
       flowTitle: "认证流程",
       jwtTitle: "JWT 令牌配置",
       jwtIntro:
-        "系统使用短期访问令牌（15分钟）和长期刷新令牌（7天）。刷新令牌每次使用后都会轮换，以防止重放攻击。",
+        "系统使用短期访问令牌（默认 30 分钟，由 Jwt:ExpiryMinutes 与 SessionPolicyDto 控制）及单次轮换刷新令牌，并受 AbsoluteExpiresAt 绝对上限约束（标准 24 小时、StaySignedIn >=30 天、代管模拟 8 小时）。",
       dualAuthTitle: "双重身份验证系统 (管理员与用户)",
       dualAuthIntro:
         "管理端和用户端拥有隔离的验证管道：AdminAuthController 和 UserAuthController，签发不同的权限声明。",

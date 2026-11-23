@@ -44,7 +44,7 @@ export const es = {
       intro: "Exploración exhaustiva de los mecanismos de identidad de SCRIPE.",
       jwtLifecycleTitle: "Ciclo de Vida del Token JWT",
       jwtLifecycleIntro:
-        "Acceso ultracorto (15 min) respaldado por refrescos (7 días) que se destruyen y renuevan en cada solicitud exitosa.",
+        "Tokens de acceso de 30 minutos por defecto (Jwt:ExpiryMinutes / SessionPolicy) con firma HMAC-SHA256, revocación jti + scripe_iat_ms (+5ms) y refresh rotativo en cookie HttpOnly bajo techo AbsoluteExpiresAt (24h, >=30d StaySignedIn, 8h impersonation).",
       tokenStructureTitle: "Estructura del JWT",
       bcryptTitle: "Hash de Contraseña $s2$ SHA-256 + BCrypt",
       bcryptIntro:

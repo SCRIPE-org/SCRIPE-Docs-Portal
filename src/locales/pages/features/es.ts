@@ -27,7 +27,7 @@ export const es = {
         "Evita que miembros de organizaciones suspendidas eludan restricciones mediante proveedores como Google o Azure AD.",
       jwtTitle: "Configuración de Tokens JWT",
       jwtIntro:
-        "El sistema utiliza tokens de acceso de corta duración (15 minutos) con tokens de refresco de larga duración (7 días). Los tokens de refresco se rotan en cada uso para evitar ataques de repetición.",
+        "El sistema utiliza tokens de acceso de corta duración (30 minutos por defecto vía Jwt:ExpiryMinutes y SessionPolicyDto) junto con tokens de refresco rotativos acotados por AbsoluteExpiresAt (24 h estándar, >= 30 días StaySignedIn y 8 h en suplantación).",
       dualAuthTitle: "Autenticación Dual (Admin y Usuario)",
       dualAuthIntro:
         "SCRIPE tiene dos pipelines de autenticación separados. La autenticación de administrador (AdminAuthController) emite JWT con reclamaciones específicas de administrador (TenantId, IsSuperAdmin, Roles). La autenticación de usuario (UserAuthController) emite JWT con reclamaciones específicas de usuario (NationalId, Gender, Country). Cada uno tiene sus propios endpoints de inicio de sesión, registro y actualización de tokens.",
