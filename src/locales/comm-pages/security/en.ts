@@ -32,10 +32,10 @@ export const en = {
       intro:
         "Security is baked into SCRIPE's DNA. Our zero-trust identity architecture leverages industry-leading cryptography, highly configurable password policies, and strict JWT validation to defend your application from modern vectors.",
       jwtContent:
-        "We utilize fast, stateless JSON Web Tokens (JWT) signed using asymmetric RSA keys. Access tokens have short lifespans while secure, HTTP-only refresh tokens ensure frictionless user experiences without compromising security.",
-      jwtTitle: "Asymmetric JWT Protocol",
+        "API Bearer tokens use fast, stateless HS256 (HMAC-SHA256) JWTs stored strictly in client memory alongside RS256 OpenIddict OIDC Server issuance and HttpOnly SameSite refresh cookies ({CookiePrefix}_refresh_token) backed by JTI and millisecond revocation cutoffs.",
+      jwtTitle: "HS256 API JWTs & OIDC Protocol",
       passwordContent:
-        "Enforce NIST-compliant password complexity. Dictate required lengths, specialized character combinations, and prevent reuse of historical passwords over configurable timeframes.",
+        "Enforce tenant-scoped password complexity, versioned $s2$ SHA-256 Base64 pre-hashed BCrypt (work factor 12), PasswordHistory reuse blocks, and an 8,616-entry breached password denylist.",
       passwordTitle: "Adaptive Password Policies",
       sessionTitle: "Concurrent Session Control",
       title: "Authentication & Security",
