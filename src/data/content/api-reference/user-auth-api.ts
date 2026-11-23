@@ -415,8 +415,8 @@ const sections: DocSection[] = [
       {
         method: "POST",
         path: "/api/v1/auth/user/external-logins/link",
-        descriptionKey: "apiReference.userAuthApi.linkExternalLoginDesc",
-        auth: "Bearer Token",
+        descriptionKey: "Removed direct link endpoint (returns 410 Gone; sign in with provider to link)",
+        auth: "Removed (410 Gone)",
       },
       {
         method: "DELETE",
@@ -484,7 +484,7 @@ const sections: DocSection[] = [
       ["/api/v1/auth/user/send-email-verification", "POST", "None", "otp"],
       ["/api/v1/auth/user/send-phone-verification", "POST", "None", "otp"],
       ["/api/v1/auth/user/request-password-reset", "POST", "None", "password-reset"],
-      ["/api/v1/auth/user/reset-password", "POST", "None", "global"],
+      ["/api/v1/auth/user/reset-password", "POST", "None", "password-reset"],
       ["/api/v1/auth/user/refresh", "POST", "None", "token-refresh"],
       ["/api/v1/auth/user/logout", "POST", "Bearer", "global"],
       ["/api/v1/auth/user/2fa/enable", "POST", "Bearer", "global"],
@@ -492,7 +492,7 @@ const sections: DocSection[] = [
       ["/api/v1/auth/user/2fa/verify", "POST", "None", "auth"],
       ["/api/v1/auth/user/2fa/disable", "POST", "Bearer", "global"],
       ["/api/v1/auth/user/external-logins", "GET", "Bearer", "global"],
-      ["/api/v1/auth/user/external-logins/link", "POST", "Bearer", "global"],
+      ["/api/v1/auth/user/external-logins/link", "POST", "Removed (410 Gone)", "global"],
       ["/api/v1/auth/user/external-logins/{externalLoginId}", "DELETE", "Bearer", "global"],
       ["/api/v1/Users/me", "GET", "Bearer", "global"],
     ],

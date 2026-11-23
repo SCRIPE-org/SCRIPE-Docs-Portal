@@ -204,7 +204,7 @@ const sections: DocSection[] = [
     ],
   },
 
-  // ─── BCrypt Password Hashing ──────────────────────────────
+  // ─── Versioned Pre-Hashed BCrypt ($s2$) & Reuse Guards ───
   {
     type: "heading",
     level: 2,
@@ -215,27 +215,32 @@ const sections: DocSection[] = [
   {
     type: "code",
     language: "csharp",
-    filename: "Password Hashing Implementation",
-    code: `// Hash password with BCrypt (work factor = 12)
-// ~250ms per hash — intentionally slow to resist brute force
-var hashedPassword = BCrypt.Net.BCrypt.HashPassword(
-    plainPassword,
-    workFactor: 12  // 2^12 = 4,096 iterations
-);
+    filename: "Identity.Infrastructure/Services/PasswordHasher.cs",
+    code: `// Versioned SHA-256 Base64 pre-hash ($s2$) + BCrypt (work factor 12)
+// Eliminates silent 72-byte / NUL-byte BCrypt truncation while retaining $2a$/$2b$/$2y$ verify compatibility
+private const int WorkFactor = 12;
+private const string PreHashPrefix = "$s2$";
 
-// Verify password during login
-var isValid = BCrypt.Net.BCrypt.Verify(plainPassword, storedHash);
-// Returns true/false — constant-time comparison prevents timing attacks`,
+public string Hash(string password)
+{
+    var digest = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(password)));
+    return string.Concat(PreHashPrefix, BCrypt.Net.BCrypt.HashPassword(digest, WorkFactor));
+}
+
+public bool Verify(string password, string hash) =>
+    hash.StartsWith(PreHashPrefix, StringComparison.Ordinal)
+        ? BCrypt.Net.BCrypt.Verify(PreHash(password), hash[PreHashPrefix.Length..])
+        : BCrypt.Net.BCrypt.Verify(password, hash);`,
   },
   {
     type: "table",
-    headers: ["Work Factor", "Iterations", "Time per Hash", "Use Case"],
+    headers: ["Control", "Default / Scope", "Enforcement Point"],
     rows: [
-      ["10", "1,024", "~65ms", "Development/testing"],
-      ["11", "2,048", "~130ms", "Low-security applications"],
-      ["12 (default)", "4,096", "~250ms", "Production (SCRIPE default)"],
-      ["13", "8,192", "~500ms", "High-security environments"],
-      ["14", "16,384", "~1s", "Maximum security (very slow)"],
+      ["Hash Scheme", "$s2$ SHA-256 Base64 pre-hash + BCrypt wf 12", "PasswordHasher.cs (all password writes)"],
+      ["Password History", "5 previous hashes (configurable 0–24)", "PasswordHistory table via IPermission/IPasswordMutationService"],
+      ["Breached Denylist", "8,616 NFKC-normalized entries + repeated-char check", "BreachedPasswordChecker.cs (CheckBreachedPasswords = true)"],
+      ["Context Identifiers", "Rejects email local-part, username, name, tenant code, 'scripe'", "BreachedPasswordChecker.ContainsContextIdentifier"],
+      ["Complexity Bounds", "8–128 chars, Upper=true, Digit=true, Lower/Special configurable", "ITenantPasswordValidator + PasswordValidationService"],
     ],
   },
 
@@ -252,14 +257,14 @@ var isValid = BCrypt.Net.BCrypt.Verify(plainPassword, storedHash);
     title: "Account Lockout Flow",
     direction: "vertical",
     nodes: [
-      { id: "attempt", label: "Login Attempt", type: "primary" },
-      { id: "check", label: "Check Lockout Status", type: "info" },
-      { id: "locked", label: "Account Locked", type: "danger", description: "Return 423 Locked" },
-      { id: "verify", label: "Verify Password", type: "warning" },
-      { id: "fail", label: "Wrong Password", type: "danger", description: "Increment FailedCount" },
-      { id: "threshold", label: "FailedCount >= 5?", type: "warning" },
-      { id: "lock", label: "Lock Account (5 min)", type: "danger" },
-      { id: "success", label: "Login Success", type: "success", description: "Reset FailedCount" },
+      { id: "attempt", label: "Login / 2FA Attempt", type: "primary" },
+      { id: "check", label: "Check LockoutEnd > UtcNow", type: "info" },
+      { id: "locked", label: "Account Locked", type: "danger", description: "Return AUTH_ACCOUNT_LOCKED (423)" },
+      { id: "verify", label: "Verify Credential ($s2$ / TOTP)", type: "warning" },
+      { id: "fail", label: "Invalid Credential", type: "danger", description: "Increment FailedLoginAttempts" },
+      { id: "threshold", label: "Attempts >= Effective MaxAttempts (default 5)?", type: "warning" },
+      { id: "lock", label: "Lock Account (default 15 min)", type: "danger" },
+      { id: "success", label: "Verification Success", type: "success", description: "ResetFailedAttempts()" },
     ],
     connections: [
       { from: "attempt", to: "check" },
@@ -274,13 +279,13 @@ var isValid = BCrypt.Net.BCrypt.Verify(plainPassword, storedHash);
   },
   {
     type: "table",
-    headers: ["Setting", "Default Value", "Configurable"],
+    headers: ["Setting", "Default Value", "Resolution Source"],
     rows: [
-      ["Max Failed Attempts", "5", "Yes (appsettings)"],
-      ["Lockout Duration", "5 minutes", "Yes (appsettings)"],
+      ["LoginLockoutThreshold", "5 failed attempts", "TenantSettings / Security:MaxFailedAttempts clamped by Identity.Login.MaxAttempts"],
+      ["LoginLockoutMinutes", "15 minutes", "TenantSettings / Security:LockoutMinutes via ISecurityPolicyService"],
       ["Lockout on First Failure", "No", "—"],
       ["Reset Counter on Success", "Yes (automatic)", "—"],
-      ["Admin Can Unlock", "Yes (POST /admins/{id}/unlock)", "—"],
+      ["Admin Can Unlock", "Yes (POST /api/v1/admins/{id}/unlock)", "—"],
     ],
   },
 
@@ -470,65 +475,27 @@ public record ExternalUserInfo(
   { type: "paragraph", contentKey: "security.authDeep.otpIntro" },
   {
     type: "table",
-    headers: ["OTP Purpose", "Delivery", "Length", "Expiry", "Max Attempts"],
+    headers: ["Credential / Flow", "Crypto / Storage", "Length", "Expiry", "Max Attempts"],
     rows: [
-      ["Email Verification", "Email", "6 digits", "15 minutes", "3"],
-      ["Phone Verification", "SMS", "6 digits", "10 minutes", "3"],
-      ["Password Reset", "Email", "6 digits", "15 minutes", "3"],
-      ["Rate Limit", "Per IP", "—", "60 seconds cooldown", "5 per hour"],
+      ["Email & Phone OTP", "HMAC-SHA256 verifier (Verification:VerifierKey)", "6 digits", "10 min (Verification:ExpirationMinutes)", "5"],
+      ["Password Reset OTP", "HMAC-SHA256 verifier + otp-scope token", "6 digits", "10 min (30 min Production)", "5"],
+      ["Magic Link / Reset Grant", "PasswordResetToken SHA-256 hex digest", "256-bit random", "10 min (30 min Production)", "5 (single-use)"],
+      ["Endpoint Throttle", "Fixed Window password-reset limiter", "—", "15 min window", "5 req / 15 min / IP"],
     ],
   },
   {
     type: "code",
     language: "csharp",
-    filename: "OtpService — Code Generation & Verification",
-    code: `public class OtpService : IOtpService
-{
-    public async Task<string> GenerateAsync(
-        string userId, OtpPurpose purpose, CancellationToken ct)
-    {
-        // 1. Invalidate any existing OTP for this user+purpose
-        await _repository.InvalidateExistingAsync(userId, purpose, ct);
-
-        // 2. Generate cryptographically random 6-digit code
-        var code = RandomNumberGenerator.GetInt32(100000, 999999).ToString();
-
-        // 3. Store hashed code (never store plaintext)
-        var otpCode = new OtpCode
-        {
-            UserId = userId,
-            Purpose = purpose,
-            CodeHash = BCrypt.Net.BCrypt.HashPassword(code),
-            ExpiresAt = DateTime.UtcNow.AddMinutes(15),
-            RemainingAttempts = 3
-        };
-
-        await _repository.AddAsync(otpCode, ct);
-        return code; // Return plaintext to send via email/SMS
-    }
-
-    public async Task<bool> VerifyAsync(
-        string userId, string code, OtpPurpose purpose, CancellationToken ct)
-    {
-        var otp = await _repository.GetLatestAsync(userId, purpose, ct);
-        if (otp is null || otp.ExpiresAt < DateTime.UtcNow) return false;
-        if (otp.RemainingAttempts <= 0) return false;
-
-        var isValid = BCrypt.Net.BCrypt.Verify(code, otp.CodeHash);
-        if (!isValid)
-        {
-            otp.RemainingAttempts--;
-            await _repository.SaveChangesAsync(ct);
-            return false;
-        }
-
-        // Mark as used
-        otp.UsedAt = DateTime.UtcNow;
-        await _repository.SaveChangesAsync(ct);
-        return true;
-    }
-}`,
-    highlightLines: [10, 15, 16, 17, 30, 31],
+    filename: "OtpService & PasswordResetToken — Verifier & Atomic Consume",
+    code: `// OTPs are NEVER stored or hashed with BCrypt or plaintext.
+// OtpService binds each 6-digit code with HMAC-SHA256(Verification:VerifierKey):
+//   • Normalized email (.Trim().ToLowerInvariant()) across generate/peek/consume
+//   • Lookback window clamped safely against VerificationSettings.ResendWindowMinutes
+//   • Step 2 (AdminVerifyResetOtp) peeks OTP without consuming it and mints a
+//     single-use PasswordResetToken (Purpose = "reset-grant", MaxVerificationAttempts = 5)
+//   • Step 3 (AdminResetPasswordWithOtp) validates TenantPasswordValidator + Breached + History
+//     FIRST so HTTP 422 never burns the OTP, then atomically consumes grant + OtpCode
+//     and revokes all active RefreshTokens inside one ExecuteInTransactionAsync unit of work.`,
   },
 
   // ─── Impersonation ────────────────────────────────────────
@@ -545,10 +512,10 @@ public record ExternalUserInfo(
     direction: "horizontal",
     nodes: [
       { id: "super", label: "SuperAdmin", type: "primary" },
-      { id: "impersonate", label: "POST /admins/{id}/impersonate", type: "warning" },
+      { id: "impersonate", label: "POST /auth/admin/impersonate/{id}", type: "warning" },
       {
         id: "check",
-        label: "Security Checks",
+        label: "Security & Sudo Checks",
         type: "danger",
         description: "Can't impersonate protected/superior admins",
       },
@@ -559,7 +526,7 @@ public record ExternalUserInfo(
         description: "Claims of target + impersonator_id claim",
       },
       { id: "act", label: "Act as Target Admin", type: "info" },
-      { id: "stop", label: "POST /admins/stop-impersonation", type: "primary" },
+      { id: "stop", label: "POST /auth/admin/stop-impersonation", type: "primary" },
       { id: "restore", label: "Restore Original Token", type: "success" },
     ],
     connections: [

@@ -182,28 +182,36 @@ var admin = allMatchingAdmins.FirstOrDefault(a => a.IsActive && a.TenantId == ta
   {
     type: "code",
     language: "csharp",
-    filename: "MustChangePasswordMiddleware.cs Whitelist Enforcement",
-    code: `public async Task InvokeAsync(HttpContext context)
+    filename: "MustChangePasswordMiddleware.cs & RequireMfaEnrollmentMiddleware.cs",
+    code: `// 1. MustChangePasswordMiddleware enforces mcp=true before general API access
+public async Task InvokeAsync(HttpContext context)
 {
-    if (context.User.Identity?.IsAuthenticated == true)
+    if (context.Request.Path.StartsWithSegments("/hubs", StringComparison.OrdinalIgnoreCase))
     {
-        var mcpClaim = context.User.FindFirst("mcp")?.Value;
-        if (mcpClaim == "true")
-        {
-            var path = context.Request.Path.Value ?? "";
-            var isAllowed = AllowedPatterns.Any(pattern => pattern.IsMatch(path));
+        await _next(context);
+        return;
+    }
 
-            if (!isAllowed)
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                context.Response.ContentType = "application/json";
-                await context.Response.WriteAsync("{\\"error\\":\\"Password change required.\\",\\"code\\":\\"MustChangePassword\\"}");
-                return;
-            }
+    if (context.User.Identity?.IsAuthenticated == true &&
+        context.User.FindFirst("mcp")?.Value == "true")
+    {
+        var path = context.Request.Path.Value ?? "";
+        if (!AllowedPatterns.Any(pattern => pattern.IsMatch(path)))
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+            context.Response.ContentType = "application/json";
+            var response = new ErrorResponse(
+                (int)HttpStatusCode.Forbidden,
+                ErrorCodes.MustChangePassword,
+                "Password change required before accessing the system.");
+            await context.Response.WriteAsync(JsonSerializer.Serialize(response, CamelCaseOptions));
+            return;
         }
     }
     await _next(context);
-}`,
+}
+
+// 2. RequireMfaEnrollmentMiddleware runs next when mfa_enroll=true (blocking non-MFA endpoints until TOTP/Passkey enrollment completes)`,
   },
 
   // — SSO Tenant Suspension Gate
@@ -389,16 +397,19 @@ var admin = allMatchingAdmins.FirstOrDefault(a => a.IsActive && a.TenantId == ta
   { type: "paragraph", contentKey: "features.authentication.passwordPolicyIntro" },
   {
     type: "table",
-    headers: ["Setting", "Default", "Description"],
+    headers: ["Setting (TenantSettings.cs)", "Default", "Description"],
     rows: [
-      ["MinPasswordLength", "8", "Minimum characters"],
-      ["RequireUppercase", "true", "Must contain A-Z"],
-      ["RequireNumber", "true", "Must contain 0-9"],
-      ["RequireSpecialCharacter", "true", "Must contain !@#$%..."],
-      ["PasswordExpiryDays", "90", "0 = never expire"],
-      ["LockoutThreshold", "5", "Failed attempts before lockout"],
-      ["LockoutDurationMinutes", "30", "Lockout duration"],
-      ["Require2FA", "false", "Force 2FA for all admins in tenant"],
+      ["PasswordMinLength", "8", "Minimum characters (hard bounds 8–128)"],
+      ["PasswordRequireUppercase", "true", "Must contain uppercase letter (A–Z)"],
+      ["PasswordRequireLowercase", "false", "Optional lowercase constraint (a–z)"],
+      ["PasswordRequireNumber", "true", "Must contain numeric digit (0–9)"],
+      ["PasswordRequireSpecial", "false", "Optional special character constraint"],
+      ["PasswordHistoryCount", "5", "Reuse blocked across last 0–24 passwords"],
+      ["CheckBreachedPasswords", "true", "Rejects passwords in 8,616-entry denylist"],
+      ["PasswordExpiryDays", "null", "Days until expiration (null = never expire)"],
+      ["LoginLockoutThreshold", "5", "Failed attempts before lockout (clamped by config)"],
+      ["LoginLockoutMinutes", "15", "Lockout duration in minutes (default 15)"],
+      ["Require2FA", "false", "Forces mfa_enroll=true wall until TOTP/Passkey enrolled"],
     ],
   },
 

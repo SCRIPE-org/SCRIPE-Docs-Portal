@@ -99,8 +99,8 @@ const sections: DocSection[] = [
       "IdP redirects back to /sso/callback?code=...&state=...",
       "Callback page retrieves PKCE state from sessionStorage, validates state matches (CSRF protection)",
       "Frontend calls POST /auth/oidc/callback with code + codeVerifier → backend exchanges code for user info",
-      "Backend finds the linked ExternalLogin record → returns the admin/user identity",
-      "Frontend completes login: stores auth tokens, loads navigation, redirects to dashboard",
+      "Backend evaluates HybridMfaPolicy, issues TwoFactorPendingToken if required, or returns session claims + sets scripe-auth / refresh HttpOnly cookies",
+      "Frontend keeps bearer tokens in memory (never localStorage), hydrates non-secret navigation/store state, and redirects to dashboard or MFA setup",
     ],
   },
 

@@ -18,8 +18,8 @@ const sections: DocSection[] = [
       ["At Rest", "AES-256", "Database TDE (transparent data encryption)"],
       ["Field Level", "AES-256-CBC", "Sensitive fields encrypted individually"],
       ["ID Parameters", "AES encryption", "All entity IDs encrypted in URLs"],
-      ["Tokens", "RS256", "JWT tokens with asymmetric signing"],
-      ["Passwords", "Bcrypt", "One-way hashing with configurable work factor"],
+      ["Tokens", "HS256 / RS256", "HMAC-SHA256 for API Bearer JWTs; asymmetric RS256 for OpenIddict OIDC Server"],
+      ["Passwords", "$s2$ SHA-256 + BCrypt", "SHA-256 pre-hash + BCrypt (work factor 12), 8,616-entry denylist & PasswordHistory"],
     ],
   },
 

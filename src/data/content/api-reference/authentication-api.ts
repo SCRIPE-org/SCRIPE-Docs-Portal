@@ -113,11 +113,14 @@ const sections: DocSection[] = [
       {
         label: "2FA Required (200)",
         language: "json",
-        filename: "Login — 2FA Challenge",
+        filename: "Login — 2FA Challenge (TokenResponse)",
         code: `{
-  "requiresTwoFactor": true,
-  "twoFactorSessionToken": "temp_session_abc123...",
-  "message": "Two-factor authentication is required for this account."
+  "accessToken": "",
+  "refreshToken": "",
+  "expiresAt": "0001-01-01T00:00:00Z",
+  "requires2FA": true,
+  "staySignedIn": false,
+  "twoFactorPendingToken": "single-use-5m-pending-ticket"
 }`,
       },
       {
@@ -403,15 +406,21 @@ const sections: DocSection[] = [
       },
       {
         method: "POST",
-        path: "/api/v1/auth/admin/external-logins/link",
+        path: "/api/v1/auth/admin/external-logins/initiate-link",
         descriptionKey: "apiReference.authApi.linkExternalLoginDesc",
-        auth: "Bearer Token",
+        auth: "Bearer Token + X-Sudo-Token",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/admin/external-logins/link",
+        descriptionKey: "Removed direct link endpoint (returns 410 Gone; use initiate-link)",
+        auth: "Removed (410 Gone)",
       },
       {
         method: "DELETE",
         path: "/api/v1/auth/admin/external-logins/{externalLoginId}",
         descriptionKey: "apiReference.authApi.unlinkExternalLoginDesc",
-        auth: "Bearer Token",
+        auth: "Bearer Token + X-Sudo-Token",
       },
     ],
   },
@@ -435,25 +444,22 @@ const sections: DocSection[] = [
 ]`,
       },
       {
-        label: "POST /link Request",
+        label: "POST /initiate-link Request",
         language: "json",
-        filename: "POST /external-logins/link — Request",
+        filename: "POST /external-logins/initiate-link — Request",
         code: `{
-  "identityProviderId": "idp-config-uuid",
-  "providerName": "Google",
-  "providerKey": "1048596048593028",
-  "email": "admin@gmail.com",
-  "displayName": "John Google"
+  "identityProviderId": "idp-config-encrypted-id",
+  "redirectUri": "https://admin.scripe.org/account/security"
 }`,
       },
       {
-        label: "Link Success (201)",
+        label: "Initiate Link Success (200)",
         language: "json",
-        filename: "POST /external-logins/link — Response",
+        filename: "POST /external-logins/initiate-link — Response",
         code: `{
-  "id": "external-login-uuid-1",
-  "providerName": "Google",
-  "email": "admin@gmail.com"
+  "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth?...",
+  "protocol": "Oidc",
+  "state": "signed-state-ticket"
 }`,
       },
     ],
@@ -516,31 +522,46 @@ const sections: DocSection[] = [
         code: `// Request
 {
   "email": "admin@example.com",
-  "code": "123456"
+  "code": "123456",
+  "method": "otp" // "otp" or "magic-link"
 }
 
-// Response (200 OK)
+// Response (200 OK — OTP remains unconsumed until step 3 succeeds)
 {
-  "email": "admin@example.com",
+  "isValid": true,
   "workspaces": [
     {
-      "tenantId": "f8e7d6c5-b4a3-2190-fedc-ba0987654321",
+      "tenantId": "encrypted-tenant-id",
       "name": "Acme Corp",
       "code": "ACME"
     }
-  ]
+  ],
+  "passwordPolicy": {
+    "minLength": 8,
+    "maxLength": 128,
+    "requireUppercase": true,
+    "requireLowercase": false,
+    "requireDigit": true,
+    "requireSpecial": false,
+    "expiryDays": null,
+    "historyCount": 5,
+    "checkBreachedPasswords": true
+  },
+  "resetGrantToken": "single-use-reset-grant-token"
 }`,
       },
       {
         label: "Step 3: Reset Password",
         language: "json",
-        filename: "POST /reset-password — Request",
-        code: `// Request
+        filename: "POST /reset-password — Request & Response (204 No Content)",
+        code: `// Request (requires verified resetGrantToken; returns 204 No Content with NO auto-login)
 {
   "email": "admin@example.com",
-  "code": "123456", // Or "otp" field
+  "code": "123456",
+  "method": "otp",
+  "resetGrantToken": "single-use-reset-grant-token",
   "newPassword": "NewSecureP@ssword1!",
-  "tenantIds": ["f8e7d6c5-b4a3-2190-fedc-ba0987654321"] // Decryptable/Encrypted list or null (null resets all)
+  "tenantIds": ["encrypted-tenant-id"] // Encrypted tenant IDs or null to reset all workspaces
 }`,
       },
     ],

@@ -101,23 +101,72 @@ const sections: DocSection[] = [
     rows: [
       ["UserId", "Guid?", "FK → User. Set for user-facing OTP flows"],
       ["AdminId", "Guid?", "FK → Admin. Set for admin-facing OTP flows"],
-      ["Code", "string (max 10)", "The numeric OTP value (e.g., '483921')"],
+      ["Code", "string (max 10)", "Keyed HMAC-SHA256 verifier tag derived with Verification:VerifierKey (never plaintext OTP)"],
       [
         "Purpose",
         "int",
-        "Enum integer: identifies the OTP purpose (email verify, password reset, etc.)",
+        "Enum integer: identifies the OTP purpose (email verify, password reset, phone login, etc.)",
       ],
-      ["ExpiresAt", "DateTime", "OTP validity window end"],
+      ["ExpiresAt", "DateTime", "OTP expiry (10 min default ExpirationMinutes / PasswordResetExpirationMinutes; 30 min Prod reset)"],
       ["Attempts", "int", "Number of failed validation attempts so far"],
-      ["MaxAttempts", "int (default 5)", "Maximum allowed failed attempts before lock-out"],
-      ["IsUsed", "bool", "Set to true by Invalidate() after successful use"],
-      ["Email", "string (max 200)", "Email address the OTP was sent to"],
+      ["MaxAttempts", "int (default 5)", "Maximum allowed failed attempts before invalidation (Verification:MaxVerificationAttempts)"],
+      ["IsUsed", "bool", "Atomically set to true inside the recovery/verification transaction via ExecuteUpdateAsync"],
+      ["Email", "string (max 200)", "Normalized lowercase trimmed email address the OTP was sent to"],
     ],
   },
   {
     type: "info",
     variant: "note",
     contentKey: "modules.identityAuthSessions.otpCodeNote",
+  },
+
+  // ── PasswordResetToken ────────────────────────────────────────────────────────
+  {
+    type: "heading",
+    level: 2,
+    titleKey: "modules.identityAuthSessions.passwordResetTokenTitle",
+    id: "password-reset-token",
+  },
+  {
+    type: "paragraph",
+    contentKey: "modules.identityAuthSessions.passwordResetTokenIntro",
+  },
+  {
+    type: "table",
+    headers: ["Field", "Type", "Notes"],
+    rows: [
+      ["NormalizedEmail", "string (max 256)", "Lowercase trimmed email bound to the recovery credential (`[AuditRedacted]`)"],
+      ["TokenHash", "string (max 64)", "Unique lowercase SHA-256 hex digest of the raw magic-link or reset-grant token"],
+      ["Purpose", "string (max 32)", "`magic-link`, `reset-grant`, or `otp-scope` recovery tenant binding"],
+      ["ScopedTenantId", "Guid?", "Optional single-tenant / portal scope requested at recovery initiation"],
+      ["AllowedTenantIdsJson", "string (max 4000)", "JSON array of authorized tenant IDs selectable in step 3"],
+      ["SourceCredentialId", "Guid?", "Originating OtpCode or PasswordResetToken ID consumed atomically with the grant"],
+      ["FailedAttempts", "int (max 5)", "Failed verification attempts counter (`MaxVerificationAttempts = 5`)"],
+      ["IsConsumed", "bool", "Atomically flipped to true inside `ExecuteInTransactionAsync`"],
+      ["ExpiresAt / ConsumedAt", "DateTime / DateTime?", "UTC expiry and single-use consumption timestamps"],
+    ],
+  },
+
+  // ── PasswordHistory ───────────────────────────────────────────────────────────
+  {
+    type: "heading",
+    level: 2,
+    titleKey: "modules.identityAuthSessions.passwordHistoryTitle",
+    id: "password-history",
+  },
+  {
+    type: "paragraph",
+    contentKey: "modules.identityAuthSessions.passwordHistoryIntro",
+  },
+  {
+    type: "table",
+    headers: ["Field", "Type", "Notes"],
+    rows: [
+      ["PrincipalType", "PasswordPrincipalType", "Admin or User principal discriminator"],
+      ["PrincipalId", "Guid", "Owning Admin or User identifier (composite index with `RecordedAtUtc`)"],
+      ["PasswordHash", "string (max 200)", "Salted `$s2$` SHA-256 pre-hash + BCrypt (work factor 12) digest (`[AuditRedacted]`)"],
+      ["RecordedAtUtc", "DateTime", "UTC timestamp preserved for enforcing `PasswordHistoryCount` (default 5, range 0..24)"],
+    ],
   },
 
   // ── QrLoginSession ────────────────────────────────────────────────────────────
