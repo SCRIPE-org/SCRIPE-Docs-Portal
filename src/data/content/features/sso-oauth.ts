@@ -127,12 +127,27 @@ const sections: DocSection[] = [
       [
         "/api/auth/session/{establish,refresh,logout}",
         "First-party Next.js BFF HMAC micro-relay for custom domains",
-        "Enforces Sec-Fetch-Site/Origin + HMAC-SHA256 (30s skew, 60s atomic nonce in SessionRelayAuthenticator); issues __Host-scripe_refresh_token",
+        "Enforces Sec-Fetch-Site/Origin + HMAC-SHA256 (30s skew, 60s atomic nonce, X-Scripe-Session-Relay-Client-Ip rate-limit partitioning, X-Scripe-Relay-Refresh-MaxAge: 0 staySignedIn=false parity); issues __Host-scripe_refresh_token",
+      ],
+      [
+        "PostMfaHandoffHelper & ssoTwoFactorBridge.ts",
+        "Custom-domain + Hybrid-2FA post-MFA handoff bridge (#227/#228)",
+        "When SSO login on auth.scripe.org/sso/continue requires SCRIPE 2FA, Verify2FA / VerifyUser2FA validates TenantOriginOwnershipValidator and mints a post-MFA ExternalAuthHandoffTicket back to {ReturnOrigin}/sso/callback",
       ],
       [
         "IVerifiedOriginEvaluator",
         "60s generation-cached custom-domain verifier",
         "Authorizes active non-suspended verified tenant origins dynamically in DynamicVerifiedCorsPolicyProvider and CSRF guards",
+      ],
+      [
+        "WebAuthn:UserVerification & Multi-DB Parity",
+        "Dual-RP Passkey & 3-Engine Identity Schema",
+        "Enforces UserVerification = 'required' and PasskeyAuthLimit = 12 (15m) with 0-error --idempotent migrations across PostgreSQL 18, SQL Server 2025 & live Oracle 21c XE (IDENTITY schema)",
+      ],
+      [
+        "Cloudflare Edge & External IdP Setup",
+        "api.scripe.org (Orange Cloud) & auth.scripe.org (Vercel Grey Cloud)",
+        "Requires X-Scripe-Origin-Verify Transform Rule, ForwardedHeaders ForwardLimit=2 + KnownNetworks, Saml:SpBaseUrl=https://api.scripe.org, Entra email+xms_edov claims, GitHub user:email read:user scopes, and 2-step SAML ACS setup",
       ],
     ],
   },

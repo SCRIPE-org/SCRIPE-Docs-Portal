@@ -135,6 +135,42 @@ const sections: DocSection[] = [
     id: "split-logout-scope",
   },
   { type: "paragraph", contentKey: "security.sso.splitLogoutContent" },
+  {
+    type: "table",
+    headers: ["Provider / Edge Layer", "Protocol & Canonical Callback", "Mandatory Production Setup & Invariants"],
+    rows: [
+      [
+        "Cloudflare & Railway Edge (api.scripe.org / auth.scripe.org)",
+        "Orange Cloud on api.scripe.org · Grey Cloud DNS-only on auth/admin.scripe.org",
+        "Inject X-Scripe-Origin-Verify via Cloudflare Transform Rule (/health/ready probe bypass); set ForwardedHeaders__ForwardLimit=2 + KnownNetworks__0 on Railway (fixes OpenIddict ID2083); set Saml__SpBaseUrl=https://api.scripe.org and SCRIPE_API_INTERNAL_URL=https://api.scripe.org/api",
+      ],
+      [
+        "Google Workspace",
+        "oidc · GET https://api.scripe.org/api/v1/auth/oidc/callback",
+        "Authority https://accounts.google.com; scopes 'openid email profile'; PKCE S256; keep TrustIdpMfa = false so HybridMfaPolicy enforces SCRIPE 2FA/Passkey when required",
+      ],
+      [
+        "Microsoft Entra ID (Azure AD)",
+        "oidc · GET https://api.scripe.org/api/v1/auth/oidc/callback",
+        "Authority https://login.microsoftonline.com/<Tenant-GUID|organizations|common>/v2.0 (replace literal {tenant-id} before Test Connection); enable optional ID token claims 'email' and 'xms_edov' for verified-email auto-linking",
+      ],
+      [
+        "GitHub OAuth2",
+        "oauth2 + PKCE S256 · GET https://api.scripe.org/api/v1/auth/oidc/callback",
+        "Authorize https://github.com/login/oauth/authorize, Token https://github.com/login/oauth/access_token, UserInfo https://api.github.com/user (User-Agent: SCRIPE-SSO/1.0); mandatory scopes 'user:email read:user' (queries /user/emails for verified address); TrustIdpMfa = false",
+      ],
+      [
+        "Enterprise SAML 2.0 (Okta / Entra SAML / ADFS / Ping)",
+        "saml · POST https://api.scripe.org/api/v1/auth/saml/acs/{encryptedProviderId}",
+        "Two-step setup: create provider in SCRIPE first with SamlIdpEntityId, SamlSsoUrl & X.509 SamlCertificate to obtain encrypted ACS URL; register SP Entity ID https://api.scripe.org at IdP; rejects unsolicited IdP-initiated assertions (RelayState + InResponseTo) and enforces verified TenantDomain on Global SAML (SEC-SAML-01)",
+      ],
+      [
+        "Custom-Domain + Hybrid-2FA Post-MFA Bridge (#227/#228)",
+        "POST /api/v1/auth/admin|user/2fa/verify -> POST /api/v1/auth/sso/handoff",
+        "PostMfaHandoffHelper + TenantOriginOwnershipValidator + ssoTwoFactorBridge.ts mint a post-MFA 120s ExternalAuthHandoffTicket on auth.scripe.org/sso/continue and return cleanly to verified {ReturnOrigin}/sso/callback",
+      ],
+    ],
+  },
 
   // ── API Endpoints ──
   { type: "heading", level: 2, titleKey: "security.sso.apiTitle", id: "api" },

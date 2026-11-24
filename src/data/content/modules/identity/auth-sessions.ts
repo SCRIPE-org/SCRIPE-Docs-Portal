@@ -351,12 +351,12 @@ const sections: DocSection[] = [
       [
         "RpId",
         "string (max 253)",
-        "Bound WebAuthn Relying Party ID (Dual-RP validated via AllowedRpIds; existing rows backfilled to 'admin.scripe.org')",
+        "Bound WebAuthn Relying Party ID (Dual-RP validated via AllowedRpIds; backfilled to 'admin.scripe.org'; verified --idempotent across PostgreSQL 18, SQL Server 2025 & live Oracle 21c XE)",
       ],
       [
         "RegistrationOrigin",
         "string? (max 255)",
-        "Validated registration ceremony origin stored on credential creation (EnableCentralNativeAndPasskeyMigration = false)",
+        "Validated registration ceremony origin (EnableCentralNativeAndPasskeyMigration = false; WebAuthn:UserVerification = 'required'; PasskeyAuthLimit = 12/15m)",
       ],
     ],
   },

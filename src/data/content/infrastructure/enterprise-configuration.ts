@@ -112,7 +112,7 @@ const sections: DocSection[] = [
     "ExportHeavyLimit": 5,
     "SignupLimit": 3,
     "PhoneOtpSendLimit": 3,
-    "PasskeyAuthLimit": 5,
+    "PasskeyAuthLimit": 12,
     "QrPollLimit": 60,
     "PasswordResetLimit": 5,
     "PasswordResetWindowMinutes": 15,

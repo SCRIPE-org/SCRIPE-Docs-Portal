@@ -706,8 +706,8 @@ public async Task InvokeAsync(HttpContext context)
       [
         "passkey-auth",
         "Fixed Window",
-        "5 requests per 15 minutes",
-        "WebAuthn brute-force protection: passkey:{IP}",
+        "12 requests per 15 minutes",
+        "WebAuthn / Sudo ceremony brute-force protection (PasskeyAuthLimit = 12): passkey:{clientIp}",
       ],
       [
         "qr-poll",

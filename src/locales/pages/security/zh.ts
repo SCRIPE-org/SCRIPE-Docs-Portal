@@ -59,7 +59,7 @@ export const zh = {
         "工作区与自定义域名浏览器会话采用 SameSite=Lax HttpOnly Secure Cookie（自定义域名经由 HMAC 微中继下发 __Host-scripe_refresh_token），在保障顶层跨源 SSO 重定向的同时拦截跨站子请求。",
       federationControlsTitle: "双 RP WebAuthn 与 Sudo 提权治理",
       federationControlsContent:
-        "在中央联邦认证下，原生管理员登录与 WebAuthn 通行密钥锁定保留于 admin.scripe.org 与 *.admin.scripe.org（EnableCentralNativeAndPasskeyMigration = false）。AdminPasskey.RpId (varchar(253)) 与 AllowedRpIds 由 Fido2PasskeyService 校验；标注 ISovereignSudoProtectedCommand 的高危命令强制校验 15 分钟 HMAC X-Sudo-Token 并在前端触发 <SudoVerificationModal /> 自动重试。",
+        "在中央联邦认证下，原生管理员登录与 WebAuthn 通行密钥锁定保留于 admin.scripe.org 与 *.admin.scripe.org（EnableCentralNativeAndPasskeyMigration = false），强制启用 WebAuthn:UserVerification = 'required'、PasskeyAuthLimit = 12（15 分钟窗口）并在 PostgreSQL 18、SQL Server 2025 与实测 Oracle 21c XE（IDENTITY 模式）上通过 0 错误 --idempotent 迁移校验。AdminPasskey.RpId (varchar(253)) 与 AllowedRpIds 由 Fido2PasskeyService 校验；标注 ISovereignSudoProtectedCommand 的高危命令强制校验 15 分钟 HMAC X-Sudo-Token 并在前端触发 <SudoVerificationModal /> 自动重试。",
       workspaceRoutingTitle: "多工作区登录智能发现与分流算法",
       workspaceRoutingIntro:
         "当管理员从平台根域访问时，登录处理器执行三路路由算法：携带明确租户 ID 登录、平台超管标识 (isPlatformAdmin) 直连绕过发现，以及按邮箱智能发现全量关联租户并弹出工作区切换面板。",
@@ -132,7 +132,7 @@ export const zh = {
         "已登录账户绑定外部身份需先完成 Sudo 提权（X-Sudo-Token）并调用 POST /api/v1/auth/admin/external-logins/initiate-link（直接调用 /external-logins/link 返回 410 Gone），经中央回调与 Handoff 票据完成关联。",
       centralRelayTitle: "自定义域名一方会话微中继 (HMAC) 与动态 CORS",
       centralRelayContent:
-        "已验证的自定义域名无法与 api.scripe.org 共享跨站 Cookie，因此 Next.js BFF 提供三组故障关闭中继路由（/api/auth/session/establish、/refresh、/logout），受同源 Sec-Fetch-Site/Origin 与 HMAC-SHA256（X-Scripe-Session-Relay-* 头部、30 秒时间窗与 SessionRelayAuthenticator 60 秒原子 Nonce 防重放）保护并下发本域 __Host-scripe_refresh_token；IVerifiedOriginEvaluator 为动态 CORS 与 CSRF 提供 60 秒代际缓存。",
+        "已验证的自定义域名无法与 api.scripe.org 共享跨站 Cookie，因此 Next.js BFF 提供三组故障关闭中继路由（/api/auth/session/establish、/refresh、/logout），受同源 Sec-Fetch-Site/Origin 与 HMAC-SHA256（X-Scripe-Session-Relay-* 头部、30 秒时间窗、60 秒原子 Nonce、按 X-Scripe-Session-Relay-Client-Ip 隔离限流及 X-Scripe-Relay-Refresh-MaxAge: 0 临时 staySignedIn=false 会话）保护并下发本域 __Host-scripe_refresh_token；当 auth.scripe.org/sso/continue 触发混合 2FA 时，PostMfaHandoffHelper、TenantOriginOwnershipValidator 与 ssoTwoFactorBridge.ts 签发 MFA 后单次票据回跳至 {ReturnOrigin}/sso/callback，生产边缘配合 Cloudflare X-Scripe-Origin-Verify、ForwardedHeaders ForwardLimit=2、Entra email+xms_edov 声明、GitHub user:email read:user 作用域及两步式 SAML ACS 配置。",
       splitLogoutTitle: "应用级与中央级拆分注销 (scr.oidc.session)",
       splitLogoutContent:
         "注销支持 logoutScope 参数（默认 'app' 或 'central'）。AuthLogoutScopeHelper 与 CookieAuthMiddleware 在静默 /refresh、/sso/handoff、/complete-workspace-selection 与 'app' 注销时保留中央 OpenIddict 会话 Cookie（scr.oidc.session），仅在 'central' 时全量清除。",

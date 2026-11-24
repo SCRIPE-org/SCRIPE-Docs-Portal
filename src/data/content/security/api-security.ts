@@ -239,9 +239,9 @@ const sections: DocSection[] = [
       [
         "passkey-auth",
         "Fixed Window",
-        "5 requests",
+        "12 requests",
         "15 minutes",
-        "WebAuthn / passkey authentication attempts",
+        "WebAuthn / passkey & Sudo ceremony authentication attempts (PasskeyAuthLimit = 12; X-Scripe-Session-Relay-Client-Ip partitioned)",
       ],
       [
         "qr-poll",
