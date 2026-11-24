@@ -51,7 +51,7 @@ export const ARCHIFY_PILLAR_META: Record<
     repoName: "SCRIPE-org/SCRIPE",
     commit: "960923d",
     accentColor: "#B7FF00",
-    count: 25,
+    count: 26,
   },
   backend: {
     label: "SCRIPE-Backend Deep Dive (.NET 10 & AstraFlow 2.4.7)",
@@ -844,6 +844,35 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
       "SCRIPE-Backend/src/Host/API/Middleware/SessionRelayAuthenticator.cs",
       "SCRIPE-Frontend/src/modules/shared/auth/signin/src/presentation/utils/ssoTwoFactorBridge.ts",
       "SCRIPE-Frontend/src/core/services/session-relay-hmac.ts",
+    ],
+  },
+  {
+    id: "enterprise-security-assurance-platform-hardening",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "SECURITY ASSURANCE · JSENTINEL 48/48 · OWASP ASVS L2/L3",
+    title: "Enterprise Security Assurance, JSENTINEL 48/48 & 19-Module Platform Hardening",
+    subtitle:
+      "5-Layer Defense Topology, 26 Net-New Threats & 7 Review Catches Closed, Nonce CSP, DNS-Pinned SSRF, 4×9 Domain-Identity Matrix & 391 Automated Security Proofs",
+    description:
+      "Authoritative Single Source of Truth for SCRIPE Enterprise Security Assurance & Platform Hardening across all 19 backend modules, Next.js 16 frontend, and CLI/CI supply chain. Reconciles all 48 JSENTINEL findings (13 confirmed live-drift/app-hardened, 31 verified false positives, 4 managed-edge items), closes 26 net-new platform threats (3 Critical: Paymob/PayPal constant-time webhook auth, Compliance DSR subject ownership, Custom-Domain _scripe-verify DNS TXT & RFC 1123 ASCII FQDN; 15 High; 8 Medium) plus 7 independent security review catches, and proves 4×9 domain-identity isolation with 318 xUnit tests, 65 Vitest checks, 8 live unmocked Chromium E2E journeys, 100/100 security arch-check rules (BE-040..042, FE-034..036), and 0 NuGet/pnpm CVEs.",
+    htmlUrl: "/archify-hub/enterprise-security-assurance-platform-hardening.html",
+    specUrl: "/archify-hub/specs/enterprise-security-assurance-platform-hardening.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "d3bd74b37 / d8ec386ad / 268f169",
+    featured: true,
+    highlights: [
+      "JSENTINEL 48/48 Reconciled: 13 confirmed live-drift/app-hardened findings closed, 31 verified bundle AST false positives documented, and 4 managed-edge items bounded",
+      "26 Net-New Threats & 7 Review Catches Closed: 3 Critical (TH-API-01 webhook HMAC, TH-TEN-01 DSR ownership, TH-TEN-02 custom-domain _scripe-verify DNS TXT), 15 High, and 8 Medium findings remediated",
+      "Nonce CSP & Browser Hardening: Per-request 128-bit x-nonce script-src, preview-only SAMEORIGIN framing, 6-pass CSS/SVG sanitization, strict postMessage origin+source+schema, and sw.js v3 static-only",
+      "4-Layer Proof & Cutover Boundary: 318 xUnit + 65 Vitest + 8 live Chromium E2E + 100/100 security arch-check (0 CVEs); Scoped GO for code/UAT and explicit 4-gate external production cutover checklist",
+    ],
+    keySources: [
+      "SCRIPE-Backend/docs/security/enterprise-assurance/PLATFORM_SECURITY_AUDIT.md",
+      "SCRIPE-Backend/docs/security/enterprise-assurance/OWASP_SECURITY_REQUIREMENTS_TRACEABILITY.md",
+      "SCRIPE-Backend/docs/security/enterprise-assurance/SECURITY_REGRESSION_TEST_MATRIX.md",
+      "SCRIPE-Backend/docs/security/enterprise-assurance/INDEPENDENT_SECURITY_REVIEW.md",
+      "SCRIPE-Frontend/src/proxy.ts",
     ],
   },
 

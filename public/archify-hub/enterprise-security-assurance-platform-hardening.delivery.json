@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "c9a4c247-db1d-46a7-aa2a-83e507a2685b",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\enterprise-security-assurance-platform-hardening.archify.md",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\enterprise-security-assurance-platform-hardening.html",
+  "specification": {
+    "sha256": "d754d2a917f6f7f7acea2b3290ad438dfcd24dc3ae319b92da5c3de26cecd065",
+    "bytes": 11948
+  },
+  "artifact": {
+    "sha256": "16c8c502372da346e6fbe54262977b13424e40c8371fb7a6ef915703b0150cf7",
+    "bytes": 1076302
+  },
+  "explainer": {
+    "preparedSha256": "ba10f76049eb96ce1cabe5934f0f43ae393cc5255d15c3107b701f03409c711c",
+    "dependencies": [
+      {
+        "kind": "diagram-spec",
+        "id": "platform-security-arch",
+        "inline": true,
+        "sha256": "c7804be96173307b8d2698e01dd5cc5468b1640fc59552fc5a6a5a3ef2f0eaec",
+        "bytes": 1484
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "security-assurance-seq",
+        "inline": true,
+        "sha256": "bb5d64c4a33d23f625214abc96e30dc928e35e390307b0a404473a3ef3623faa",
+        "bytes": 1675
+      }
+    ]
+  }
+}
