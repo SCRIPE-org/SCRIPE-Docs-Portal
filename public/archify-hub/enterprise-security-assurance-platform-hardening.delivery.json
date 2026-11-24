@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "receiptId": "c9a4c247-db1d-46a7-aa2a-83e507a2685b",
+  "receiptId": "363805d5-0d04-4b57-8063-6898afe26965",
   "status": "current",
   "command": "deliver",
   "type": "explainer",
   "input": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\enterprise-security-assurance-platform-hardening.archify.md",
   "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\enterprise-security-assurance-platform-hardening.html",
   "specification": {
-    "sha256": "d754d2a917f6f7f7acea2b3290ad438dfcd24dc3ae319b92da5c3de26cecd065",
-    "bytes": 11948
+    "sha256": "61bb0fdca96956fd4b422c3f58f41ab601b7361ace42e56736aebf8efd01a8e1",
+    "bytes": 14290
   },
   "artifact": {
-    "sha256": "16c8c502372da346e6fbe54262977b13424e40c8371fb7a6ef915703b0150cf7",
-    "bytes": 1076302
+    "sha256": "f82c43c90fbac1b6663f2de4a9341d0243716739ec30dab40a6a561332852f16",
+    "bytes": 1084838
   },
   "explainer": {
-    "preparedSha256": "ba10f76049eb96ce1cabe5934f0f43ae393cc5255d15c3107b701f03409c711c",
+    "preparedSha256": "62c9faeb00db8b18008752a59f319d88a4c7aa9f6965ab9504b3b4b533cf5549",
     "dependencies": [
       {
         "kind": "diagram-spec",
@@ -28,8 +28,8 @@
         "kind": "diagram-spec",
         "id": "security-assurance-seq",
         "inline": true,
-        "sha256": "bb5d64c4a33d23f625214abc96e30dc928e35e390307b0a404473a3ef3623faa",
-        "bytes": 1675
+        "sha256": "8f020572b589b2078a6fbdf1e7c466adef98c7236f568b2d704954bab16e02b3",
+        "bytes": 1700
       }
     ]
   }
