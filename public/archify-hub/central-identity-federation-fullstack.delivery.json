@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "receiptId": "d34a1350-6c0f-4ac8-b283-2b3efd15f646",
+  "receiptId": "46dd479d-2cc7-4af9-b088-7e65f9a9ca9c",
   "status": "current",
   "command": "deliver",
   "type": "explainer",
   "input": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\central-identity-federation-fullstack.archify.md",
   "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\central-identity-federation-fullstack.html",
   "specification": {
-    "sha256": "7d5aba06ea4a0cf3a74e63f86d3263a2ecb344de86eb5cfac9403d4fe5164a5f",
+    "sha256": "81d23fe219ee78a719a31874bf6e44c27f1568774c0c26c5d6756fbb2c5b9174",
     "bytes": 11162
   },
   "artifact": {
-    "sha256": "8727643a72a357deb5a3be2541cf0928ec0eb380f259ae6593e11b3e991628f1",
+    "sha256": "6d02e0df73d02e542ed21dcbc57a90deca147be41d8910ce76ae51fbd8863727",
     "bytes": 1082752
   },
   "explainer": {
-    "preparedSha256": "a78f0fc72d5d592d2aa9ecaf3523d9c5a5135e3961f0db03f4694b05bc4f797d",
+    "preparedSha256": "39b71036453a9578f277b7056e540ee9b06087bb956af8b146e01b11104938d8",
     "dependencies": [
       {
         "kind": "diagram-spec",
