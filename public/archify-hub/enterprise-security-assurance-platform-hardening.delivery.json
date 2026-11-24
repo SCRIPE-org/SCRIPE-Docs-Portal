@@ -1,35 +1,35 @@
 {
   "schemaVersion": 1,
-  "receiptId": "363805d5-0d04-4b57-8063-6898afe26965",
+  "receiptId": "496c0f77-45d9-4eac-a2d1-ffb800652de8",
   "status": "current",
   "command": "deliver",
   "type": "explainer",
   "input": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\enterprise-security-assurance-platform-hardening.archify.md",
   "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\enterprise-security-assurance-platform-hardening.html",
   "specification": {
-    "sha256": "61bb0fdca96956fd4b422c3f58f41ab601b7361ace42e56736aebf8efd01a8e1",
-    "bytes": 14290
+    "sha256": "89289331602610e6a533dd7cffb3eda425137f03361d50264b049a4c93d72fd6",
+    "bytes": 15171
   },
   "artifact": {
-    "sha256": "f82c43c90fbac1b6663f2de4a9341d0243716739ec30dab40a6a561332852f16",
-    "bytes": 1084838
+    "sha256": "e83b5b2fcd9ded9181a3a984cbd46854feba7c9c54a8cc84f4dfa62622fb0dd3",
+    "bytes": 1091437
   },
   "explainer": {
-    "preparedSha256": "62c9faeb00db8b18008752a59f319d88a4c7aa9f6965ab9504b3b4b533cf5549",
+    "preparedSha256": "ec1cc6c6140fd8abb00c1c71602691eaee72a267882383d8bbb73f2b5f2b72c5",
     "dependencies": [
       {
         "kind": "diagram-spec",
         "id": "platform-security-arch",
         "inline": true,
-        "sha256": "c7804be96173307b8d2698e01dd5cc5468b1640fc59552fc5a6a5a3ef2f0eaec",
-        "bytes": 1484
+        "sha256": "91e48a590b8c74401d700068ad2b165acfbab1af59a61e4260d040c7ec00d9ec",
+        "bytes": 1494
       },
       {
         "kind": "diagram-spec",
         "id": "security-assurance-seq",
         "inline": true,
-        "sha256": "8f020572b589b2078a6fbdf1e7c466adef98c7236f568b2d704954bab16e02b3",
-        "bytes": 1700
+        "sha256": "51835ac343dbc684eabd87db3adb4baf98eb129b7e74806977996be14dcf14c8",
+        "bytes": 1850
       }
     ]
   }

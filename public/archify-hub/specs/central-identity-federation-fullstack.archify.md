@@ -2,12 +2,12 @@
 
 SCRIPE decouples interactive identity UI (`https://auth.scripe.org`) from callback ingress (`https://api.scripe.org`). Custom domains, post-MFA handoffs, Dual-RP passkeys, Sudo step-up, and split logouts remain strictly fail-closed.
 
-- **Central Callback & Post-MFA Bridge:** OIDC and SAML callbacks on `api.scripe.org` consume server `ExternalAuthStateTicket` and mint a 120s SHA-256 `ExternalAuthHandoffTicket`. `PostMfaHandoffHelper` and `ssoTwoFactorBridge.ts` bridge hybrid-2FA back to `{ReturnOrigin}/sso/callback`.
-- **Custom-Domain First-Party HMAC Relay:** Next.js BFF exposes `/api/auth/session/{establish,refresh,logout}` with HMAC-SHA256 headers (`30s` skew, `60s` nonce, `Client-Ip` rate limit, `MaxAge: 0` parity) and issues `__Host-scripe_refresh_token` (`SameSite=Lax`).
-- **Dual-RP Passkeys, `UserVerification=required` & 3-DB Parity:** `AdminPasskey.RpId` keeps `EnableCentralNativeAndPasskeyMigration` locked `false` with `WebAuthn:UserVerification = "required"`, `PasskeyAuthLimit = 12` (15m), and `--idempotent` parity on PostgreSQL 18, SQL Server 2025, and Oracle 21c XE.
-- **Cloudflare Edge, Provider Runbook, Sudo & Split Logout:** Edge enforces Cloudflare `X-Scripe-Origin-Verify` -> Railway `ForwardedHeaders__ForwardLimit=2`, Entra `email`+`xms_edov`, GitHub `user:email read:user`, 2-step SAML ACS, 403 `<SudoVerificationModal />` retry, sibling-JTI `RevokeAllSessions`, and split `logoutScope`.
+- **Central Callback, `/oidc/start` TX & Post-MFA Bridge:** `GET /api/v1/auth/oidc/start` binds a 43-char SHA-256 `browserBindingHash` and sets `__Host-scripe_oidc_tx`. `OidcClientController.Central` and `PostMfaHandoffHelper` (`ssoTwoFactorBridge.ts`) propagate `ASVS V10.2.2` binding through hybrid-2FA back to `{ReturnOrigin}/sso/callback`.
+- **12-Mode Custom-Domain First-Party HMAC Relay:** Next.js BFF exposes `/api/auth/sso/{bind,consume-binding}` (`__Host-scripe_sso_nonce`) and 12-mode `/api/auth/session/{establish,refresh,logout}` with HMAC-SHA256 headers (`30s` skew, `60s` nonce, `Client-Ip` rate limit, Sudo step-up forwarding, `0` third-party cookies) and issues `__Host-scripe_refresh_token` (`SameSite=Lax`).
+- **Dual-RP Passkeys, Redis DataProtection & 3-DB Parity:** `AdminPasskey.RpId` keeps `EnableCentralNativeAndPasskeyMigration` locked `false` with `WebAuthn:UserVerification = "required"`, `PasskeyAuthLimit = 12` (15m), multi-replica AES-256-GCM Redis `dataprotection:keys` (`8968bee3b`), and `--idempotent` parity on PostgreSQL 18, SQL Server 2025, and Oracle 21c XE.
+- **Cloudflare Edge, Provider Runbook, Sudo & Split Logout:** Edge enforces Cloudflare `X-Scripe-Origin-Verify` -> Railway `ForwardedHeaders__ForwardLimit=2`, Entra `email`+`xms_edov`, GitHub `user:email read:user`, 2-step SAML ACS, 403 `<SudoVerificationModal />` retry, sibling-JTI `RevokeAllSessions`, and scoped `[JsonIgnore] IsExternalSsoFlow` / split `logoutScope` (`c081fded9`).
 
-@answer scope="SCRIPE-Backend (e64e61e65) + SCRIPE-Frontend (eea985c95) + SCRIPE-CLI (0cc99a3)"
+@answer scope="SCRIPE-Backend (ac5955af2) + SCRIPE-Frontend (2f962e2a4) + SCRIPE-CLI (268f169)"
 @meta locale=en
 
 ## Which Verification Gates, Multi-DB Engines & Timers Govern This Architecture? {#federation-metrics}
@@ -83,8 +83,8 @@ When a custom-domain user authenticates via an external IdP and tenant policy re
 | bff | api | HMAC X-Scripe-Session-Relay-* + /sso/handoff | security |
 | bff | spa | Access JWT JSON + __Host-scripe_refresh_token | return |
 
-@callout id=dual-rp-lock level=note title="Decision 2, WebAuthn UserVerification=required & Multi-DB Parity"
-`CentralFederationOptions.EnableCentralNativeAndPasskeyMigration` stays `false` in all environments while `WebAuthn:UserVerification` is `"required"` and `RateLimiting:PasskeyAuthLimit` is `12` (15m). `AddPasskeyRpIdFilteredIndexAndEncryptedTotpStorage` (`9aedf12b9`) is verified with `0` errors across `--idempotent` fresh and replay runs on PostgreSQL 18, SQL Server 2025 Express (deferred `RpId` backfill), and live Oracle 21c XE (`XEPDB1` `IDENTITY` schema).
+@callout id=dual-rp-lock level=note title="Decision 2, ASVS V10.2.2 SSO Login CSRF, Multi-Replica Redis DataProtection & 3-DB Parity"
+`CentralFederationOptions.EnableCentralNativeAndPasskeyMigration` stays `false` in all environments while `WebAuthn:UserVerification` is `"required"` and `RateLimiting:PasskeyAuthLimit` is `12` (15m). `ASVS V10.2.2` browser-bound SSO Login CSRF (`__Host-scripe_sso_nonce`, `GET /api/v1/auth/oidc/start` `__Host-scripe_oidc_tx`, `ExternalAuthTokenHash`, `ProcessOidcCallbackCommandValidator` `ac5955af2`), 12-mode `/api/auth/session/establish` (`f93fc3533`, `be2b8783b`, `a2e951352`), and multi-replica AES-256-GCM + HKDF-SHA256 Redis `dataprotection:keys` (`8968bee3b`) are verified across `150/150` targeted Backend xUnit tests, `31/31` Frontend Vitest checks, `11/11` live Chromium E2E specs (`2f962e2a4`), and `0`-error `--idempotent` runs on PostgreSQL 18, SQL Server 2025, and live Oracle 21c XE.
 
 ## Which Production Edge, External IdP & Security Contracts Govern Central Federation? {#federation-matrix}
 
