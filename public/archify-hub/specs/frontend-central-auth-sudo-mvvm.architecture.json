@@ -2,7 +2,7 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "SCRIPE-Frontend Central Auth, HMAC Session Relay, Principal Isolation & Sudo MVVM",
+    "title": "SCRIPE-Frontend Central Auth, Post-MFA Bridge, HMAC Session Relay & Sudo MVVM",
     "locale": "en",
     "output": "SCRIPE-Docs-Portal/public/archify-hub/frontend-central-auth-sudo-mvvm.html",
     "visual_preset": "signal-flow",
@@ -12,7 +12,7 @@
       "url": "https://github.com/SCRIPE-org/SCRIPE-Frontend.git",
       "provider": "github",
       "link_mode": "web",
-      "revision": "a9748503c43815e42ee78dd7a9b9d8470a181a17"
+      "revision": "eea985c95d7a718593029ceeede1b9f745dc1adc"
     },
     "views": [
       {
@@ -23,9 +23,9 @@
       },
       {
         "id": "handoff_principal",
-        "label": "2. Handoff Dispatch & Tab Isolation",
+        "label": "2. Post-MFA Bridge & Tab Isolation",
         "focus": ["handoff_dispatch", "active_principal", "broadcast_auth", "central_auth_app"],
-        "note": "ssoHandoffDispatch validates verified returnOrigin redirects while ActivePrincipal + BroadcastChannel isolate multi-tab principals."
+        "note": "ssoTwoFactorBridge and ssoHandoffDispatch route post-MFA handoff tickets while ActivePrincipal isolates multi-tab principals."
       },
       {
         "id": "sudo_logout",
@@ -46,7 +46,7 @@
     },
     {
       "kind": "security-group",
-      "label": "Client Core Origin, Principal & Sudo Security",
+      "label": "Client Core Origin, Post-MFA, Principal & Sudo Security",
       "wraps": ["origin_routing", "handoff_dispatch", "active_principal", "broadcast_auth", "api_service", "sudo_modal", "auth_logout"]
     }
   ],
@@ -63,11 +63,14 @@
     {
       "id": "handoff_dispatch",
       "type": "frontend",
-      "label": "SSO Handoff Dispatcher",
-      "sublabel": "/sso/continue & /callback",
-      "tag": "ssoHandoffDispatch.ts",
-      "explanation": "Redeems 120s ExternalAuthHandoffTicket and dispatches link completion, 2FA, workspace selection, or cross-origin /sso/callback redirects.",
-      "sources": [{ "path": "src/modules/shared/auth/signin/src/presentation/utils/ssoHandoffDispatch.ts", "line": 101, "end_line": 296, "label": "Handoff & Continuation Dispatch" }]
+      "label": "SSO Handoff & 2FA Bridge",
+      "sublabel": "ssoTwoFactorBridge.ts",
+      "tag": "Post-MFA Bridge",
+      "explanation": "Redeems 120s ExternalAuthHandoffTicket and bridges hybrid-2FA SSO verification on auth.scripe.org/sso/continue back to verified custom-domain /sso/callback.",
+      "sources": [
+        { "path": "src/modules/shared/auth/signin/src/presentation/utils/ssoTwoFactorBridge.ts", "line": 37, "end_line": 124, "label": "Post-MFA Cross-Origin Bridge" },
+        { "path": "src/modules/shared/auth/signin/src/presentation/utils/ssoHandoffDispatch.ts", "line": 101, "end_line": 297, "label": "Handoff & Continuation Dispatch" }
+      ]
     },
     {
       "id": "active_principal",
@@ -91,10 +94,10 @@
       "id": "relay_hmac",
       "type": "security",
       "label": "Relay HMAC Signer",
-      "sublabel": "Same-origin + SHA-256",
+      "sublabel": "Client-Ip + Authority",
       "tag": "session-relay-hmac.ts",
-      "explanation": "Validates Sec-Fetch-Site/Origin same-origin invariant and signs canonical backend relay requests with timestamp and random nonce.",
-      "sources": [{ "path": "src/core/services/session-relay-hmac.ts", "line": 1, "end_line": 194, "label": "Same-Origin & HMAC Helper" }]
+      "explanation": "Validates Sec-Fetch-Site/Origin same-origin invariant, extracts trusted client IP and host authority, rejects placeholder secrets, and signs HMAC headers.",
+      "sources": [{ "path": "src/core/services/session-relay-hmac.ts", "line": 1, "end_line": 242, "label": "Same-Origin, IP & HMAC Helper" }]
     },
     {
       "id": "relay_routes",
@@ -102,11 +105,11 @@
       "label": "BFF Session Relay API",
       "sublabel": "establish / refresh / logout",
       "tag": "app/api/auth/session/*",
-      "explanation": "Reads/rotates/clears first-party __Host-scripe_refresh_token (HttpOnly, Secure, SameSite=Lax) on verified custom tenant domains.",
+      "explanation": "Mints, rotates, and clears first-party __Host-scripe_refresh_token (honoring X-Scripe-Relay-Refresh-MaxAge: 0 ephemeral staySignedIn=false sessions and fail-closed 502 on missing refresh token).",
       "sources": [
-        { "path": "src/app/api/auth/session/establish/route.ts", "line": 1, "end_line": 106, "label": "Establish Relay Cookie" },
-        { "path": "src/app/api/auth/session/refresh/route.ts", "line": 1, "end_line": 102, "label": "Refresh Relay Cookie" },
-        { "path": "src/app/api/auth/session/logout/route.ts", "line": 1, "end_line": 84, "label": "Logout Relay Cookie" }
+        { "path": "src/app/api/auth/session/establish/route.ts", "line": 1, "end_line": 125, "label": "Establish Relay Cookie" },
+        { "path": "src/app/api/auth/session/refresh/route.ts", "line": 1, "end_line": 104, "label": "Refresh Relay Cookie" },
+        { "path": "src/app/api/auth/session/logout/route.ts", "line": 1, "end_line": 86, "label": "Logout Relay Cookie" }
       ]
     },
     {
@@ -142,7 +145,7 @@
       "label": "auth.scripe.org",
       "sublabel": "Central SSO Continue",
       "href": "central-identity-federation-fullstack.html",
-      "explanation": "Hosts /sso/continue for centralized workspace picker, MFA challenge, and verified cross-origin handoff redirect."
+      "explanation": "Hosts /sso/continue for centralized workspace picker, hybrid-2FA challenge, and verified cross-origin handoff redirect."
     },
     {
       "id": "backend_api",
@@ -150,12 +153,12 @@
       "label": "api.scripe.org",
       "sublabel": "Handoff & Relay Backend",
       "href": "backend-central-federation-relay-sequence.html",
-      "explanation": "Redeems ExternalAuthHandoffTicket, verifies HMAC relay headers, enforces Sudo behavior, and splits scr.oidc.session."
+      "explanation": "Redeems ExternalAuthHandoffTicket, mints post-MFA handoff via PostMfaHandoffHelper, verifies HMAC relay headers, and splits scr.oidc.session."
     }
   ],
   "connections": [
     { "from": "origin_routing", "to": "handoff_dispatch", "label": "allowed target origin" },
-    { "from": "handoff_dispatch", "to": "central_auth_app", "label": "continue redirect", "variant": "emphasis" },
+    { "from": "handoff_dispatch", "to": "central_auth_app", "label": "2FA + continue", "variant": "emphasis" },
     { "from": "handoff_dispatch", "to": "active_principal", "label": "bind principal" },
     { "from": "active_principal", "to": "broadcast_auth", "label": "scope tab sync" },
     { "from": "origin_routing", "to": "relay_routes", "label": "custom domain BFF" },
@@ -170,10 +173,10 @@
   "cards": [
     {
       "dot": "violet",
-      "title": "Custom-Domain Micro-Relay & Origin Safety",
+      "title": "Post-MFA Bridge & Custom-Domain Micro-Relay",
       "items": [
-        "origin-routing.ts gates non-localhost redirect targets to HTTPS and central/workspace/verified custom hosts",
-        "Next.js /api/auth/session/{establish,refresh,logout} enforces Sec-Fetch-Site/Origin before signing HMAC headers",
+        "ssoTwoFactorBridge.ts bridges hybrid-2FA SSO verification on auth.scripe.org/sso/continue back to {ReturnOrigin}/sso/callback",
+        "Next.js /api/auth/session/{establish,refresh,logout} enforces Sec-Fetch-Site/Origin, extracts trusted Client-Ip, and honors MaxAge: 0",
         "Browser receives first-party __Host-scripe_refresh_token (HttpOnly, Secure, SameSite=Lax)"
       ]
     },

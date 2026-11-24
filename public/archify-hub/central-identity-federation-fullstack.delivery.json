@@ -1,35 +1,35 @@
 {
   "schemaVersion": 1,
-  "receiptId": "24ec91d5-32dc-4d8b-8c42-2f45a84486cc",
+  "receiptId": "43a8939a-875e-4192-91c3-581e0d7d9e40",
   "status": "current",
   "command": "deliver",
   "type": "explainer",
   "input": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\central-identity-federation-fullstack.archify.md",
   "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\central-identity-federation-fullstack.html",
   "specification": {
-    "sha256": "2078b117f352458eaf0efba90d38db3e9adb4dc1da7a655d31274669c30aead1",
-    "bytes": 9548
+    "sha256": "3224311ac754e598a581c1dfaf7f4533d86ee312a2abe73ef87d5cead99675ae",
+    "bytes": 10507
   },
   "artifact": {
-    "sha256": "bbb19d139e6f4207edb548347eb1b58a393d839a5692c7e590bae5e1c8252cf8",
-    "bytes": 1077630
+    "sha256": "3d10aa2ba316a4b66b11e2174806a3dcd4a4f3042a7f8fa7f0b7819b09ecc11d",
+    "bytes": 1079173
   },
   "explainer": {
-    "preparedSha256": "26f205c5b5dee685f996af9c92e05e51ca50ea2b5746b7b5866c5f5a1d01177b",
+    "preparedSha256": "d21875e86afa989819156d7f23d81bd666294def67e9386b87e683c03de32c5a",
     "dependencies": [
       {
         "kind": "diagram-spec",
         "id": "federation-fullstack-arch",
         "inline": true,
-        "sha256": "c4a81d264415593e091675294c74c906819f3dca7fbd074b2d86ce1e391dfc0d",
-        "bytes": 1409
+        "sha256": "fa0270c523d0f037a4a03fb7a95a8070549b9978d248d3dd9f765a3457f77549",
+        "bytes": 1427
       },
       {
         "kind": "diagram-spec",
         "id": "federation-runtime-seq",
         "inline": true,
-        "sha256": "2ddca3b26541d7420616d6d7b5f9b933b5bb9b23ae10f0941d95d3a91be06235",
-        "bytes": 1916
+        "sha256": "d43bdb7d387e21b963b2ce3d24cf4f1268ab96a049bc227749415c96c0df4419",
+        "bytes": 1871
       }
     ]
   }

@@ -1,43 +1,43 @@
 # How Does Central Identity Federation Unify Multi-Tenant SSO, Custom Domains & Dual-RP Passkeys? {#central-federation-overview}
 
-SCRIPE decouples interactive identity workflows (`https://auth.scripe.org`) from protocol callback ingress (`https://api.scripe.org`) while keeping custom tenant domains, native admin logins, WebAuthn passkeys, Sudo step-up, and split logouts strictly fail-closed.
+SCRIPE decouples interactive identity UI (`https://auth.scripe.org`) from callback ingress (`https://api.scripe.org`). Custom domains, post-MFA handoffs, Dual-RP passkeys, Sudo step-up, and split logouts remain strictly fail-closed.
 
-- **Central Callback & Single-Use Handoff:** External OIDC (`GET /api/v1/auth/oidc/callback`) and SAML (`POST /api/v1/auth/saml/acs/{providerId}`) callbacks on `api.scripe.org` consume server-side `ExternalAuthStateTicket` (never client `sessionStorage`), mint a 120s SHA-256 `ExternalAuthHandoffTicket`, and redeem it once via `POST /api/v1/auth/sso/handoff`.
-- **Custom-Domain First-Party HMAC Relay:** Verified custom domains cannot share cross-site cookies with `api.scripe.org`, so Next.js BFF exposes `/api/auth/session/{establish,refresh,logout}` guarded by HMAC-SHA256 headers and issuing `__Host-scripe_refresh_token` (`HttpOnly`, `Secure`, `SameSite=Lax`).
-- **Dynamic Origin Governance & Dual-RP Passkeys:** `IVerifiedOriginEvaluator` feeds dynamic CORS/CSRF checks with a 60s generation-keyed cache, while `AdminPasskey.RpId` / `WebAuthnChallenge.RpId` keep `EnableCentralNativeAndPasskeyMigration` locked `false` on `admin.scripe.org` and `*.admin.scripe.org`.
-- **Sudo Expansion, Sibling-JTI Revoke & Split Logout:** `<SudoVerificationModal />` expands 403 retry across Sudo revocation/downgrade errors, `RevokeAllSessions` preserves the caller's session via sibling JTI blacklisting, and `AuthLogoutScopeHelper` preserves `scr.oidc.session` on `"app"` logouts.
+- **Central Callback & Post-MFA Bridge:** OIDC and SAML callbacks on `api.scripe.org` consume server `ExternalAuthStateTicket` and mint a 120s SHA-256 `ExternalAuthHandoffTicket`. `PostMfaHandoffHelper` and `ssoTwoFactorBridge.ts` bridge hybrid-2FA back to `{ReturnOrigin}/sso/callback`.
+- **Custom-Domain First-Party HMAC Relay:** Next.js BFF exposes `/api/auth/session/{establish,refresh,logout}` with HMAC-SHA256 headers (`30s` skew, `60s` nonce, `Client-Ip` rate limit, `MaxAge: 0` parity) and issues `__Host-scripe_refresh_token` (`SameSite=Lax`).
+- **Dual-RP Passkeys, `UserVerification=required` & 3-DB Parity:** `AdminPasskey.RpId` keeps `EnableCentralNativeAndPasskeyMigration` locked `false` with `WebAuthn:UserVerification = "required"`, `PasskeyAuthLimit = 12` (15m), and `--idempotent` parity on PostgreSQL 18, SQL Server 2025, and Oracle 21c XE.
+- **Cloudflare Edge, Provider Runbook, Sudo & Split Logout:** Edge enforces Cloudflare `X-Scripe-Origin-Verify` -> Railway `ForwardedHeaders__ForwardLimit=2`, Entra `email`+`xms_edov`, GitHub `user:email read:user`, 2-step SAML ACS, 403 `<SudoVerificationModal />` retry, sibling-JTI `RevokeAllSessions`, and split `logoutScope`.
 
-@answer scope="SCRIPE-Backend + SCRIPE-Frontend + SCRIPE-CLI · Stage 6B"
+@answer scope="SCRIPE-Backend (e64e61e65) + SCRIPE-Frontend (eea985c95) + SCRIPE-CLI (0cc99a3)"
 @meta locale=en
 
-## Which Verification Gates & Federation Timers Govern This Architecture? {#federation-metrics}
+## Which Verification Gates, Multi-DB Engines & Timers Govern This Architecture? {#federation-metrics}
 
-Measured test suites, architecture lint scores, and bounded cryptographic windows from `CentralFederationOptions`, `ExternalAuthHandoffStore`, `SessionRelayAuthenticator`, and `VerifiedOriginEvaluator`:
+Measured test suites, live browser E2E, multi-DB migrations, and bounded security windows across `CentralFederationOptions`, `RateLimitingSettings`, `ExternalAuthHandoffStore`, and `SessionRelayAuthenticator`:
 
-@metric id=m_be_unit label="Backend Unit Tests" value=702 limit=702 unit="pass" note="702/702 API.UnitTests + 200/200 AuthorizationGates verified passing on SCRIPE-Backend commit 970806205."
-@metric id=m_fe_build label="Frontend Build Packages" value=208 limit=208 unit="ok" note="208/208 Next.js 16 packages built + 9/9 live E2E suites verified on SCRIPE-Frontend commit a9748503c."
-@metric id=m_handoff label="SSO Handoff Ticket TTL" value=120 limit=120 unit="sec" note="SHA-256 ExternalAuthHandoffTicket expires in 120s with atomic TryAddAsync auth:ext-handoff-used:{sha256} replay lock."
-@metric id=m_arch label="BE & FE Arch Scores" value=94 limit=100 unit="score" note="scripe arch-check scores: Backend 94/100 (90/90 builds), Frontend 92/100 across 65+ MVVM sub-modules."
+@metric id=m_be_unit label="Backend Unit & Authz Gates" value=902 limit=902 unit="pass" note="702/702 API.UnitTests + 200/200 AuthorizationGates + 3/3 idempotent DB engines (PG 18, SQL 2025, Oracle 21c XE)."
+@metric id=m_fe_build label="Frontend Build & Live E2E" value=208 limit=208 unit="ok" note="208/208 Next.js 16 packages built + 9/9 live RateLimiting=true E2E suites + 24/24 visual gallery captures."
+@metric id=m_handoff label="SSO Handoff Ticket TTL" value=120 limit=120 unit="sec" note="SHA-256 ExternalAuthHandoffTicket (initial & post-MFA) expires in 120s with atomic TryAddAsync replay lock."
+@metric id=m_passkey_rl label="Passkey Auth Rate Limit" value=12 limit=12 unit="req/15m" note="RateLimiting:PasskeyAuthLimit = 12 per 15m (WebAuthn:UserVerification = required; client-IP partitioned on BFF relay)."
 
-```mermaid title="Verified Central Federation Quality Gates & Security Timers (Observed Counts & Windows)"
+```mermaid title="Verified Central Federation Quality Gates, Timers & Multi-DB Scoreboard"
 xychart-beta horizontal
-  x-axis ["BE Unit Tests (702)", "Authz Gates (200)", "FE Packages (208)", "BE Projects (90)", "BE Arch Score (94)", "FE Arch Score (92)", "Live E2E (9)", "Handoff TTL (120s)", "Relay Nonce (60s)"]
+  x-axis ["BE Unit Tests (702)", "Authz Gates (200)", "FE Packages (208)", "BE Projects (90)", "BE Arch Score (94)", "FE Arch Score (92)", "Handoff TTL (120s)", "Relay Nonce (60s)", "Gallery Captures (24)", "PasskeyLimit (12)"]
   y-axis "Verified Value / Bounds" 0 --> 750
-  bar "Observed Metric" [702, 200, 208, 90, 94, 92, 9, 120, 60]
+  bar "Observed Metric" [702, 200, 208, 90, 94, 92, 120, 60, 24, 12]
 ```
 
-## How Do Central Auth, API Callbacks, Custom-Domain Relay & Native Origins Connect? {#federation-topology}
+## How Do Central Auth, API Callbacks, Post-MFA Bridging & Custom-Domain Relay Connect? {#federation-topology}
 
-Click any highlighted node below to step through host boundaries, cookie isolation, HMAC relay signing, Dual-RP WebAuthn, and Sudo enforcement across both repositories.
+Click any highlighted node below to trace host boundaries, post-MFA handoff bridging, HMAC relay signing, Dual-RP WebAuthn (`UserVerification=required`), and multi-DB persistence.
 
-@architecture id=federation-fullstack-arch title="Central Identity Federation, Custom-Domain HMAC Relay & Dual-RP WebAuthn Topology"
+@architecture id=federation-fullstack-arch title="Central Identity Federation, Post-MFA Bridge, Custom-Domain HMAC Relay & Dual-RP Topology"
 | fe_auth | auth.scripe.org | frontend |
 | fe_custom | Custom Tenant BFF | frontend |
 | fe_native | admin.scripe.org | frontend |
 | api_cb | api.scripe.org | backend |
 | sec_gate | Relay, Sudo & Dual-RP | security |
-| id_store | Redis + SQL Store | database |
-| fe_auth > api_cb | OIDC/SAML | emphasis |
+| id_store | PG / SQL / Oracle 21c | database |
+| fe_auth > api_cb | OIDC/SAML + 2FA | emphasis |
 | fe_custom > sec_gate | HMAC BFF | security |
 | sec_gate > api_cb | /sso/handoff |
 | fe_native > sec_gate | WebAuthn + Sudo | security |
@@ -45,56 +45,54 @@ Click any highlighted node below to step through host boundaries, cookie isolati
 | sec_gate > id_store |
 
 @steps id=topology-walkthrough
-| st-auth | auth.scripe.org UI | Interactive SSO start, `/sso/continue` workspace picker & 2FA challenge (`Tenancy:AuthBaseUrl`, `OpenIddict:FrontendBaseUrl`). | federation-fullstack-arch | fe_auth |
-| st-bff | Custom-Domain BFF Relay | Next.js `/api/auth/session/{establish,refresh,logout}` checks same-origin headers, signs `X-Scripe-Session-Relay-*`, and sets `__Host-scripe_refresh_token` (`Lax`). | federation-fullstack-arch | fe_custom |
-| st-native | Native & Passkey Origin | Locked on `admin.scripe.org` and `*.admin.scripe.org` (`EnableCentralNativeAndPasskeyMigration: false`) with `OriginRouting` + `BroadcastChannel` isolation. | federation-fullstack-arch | fe_native |
-| st-cb | Central Callback Ingress | `OidcClientController.Central` and SAML ACS redeem server `ExternalAuthStateTicket`, mint 120s SHA-256 `ExternalAuthHandoffTicket`, and `302` redirect. | federation-fullstack-arch | api_cb |
-| st-sec | Relay, Dual-RP & Sudo Gate | `SessionRelayAuthenticator` (30s skew, 60s nonce), `IVerifiedOriginEvaluator`, `Fido2PasskeyService.ResolveAndValidateRpId`, `RevokeAllSessions` JTI blacklist, and `AuthLogoutScopeHelper`. | federation-fullstack-arch | sec_gate |
-| st-store | Redis + SQL Persistence | Stores `auth:ext-handoff-used:{sha256}`, relay nonces, `AdminPasskey.RpId` (`varchar(253)`), and hashed `RefreshTokens`. | federation-fullstack-arch | id_store |
+| st-auth | auth.scripe.org UI & Post-MFA Bridge | Interactive SSO start, `/sso/continue` workspace picker, and hybrid-2FA challenge (`ssoTwoFactorBridge.ts` -> `PostMfaHandoffHelper` + `TenantOriginOwnershipValidator`). | federation-fullstack-arch | fe_auth |
+| st-bff | Custom-Domain BFF Relay | Next.js `/api/auth/session/{establish,refresh,logout}` enforces same-origin headers, signs `X-Scripe-Session-Relay-*` (with `Client-Ip` & `MaxAge: 0` parity), and sets `__Host-scripe_refresh_token` (`Lax`). | federation-fullstack-arch | fe_custom |
+| st-native | Native & Passkey Origin | Locked on `admin.scripe.org` and `*.admin.scripe.org` (`EnableCentralNativeAndPasskeyMigration: false`, `WebAuthn:UserVerification = "required"`, `PasskeyAuthLimit = 12`). | federation-fullstack-arch | fe_native |
+| st-cb | Central Callback & Cloudflare Edge | `OidcClientController.Central` and SAML ACS behind Cloudflare `X-Scripe-Origin-Verify` + Railway `ForwardedHeaders__ForwardLimit=2` redeem server state and mint 120s SHA-256 `ExternalAuthHandoffTicket`. | federation-fullstack-arch | api_cb |
+| st-sec | Relay, Dual-RP & Sudo Gate | `SessionRelayAuthenticator` (30s skew, 60s nonce), `IVerifiedOriginEvaluator`, `Fido2PasskeyService`, `RevokeAllSessions` sibling-JTI blacklist, and `AuthLogoutScopeHelper` (`POST ~/oidc/logout`). | federation-fullstack-arch | sec_gate |
+| st-store | Redis + 3-DB Persistence | Stores `auth:ext-handoff-used:{sha256}`, relay nonces, and `AdminPasskey.RpId` (`varchar(253)`) verified `--idempotent` across PostgreSQL 18, SQL Server 2025, and live Oracle 21c XE. | federation-fullstack-arch | id_store |
 
-```csharp title="SCRIPE-Backend: Atomic Single-Use Handoff Claim & Split Logout Helper"
-// ExternalAuthHandoffStore.cs — atomic SHA-256 digest lookup + TryAddAsync replay guard
-var digest = ComputeSha256Hex(rawCode);
-var claimed = await _cache.TryAddAsync($"auth:ext-handoff-used:{digest}", "1", ReplayGuardTtl, ct);
+```csharp title="SCRIPE-Backend: Post-MFA Custom-Domain Handoff Validation & Relay Rate-Limit Partitioning"
+// PostMfaHandoffHelper.cs — requires pending federated SSO ticket & validates tenant domain ownership
+if (!isPendingPath || (pendingTicket is not null && !IsFederatedSsoSource(pendingTicket.Source)))
+    return Result.Failure<ValidatedHandoffOrigin?>(Error.Forbidden("HANDOFF_REQUIRES_PENDING_TICKET", "..."));
 
-// AuthLogoutScopeHelper.cs — keep scr.oidc.session during app logout; clear only on "central"
-public static bool ShouldClearOidcSession(string? scope) =>
-    string.Equals(scope?.Trim(), "central", StringComparison.OrdinalIgnoreCase);
+// RateLimitingSettings.cs & RateLimitingConfiguration.AuthPolicies.cs — PasskeyAuthLimit = 12 (15m)
+public int PasskeyAuthLimit { get; set; } = 12; // Partitioned by X-Scripe-Session-Relay-Client-Ip on HMAC relay
 ```
 
-## How Do Central Callback, Custom-Domain Relay & Split Logout Execute Step by Step? {#federation-sequence-section}
+## How Do Central Callback, Post-MFA Bridging & Custom-Domain Relay Execute Step by Step? {#federation-sequence-section}
 
-Custom-domain workspaces route refresh tokens through their own Next.js first-party BFF (`__Host-scripe_refresh_token`) while keeping `scr.oidc.session` isolated until explicit `"central"` logout.
+When a custom-domain user authenticates via an external IdP and tenant policy requires SCRIPE 2FA, `auth.scripe.org/sso/continue` completes the 2FA challenge and mints a fresh single-use post-MFA `ExternalAuthHandoffTicket` back to `{ReturnOrigin}/sso/callback`.
 
-@sequence id=federation-runtime-seq title="Central OIDC Callback, Custom-Domain HMAC Relay & Split Logout Trace"
+@sequence id=federation-runtime-seq title="Central OIDC Callback, Hybrid-2FA Post-MFA Bridge & Custom-Domain HMAC Relay Trace"
 | actor spa | Custom Domain SPA | frontend |
+| actor auth | auth.scripe.org | frontend |
 | actor bff | Next.js HMAC Relay | frontend |
 | actor api | api.scripe.org | backend |
-| actor sec | Relay & Store | security |
 | actor idp | External IdP | external |
 | spa | api | POST /api/v1/auth/oidc/challenge |
 | api | spa | idpUrl (ExternalAuthStateTicket cached) | return |
 | spa | idp | authenticate at IdP |
 | idp | api | GET /api/v1/auth/oidc/callback | emphasis |
-| api | sec | mint 120s SHA-256 HandoffTicket | security |
-| api | spa | 302 {ReturnOrigin}/sso/callback?code= | return |
+| api | auth | 302 auth.scripe.org/sso/continue (Requires2FA) | return |
+| auth | api | POST /2fa/verify (twoFactorPendingToken + returnOrigin) | security |
+| api | auth | PostMfaHandoffHelper -> 120s post-MFA HandoffTicket | return |
+| auth | spa | 302 {ReturnOrigin}/sso/callback?code=&state= | return |
 | spa | bff | POST /api/auth/session/establish | emphasis |
 | bff | api | HMAC X-Scripe-Session-Relay-* + /sso/handoff | security |
-| api | sec | atomic claim auth:ext-handoff-used:{sha256} | security |
 | bff | spa | Access JWT JSON + __Host-scripe_refresh_token | return |
-| spa | bff | POST /api/auth/session/logout (app default) |
-| bff | api | revoke refresh cookie (keep scr.oidc.session) | return |
 
-@callout id=dual-rp-lock level=note title="Decision 2: Why Native Admin Login & Passkeys Stay Locked on admin.scripe.org"
-`CentralFederationOptions.EnableCentralNativeAndPasskeyMigration` stays `false` in all environments. Existing `AdminPasskey` credentials bind cryptographically to the registering Relying Party (`rpId`); migrating native login to `auth.scripe.org` without Dual-RP opt-in would orphan enrolled hardware keys. Adding `AdminPasskey.RpId` (`varchar(253)`, backfilled `'admin.scripe.org'`) and `AllowedRpIds` provides non-breaking forward compatibility.
+@callout id=dual-rp-lock level=note title="Decision 2, WebAuthn UserVerification=required & Multi-DB Parity"
+`CentralFederationOptions.EnableCentralNativeAndPasskeyMigration` stays `false` in all environments while `WebAuthn:UserVerification` is `"required"` and `RateLimiting:PasskeyAuthLimit` is `12` (15m). `AddPasskeyRpIdFilteredIndexAndEncryptedTotpStorage` (`9aedf12b9`) is verified with `0` errors across `--idempotent` fresh and replay runs on PostgreSQL 18, SQL Server 2025 Express (deferred `RpId` backfill), and live Oracle 21c XE (`XEPDB1` `IDENTITY` schema).
 
-## Which Configuration Flags & Security Contracts Govern Central Federation? {#federation-matrix}
+## Which Production Edge, External IdP & Security Contracts Govern Central Federation? {#federation-matrix}
 
-| Contract / Component | Owner Repository | Invariant & Bounded Behavior | Child Drilldown |
+| Contract / Provider | Owner Surface | Code-Verified Production Invariant | Child Drilldown |
 | --- | --- | --- | --- |
-| `CentralFederationOptions` | `SCRIPE-Backend` (`970806205`) | 5 federation toggles `true`; `EnableCentralNativeAndPasskeyMigration` locked `false` | `backend-central-federation-relay-sequence.html` |
-| `ExternalAuthHandoffStore` | `SCRIPE-Backend` (`970806205`) | `120s` TTL SHA-256 ticket key + `TryAddAsync` single-use replay guard | `backend-central-federation-relay-sequence.html` |
-| `SessionRelayAuthenticator` | `SCRIPE-Backend` (`970806205`) | `30s` timestamp skew, `60s` atomic nonce, `>=32`-char fail-closed HMAC secret | `backend-central-federation-relay-sequence.html` |
-| `VerifiedOriginEvaluator` | `SCRIPE-Backend` (`970806205`) | `60s` generation cache authorizing verified active non-suspended custom domains | `backend-central-federation-relay-sequence.html` |
-| `OriginRouting` & `ssoHandoffDispatch` | `SCRIPE-Frontend` (`a9748503c`) | Strict HTTPS/origin checks, zero `sessionStorage` PKCE, central continuation dispatch | `frontend-central-auth-sudo-mvvm.html` |
-| `SudoVerificationModal` & `useAuthLogout` | `SCRIPE-Frontend` (`a9748503c`) | Expands 403 Sudo retry (`SudoRevokedOrExpired`, `DowngradeRefused`, `TokenInvalid`) + split `logoutScope` | `frontend-central-auth-sudo-mvvm.html` |
+| Cloudflare & Railway Edge | `api.scripe.org` / `auth.scripe.org` | Orange Cloud `X-Scripe-Origin-Verify` Transform Rule (`/health/ready` bypass); Railway `ForwardedHeaders__ForwardLimit=2` + `KnownNetworks__0`; `Saml__SpBaseUrl=https://api.scripe.org` | `backend-central-federation-relay-sequence.html` |
+| Google / Microsoft Entra / GitHub / SAML | `/settings/identity-providers` | Google (`openid email profile`, `TrustIdpMfa=false`); Entra (`email` + `xms_edov` ID claims, replace `{tenant-id}`); GitHub (`user:email read:user`); 2-step SAML ACS + `SEC-SAML-01` | `backend-central-federation-relay-sequence.html` |
+| `PostMfaHandoffHelper` & `TenantOriginOwnershipValidator` | `SCRIPE-Backend` (`e64e61e65`) | Validates federated `TwoFactorPendingTicket.Source`, enforces tenant-domain ownership, and mints 120s post-MFA `ExternalAuthHandoffTicket` | `backend-central-federation-relay-sequence.html` |
+| `SessionRelayAuthenticator` & `CookieAuthMiddleware.Relay` | `SCRIPE-Backend` (`e64e61e65`) | `30s` skew, `60s` atomic nonce, `X-Scripe-Session-Relay-Client-Ip` rate-limit key, `X-Scripe-Relay-Refresh-MaxAge: 0` ephemeral cookie parity | `backend-central-federation-relay-sequence.html` |
+| `ssoTwoFactorBridge.ts` & `session-relay-hmac.ts` | `SCRIPE-Frontend` (`eea985c95`) | Bridges post-MFA cross-origin handoff, extracts trusted client IP / `host` authority, and fails closed (`502`) if refresh token is missing | `frontend-central-auth-sudo-mvvm.html` |
+| `SudoVerificationModal` & `useAuthLogout` | `SCRIPE-Frontend` (`eea985c95`) | Expands 403 Sudo retry (`SudoRevokedOrExpired`, `DowngradeRefused`, `TokenInvalid`) and preserves `scr.oidc.session` on `"app"` logout (`POST ~/oidc/logout`) | `frontend-central-auth-sudo-mvvm.html` |
