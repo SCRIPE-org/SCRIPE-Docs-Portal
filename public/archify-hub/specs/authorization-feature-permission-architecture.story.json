@@ -1,0 +1,111 @@
+{
+  "version": 2,
+  "title": "SCRIPE Authorization & Entitlements Architecture Walkthrough",
+  "intro": "Trace how requests, dotted resource keys, multi-role FLS merges, and post-commit cache evictions collaborate across Next.js 16 and .NET 10 without cross-module coupling or privilege leakage.",
+  "outro": "Every tenant request is gated by cold-warmed context, live IFeatureChecker evaluation, Priority-0 FLS intersection, and export redaction.",
+  "scenes": [
+    {
+      "title": "1. Zero-Trust Ingress & Live Feature Gate",
+      "points": [
+        {
+          "anchor": "fe_portal",
+          "via": "fe_to_mw",
+          "action": "trace",
+          "title": "Route Guard & Context Switch",
+          "text": "The Next.js 16 MVVM shell validates route permissions and platform vs tenant workspace boundaries before attaching the active JWT and X-Tenant-Context header.",
+          "caption": "Next.js 16 ingress enters ASP.NET Core"
+        },
+        {
+          "anchor": "mw_context",
+          "via": "mw_to_authz",
+          "action": "trace",
+          "title": "Pre-Authz Context & Cold Warm",
+          "text": "TenantContextMiddleware runs before RequireMfaEnrollmentMiddleware and UseAuthorization, skipping unauthenticated requests (401) and cold-warming AdminPermissionCache before resolving bidirectional MembershipMode.",
+          "caption": "Middleware establishes authoritative tenant context"
+        },
+        {
+          "anchor": "authz_handler",
+          "via": ["authz_to_cat", "authz_to_feat"],
+          "action": "parallel",
+          "title": "Catalog Metadata + Live Feature Check",
+          "text": "PermissionAuthorizationHandler resolves RequiredAnyFeatures (OR semantics) and IsGloballyAvailable from the 490-permission FrozenDictionary, then calls fail-closed IFeatureChecker on live Entitlements.",
+          "caption": "PBAC verifies catalog + live feature flag simultaneously"
+        },
+        {
+          "anchor": "feature_checker",
+          "via": "chk_to_edb",
+          "action": "trace",
+          "title": "Entitlements Evaluation",
+          "text": "Live feature checks query Entitlements overrides, base edition, and non-marketing FeaturePackExpansions before admitting or refusing with 403.",
+          "caption": "Fail-closed Entitlements gate verifies tenant eligibility"
+        }
+      ]
+    },
+    {
+      "title": "2. Multi-Role FLS Algebra & Export Hardening",
+      "points": [
+        {
+          "anchor": "admin_sec_svc",
+          "via": ["sec_to_idb", "sec_to_merge"],
+          "action": "parallel",
+          "title": "Entitled Role Selection (Priority 0 Asc)",
+          "text": "AdminSecurityService loads active Roles ordered by Priority ascending (0 = highest), filtering out permissions disabled by live tenant features.",
+          "caption": "Roles & UserGroups feed FLS merge"
+        },
+        {
+          "anchor": "fls_merge",
+          "via": "merge_to_norm",
+          "action": "trace",
+          "title": "Dotted Resource Preservation",
+          "text": "FieldLevelSecurityMergeHelper intersects restrictions across read-capable roles, unions additive UserGroup restrictions on top, and relies on PermissionResourceNormalizer without truncating dotted keys like crm.opportunities.",
+          "caption": "Intersection per role, union per UserGroup, dotted key kept intact"
+        },
+        {
+          "anchor": "fls_filter",
+          "via": "fls_to_export",
+          "action": "trace",
+          "title": "JSON, Write & File Export Parity",
+          "text": "FieldProjectionMiddleware, FieldRestrictionEnforcementBehavior, and Export/DataTransfer guards enforce identical masked fields and record visibility across REST JSON, CSV/XLSX/PDF exports, and queued background jobs.",
+          "caption": "REST responses and async exports share one FLS boundary"
+        },
+        {
+          "anchor": "fe_rbac_ui",
+          "via": "fe_rbac_to_fls",
+          "action": "relation",
+          "title": "Tenant-Filtered Picker Alignment",
+          "text": "Roles & Restrictions Studio fetches non-PlatformOnly catalog items filtered by live tenant features, hiding unavailable modules and platform-only host actions cleanly.",
+          "caption": "UI pickers match backend assignable permissions 1:1"
+        }
+      ]
+    },
+    {
+      "title": "3. Non-Destructive Entitlements Sync & Atomic Cache Eviction",
+      "points": [
+        {
+          "anchor": "feature_builder",
+          "via": ["feat_to_edb", "feat_to_bus"],
+          "action": "parallel",
+          "title": "Commit Transaction Before Event Dispatch",
+          "text": "EffectiveFeatureMapBuilder persists subscription or TenantFeatureOverride updates to EntitlementsDbContext first, then emits SubscriptionChanged integration events after SaveChangesAsync succeeds.",
+          "caption": "Zero pre-commit race condition on event handlers"
+        },
+        {
+          "anchor": "sub_event_bus",
+          "via": "bus_to_tpm",
+          "action": "trace",
+          "title": "Tenant Permission Pool Sync",
+          "text": "AstraFlow dispatches the committed event to TenantPermissionManager, recomputing the tenant permission pool using catalog RequiredAnyFeatures and IsGloballyAvailable rules.",
+          "caption": "Pool sync tracks enabled editions cleanly"
+        },
+        {
+          "anchor": "tenant_perm_mgr",
+          "via": ["tpm_to_idb", "tpm_to_cache"],
+          "action": "parallel",
+          "title": "Preserve Custom Roles & Stamp Cache",
+          "text": "TenantPermissionManager updates TenantPermissions and T_SCRIPE_SA while leaving custom RolePermissions untouched in IdentityDbContext, then evicts AdminPermissionCache and bumps admin:principal:* stamps.",
+          "caption": "Zero privilege hangover and zero custom-role loss"
+        }
+      ]
+    }
+  ]
+}

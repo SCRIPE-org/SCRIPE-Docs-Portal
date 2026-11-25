@@ -36,16 +36,17 @@ export const fr = {
       refreshDesc:
         "Consomme le Refresh Token valide stocké et émet une nouvelle paire cryptographique.",
       logoutTitle: "Déconnexion (Logout)",
-      logoutDesc: "Détruit tous les jetons persistants et déconnecte les services actifs associés.",
+      logoutDesc:
+        "[AllowAnonymous] Révoque le Refresh Token courant et efface les cookies BrandingSettings ; accepte logoutScope ('app' préserve scr.oidc.session, 'central' la supprime) (204 No Content).",
       tfaTitle: "Authentification à Deux Facteurs (2FA)",
       tfaIntro:
         "Les protocoles TOTP intégrés aux applications d'authentification classiques (Google, Microsoft, Authy).",
       tfaEnableDesc: "Émission du Secret aléatoire codé en URI QR Code pour initialisation.",
       tfaConfirmDesc: "Consolide le réglage initial en validant le premier code entré.",
       tfaVerifyDesc:
-        "Poursuite du processus de connexion lorsqu'un jeton Session-2FA a été fourni à l'étape 1.",
+        "Finaliser la connexion via mot de passe + code ou jeton à usage unique twoFactorPendingToken.",
       tfaDisableDesc:
-        "Suspension manuelle et désactivation des sécurités du compte de cet administrateur.",
+        "Désactiver la 2FA avec mot de passe + twoFactorCode (bloqué si Require2FA sans passkey de secours).",
       tfaBackupDesc:
         "Génération de codes imprimables d'urgence et écrasement de la liste de secours précédente.",
       profileTitle: "Gestion de Profil",
@@ -53,7 +54,7 @@ export const fr = {
         "Récupération profonde de l'identité, des permissions croisées et du contexte locataire du JWT courant.",
       updateProfileDesc: "Modification des noms et numéros de téléphone.",
       changePasswordDesc:
-        "Opération de renouvellement de mot de passe impliquant une vérification croisée de l'ancien mot de passe.",
+        "Renouvellement du mot de passe retournant un TokenResponse pivoté (200 OK).",
       uploadAvatarDesc:
         "Stockage asynchrone d'une nouvelle photo de profil (formats JPG/PNG/WEBP, max 2 Mo).",
       removeAvatarDesc: "Retour au profil générique avec les lettres d'initiales automatiques.",
@@ -69,16 +70,34 @@ export const fr = {
       discoverWorkspacesDesc:
         "Découvrir tous les espaces de travail et organisations accessibles avec les identifiants.",
       revokeAllSessionsDesc:
-        "Révoquer instantanément toutes les sessions actives et jetons de rafraîchissement sur tous les appareils.",
+        "Révoquer toutes les autres sessions actives par mise sur liste noire des JTI frères tout en préservant la session courante.",
+      federationEndpointsTitle: "Fédération Centrale et Relais de Session sur Domaine Personnalisé",
+      centralOidcCallbackDesc:
+        "[AllowAnonymous] Callback central OIDC sur api.scripe.org consommant ExternalAuthStateTicket et émettant un ExternalAuthHandoffTicket SHA-256 (120s).",
+      centralSamlAcsDesc:
+        "[AllowAnonymous] Point ACS SAML 2.0 central générant un ExternalAuthHandoffTicket SHA-256 (120s) vers auth.scripe.org ou domaine vérifié.",
+      ssoHandoffDesc:
+        "[AllowAnonymous] Échange atomique unique d'un ExternalAuthHandoffTicket (auth:ext-handoff-used:{sha256}) contre jetons ou état 2FA/espace.",
+      relayEstablishDesc:
+        "Micro-relais HMAC Next.js BFF (X-Scripe-Session-Relay-*) établissant la session et posant __Host-scripe_refresh_token.",
+      relayRefreshDesc:
+        "Micro-relais HMAC Next.js BFF assurant la rotation de __Host-scripe_refresh_token sur domaine personnalisé.",
+      relayLogoutDesc:
+        "Micro-relais Next.js BFF transmettant logoutScope ('app' ou 'central') et supprimant __Host-scripe_refresh_token.",
       getExternalLoginsDesc:
         "Lister les connexions SSO et fournisseurs d'identité externes liés à ce compte.",
       linkExternalLoginDesc:
-        "Lier un compte externe OAuth/OIDC au compte administrateur authentifié.",
+        "Initier une liaison fédérée OIDC/SAML protégée par Sudo (/external-logins/link retourne 410 Gone).",
       unlinkExternalLoginDesc: "Dissocier un fournisseur d'authentification externe du compte.",
       requestPasswordResetDesc:
         "Initier la récupération du mot de passe administrateur avec défi temporaire.",
       verifyResetOtpDesc: "Valider le mot de passe à usage unique (OTP) pour la réinitialisation.",
-      resetPasswordDesc: "Finaliser la réinitialisation du mot de passe avec le jeton vérifié.",
+      resetPasswordDesc:
+        "Finaliser la réinitialisation via ResetGrantToken ; retourne 204 No Content sans connexion automatique.",
+      passwordPolicyDesc:
+        "Récupérer la politique anonyme de complexité des mots de passe du locataire.",
+      forceChangePasswordDesc:
+        "Finaliser la rotation obligatoire du mot de passe (mcp=true) et réémettre TokenResponse.",
     },
     userAuthApi: {
       title: "API d'Authentification des Utilisateurs (Clients)",
@@ -108,20 +127,28 @@ export const fr = {
         "Action finale qui clôture l'OTP émis et le remplace par un nouveau condensé BCrypt.",
       tokenTitle: "Gestion des Accès",
       refreshDesc: "Appel de rotation silencieuse invisible pour le client Web.",
-      logoutDesc: "Arrêt de la session et purge du Refresh Token des bases de données de l'API.",
+      logoutDesc:
+        "[AllowAnonymous] Révoque le Refresh Token courant et purge les cookies ; logoutScope ('app' préserve scr.oidc.session, 'central' l'efface) (204 No Content).",
       tfaTitle: "2FA Utilisateur Final",
       tfaEnableDesc: "QR générateur de la graine secrète du client.",
       tfaConfirmDesc: "Émission des jetons de récupération hors-ligne.",
-      tfaVerifyDesc: "Seconde étape du blocage de connexion.",
-      tfaDisableDesc: "Abolition de l'authentification 2FA personnelle.",
+      tfaVerifyDesc:
+        "Finaliser la connexion via mot de passe + code ou jeton à usage unique twoFactorPendingToken.",
+      tfaDisableDesc:
+        "Désactiver la 2FA avec mot de passe actuel + twoFactorCode (bloqué si Require2FA sans passkey).",
       tfaBackupDesc: "Générer une nouvelle carte de secours imprimable.",
       profileTitle: "Opérations de Profil Utilisateur",
       meDesc: "Récupération des métadonnées liées à son identité de domaine public.",
       updateProfileDesc: "Modification des champs signalétiques mineurs.",
-      changePasswordDesc: "Renouvellement du mot de passe direct.",
+      changePasswordDesc:
+        "Renouvellement du mot de passe retournant un TokenResponse pivoté en place (200 OK).",
+      passwordPolicyDesc:
+        "Consulter la politique de complexité des mots de passe du locataire sans authentification.",
+      forceChangePasswordDesc:
+        "Finaliser le changement obligatoire de mot de passe (mcp=true) et réémettre TokenResponse.",
       summaryTitle: "Résumé des Interfaces de Sécurité",
       diffNote:
-        "Alerte de Sécurité Architecturale : La base de données rejette les JWT d'utilisateurs sur les points de terminaison d'administration. Une tentative de substitution retournera une violation du protocole d'authentification 401.",
+        "L'API utilisateur (/api/v1/auth/user/*) est isolée de l'API administrateur (/api/v1/auth/admin/*) ; toutes deux émettent TokenResponse avec cookies HttpOnly BrandingSettings sans jetons interchangeables.",
       loginProviderDesc:
         "Initier le parcours d'authentification SSO ou OAuth2 avec un fournisseur externe.",
       sendEmailVerificationDesc:
@@ -130,7 +157,8 @@ export const fr = {
         "Envoyer un code OTP de vérification par SMS au numéro de mobile renseigné.",
       getExternalLoginsDesc:
         "Lister l'ensemble des services de connexion externes liés à cet utilisateur.",
-      linkExternalLoginDesc: "Associer un compte externe social ou OIDC au profil utilisateur.",
+      linkExternalLoginDesc:
+        "Endpoint direct /external-logins/link supprimé (410 Gone) ; connectez-vous via le fournisseur fédéré.",
       unlinkExternalLoginDesc: "Supprimer une liaison d'identité externe du compte utilisateur.",
     },
     adminApi: {
@@ -177,7 +205,7 @@ export const fr = {
       protectDesc:
         "Basculer la balise IsProtected empêchant l'élimination ou le verrouillage dudit compte de façon native par la base de données.",
       impersonationWarning:
-        "Toute action de modification effectuée sous l'imposture génère une empreinte double dans les bases de données d'audit liant de manière irrévocable le modificateur fantôme.",
+        "Requiert SuperAdmin et X-Sudo-Token ; chaque action consigne les deux identités, échoue en mode fermé en cas de révocation et expire au plafond strict non prolongeable de 8 heures.",
       queryParamsTitle: "Opérations de Chaînes de Requêtes Avancées (Query Params)",
     },
     tenantApi: {

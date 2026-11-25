@@ -68,25 +68,16 @@ const sections: DocSection[] = [
       {
         label: "Registration Response (201)",
         language: "json",
-        filename: "Registration Success — Response",
+        filename: "Registration Success — Response (TokenResponse)",
         code: `{
   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "refreshToken": "dGhpcyBpcyBhIHJlZnJlc2ggdG9rZW4...",
-  "expiresIn": 3600,
-  "tokenType": "Bearer",
-  "requiresTwoFactor": false,
-  "user": {
-    "id": "user-uuid-12345",
-    "email": "alice@example.com",
-    "username": "alicejohnson",
-    "firstName": null,
-    "lastName": null,
-    "role": "User",
-    "tenantId": "f8e7d6c5-b4a3-2190-fedc-ba0987654321",
-    "tenantCode": "ACME",
-    "emailVerified": false,
-    "phoneVerified": false
-  }
+  "refreshToken": "", // Set as HttpOnly cookie by CookieAuthMiddleware for web clients
+  "expiresAt": "2026-11-23T12:30:00Z",
+  "requires2FA": false,
+  "staySignedIn": false,
+  "mustChangePassword": false,
+  "requireMfaEnrollment": false,
+  "defaultRedirectPath": "/"
 }`,
       },
     ],
@@ -141,22 +132,16 @@ const sections: DocSection[] = [
       {
         label: "Success Response (200)",
         language: "json",
-        filename: "Login Success — Response",
+        filename: "Login Success — Response (TokenResponse)",
         code: `{
   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "refreshToken": "dGhpcyBpcyBhIHJlZnJlc2ggdG9rZW4...",
-  "expiresIn": 3600,
-  "tokenType": "Bearer",
-  "requiresTwoFactor": false,
-  "user": {
-    "id": "user-uuid-12345",
-    "email": "alice@example.com",
-    "username": "alicejohnson",
-    "role": "User",
-    "tenantId": "f8e7d6c5-b4a3-2190-fedc-ba0987654321",
-    "emailVerified": true,
-    "phoneVerified": false
-  }
+  "refreshToken": "", // Stored in HttpOnly cookie ({CookiePrefix}_refresh_token)
+  "expiresAt": "2026-11-23T12:30:00Z", // Default 30m via Jwt:ExpiryMinutes / SessionPolicy
+  "requires2FA": false,
+  "staySignedIn": false,
+  "mustChangePassword": false,
+  "requireMfaEnrollment": false,
+  "defaultRedirectPath": "/"
 }`,
       },
     ],
@@ -316,6 +301,12 @@ const sections: DocSection[] = [
     type: "api-table",
     endpoints: [
       {
+        method: "GET",
+        path: "/api/v1/auth/user/password-policy",
+        descriptionKey: "apiReference.userAuthApi.passwordPolicyDesc",
+        auth: "None ([AllowAnonymous])",
+      },
+      {
         method: "POST",
         path: "/api/v1/auth/user/refresh",
         descriptionKey: "apiReference.userAuthApi.refreshDesc",
@@ -325,6 +316,18 @@ const sections: DocSection[] = [
         method: "POST",
         path: "/api/v1/auth/user/logout",
         descriptionKey: "apiReference.userAuthApi.logoutDesc",
+        auth: "None ([AllowAnonymous], revokes token & cookies)",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/user/change-password",
+        descriptionKey: "apiReference.userAuthApi.changePasswordDesc",
+        auth: "Bearer Token",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/user/force-change-password",
+        descriptionKey: "apiReference.userAuthApi.forceChangePasswordDesc",
         auth: "Bearer Token",
       },
     ],
@@ -390,7 +393,29 @@ const sections: DocSection[] = [
 
 // Response (200 OK)
 {
-  "message": "2FA enabled successfully"
+  "message": "2FA enabled successfully",
+  "refreshRequired": true
+}`,
+      },
+      {
+        label: "Verify 2FA (Login)",
+        language: "json",
+        filename: "POST /2fa/verify — Request & Response (TokenResponse)",
+        code: `// Request (passwordless twoFactorPendingToken OR identifier + password)
+{
+  "twoFactorPendingToken": "single-use-5m-pending-ticket",
+  "code": "654321",
+  "staySignedIn": false
+}`,
+      },
+      {
+        label: "Disable 2FA",
+        language: "json",
+        filename: "POST /2fa/disable — Request (Requires password + TOTP/backup code)",
+        code: `// Blocked with 403 MfaEnrollmentRequired when tenant Require2FA=true without passkey fallback
+{
+  "password": "SecureP@ssword1!",
+  "twoFactorCode": "123456"
 }`,
       },
     ],
@@ -415,8 +440,8 @@ const sections: DocSection[] = [
       {
         method: "POST",
         path: "/api/v1/auth/user/external-logins/link",
-        descriptionKey: "apiReference.userAuthApi.linkExternalLoginDesc",
-        auth: "Bearer Token",
+        descriptionKey: "Removed direct link endpoint (returns 410 Gone; sign in with provider to link)",
+        auth: "Removed (410 Gone)",
       },
       {
         method: "DELETE",
@@ -483,16 +508,19 @@ const sections: DocSection[] = [
       ["/api/v1/auth/user/verify-phone", "POST", "None", "otp"],
       ["/api/v1/auth/user/send-email-verification", "POST", "None", "otp"],
       ["/api/v1/auth/user/send-phone-verification", "POST", "None", "otp"],
+      ["/api/v1/auth/user/password-policy", "GET", "None ([AllowAnonymous])", "global"],
       ["/api/v1/auth/user/request-password-reset", "POST", "None", "password-reset"],
-      ["/api/v1/auth/user/reset-password", "POST", "None", "global"],
+      ["/api/v1/auth/user/reset-password", "POST", "None", "password-reset"],
       ["/api/v1/auth/user/refresh", "POST", "None", "token-refresh"],
-      ["/api/v1/auth/user/logout", "POST", "Bearer", "global"],
+      ["/api/v1/auth/user/logout", "POST", "None ([AllowAnonymous])", "token-refresh"],
+      ["/api/v1/auth/user/change-password", "POST", "Bearer", "mutation-api"],
+      ["/api/v1/auth/user/force-change-password", "POST", "Bearer", "per-user"],
       ["/api/v1/auth/user/2fa/enable", "POST", "Bearer", "global"],
       ["/api/v1/auth/user/2fa/confirm", "POST", "Bearer", "global"],
       ["/api/v1/auth/user/2fa/verify", "POST", "None", "auth"],
       ["/api/v1/auth/user/2fa/disable", "POST", "Bearer", "global"],
       ["/api/v1/auth/user/external-logins", "GET", "Bearer", "global"],
-      ["/api/v1/auth/user/external-logins/link", "POST", "Bearer", "global"],
+      ["/api/v1/auth/user/external-logins/link", "POST", "Removed (410 Gone)", "global"],
       ["/api/v1/auth/user/external-logins/{externalLoginId}", "DELETE", "Bearer", "global"],
       ["/api/v1/Users/me", "GET", "Bearer", "global"],
     ],

@@ -45,18 +45,19 @@ export const fr = {
       jwtLifecycleIntro:
         "Les jetons d'accès ont une durée de vie très courte et sont renouvelés via un processus de rotation à usage unique.",
       tokenStructureTitle: "Structure des Jetons JWT",
-      bcryptTitle: "Hachage de Mot de Passe BCrypt",
+      bcryptTitle: "Hachage de Mot de Passe ($s2$ SHA-256 + BCrypt)",
       bcryptIntro:
-        "Chaque vérification prend intentionnellement environ 250 ms (facteur de charge : 12) pour anéantir les attaques par force brute.",
+        "Chaque mot de passe est pré-haché en SHA-256 Base64 puis haché avec BCrypt (facteur de charge 12, préfixe $s2$), avec vérification contre une liste de 8 616 mots de passe compromis et un historique de 5 mots de passe (PasswordHistory).",
       lockoutTitle: "Verrouillage de Compte",
       lockoutIntro: "Après 5 tentatives infructueuses, le compte est verrouillé pour 15 minutes.",
-      tfaTitle: "Authentification à Deux Facteurs (TOTP)",
-      tfaIntro: "Les jetons de session 2FA temporaires exigent une validation TOTP finale.",
+      tfaTitle: "Authentification Multi-Facteurs Hybride (TOTP / Passkeys / Email / SMS)",
+      tfaIntro:
+        "Les connexions soumises au MFA retournent un twoFactorPendingToken temporaire ; la politique mfa_enroll=true bloque l'accès jusqu'à l'enrôlement via RequireMfaEnrollmentMiddleware.",
       externalAuthTitle: "Authentification Externe (OAuth)",
       externalAuthIntro: "S'intègre avec Google, Facebook, Apple et Microsoft.",
-      otpTitle: "Système OTP (Mots de Passe à Usage Unique)",
+      otpTitle: "Système OTP et Réinitialisation (Hachage HMAC-SHA256)",
       otpIntro:
-        "Codes à 6 chiffres pour les réinitialisations et vérifications d'e-mail/téléphone.",
+        "Codes à 6 chiffres stockés sous forme de vérificateurs HMAC-SHA256 (Verification:VerifierKey), limités à 5 tentatives max et expirant après 10 min (30 min en Prod), complétés par PasswordResetToken et limitation password-reset (5 req/15 min).",
       impersonationTitle: "Usurpation d'Identité (Impersonation)",
       impersonationIntro:
         "Les SuperAdmins peuvent usurper l'identité d'autres comptes pour le support technique, tout en conservant une trace d'audit détaillée.",
@@ -64,9 +65,12 @@ export const fr = {
         "Opération hautement privilégiée. Le système bloque l'usurpation d'identité sur les comptes de niveau égal ou supérieur.",
       sessionTitle: "Gestion des Sessions",
       sessionIntro:
-        "Modèle sans état (stateless). Les jetons JWT gèrent l'autorisation client sans saturer le serveur.",
+        "Modèle JWT sans état couplé aux jetons d'actualisation à usage unique en base. Les jetons d'accès restent en mémoire client, les jetons de rafraîchissement voyagent en cookies HttpOnly Secure SameSite=Lax ({CookiePrefix}_refresh_token ou __Host-scripe_refresh_token sur domaine personnalisé), et RevokeAllSessions révoque les sessions sœurs par JTI tout en préservant la session courante.",
       cookieAuthTip:
-        "Pour une sécurité maximale, configurez les jetons d'actualisation pour qu'ils soient envoyés en tant que cookies HttpOnly, Secure et SameSite=Strict.",
+        "Les sessions sur domaine principal et personnalisé utilisent des cookies HttpOnly Secure SameSite=Lax (__Host-scripe_refresh_token via micro-relais HMAC) afin d'autoriser les redirections SSO tout en bloquant les sous-requêtes inter-sites.",
+      federationControlsTitle: "Gouvernance WebAuthn Dual-RP et Élévation Sudo",
+      federationControlsContent:
+        "Sous Fédération Centrale, la connexion admin native et les passkeys WebAuthn restent verrouillées sur admin.scripe.org et *.admin.scripe.org (EnableCentralNativeAndPasskeyMigration = false) avec WebAuthn:UserVerification = 'required', PasskeyAuthLimit = 12 (15 min) et parité de migrations --idempotent sans erreur sur PostgreSQL 18, SQL Server 2025 et Oracle 21c XE en direct (schéma IDENTITY). AdminPasskey.RpId (varchar(253)) et AllowedRpIds sont validés par Fido2PasskeyService, tandis que ISovereignSudoProtectedCommand exige X-Sudo-Token (15 min) avec relance automatique via <SudoVerificationModal />.",
       workspaceRoutingTitle: "Acheminement de Connexion Multi-Espaces",
       workspaceRoutingIntro:
         "Lors d'une connexion globale sans locataire prédéfini, le gestionnaire applique un algorithme à 3 branches : connexion par tenantId, connexion directe administrateur plateforme via isPlatformAdmin et recherche d'organisations par adresse e-mail.",
@@ -106,29 +110,35 @@ export const fr = {
       howItWorksTitle: "How SSO Works",
       howItWorksContent:
         "SCRIPE uses the Authorization Code Flow with PKCE (Proof Key for Code Exchange) for SSO. This is the most secure OAuth2 flow, recommended by the OAuth 2.1 specification for all client types.",
-      step1Title: "1. Provider Discovery",
+      step1Title: "1. Découverte des Fournisseurs",
       step1Content:
-        "The login page fetches available SSO providers via GET /auth/oidc/providers/admin. Only enabled providers for the current login context (admin/user) are returned.",
-      step2Title: "2. PKCE Challenge",
+        "L'interface sur https://auth.scripe.org charge les fournisseurs actifs via GET /api/v1/auth/oidc/providers/admin selon Tenancy:AuthBaseUrl et OriginRouting.",
+      step2Title: "2. Défi PKCE et Ticket d'État Serveur",
       step2Content:
-        "When the user clicks an SSO button, the frontend calls POST /auth/oidc/challenge. The backend generates a code_verifier, computes the code_challenge (SHA-256), and returns the authorization URL.",
-      step3Title: "3. IdP Redirect",
+        "Au clic sur un fournisseur SSO, le frontend appelle POST /api/v1/auth/oidc/challenge. Le backend génère code_verifier, nonce, state et returnOrigin validé dans un ExternalAuthStateTicket côté serveur (jamais en sessionStorage).",
+      step3Title: "3. Redirection IdP avec Callback Central",
       step3Content:
-        "The frontend stores PKCE state (code_verifier, state, providerId) in sessionStorage, then redirects the user to the external IdP's authorization endpoint.",
-      step4Title: "4. User Authentication",
+        "Le navigateur redirige vers l'IdP externe avec redirect_uri fixé sur https://api.scripe.org/api/v1/auth/oidc/callback (ou /api/v1/auth/saml/acs/{providerId}).",
+      step4Title: "4. Callback Central et Ticket Handoff",
       step4Content:
-        "The user authenticates at the external IdP (Azure AD, Google, Okta, etc.) and grants consent for the requested scopes.",
-      step5Title: "5. Callback & Token Exchange",
+        "Après authentification externe, api.scripe.org consomme ExternalAuthStateTicket, vérifie l'état du locataire et HybridMfaPolicy, émet un ExternalAuthHandoffTicket SHA-256 de 120s (auth:ext-handoff:{sha256}, garde atomique auth:ext-handoff-used:{sha256}) et redirige vers auth.scripe.org/sso/continue ou {ReturnOrigin}/sso/callback.",
+      step5Title: "5. Échange Unique Handoff et Session Locale",
       step5Content:
-        "The IdP redirects to /sso/callback with an authorization code. The frontend retrieves PKCE state from sessionStorage, validates the state parameter, and calls POST /auth/oidc/callback. The backend exchanges the code for tokens using the code_verifier.",
-      pkceTitle: "PKCE Security Model",
+        "La page cible consomme le ticket une seule fois via POST /api/v1/auth/sso/handoff (ou le relais HMAC /api/auth/session/establish sur domaine personnalisé) et initialise le JWT en mémoire et le cookie HttpOnly Lax.",
+      pkceTitle: "Modèle de Sécurité PKCE et Handoff Central",
       pkceContent:
-        "PKCE prevents authorization code interception attacks by ensuring that only the client that initiated the flow can exchange the code. The code_verifier is never sent over the network — only its SHA-256 hash (code_challenge) is sent during the challenge step.",
+        "La persistance serveur d'ExternalAuthStateTicket supprime l'exposition PKCE dans sessionStorage. Les tickets ExternalAuthHandoffTicket de 120s (SHA-256 atomique) vérifient returnOrigin via IVerifiedOriginEvaluator contre les redirections ouvertes.",
       entityModelTitle: "Identity Provider Entity",
       entityModelContent:
         "The IdentityProvider entity stores all OIDC configuration for an external IdP. Each provider is optionally scoped to a tenant (TenantId = null means system-wide).",
       linkingContent:
-        "Before SSO login works, a SCRIPE admin/user must link their account to the external identity. This creates an ExternalLogin record mapping the provider's subject ID to the SCRIPE account.",
+        "La liaison d'un compte authentifié requiert une élévation Sudo (X-Sudo-Token) via POST /api/v1/auth/admin/external-logins/initiate-link (/external-logins/link direct renvoie 410 Gone) puis le callback central.",
+      centralRelayTitle: "Micro-Relais HMAC de Domaine Personnalisé et CORS Dynamique",
+      centralRelayContent:
+        "Les domaines personnalisés vérifiés ne partagent pas les cookies avec api.scripe.org ; Next.js BFF expose donc /api/auth/session/establish, /refresh et /logout protégés par Sec-Fetch-Site/Origin et signature HMAC-SHA256 (X-Scripe-Session-Relay-*, fenêtre 30s, nonce 60s, partitionnement de limite de débit par X-Scripe-Session-Relay-Client-Ip et X-Scripe-Relay-Refresh-MaxAge: 0 pour staySignedIn=false) émettant __Host-scripe_refresh_token local. Lorsqu'un SSO sur auth.scripe.org/sso/continue exige la 2FA, PostMfaHandoffHelper, TenantOriginOwnershipValidator et ssoTwoFactorBridge.ts émettent un ticket post-MFA vers {ReturnOrigin}/sso/callback, complété en production par Cloudflare X-Scripe-Origin-Verify, ForwardedHeaders ForwardLimit=2, claims Entra email+xms_edov, scopes GitHub user:email read:user et configuration SAML ACS en 2 étapes.",
+      splitLogoutTitle: "Déconnexion Séparée App vs. SSO Central (scr.oidc.session)",
+      splitLogoutContent:
+        "Logout accepte logoutScope ('app' par défaut ou 'central'). AuthLogoutScopeHelper et CookieAuthMiddleware préservent scr.oidc.session lors de /refresh, /sso/handoff, /complete-workspace-selection et des déconnexions 'app' ; seul 'central' l'efface.",
       oauthAppsTitle: "OAuth Applications",
       oauthAppsContent:
         "OAuth Applications are third-party apps that authenticate against SCRIPE as an OIDC server. Each app gets a Client ID and Client Secret, with configurable redirect URIs, scopes, and PKCE enforcement.",
@@ -219,9 +229,9 @@ export const fr = {
     middlewarePipeline: {
       title: "Pipeline de Middlewares",
       description:
-        "11 composants middleware exécutés dans un ordre strict allant de la gestion des exceptions au contexte du locataire.",
+        "33 étapes ordonnées dans MiddlewarePipeline.cs — de l'authentification JWT/clé API et limitation de débit post-auth aux filtres Trusted CIDR, mcp=true et mfa_enroll=true.",
       intro:
-        "Le pipeline de requêtes HTTP de SCRIPE garantit que chaque flux subit le bon traitement contextuel avant d'atteindre votre code métier.",
+        "Le pipeline HTTP de SCRIPE exécute 33 étapes dans un ordre strict via MiddlewarePipeline.cs, avec court-circuit immédiat en cas de refus.",
       overviewTitle: "Aperçu du Pipeline",
       overviewIntro:
         "L'ordre d'exécution (de haut en bas) est primordial et un court-circuit empêche les couches suivantes d'être exécutées.",
@@ -252,7 +262,8 @@ export const fr = {
       observabilityIntro:
         "Expose des métriques structurées OpenTelemetry au format Prometheus sur l'endpoint /metrics.",
       registrationTitle: "Ordre d'Enregistrement",
-      registrationIntro: "Défini dans la classe Program.cs principale.",
+      registrationIntro:
+        "Défini dans MiddlewarePipeline.cs : ApiKeyUsageMiddleware et Rate Limiting s'exécutent après UseAuthentication(), tandis que TrustedCidrEnforcementMiddleware, MustChangePasswordMiddleware et RequireMfaEnrollmentMiddleware s'exécutent après UseAuthorization().",
       summaryTitle: "Résumé des Middlewares",
       orderWarning:
         "La modification de cet ordre déclenchera probablement des pannes critiques ou des failles de sécurité.",

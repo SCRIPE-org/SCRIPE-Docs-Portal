@@ -79,23 +79,44 @@ const sections: DocSection[] = [
     "EnableSecurityHeaders": true,
     "MaxFailedAttempts": 5,
     "LockoutMinutes": 15,
-    "OtpExpirationMinutes": 5,
-    "SessionTimeoutMinutes": 60,
     "InternalApiKey": "\${INTERNAL_API_KEY}"
+  },
+  "Jwt": {
+    "Secret": "\${JWT_SECRET}",
+    "Issuer": "SCRIPE",
+    "Audience": "SCRIPE",
+    "ExpiryMinutes": 30,
+    "RefreshExpiryDays": 7
+  },
+  "Verification": {
+    "VerifierKey": "\${VERIFICATION_VERIFIER_KEY}",
+    "CodeLength": 6,
+    "ExpirationMinutes": 10,
+    "PasswordResetExpirationMinutes": 10,
+    "MaxResendAttempts": 3,
+    "ResendCooldownMinutes": 30,
+    "MaxVerificationAttempts": 5,
+    "ResendWindowMinutes": 60
+  },
+  "Branding": {
+    "CookiePrefix": "scripe"
   },
   "RateLimiting": {
     "Enabled": true,
-    "GlobalLimit": 1000,
-    "PerIpLimit": 200,
-    "LoginLimit": 10,
+    "GlobalLimit": 10000,
+    "PerIpLimit": 2000,
+    "LoginLimit": 1000,
     "ReadLimit": 200,
     "MutationLimit": 30,
     "PerUserLimit": 100,
     "ExportHeavyLimit": 5,
     "SignupLimit": 3,
     "PhoneOtpSendLimit": 3,
-    "PasskeyAuthLimit": 5,
-    "QrPollLimit": 60
+    "PasskeyAuthLimit": 12,
+    "QrPollLimit": 60,
+    "PasswordResetLimit": 5,
+    "PasswordResetWindowMinutes": 15,
+    "TokenRefreshLimit": 20
   },
   "GeoIp": {
     "EnableIpApiFallback": true,

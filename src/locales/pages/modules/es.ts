@@ -2705,19 +2705,25 @@ export const es = {
       },
     },
     identityAuthSessions: {
-      title: "Sesiones de Autenticación y Gestión de Tokens",
+      title: "Sesiones de Autenticación, Recuperación y Gestión de Tokens",
       description:
-        "Documentación detallada de las seis entidades de sesión y autenticación: RefreshToken, OtpCode, QrLoginSession, WebAuthnChallenge, AdminPasskey y ExternalLogin.",
+        "Documentación detallada de las entidades de sesión, recuperación y autenticación: RefreshToken, OtpCode, PasswordResetToken, PasswordHistory, QrLoginSession, WebAuthnChallenge, AdminPasskey y ExternalLogin.",
       intro:
-        "SCRIPE supports multiple concurrent authentication mechanisms. Each mechanism has a dedicated entity in the Identity module. RefreshToken manages sliding session windows. OtpCode handles time-limited one-time codes. QrLoginSession enables cross-device login via QR scanning. WebAuthnChallenge powers FIDO2 passkey ceremonies. AdminPasskey stores registered FIDO2 credentials. ExternalLogin links third-party identity providers to Admin and User accounts.",
+        "SCRIPE supports multiple concurrent authentication and recovery mechanisms in the Identity module. RefreshToken manages rotating session families, OtpCode stores keyed HMAC-SHA256 verification tags, PasswordResetToken secures magic-link and single-use reset grants across tenants without global query filters, PasswordHistory prevents credential reuse, QrLoginSession enables atomic cross-device QR login, WebAuthnChallenge and AdminPasskey power FIDO2 passkeys, and ExternalLogin links federated IdPs.",
       refreshTokenTitle: "Sesiones de Autenticación y Gestión de Tokens — RefreshToken Entity",
       refreshTokenIntro:
         "RefreshToken stores a long-lived opaque token issued alongside a JWT access token. Tokens are rotated on each use — the old token is revoked with a ReplacedByToken pointer, and a new token is issued. Impersonation sessions are tracked via ImpersonatorAdminId, enabling the StopImpersonation flow to restore the original admin's session.",
       otpCodeTitle: "Sesiones de Autenticación y Gestión de Tokens — OtpCode Entity",
       otpCodeIntro:
-        "OtpCode is a polymorphic one-time code that serves both users and admins. The Purpose integer maps to an enum (email verification, password reset, 2FA, etc.). Codes are invalidated via Invalidate() after successful use. The Attempts / MaxAttempts pair implements brute-force protection.",
+        "OtpCode stores time-limited one-time challenges using a keyed HMAC-SHA256 verifier derived from Verification:VerifierKey (never plaintext OTPs). Failed attempts increment up to MaxAttempts (default 5).",
       otpCodeNote:
-        "OtpCode.Purpose is stored as an integer for database efficiency. The application-layer enum is defined in Identity.Application. Always check IsUsed and ExpiresAt before trusting a code — do NOT rely solely on the code value.",
+        "During password recovery, step 2 validates the OTP without burning it (`AdminVerifyResetOtp`), and step 3 consumes both the ResetGrantToken and the originating OtpCode atomically inside one database transaction.",
+      passwordResetTokenTitle: "Sesiones de Autenticación y Gestión de Tokens — PasswordResetToken Entity",
+      passwordResetTokenIntro:
+        "PasswordResetToken persists pre-auth magic-link hashes, single-use step-3 reset grants (`AllowedTenantIdsJson`, `SourceCredentialId`), and OTP tenant scope bindings without global tenant filters (`MaxVerificationAttempts = 5`).",
+      passwordHistoryTitle: "Sesiones de Autenticación y Gestión de Tokens — PasswordHistory Entity",
+      passwordHistoryIntro:
+        "PasswordHistory records salted `$s2$` digests (`SHA-256` pre-hash + BCrypt work factor 12) per `(PrincipalType, PrincipalId)` to block password reuse within `PasswordHistoryCount` (default 5, range 0..24).",
       qrLoginTitle: "Sesiones de Autenticación y Gestión de Tokens — QrLoginSession Entity",
       qrLoginIntro:
         "QrLoginSession orchestrates cross-device login: a desktop browser creates a session (status = Pending) and displays a QR code containing the SessionToken. An authenticated mobile device scans the QR (Scanned), the user approves (Approved), the backend generates tokens, and the polling desktop browser consumes them (Consumed). Sessions are cleaned up by QrSessionCleanupJob after the 5-minute TTL.",

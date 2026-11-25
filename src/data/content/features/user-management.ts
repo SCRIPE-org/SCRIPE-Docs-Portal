@@ -302,9 +302,9 @@ const sections: DocSection[] = [
     endpoints: [
       {
         method: "POST",
-        path: "/admins/{id}/impersonate",
+        path: "/auth/admin/impersonate/{id}",
         descriptionKey: "Impersonate another admin",
-        auth: "Super admin",
+        auth: "Super admin (admins.impersonate + X-Sudo-Token)",
       },
       {
         method: "POST",

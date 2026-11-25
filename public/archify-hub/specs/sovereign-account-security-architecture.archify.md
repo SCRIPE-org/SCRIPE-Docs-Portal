@@ -81,21 +81,21 @@ Web browsers send challenges with variable padding. `WebAuthnChallengeHelper` no
 ## How does Enterprise SSO Identity Federation bind OIDC and SAML 2.0 accounts? {#enterprise-sso-federation}
 
 @workflow id=sso-federation-flow title="Enterprise SSO Federation & Dual-Mode Binding Lifecycle"
-| idp | Enterprise IdP (OIDC/SAML2) | external |
-| callback | /api/v1/auth/admin/external-logins/link | backend |
-| mediator | AstraFlow Mediator | backend |
-| handler | LinkAdminExternalAccountHandler | backend |
-| entity | ExternalLogin Record | database |
-| audit | AuditService Security Log | security |
-| notify | NotificationService Alert | messagebus |
-| idp > callback | OIDC Callback (Claims + Subject ID) | emphasis |
-| callback > mediator | Send LinkAdminExternalAccountCommand |
-| mediator > handler | Dispatch Command |
-| handler > entity | Bind ExternalLogin (ProviderKey, Email) | security |
-| handler > audit | Record AuditEventTypes.ExternalLoginLinked |
-| handler > notify | Dispatch Security Notification |
+| lane edge_lane | Federated Edge & External IdP |
+| lane core_lane | Identity Core & Audit |
+| initiate | Initiate Link | backend | edge_lane |
+| idp | External IdP | external | edge_lane |
+| callback | OIDC Callback | security | edge_lane |
+| handler | Link Handler | backend | core_lane |
+| entity | ExternalLogin | database | core_lane |
+| audit | Audit & Alert | security | core_lane |
+| initiate > idp | sudo state | security |
+| idp > callback | signed claims | emphasis |
+| callback > handler | verify sub | emphasis |
+| handler > entity | bind key | security |
+| handler > audit | log + notify |
 
-Enterprise SSO supports Dual-Mode identity binding. Administrators authenticate using corporate single sign-on while preserving hardware passkeys as fallback credentials.[](source:oidc_core)
+Enterprise SSO binds identities via Sudo-protected `POST /api/v1/auth/admin/external-logins/initiate-link` (direct `POST /link` returns `410 Gone`). Verified `(ProviderId, sub)` claims are written through the federated IdP callback.[](source:oidc_core)
 
 | Enterprise Provider | Authentication Protocol | Tenant Domain Mapping | Account Binding Mode |
 | --- | --- | --- | --- |

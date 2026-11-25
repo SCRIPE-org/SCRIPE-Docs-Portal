@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "46dd479d-2cc7-4af9-b088-7e65f9a9ca9c",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\central-identity-federation-fullstack.archify.md",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\central-identity-federation-fullstack.html",
+  "specification": {
+    "sha256": "81d23fe219ee78a719a31874bf6e44c27f1568774c0c26c5d6756fbb2c5b9174",
+    "bytes": 11162
+  },
+  "artifact": {
+    "sha256": "6d02e0df73d02e542ed21dcbc57a90deca147be41d8910ce76ae51fbd8863727",
+    "bytes": 1082752
+  },
+  "explainer": {
+    "preparedSha256": "39b71036453a9578f277b7056e540ee9b06087bb956af8b146e01b11104938d8",
+    "dependencies": [
+      {
+        "kind": "diagram-spec",
+        "id": "federation-fullstack-arch",
+        "inline": true,
+        "sha256": "fa0270c523d0f037a4a03fb7a95a8070549b9978d248d3dd9f765a3457f77549",
+        "bytes": 1427
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "federation-runtime-seq",
+        "inline": true,
+        "sha256": "d43bdb7d387e21b963b2ce3d24cf4f1268ab96a049bc227749415c96c0df4419",
+        "bytes": 1871
+      }
+    ]
+  }
+}

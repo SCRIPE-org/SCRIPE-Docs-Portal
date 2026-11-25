@@ -8,7 +8,7 @@ export const ru = {
     authentication: {
       title: "Аутентификация",
       description:
-        "Двойная аутентификация (Админ + Пользователь), маршрутизация между рабочими областями, JWT-токены, 2FA с резервными кодами, принудительное изменение пароля, بوابة تعليق SSO и политики паролей для тенантов.",
+        "Двойная аутентификация (Админ + Пользователь), маршрутизация между рабочими областями, JWT-токены, 2FA с резервными кодами, принудительное изменение пароля, шлюз приостановки SSO и политики паролей для тенантов.",
       intro:
         "SCRIPE предоставляет безопасную систему аутентификации с JWT access-токенами, ротацией refresh-токенов, опциональной двухфакторной аутентификацией, автоопределением рабочей области, принудительной сменой пароля и полным лимитированием запросов. Система поддерживает отдельные конвейеры для администраторов и пользователей с различными наборами JWT-утверждений и разрешений.",
       flowTitle: "Процесс аутентификации",
@@ -27,7 +27,7 @@ export const ru = {
         "Исключает возможность обхода блокировки через внешние сервисы авторизации, такие как Google или Azure AD.",
       jwtTitle: "Конфигурация JWT",
       jwtIntro:
-        "Используются короткоживущие access-токены (15 минут) и долгоживущие refresh-токены (7 дней). Refresh-токены ротируются при каждом использовании для предотвращения атак повторного воспроизведения.",
+        "Используются access-токены (по умолчанию 30 минут через Jwt:ExpiryMinutes и SessionPolicyDto) и одноразовые refresh-токены с ротацией и верхним пределом AbsoluteExpiresAt (24 ч стандарт, >= 30 дн. при StaySignedIn, 8 ч при имперсонации).",
       dualAuthTitle: "Двойная аутентификация (Админ и Пользователь)",
       dualAuthIntro:
         "SCRIPE имеет два независимых конвейера аутентификации. Админский (AdminAuthController) выпускает JWT с админскими утверждениями (TenantId, IsSuperAdmin, Roles). Пользовательский (UserAuthController) выпускает JWT с утверждениями клиента (NationalId, Gender, Country). Каждый имеет свои конечные точки входа, регистрации и обновления токенов.",
@@ -51,9 +51,9 @@ export const ru = {
       tokenValidationTitle: "Криптографическая Проверка Токенов",
       tokenValidationIntro:
         "Контроль подписи, времени жизни и отпечатков устройств для защиты от перехвата сессий.",
-      mcpMiddlewareTitle: "Защитный Middleware для MCP",
+      mcpMiddlewareTitle: "Ограничения после входа (MustChangePassword и RequireMfaEnrollment)",
       mcpMiddlewareIntro:
-        "Изоляция и авторизация вызовов Model Context Protocol при взаимодействии с ИИ-агентами.",
+        "При обязательной смене пароля (`mcp: true`) или привязке MFA/Passkey (`mfa_enroll: true`) `MustChangePasswordMiddleware` и `RequireMfaEnrollmentMiddleware` отклоняют общие API-запросы с `403 Forbidden` и разрешают только маршруты завершения настройки (`change-password`, `force-change-password`, `2fa/enable|confirm|status`, `passkeys/registration/*`, `sudo/*`, `account/security`, `principal`, `refresh`, `logout`, `revoke`, `password-policy`, `customization/resolve`, `/hubs/*`, `/health`).",
       ssoCallbackTitle: "Обработка Ответов SSO",
       ssoCallbackIntro:
         "Безопасный обмен кодами авторизации и связывание профилей по подтвержденным адресам электронной почты.",
@@ -474,9 +474,12 @@ export const ru = {
       samlTitle: "Корпоративная Авторизация SAML 2.0",
       samlContent:
         "Интеграция с корпоративными провайдерами идентификации (IdP) для единого входа.",
-      oidcCallbackTitle: "Обработчик OpenID Connect",
+      oidcCallbackTitle: "Центральный Callback OIDC/SAML и одноразовый Handoff",
       oidcCallbackContent:
-        "Проверка подлинности токенов ID Token и защищенный обмен авторизационными кодами.",
+        "Внешние IdP-колбеки обрабатываются центрально на https://api.scripe.org (GET /api/v1/auth/oidc/callback и POST /api/v1/auth/saml/acs/{providerId}), погашая серверный ExternalAuthStateTicket (без sessionStorage) и выпуская 120s SHA-256 ExternalAuthHandoffTicket на auth.scripe.org/sso/continue или {ReturnOrigin}/sso/callback для одноразового обмена через POST /api/v1/auth/sso/handoff.",
+      centralFederationTitle: "Центральная федерация идентичности и Session Micro-Relay",
+      centralFederationContent:
+        "При Authentication:CentralFederation (https://auth.scripe.org для Auth/Consent и https://api.scripe.org для колбеков) проверенные кастомные домены работают через HMAC-подписанные маршруты Next.js (/api/auth/session/establish, /refresh, /logout -> __Host-scripe_refresh_token с X-Scripe-Session-Relay-Client-Ip и X-Scripe-Relay-Refresh-MaxAge: 0), post-MFA мост PostMfaHandoffHelper + ssoTwoFactorBridge.ts и динамический CORS IVerifiedOriginEvaluator, тогда как нативный вход и Dual-RP passkeys остаются на admin.scripe.org (EnableCentralNativeAndPasskeyMigration: false, WebAuthn:UserVerification = 'required', PasskeyAuthLimit = 12; --idempotent миграции на PostgreSQL 18, SQL Server 2025 и Oracle 21c XE).",
       oauthMirroringTitle: "Синхронизация Профилей OAuth",
       oauthMirroringContent:
         "Автоматическое обновление имени и аватара пользователя из внешнего сервиса при авторизации.",

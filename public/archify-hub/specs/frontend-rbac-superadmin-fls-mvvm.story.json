@@ -1,0 +1,71 @@
+{
+  "version": 2,
+  "title": "SCRIPE-Frontend RBAC, Dotted FLS & Partial CRM MVVM Walkthrough",
+  "intro": "Follow how Next.js 16 prevents tenant superadmin spoofing, scopes Role and UserGroup pickers, synchronizes live principals, and submits FLS-safe partial CRM updates.",
+  "outro": "Client route guards, RBAC editors, Zustand state, and CRM services stay locked to backend FLS and 389-permission tenant pools.",
+  "scenes": [
+    {
+      "title": "1. Fail-Closed RouteGuard & SuperAdmin Separation",
+      "points": [
+        {
+          "anchor": "route_guard",
+          "via": ["c_rg_pp", "c_rg_pv"],
+          "action": "parallel",
+          "title": "Route & Manifest Gatekeeping",
+          "text": "RouteGuard matches every path against PAGE_PERMISSIONS and synced menus before rendering, aligning /audit, /security, /sso/continue, and /entitlements/payouts.",
+          "caption": "Zero unprotected route drift against backend menus"
+        },
+        {
+          "anchor": "use_perm_hook",
+          "via": "c_hk_st",
+          "action": "trace",
+          "title": "Platform vs Tenant SuperAdmin",
+          "text": "isPlatformSuperAdminUser strictly requires !user?.tenantId, eliminating Supervisor substring matching and username spoofing inside tenant sessions.",
+          "caption": "Tenant admins rely on live effective permissions"
+        }
+      ]
+    },
+    {
+      "title": "2. Tenant Pickers & Dotted FLS Studio",
+      "points": [
+        {
+          "anchor": "roles_matrix",
+          "via": "c_rm_ct",
+          "action": "trace",
+          "title": "Roles Matrix & Permission Config",
+          "text": "PermissionConfigDialog preserves full dotted resources like crm.opportunities, blocks all_tenants for tenant roles, and locks system-protected SA policies.",
+          "caption": "Dotted resource keys stay intact on role saves"
+        },
+        {
+          "anchor": "groups_studio",
+          "via": "c_ug_ct",
+          "action": "trace",
+          "title": "UserGroups Restrictions Studio",
+          "text": "SetRestrictionsDialog clones drafts immutably, isolates per-row useId() datalists, strips platformOnly catalog permissions, and warns truthfully on required fields.",
+          "caption": "Additive UserGroup caps never expose host permissions"
+        }
+      ]
+    },
+    {
+      "title": "3. Session Sync & Partial CRM Payloads",
+      "points": [
+        {
+          "anchor": "authz_sync",
+          "via": ["c_br_sy", "c_sy_st", "c_sy_api"],
+          "action": "trace",
+          "title": "Immediate Principal & Cache Sync",
+          "text": "After any RBAC or entitlement edit, syncCurrentSessionAuthorization refetches /auth/admin/principal, overwrites [] cleanly, and purges stale navigation queries.",
+          "caption": "Revocations apply instantly across open UI sessions"
+        },
+        {
+          "anchor": "crm_service",
+          "via": ["c_cr_rf", "c_cr_api"],
+          "action": "trace",
+          "title": "Partial CRM Update & Close",
+          "text": "updateOpportunity and closeOpportunity omit undefined restricted fields such as currencyCode and dealKind so backend FLS preserves existing DB values.",
+          "caption": "Slices 6A & 6C prevent false 403 FieldRestricted blocks"
+        }
+      ]
+    }
+  ]
+}

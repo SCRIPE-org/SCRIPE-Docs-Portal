@@ -7,13 +7,13 @@
   "quality": "showcase",
   "specification": {
     "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\sovereign-account-security-architecture.archify.md",
-    "sha256": "2531018c9b9802ed7d8834c76edd44253927df2e0f4779c9601ac46546058681",
-    "bytes": 11504
+    "sha256": "ba8ad1f7435484270daf2e6ef6130c95100542b36169e2a0347c58d4ec1b42ec",
+    "bytes": 11445
   },
   "artifact": {
     "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\sovereign-account-security-architecture.html",
-    "sha256": "66d5bd69442a76a92a4365b81368ead41c7565c36bd619a58f1f0882cdeab881",
-    "bytes": 1464950
+    "sha256": "896d6bec423a4f763d1da69b393bd91eaf0ffca250620fa3ba9262fb454e8b9d",
+    "bytes": 1569010
   },
   "gates": {
     "validate": "pass",
@@ -32,7 +32,7 @@
     "summaryReceipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\sovereign-account-security-architecture.finalize-summary.json"
   },
   "visualReview": "not-requested",
-  "durationMs": 3633,
+  "durationMs": 4650,
   "browserCheck": {
     "requested": false,
     "ran": false

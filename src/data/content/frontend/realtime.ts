@@ -69,17 +69,19 @@ const sections: DocSection[] = [
  * Exported function defining parameters and fields for signal r provider configurations.
  */
 export function SignalRProvider({ children }: { children: ReactNode }) {
-  const { token } = useAuthStore();
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
+  const mustChangePassword = useAppStore((s) => s.mustChangePassword);
   const [auditConnection, setAuditConnection] = useState<HubConnection | null>(null);
   const [notifConnection, setNotifConnection] = useState<HubConnection | null>(null);
 
   useEffect(() => {
-    if (!token) return;
+    const token = secureTokenService.getAccessToken();
+    if (!isAuthenticated || mustChangePassword || !token) return;
 
-    // Create connection with auto-reconnect
+    // Create connection with auto-reconnect (Bearer passed via memory-only SecureTokenService)
     const audit = new HubConnectionBuilder()
       .withUrl(\`\${API_URL}/hubs/audit\`, {
-        accessTokenFactory: () => token,
+        accessTokenFactory: () => secureTokenService.getAccessToken() ?? "",
       })
       .withAutomaticReconnect([0, 2000, 5000, 10000, 30000])
       .configureLogging(LogLevel.Warning)
@@ -87,7 +89,7 @@ export function SignalRProvider({ children }: { children: ReactNode }) {
 
     const notif = new HubConnectionBuilder()
       .withUrl(\`\${API_URL}/hubs/notification\`, {
-        accessTokenFactory: () => token,
+        accessTokenFactory: () => secureTokenService.getAccessToken() ?? "",
       })
       .withAutomaticReconnect([0, 2000, 5000, 10000, 30000])
       .build();
@@ -102,7 +104,7 @@ export function SignalRProvider({ children }: { children: ReactNode }) {
       audit.stop();
       notif.stop();
     };
-  }, [token]);
+  }, [isAuthenticated, mustChangePassword]);
 
   return (
     <SignalRContext.Provider value={{ auditConnection, notifConnection }}>

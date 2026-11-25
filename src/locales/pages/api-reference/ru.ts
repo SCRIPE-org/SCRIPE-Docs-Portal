@@ -35,18 +35,22 @@ export const ru = {
       refreshDesc:
         "Обменивает действительный refresh-токен на новую пару токенов. Ротация (single-use rotation) обязательна.",
       logoutTitle: "Выход (Logout)",
-      logoutDesc: "Отзывает (revoke) все refresh-токены текущего пользователя.",
+      logoutDesc:
+        "[AllowAnonymous] Отзывает текущий refresh-токен и очищает cookie BrandingSettings; поддерживает logoutScope ('app' сохраняет scr.oidc.session, 'central' очищает её) (204 No Content).",
       tfaTitle: "Двухфакторная аутентификация (2FA)",
       tfaIntro: "Поддержка TOTP (Google Authenticator) для дополнительной безопасности входа.",
       tfaEnableDesc: "Генерация секрета и URI QR-кода.",
       tfaConfirmDesc: "Подтверждение настройки 2FA и выдача резервных кодов.",
-      tfaVerifyDesc: "Завершение входа (Login) после ввода TOTP-кода.",
-      tfaDisableDesc: "Отключение 2FA для профиля администратора.",
+      tfaVerifyDesc:
+        "Завершение входа по паролю + коду или одноразовому тикету twoFactorPendingToken.",
+      tfaDisableDesc:
+        "Отключение 2FA по паролю + twoFactorCode (блокируется при Require2FA без резервного passkey).",
       tfaBackupDesc: "Генерация нового набора резервных кодов. Старые коды аннулируются.",
       profileTitle: "Управление профилем",
       meDesc: "Получение полного профиля администратора, включая его роль, права и тенант.",
       updateProfileDesc: "Обновление имени и номера телефона.",
-      changePasswordDesc: "Изменение пароля (требует подтверждения текущего).",
+      changePasswordDesc:
+        "Смена пароля с ротацией сессии и возвратом обновлённого TokenResponse (200 OK).",
       uploadAvatarDesc: "Загрузка аватара (до 2 МБ).",
       removeAvatarDesc: "Удаление аватара.",
       securityTitle: "Эндпоинты безопасности",
@@ -58,11 +62,24 @@ export const ru = {
       discoverWorkspacesDesc:
         "Поиск всех доступных рабочих областей и организаций, связанных с учетными данными.",
       revokeAllSessionsDesc:
-        "Одновременный отзыв всех активных сеансов и токенов обновления на всех устройствах.",
+        "Отзыв всех остальных активных сеансов по чёрному списку соседних JTI при сохранении текущей активной сессии.",
+      federationEndpointsTitle: "Центральная федерация и Session Micro-Relay для доменов",
+      centralOidcCallbackDesc:
+        "[AllowAnonymous] Центральный callback OIDC на api.scripe.org для погашения ExternalAuthStateTicket и выдачи 120s ExternalAuthHandoffTicket.",
+      centralSamlAcsDesc:
+        "[AllowAnonymous] Центральный SAML 2.0 ACS-обработчик, выпускающий 120s SHA-256 ExternalAuthHandoffTicket на auth.scripe.org или проверенный домен.",
+      ssoHandoffDesc:
+        "[AllowAnonymous] Атомарное однократное погашение ExternalAuthHandoffTicket (auth:ext-handoff-used:{sha256}) в токены или 2FA/выбор области.",
+      relayEstablishDesc:
+        "First-party Next.js BFF HMAC micro-relay (X-Scripe-Session-Relay-*) для создания сессии и записи __Host-scripe_refresh_token.",
+      relayRefreshDesc:
+        "First-party Next.js BFF HMAC micro-relay для ротации __Host-scripe_refresh_token на кастомных доменах.",
+      relayLogoutDesc:
+        "First-party Next.js BFF micro-relay для передачи logoutScope ('app' или 'central') и очистки __Host-scripe_refresh_token.",
       getExternalLoginsDesc:
         "Список внешних провайдеров SSO и сервисов аутентификации, привязанных к учетной записи.",
       linkExternalLoginDesc:
-        "Привязка учетных данных внешнего OAuth/OIDC к подтвержденной учетной записи администратора.",
+        "Запуск Sudo-защищённой федеративной привязки OIDC/SAML (/external-logins/link возвращает 410 Gone).",
       unlinkExternalLoginDesc:
         "Отвязка внешнего сервиса аутентификации от учетной записи администратора.",
       requestPasswordResetDesc:
@@ -70,7 +87,11 @@ export const ru = {
       verifyResetOtpDesc:
         "Проверка одноразового пароля (OTP) для подтверждения восстановления доступа.",
       resetPasswordDesc:
-        "Завершение смены пароля администратора с использованием проверенного токена.",
+        "Завершение сброса пароля по ResetGrantToken; возвращает 204 No Content без автовхода.",
+      passwordPolicyDesc:
+        "Анонимное получение политики сложности паролей тенанта для настройки и сброса.",
+      forceChangePasswordDesc:
+        "Выполнение принудительной смены пароля (mcp=true) с перевыпуском TokenResponse.",
     },
     userAuthApi: {
       title: "API аутентификации пользователей",
@@ -97,20 +118,26 @@ export const ru = {
       resetPasswordDesc: "Установка нового пароля на основе OTP-кода.",
       tokenTitle: "Управление токенами",
       refreshDesc: "Бесшовное обновление access-токенов (Refresh).",
-      logoutDesc: "Завершение сессии.",
+      logoutDesc:
+        "[AllowAnonymous] Отзыв текущего refresh-токена и очистка cookie; logoutScope ('app' сохраняет scr.oidc.session, 'central' очищает её) (204 No Content).",
       tfaTitle: "2FA для пользователей",
       tfaEnableDesc: "Генерация TOTP-секрета.",
       tfaConfirmDesc: "Подтверждение 2FA и выдача резервных кодов.",
-      tfaVerifyDesc: "Проверка TOTP-кода при входе.",
-      tfaDisableDesc: "Отключение 2FA.",
+      tfaVerifyDesc: "Завершение входа по паролю + коду или тикету twoFactorPendingToken.",
+      tfaDisableDesc:
+        "Отключение 2FA по паролю + twoFactorCode (блокируется при Require2FA без passkey).",
       tfaBackupDesc: "Генерация новых резервных кодов.",
       profileTitle: "Профиль пользователя",
       meDesc: "Получение данных пользователя.",
       updateProfileDesc: "Обновление телефона и имени.",
-      changePasswordDesc: "Смена пароля.",
+      changePasswordDesc:
+        "Смена пароля с ротацией активной сессии и возвратом TokenResponse (200 OK).",
+      passwordPolicyDesc: "Анонимное получение требований сложности пароля тенанта.",
+      forceChangePasswordDesc:
+        "Обязательная смена пароля (mcp=true) для пользователя с перевыпуском TokenResponse.",
       summaryTitle: "Резюме по эндпоинтам",
       diffNote:
-        "API пользователей (/user-auth) и админов (/auth) строго разделены на уровне базы данных. Взаимозаменяемость токенов невозможна (вызовет ошибку 401).",
+        "API пользователей (/api/v1/auth/user/*) строго изолировано от API админов (/api/v1/auth/admin/*); оба используют TokenResponse и HttpOnly cookie BrandingSettings с раздельными областями субъектов.",
       loginProviderDesc: "Инициация процесса входа через внешний SSO или OAuth2 провайдер.",
       sendEmailVerificationDesc:
         "Отправка проверочного токена на основной подтвержденный email пользователя.",
@@ -119,7 +146,7 @@ export const ru = {
       getExternalLoginsDesc:
         "Список всех внешних учетных записей, привязанных к данному пользователю.",
       linkExternalLoginDesc:
-        "Привязка внешнего социального или OIDC токена к профилю пользователя.",
+        "Прямой endpoint /external-logins/link удалён (410 Gone); привязка выполняется через вход провайдера.",
       unlinkExternalLoginDesc: "Отвязка внешней службы авторизации от учетной записи пользователя.",
     },
     adminApi: {
@@ -155,7 +182,7 @@ export const ru = {
       transferDesc: "Передача прав владельца (Owner) другому администратору.",
       protectDesc: "Включить флаг защиты от удаления (IsProtected).",
       impersonationWarning:
-        "Все действия при имперсонации логируются с двойной идентичностью. Сессия ограничена по времени.",
+        "Требуется SuperAdmin + X-Sudo-Token. Действия аудируются под обоими идентификаторами, прерываются при отзыве любого из аккаунтов и ограничены нерасширяемым лимитом в 8 часов.",
       queryParamsTitle: "Параметры запроса (Query Params)",
     },
     tenantApi: {

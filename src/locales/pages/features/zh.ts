@@ -13,7 +13,7 @@ export const zh = {
       flowTitle: "认证流程",
       jwtTitle: "JWT 令牌配置",
       jwtIntro:
-        "系统使用短期访问令牌（15分钟）和长期刷新令牌（7天）。刷新令牌每次使用后都会轮换，以防止重放攻击。",
+        "系统使用短期访问令牌（默认 30 分钟，由 Jwt:ExpiryMinutes 与 SessionPolicyDto 控制）及单次轮换刷新令牌，并受 AbsoluteExpiresAt 绝对上限约束（标准 24 小时、StaySignedIn >=30 天、代管模拟 8 小时）。",
       dualAuthTitle: "双重身份验证系统 (管理员与用户)",
       dualAuthIntro:
         "管理端和用户端拥有隔离的验证管道：AdminAuthController 和 UserAuthController，签发不同的权限声明。",
@@ -47,8 +47,9 @@ export const zh = {
       tokenValidationTitle: "JWT 令牌深度密码学校验",
       tokenValidationIntro:
         "全流程校验签名完整性、签发有效期及设备数字指纹，严密防范会话劫持风险。",
-      mcpMiddlewareTitle: "Model Context Protocol (MCP) 安全中继中间件",
-      mcpMiddlewareIntro: "为 AI 智能体接入提供强隔离的上下文授权、指令安全过滤及调用审计。",
+      mcpMiddlewareTitle: "登录后策略拦截门 (MustChangePassword 与 RequireMfaEnrollment)",
+      mcpMiddlewareIntro:
+        "当需要强制修改密码 (`mcp: true`) 或强制绑定 MFA/Passkey (`mfa_enroll: true`) 时，`MustChangePasswordMiddleware` 与 `RequireMfaEnrollmentMiddleware` 会以 `403 Forbidden` 拦截常规 API 请求，仅放行自助处理端点（`change-password`、`force-change-password`、`2fa/enable|confirm|status`、`passkeys/registration/*`、`sudo/*`、`account/security`、`principal`、`refresh`、`logout`、`revoke`、`password-policy`、`customization/resolve`、`/hubs/*` 与 `/health`）。",
       ssoCallbackTitle: "SSO 认证回调与账户聚合",
       ssoCallbackIntro:
         "基于加密握手协议处理回调响应，依据权威验证邮箱自动完成本地账户的安全绑定。",
@@ -414,8 +415,12 @@ export const zh = {
     ssoOauth: {
       samlTitle: "SAML 2.0 企业级联合身份认证",
       samlContent: "无缝对接主流企业 IdP 身份提供商，支持基于 SCIM 协议的组织账户自动同步。",
-      oidcCallbackTitle: "OpenID Connect 标准回调管线",
-      oidcCallbackContent: "严格核验 ID Token 签名与 Claims 有效性，安全完成授权码密码学置换。",
+      oidcCallbackTitle: "中央 OIDC/SAML 回调与单次 Handoff 票据",
+      oidcCallbackContent:
+        "外部 IdP 回调统一收敛至 https://api.scripe.org（GET /api/v1/auth/oidc/callback 与 POST /api/v1/auth/saml/acs/{providerId}），在服务端核销 ExternalAuthStateTicket（禁用浏览器 sessionStorage）并签发 120 秒 SHA-256 ExternalAuthHandoffTicket 重定向至 auth.scripe.org/sso/continue 或 {ReturnOrigin}/sso/callback，随后经 POST /api/v1/auth/sso/handoff 一次性兑换。",
+      centralFederationTitle: "中央身份联邦与自定义域名会话微中继",
+      centralFederationContent:
+        "在 Authentication:CentralFederation 架构下（Tenancy:AuthBaseUrl 与 OpenIddict:FrontendBaseUrl 指向 https://auth.scripe.org），已验证自定义域名通过 HMAC 签名的 Next.js 会话中继（/api/auth/session/establish、/refresh、/logout -> __Host-scripe_refresh_token，支持 X-Scripe-Session-Relay-Client-Ip 限流分区与 X-Scripe-Relay-Refresh-MaxAge: 0）、PostMfaHandoffHelper + ssoTwoFactorBridge.ts MFA 后回跳桥接与 IVerifiedOriginEvaluator 动态 CORS/CSRF 运行，而原生登录与双 RP 通行密钥锁定在 admin.scripe.org（EnableCentralNativeAndPasskeyMigration: false，WebAuthn:UserVerification = 'required'，PasskeyAuthLimit = 12；PostgreSQL 18、SQL Server 2025 与实测 Oracle 21c XE --idempotent 迁移 0 错误）。",
       oauthMirroringTitle: "OAuth 社交账户档案镜像同步",
       oauthMirroringContent: "在用户通过第三方登录时，自动平滑同步头像、昵称及认证邮箱至系统档案。",
       title: "SSO 与 OAuth 服务器 (Keycloak 的企业级替代方案)",

@@ -251,13 +251,13 @@ const sections: DocSection[] = [
     endpoints: [
       {
         method: "POST",
-        path: "/api/v1/admins/{id}/impersonate",
+        path: "/api/v1/auth/admin/impersonate/{id}",
         descriptionKey: "apiReference.adminApi.impersonateDesc",
-        auth: "SuperAdmin only",
+        auth: "SuperAdmin only (admins.impersonate + X-Sudo-Token)",
       },
       {
         method: "POST",
-        path: "/api/v1/admins/stop-impersonation",
+        path: "/api/v1/auth/admin/stop-impersonation",
         descriptionKey: "apiReference.adminApi.stopImpersonateDesc",
         auth: "Impersonating admin",
       },

@@ -1,0 +1,87 @@
+{
+  "version": 2,
+  "title": "5-State Feature & Permission Lifecycle Walkthrough",
+  "intro": "See how all 490 catalog permissions flow from compile-time definition into active tenant pools, pickers, persistent roles, and live enforcement—while isolating 69 PlatformOnly and 32 disabled-module permissions.",
+  "outro": "Disabling a feature revokes Effective access immediately while preserving RolePermissions intact for clean re-enablement.",
+  "scenes": [
+    {
+      "title": "1. Happy Path: 490 Defined -> 389 Active -> Effective",
+      "points": [
+        {
+          "anchor": "defined",
+          "via": "t_def_avail",
+          "action": "trace",
+          "title": "Compile-Time Definition & Entitlements Resolution",
+          "text": "All 490 permissions across 19 providers carry explicit feature predicates or IsGloballyAvailable; EffectiveFeatureMapBuilder admits 389 active permissions for scripe-internal.",
+          "caption": "State 01 -> 02: Edition + Override unlocks 389 SCRIPE perms"
+        },
+        {
+          "anchor": "available",
+          "via": "t_avail_asg",
+          "action": "trace",
+          "title": "Assignable Tenant Filtering",
+          "text": "PermissionsController and RolesController filter to !PlatformOnly and active TenantPermissions, preventing unavailable or platform-host actions from appearing in UI pickers.",
+          "caption": "State 02 -> 03: API returns only eligible tenant permissions"
+        },
+        {
+          "anchor": "assignable",
+          "via": "t_asg_ass",
+          "action": "trace",
+          "title": "16 Roles & 10 UserGroups Assignment",
+          "text": "Admins bind permissions into the 16 seeded RBAC roles with Priority ordering and dotted UserGroupRestrictions persisted in IdentityDbContext.",
+          "caption": "State 03 -> 04: Grants & FLS rules persisted"
+        },
+        {
+          "anchor": "effective",
+          "via": "t_ass_eff",
+          "action": "trace",
+          "title": "Live Effective Authorization",
+          "text": "At request time, PermissionAuthorizationHandler combines PBAC, PAT scope intersection, live IFeatureChecker, and multi-role FLS merge.",
+          "caption": "State 04 -> 05: Enforced on live API & export execution"
+        }
+      ]
+    },
+    {
+      "title": "2. PlatformOnly & Non-Destructive Toggle Safety",
+      "points": [
+        {
+          "anchor": "platform_only_blocked",
+          "via": "t_def_po",
+          "action": "trace",
+          "title": "69 PlatformOnly Permissions Quarantined",
+          "text": "69 host-only permissions never enter TenantPermissions, tenant UI pickers, Break-Glass elevation, or MembershipMode execution.",
+          "caption": "Exit X1: Zero tenant leakage of platform-host operations"
+        },
+        {
+          "anchor": "feature_disabled",
+          "via": ["t_eff_dis", "t_dis_avail"],
+          "action": "relation",
+          "title": "Toggle Off & Restore Without Data Loss",
+          "text": "Turning a feature override off removes Effective access and updates T_SCRIPE_SA immediately, yet leaves custom RolePermission rows intact so re-enabling restores prior roles.",
+          "caption": "State X2 <-> 02: Non-destructive toggle loop"
+        }
+      ]
+    },
+    {
+      "title": "3. Cache Eviction & Fail-Closed Refusal",
+      "points": [
+        {
+          "anchor": "cache_evicting",
+          "via": ["t_eff_evict", "t_evict_eff"],
+          "action": "trace",
+          "title": "Commit -> Bump Principal Version Stamp",
+          "text": "Every role, group, or override mutation evicts AdminPermissionCache and bumps principal version stamps post-commit before returning fresh Effective sets.",
+          "caption": "State X3: Zero 30-second stale cache window"
+        },
+        {
+          "anchor": "denied_403",
+          "via": "t_eff_deny",
+          "action": "trace",
+          "title": "Fail-Closed 403 Refusal",
+          "text": "Stale tokens, PAT scope mismatches, restricted FLS writes, or unreachable HttpFeatureChecker immediately return 403 Forbidden.",
+          "caption": "Exit X4: Safe fail-closed security guarantee"
+        }
+      ]
+    }
+  ]
+}

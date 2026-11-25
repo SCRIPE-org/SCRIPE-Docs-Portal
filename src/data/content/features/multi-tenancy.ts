@@ -305,18 +305,21 @@ public int MaxSubTenants { get; set; } = -1;`,
       {
         label: "Security Policy",
         language: "csharp",
-        code: `// TenantSettings.cs Per-Tenant Password Policy
-public int MinPasswordLength { get; set; } = 8;
-public bool RequireUppercase { get; set; } = true;
-public bool RequireNumber { get; set; } = true;
-public bool RequireSpecialCharacter { get; set; } = true;
-public int PasswordExpiryDays { get; set; } = 90;  // 0 = never
+        code: `// TenantSettings.cs Per-Tenant Security & Password Policy
+public int PasswordMinLength { get; set; } = 8;
+public bool PasswordRequireUppercase { get; set; } = true;
+public bool PasswordRequireLowercase { get; set; } = false;
+public bool PasswordRequireNumber { get; set; } = true;
+public bool PasswordRequireSpecial { get; set; } = false;
+public int PasswordHistoryCount { get; set; } = 5;          // 0..24 previous passwords
+public bool CheckBreachedPasswords { get; set; } = true;    // 8,616-entry NFKC denylist
+public int? PasswordExpiryDays { get; set; }                // null = never expires
 
-// Lockout Policy
-public int LockoutThreshold { get; set; } = 5;     // Failed attempts
-public int LockoutDurationMinutes { get; set; } = 30;
+// Lockout Policy (overrideable per-tenant; bounded by Identity.Login.MaxAttempts entitlement)
+public int LoginLockoutThreshold { get; set; } = 5;         // Failed attempts before lockout
+public int LoginLockoutMinutes { get; set; } = 15;          // Lockout window duration
 
-// Two-Factor Auth
+// Two-Factor Auth (triggers RequireMfaEnrollmentMiddleware "mfa_enroll=true" gate)
 public bool Require2FA { get; set; } = false;`,
       },
       {

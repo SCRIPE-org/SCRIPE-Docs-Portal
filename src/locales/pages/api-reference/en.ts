@@ -36,20 +36,20 @@ export const en = {
         "Exchange a valid refresh token for a new access + refresh token pair. Single-use rotation.",
       logoutTitle: "Logout",
       logoutDesc:
-        "Revoke all refresh tokens for the authenticated user. Access token remains valid until expiry.",
+        "[AllowAnonymous] Revoke the current refresh token and evict BrandingSettings session cookies; accepts logoutScope ('app' default preserves scr.oidc.session, 'central' clears it) returning 204 No Content.",
       tfaTitle: "Two-Factor Authentication",
       tfaIntro:
-        "SCRIPE supports TOTP-based 2FA using authenticator apps (Google Authenticator, Authy, Microsoft Authenticator). Once enabled, login returns a session token instead of access tokens — the client must verify the TOTP code to complete authentication.",
+        "SCRIPE supports TOTP-based 2FA using authenticator apps (Google Authenticator, Authy, Microsoft Authenticator). When enabled, login returns a single-use twoFactorPendingToken instead of JWT tokens until verified.",
       tfaEnableDesc: "Generate a TOTP secret and QR code URI for setup in an authenticator app.",
       tfaConfirmDesc: "Confirm 2FA setup by verifying the first TOTP code. Returns backup codes.",
-      tfaVerifyDesc: "Complete login by verifying the TOTP code with the 2FA session token.",
-      tfaDisableDesc: "Disable 2FA for the current admin account. Requires valid bearer token.",
+      tfaVerifyDesc: "Complete login via password + code or single-use twoFactorPendingToken.",
+      tfaDisableDesc: "Disable 2FA with password + twoFactorCode (blocked if Require2FA without passkey fallback).",
       tfaBackupDesc: "Regenerate a new set of 10 backup codes. Previous codes are invalidated.",
       profileTitle: "Profile Management",
       meDesc:
         "Get the full profile of the currently authenticated admin, including role, permissions, and tenant info.",
       updateProfileDesc: "Update the current admin's name and phone number.",
-      changePasswordDesc: "Change password. Requires current password for verification.",
+      changePasswordDesc: "Change password (verifies current password) and return rotated 200 OK TokenResponse.",
       uploadAvatarDesc: "Upload a new avatar image (max 2 MB, jpg/png/webp).",
       removeAvatarDesc: "Remove the current avatar and revert to the default.",
       securityTitle: "Security Endpoints",
@@ -63,16 +63,34 @@ export const en = {
       discoverWorkspacesDesc:
         "Discover all accessible workspaces and organizations associated with user credentials.",
       revokeAllSessionsDesc:
-        "Revoke all active sessions and refresh tokens across all devices simultaneously.",
+        "Revoke all other active sessions by blacklisting sibling session JTIs (BlacklistSessionJtisAsync) while preserving the caller's active refresh session.",
+      federationEndpointsTitle: "Central Federation & Custom-Domain Session Relay",
+      centralOidcCallbackDesc:
+        "[AllowAnonymous] Central OIDC callback on api.scripe.org consuming ExternalAuthStateTicket and minting a 120s SHA-256 ExternalAuthHandoffTicket.",
+      centralSamlAcsDesc:
+        "[AllowAnonymous] Central SAML 2.0 ACS handler minting a 120s SHA-256 ExternalAuthHandoffTicket and redirecting to auth.scripe.org or verified custom domain.",
+      ssoHandoffDesc:
+        "[AllowAnonymous] Atomically redeem a single-use ExternalAuthHandoffTicket (auth:ext-handoff-used:{sha256}) into session tokens or 2FA/workspace continuation state.",
+      relayEstablishDesc:
+        "First-party Next.js BFF micro-relay redeeming handoff/login with HMAC-SHA256 X-Scripe-Session-Relay-* headers and setting __Host-scripe_refresh_token.",
+      relayRefreshDesc:
+        "First-party Next.js BFF micro-relay rotating __Host-scripe_refresh_token on verified custom domains over HMAC-signed API call.",
+      relayLogoutDesc:
+        "First-party Next.js BFF micro-relay forwarding logoutScope ('app' default or 'central') and clearing __Host-scripe_refresh_token.",
       getExternalLoginsDesc:
         "List external SSO and social identity provider connections linked to this account.",
       linkExternalLoginDesc:
-        "Link a third-party OAuth/OIDC credential to the authenticated admin account.",
+        "Initiate Sudo-gated federated OIDC/SAML linking (direct /external-logins/link returns 410 Gone).",
       unlinkExternalLoginDesc: "Unlink an external authentication provider from the account.",
       requestPasswordResetDesc:
         "Initiate administrative password recovery with an expiring verification challenge.",
       verifyResetOtpDesc: "Verify one-time passcode challenge for password recovery workflow.",
-      resetPasswordDesc: "Finalize administrative password reset with verified challenge token.",
+      resetPasswordDesc:
+        "Finalize administrative password reset with ResetGrantToken; returns 204 No Content with no auto-login.",
+      passwordPolicyDesc:
+        "Retrieve anonymous tenant-aware password complexity policy for pre-auth setup/reset validation.",
+      forceChangePasswordDesc:
+        "Complete mandatory first-login or expired password rotation (mcp=true) and return rotated TokenResponse.",
     },
     userAuthApi: {
       title: "User Authentication API",
@@ -102,20 +120,26 @@ export const en = {
       resetPasswordDesc: "Reset password using the 6-digit code from forgot-password.",
       tokenTitle: "Token Management",
       refreshDesc: "Exchange a valid refresh token for a new token pair. Single-use rotation.",
-      logoutDesc: "Revoke all refresh tokens and end the session.",
+      logoutDesc:
+        "[AllowAnonymous] Revoke the current refresh token and evict session cookies; supports logoutScope ('app' preserves scr.oidc.session, 'central' clears it) returning 204 No Content.",
       tfaTitle: "User Two-Factor Authentication",
       tfaEnableDesc: "Generate TOTP secret and QR code for authenticator app setup.",
       tfaConfirmDesc: "Confirm 2FA by verifying the first TOTP code. Returns 10 backup codes.",
-      tfaVerifyDesc: "Complete login by verifying the TOTP code with the 2FA session token.",
-      tfaDisableDesc: "Disable 2FA for the current user. Requires valid bearer token.",
+      tfaVerifyDesc: "Complete login via password + code or single-use twoFactorPendingToken.",
+      tfaDisableDesc:
+        "Disable 2FA with current password + twoFactorCode (blocked if Require2FA without passkey fallback).",
       tfaBackupDesc: "Regenerate backup codes. All previous codes are invalidated.",
       profileTitle: "User Profile",
       meDesc: "Get the authenticated user's profile, including tenant and verification status.",
       updateProfileDesc: "Update user name and phone number.",
-      changePasswordDesc: "Change password. Requires current password verification.",
+      changePasswordDesc: "Change user password and return rotated 200 OK TokenResponse.",
+      passwordPolicyDesc:
+        "Retrieve anonymous tenant-aware password complexity requirements for registration/reset.",
+      forceChangePasswordDesc:
+        "Complete mandatory password rotation (mcp=true) for end users and reissue TokenResponse.",
       summaryTitle: "Endpoint Summary",
       diffNote:
-        "The User Auth API (/user-auth) is separate from the Admin Auth API (/auth). Users authenticate at /user-auth/login, admins at /auth/login. Both issue JWT tokens in the same format but have different permission scopes and 2FA flows.",
+        "The User Auth API (/api/v1/auth/user/*) is strictly isolated from the Admin Auth API (/api/v1/auth/admin/*). Both issue HMAC-SHA256 TokenResponse payloads with BrandingSettings HttpOnly refresh cookies but enforce distinct principal scopes and guards.",
       loginProviderDesc:
         "Initiate SSO or OAuth2 authentication flow with an external identity provider.",
       sendEmailVerificationDesc:
@@ -125,7 +149,7 @@ export const en = {
       getExternalLoginsDesc:
         "List all third-party social and enterprise login providers linked to this user.",
       linkExternalLoginDesc:
-        "Associate an external social or OIDC login token with the user's profile.",
+        "Direct /external-logins/link removed (410 Gone); sign in via federated provider callback to link.",
       unlinkExternalLoginDesc: "Remove an external identity link from the user account.",
     },
     adminApi: {
@@ -163,7 +187,7 @@ export const en = {
       protectDesc:
         "Toggle protection flag on an admin account (protected accounts cannot be deleted).",
       impersonationWarning:
-        "Impersonation is a powerful feature restricted to SuperAdmins. All actions performed during impersonation are logged with both the impersonator's and the target's identity. The impersonation session is time-limited and automatically ends after 1 hour.",
+        "Impersonation requires SuperAdmin privileges and X-Sudo-Token elevation. All actions log both impersonator and target identities, fail closed if either account is revoked, and terminate at a hard non-extendable 8-hour ceiling.",
       queryParamsTitle: "Query Parameters",
     },
     tenantApi: {

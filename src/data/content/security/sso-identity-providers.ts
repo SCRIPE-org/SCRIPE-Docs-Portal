@@ -25,7 +25,14 @@ const sections: DocSection[] = [
     type: "table",
     headers: ["Component", "Purpose"],
     rows: [
-      ["code_verifier", "Cryptographically random string stored in sessionStorage"],
+      [
+        "code_verifier",
+        "Cryptographically random string held server-side inside ExternalAuthStateTicket (never browser sessionStorage)",
+      ],
+      [
+        "handoffCode / handoffState",
+        "120s single-use ExternalAuthHandoffTicket indexed by SHA-256 hex digest (auth:ext-handoff:{sha256}) with atomic Replay Guard (auth:ext-handoff-used:{sha256})",
+      ],
       ["code_challenge", "SHA-256 hash of the code_verifier sent to the IdP"],
       ["state", "CSRF protection — verified on callback"],
       ["Authorization Code", "One-time code from IdP, exchanged server-side"],
@@ -63,12 +70,12 @@ const sections: DocSection[] = [
     type: "list",
     variant: "ordered",
     items: [
-      "Admin signs in with username/password",
-      "Navigates to Profile → Security → External Logins",
-      "Clicks 'Link External Account' for the desired provider",
-      "Completes OIDC authentication with the external IdP",
-      "SCRIPE creates an ExternalLogin record linking the provider identity to the admin",
-      "From now on, the admin can sign in using the SSO button on the login page",
+      "Admin signs in with username/password (native credentials on admin.scripe.org / *.admin.scripe.org)",
+      "Navigates to Account → Security (/account/security) → External Logins",
+      "Satisfies Sudo elevation (<SudoVerificationModal /> / X-Sudo-Token) when clicking 'Link External Account'",
+      "Frontend calls POST /api/v1/auth/admin/external-logins/initiate-link (direct /external-logins/link returns 410 Gone); server persists ExternalAuthStateTicket",
+      "IdP returns centrally to https://api.scripe.org/api/v1/auth/oidc/callback (or /api/v1/auth/saml/acs/{providerId}), creating the ExternalLogin record and minting a link-purpose ExternalAuthHandoffTicket",
+      "Browser completes handoff via POST /api/v1/auth/sso/handoff and redirects to /account/security?ssoLinked=success",
     ],
   },
 
@@ -113,6 +120,58 @@ const sections: DocSection[] = [
     contentKey: "security.sso.tenantScopingNote",
   },
 
+  // ── Custom-Domain HMAC Session Relay & Split Logout ──
+  {
+    type: "heading",
+    level: 2,
+    titleKey: "security.sso.centralRelayTitle",
+    id: "custom-domain-session-relay",
+  },
+  { type: "paragraph", contentKey: "security.sso.centralRelayContent" },
+  {
+    type: "heading",
+    level: 2,
+    titleKey: "security.sso.splitLogoutTitle",
+    id: "split-logout-scope",
+  },
+  { type: "paragraph", contentKey: "security.sso.splitLogoutContent" },
+  {
+    type: "table",
+    headers: ["Provider / Edge Layer", "Protocol & Canonical Callback", "Mandatory Production Setup & Invariants"],
+    rows: [
+      [
+        "Cloudflare & Railway Edge (api.scripe.org / auth.scripe.org)",
+        "Orange Cloud on api.scripe.org · Grey Cloud DNS-only on auth/admin.scripe.org",
+        "Inject X-Scripe-Origin-Verify via Cloudflare Transform Rule (/health/ready probe bypass); set ForwardedHeaders__ForwardLimit=2 + KnownNetworks__0 on Railway (fixes OpenIddict ID2083); set Saml__SpBaseUrl=https://api.scripe.org and SCRIPE_API_INTERNAL_URL=https://api.scripe.org/api",
+      ],
+      [
+        "Google Workspace",
+        "oidc · GET https://api.scripe.org/api/v1/auth/oidc/callback",
+        "Authority https://accounts.google.com; scopes 'openid email profile'; PKCE S256; keep TrustIdpMfa = false so HybridMfaPolicy enforces SCRIPE 2FA/Passkey when required",
+      ],
+      [
+        "Microsoft Entra ID (Azure AD)",
+        "oidc · GET https://api.scripe.org/api/v1/auth/oidc/callback",
+        "Authority https://login.microsoftonline.com/<Tenant-GUID|organizations|common>/v2.0 (replace literal {tenant-id} before Test Connection); enable optional ID token claims 'email' and 'xms_edov' for verified-email auto-linking",
+      ],
+      [
+        "GitHub OAuth2",
+        "oauth2 + PKCE S256 · GET https://api.scripe.org/api/v1/auth/oidc/callback",
+        "Authorize https://github.com/login/oauth/authorize, Token https://github.com/login/oauth/access_token, UserInfo https://api.github.com/user (User-Agent: SCRIPE-SSO/1.0); mandatory scopes 'user:email read:user' (queries /user/emails for verified address); TrustIdpMfa = false",
+      ],
+      [
+        "Enterprise SAML 2.0 (Okta / Entra SAML / ADFS / Ping)",
+        "saml · POST https://api.scripe.org/api/v1/auth/saml/acs/{encryptedProviderId}",
+        "Two-step setup: create provider in SCRIPE first with SamlIdpEntityId, SamlSsoUrl & X.509 SamlCertificate to obtain encrypted ACS URL; register SP Entity ID https://api.scripe.org at IdP; rejects unsolicited IdP-initiated assertions (RelayState + InResponseTo) and enforces verified TenantDomain on Global SAML (SEC-SAML-01)",
+      ],
+      [
+        "Custom-Domain + Hybrid-2FA Post-MFA Bridge (#227/#228)",
+        "POST /api/v1/auth/admin|user/2fa/verify -> POST /api/v1/auth/sso/handoff",
+        "PostMfaHandoffHelper + TenantOriginOwnershipValidator + ssoTwoFactorBridge.ts mint a post-MFA 120s ExternalAuthHandoffTicket on auth.scripe.org/sso/continue and return cleanly to verified {ReturnOrigin}/sso/callback",
+      ],
+    ],
+  },
+
   // ── API Endpoints ──
   { type: "heading", level: 2, titleKey: "security.sso.apiTitle", id: "api" },
   {
@@ -133,14 +192,50 @@ const sections: DocSection[] = [
       {
         method: "POST",
         path: "/api/v1/auth/oidc/challenge",
-        descriptionKey: "Generate PKCE authorization URL",
+        descriptionKey: "Create server-side ExternalAuthStateTicket + PKCE challenge & IdP URL",
         auth: "Public",
+      },
+      {
+        method: "GET",
+        path: "/api/v1/auth/oidc/callback",
+        descriptionKey: "Central OIDC callback on api.scripe.org consuming ExternalAuthStateTicket and minting 120s ExternalAuthHandoffTicket",
+        auth: "Public ([AllowAnonymous])",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/saml/acs/{providerId}",
+        descriptionKey: "Central SAML 2.0 ACS handler validating XML signatures and minting 120s ExternalAuthHandoffTicket",
+        auth: "Public ([AllowAnonymous])",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/sso/handoff",
+        descriptionKey: "Atomically redeem 120s SHA-256 ExternalAuthHandoffTicket (auth:ext-handoff-used:{sha256})",
+        auth: "Public ([AllowAnonymous])",
       },
       {
         method: "POST",
         path: "/api/v1/auth/oidc/callback",
-        descriptionKey: "Exchange auth code for linked account",
+        descriptionKey: "Direct OIDC POST callback exchange (single-origin / continuation flows)",
         auth: "Public",
+      },
+      {
+        method: "POST",
+        path: "/api/auth/session/establish",
+        descriptionKey: "Next.js BFF custom-domain HMAC micro-relay setting first-party __Host-scripe_refresh_token",
+        auth: "Same-Origin + HMAC-SHA256 Relay",
+      },
+      {
+        method: "POST",
+        path: "/api/auth/session/refresh",
+        descriptionKey: "Next.js BFF custom-domain HMAC micro-relay rotating __Host-scripe_refresh_token",
+        auth: "__Host-scripe_refresh_token + HMAC Relay",
+      },
+      {
+        method: "POST",
+        path: "/api/auth/session/logout",
+        descriptionKey: "Next.js BFF custom-domain HMAC micro-relay forwarding logoutScope ('app' | 'central') and clearing local cookie",
+        auth: "__Host-scripe_refresh_token + HMAC Relay",
       },
       {
         method: "GET",

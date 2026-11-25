@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "af200e11-0661-42c2-b332-b26e21981ed8",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\authorization-remediation-rbac-fullstack.archify.md",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\authorization-remediation-rbac-fullstack.html",
+  "specification": {
+    "sha256": "bdc7f9721e571ba3b9a1ba439975df66c45707295414a1631ae8d330091e07f6",
+    "bytes": 12481
+  },
+  "artifact": {
+    "sha256": "9aefcdbc1d80dee98a653f9829baec522088c7be3e94f665ba44767288ffca51",
+    "bytes": 2221356
+  },
+  "explainer": {
+    "preparedSha256": "05a01841fc576e249b1c93693413bdc7103c2b63c8962509a0a0c479c2fda688",
+    "dependencies": [
+      {
+        "kind": "diagram-spec",
+        "id": "authz-arch",
+        "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\authorization-feature-permission-architecture.architecture.json",
+        "relativePath": "authorization-feature-permission-architecture.architecture.json",
+        "sha256": "cda0b517660f754a735889580e72ecb085201e3f1d6d3bc665e2746e496e3d28",
+        "bytes": 17750
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "authz-seq",
+        "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\authorization-enforcement-sequence.sequence.json",
+        "relativePath": "authorization-enforcement-sequence.sequence.json",
+        "sha256": "112cd5a3a0e7da527664d6a1aad4ab40044acec9e236944035ccb7925209a500",
+        "bytes": 7634
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "perm-lifecycle",
+        "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\permission-feature-lifecycle.lifecycle.json",
+        "relativePath": "permission-feature-lifecycle.lifecycle.json",
+        "sha256": "a393cbc676c2161a3b0691eeca8ba417458f3d0b0f95c67970851b568eda6f15",
+        "bytes": 8989
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "fls-dataflow",
+        "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\rbac-fls-projection-dataflow.dataflow.json",
+        "relativePath": "rbac-fls-projection-dataflow.dataflow.json",
+        "sha256": "9b794f3d45627d0aeef9716acd05cb3f15d01bbf367a1a801975a275ab754c03",
+        "bytes": 7550
+      }
+    ]
+  }
+}

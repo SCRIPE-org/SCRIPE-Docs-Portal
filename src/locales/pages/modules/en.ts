@@ -1803,19 +1803,25 @@ export const en = {
       "ep.export": "Export invoices and subscriptions to CSV/Excel",
     },
     identityAuthSessions: {
-      title: "Auth Sessions & Token Management",
+      title: "Auth Sessions, Recovery Credentials & Token Management",
       description:
-        "Deep-dive into the six session and authentication entities: RefreshToken, OtpCode, QrLoginSession, WebAuthnChallenge, AdminPasskey, and ExternalLogin — including all fields, security semantics, and the QR login flow.",
+        "Deep-dive into Identity authentication, recovery, and credential entities: RefreshToken, OtpCode, PasswordResetToken, PasswordHistory, QrLoginSession, WebAuthnChallenge, AdminPasskey, and ExternalLogin.",
       intro:
-        "SCRIPE supports multiple concurrent authentication mechanisms. Each mechanism has a dedicated entity in the Identity module. RefreshToken manages sliding session windows. OtpCode handles time-limited one-time codes. QrLoginSession enables cross-device login via QR scanning. WebAuthnChallenge powers FIDO2 passkey ceremonies. AdminPasskey stores registered FIDO2 credentials. ExternalLogin links third-party identity providers to Admin and User accounts.",
+        "SCRIPE supports multiple concurrent authentication and recovery mechanisms in the Identity module. RefreshToken manages rotating session families, OtpCode stores keyed HMAC-SHA256 verification tags, PasswordResetToken secures magic-link and single-use reset grants across tenants without global query filters, PasswordHistory prevents credential reuse, QrLoginSession enables atomic cross-device QR login, WebAuthnChallenge and AdminPasskey power FIDO2 passkeys, and ExternalLogin links federated IdPs.",
       refreshTokenTitle: "RefreshToken Entity",
       refreshTokenIntro:
         "RefreshToken stores a long-lived opaque token issued alongside a JWT access token. Tokens are rotated on each use — the old token is revoked with a ReplacedByToken pointer, and a new token is issued. Impersonation sessions are tracked via ImpersonatorAdminId, enabling the StopImpersonation flow to restore the original admin's session.",
       otpCodeTitle: "OtpCode Entity",
       otpCodeIntro:
-        "OtpCode is a polymorphic one-time code that serves both users and admins. The Purpose integer maps to an enum (email verification, password reset, 2FA, etc.). Codes are invalidated via Invalidate() after successful use. The Attempts / MaxAttempts pair implements brute-force protection.",
+        "OtpCode stores time-limited one-time challenges for users and admins without persisting plaintext passcodes: the Code column holds an HMAC-SHA256 verifier computed with Verification:VerifierKey. Failed submissions increment Attempts up to MaxAttempts (default 5) before invalidation.",
       otpCodeNote:
-        "OtpCode.Purpose is stored as an integer for database efficiency. The application-layer enum is defined in Identity.Application. Always check IsUsed and ExpiresAt before trusting a code — do NOT rely solely on the code value.",
+        "Never store or log plaintext OTP digits. Password reset verifies the OTP without burning it in step 2 (`AdminVerifyResetOtp`), then consumes both the ResetGrantToken and the originating OtpCode inside one `ExecuteInTransactionAsync` unit of work after password complexity, breached-denylist, and history validation succeed.",
+      passwordResetTokenTitle: "PasswordResetToken Entity",
+      passwordResetTokenIntro:
+        "PasswordResetToken replaces untyped cache recovery strings with durable, pre-auth multi-tenant recovery records stored without global query filters. It backs email magic links (`PurposeMagicLink`), single-use step-3 reset grants (`PurposeResetGrant`) carrying `AllowedTenantIdsJson` and `SourceCredentialId`, and OTP tenant scope bindings, enforcing a 5-attempt cap (`MaxVerificationAttempts = 5`) and atomic single-use consumption.",
+      passwordHistoryTitle: "PasswordHistory Entity",
+      passwordHistoryIntro:
+        "PasswordHistory persists salted `$s2$` password digests (`SHA-256` Base64 pre-hash + BCrypt work factor 12) per `(PrincipalType, PrincipalId)` ordered by `RecordedAtUtc`. Password mutation handlers reject candidates matching the last `PasswordHistoryCount` entries (default 5, configurable 0..24 in `TenantSettings`) before hashing or saving new credentials.",
       qrLoginTitle: "QrLoginSession Entity",
       qrLoginIntro:
         "QrLoginSession orchestrates cross-device login: a desktop browser creates a session (status = Pending) and displays a QR code containing the SessionToken. An authenticated mobile device scans the QR (Scanned), the user approves (Approved), the backend generates tokens, and the polling desktop browser consumes them (Consumed). Sessions are cleaned up by QrSessionCleanupJob after the 5-minute TTL.",

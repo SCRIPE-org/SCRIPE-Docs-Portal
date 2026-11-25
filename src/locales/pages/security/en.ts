@@ -15,7 +15,7 @@ export const en = {
       featuresTitle: "Security Features",
       featureJwt: "JWT Authentication",
       featureJwtDesc:
-        "Short-lived access tokens (15 min) with automatic refresh. HMAC-SHA256 signing with configurable secret.",
+        "Access tokens (30 min default via Jwt:ExpiryMinutes) with automatic refresh. HMAC-SHA256 signing and millisecond revocation cutoff.",
       feature2fa: "Two-Factor Auth",
       feature2faDesc:
         "TOTP-based 2FA with QR code setup. Optional per-user, enforceable per-tenant or globally.",
@@ -52,17 +52,17 @@ export const en = {
         "The isPlatformAdmin flag is set by the frontend when the user explicitly selects 'Platform Administration' from the workspace picker. This flag signals the backend to look up the admin with TenantId = null (platform-level) instead of running workspace discovery again.",
       jwtLifecycleTitle: "JWT Token Lifecycle",
       jwtLifecycleIntro:
-        "Access tokens are short-lived (15 minutes) JWT tokens signed with HMAC-SHA256. When an access token expires, the client uses the refresh token to obtain a new token pair. Refresh tokens are single-use and rotated on every use.",
+        "Access tokens default to 30 minutes (Jwt:ExpiryMinutes / SessionPolicyDto) signed with HMAC-SHA256 and carry jti + scripe_iat_ms for monotonic revocation checks (revokedAt + 5ms). Refresh tokens rotate once inside HttpOnly cookies ({CookiePrefix}_refresh_token) under AbsoluteExpiresAt bounds (24h, >=30d StaySignedIn, 8h impersonation).",
       tokenStructureTitle: "JWT Token Structure",
-      bcryptTitle: "BCrypt Password Hashing",
+      bcryptTitle: "$s2$ SHA-256 Pre-Hash + BCrypt Password Hashing",
       bcryptIntro:
-        "Passwords are hashed using BCrypt with a configurable work factor (default: 12). BCrypt is intentionally slow to resist brute-force attacks — each hash takes ~250ms, making mass password cracking impractical.",
+        "Passwords are hashed with a versioned SHA-256 Base64 pre-hash ($s2$ prefix) followed by BCrypt (work factor 12), eliminating 72-byte and NUL truncation while retaining backward compatibility with legacy $2a$/$2b$/$2y$ hashes. Password mutations also enforce PasswordHistory (default 5 previous hashes) and an 8,616-entry breached password denylist.",
       lockoutTitle: "Account Lockout",
       lockoutIntro:
-        "After 5 consecutive failed login attempts, the account is locked for 5 minutes. The counter resets on successful login. Admins can manually unlock accounts via the admin panel.",
+        "After 5 consecutive failed login or 2FA attempts (TenantSettings.LoginLockoutThreshold, bounded by Identity.Login.MaxAttempts), the account is locked for 15 minutes (TenantSettings.LoginLockoutMinutes). The counter resets on successful verification, and admins can manually unlock accounts.",
       tfaTitle: "Two-Factor Authentication (TOTP)",
       tfaIntro:
-        "SCRIPE supports TOTP-based 2FA compatible with Google Authenticator, Authy, and Microsoft Authenticator. When enabled, users must enter a 6-digit time-based code after password verification.",
+        "SCRIPE supports TOTP-based 2FA compatible with Google Authenticator, Authy, and Microsoft Authenticator. When enabled, login returns a single-use twoFactorPendingToken instead of JWTs until verified; accounts with TenantSettings.Require2FA = true receive mfa_enroll=true and must enroll before general access.",
       passwordExpiryTitle: "Password Expiry Enforcement",
       passwordExpiryIntro:
         "After credentials are validated and lockout checks pass, the login handler invokes ITenantPasswordValidator.IsPasswordExpiredAsync to check if the admin's password has exceeded the tenant's configured PasswordExpiryDays. If expired, the TokenResponse includes MustChangePassword = true, which forces the frontend to redirect the admin to the change-password page before granting dashboard access. This check uses the admin's PasswordLastChanged field against the tenant's security policy.",
@@ -71,9 +71,9 @@ export const en = {
       externalAuthTitle: "External Authentication (OAuth)",
       externalAuthIntro:
         "SCRIPE integrates with Google, Facebook, Apple, and Microsoft OAuth providers. External tokens are validated server-side before creating or linking local accounts.",
-      otpTitle: "OTP System (One-Time Passwords)",
+      otpTitle: "OTP System & Recovery Credentials",
       otpIntro:
-        "OTP codes are used for email verification, phone verification, and password reset flows. Codes are 6-digit, cryptographically random, stored as BCrypt hashes, and expire after 15 minutes with a maximum of 3 verification attempts.",
+        "OTP codes are 6-digit cryptographically random challenges stored as keyed HMAC-SHA256 verifiers via Verification:VerifierKey (never BCrypt or plaintext), defaulting to 10-minute expiry (30-minute Production password reset) and 5 verification attempts. Multi-workspace admin password recovery issues single-use SHA-256 PasswordResetToken records without consuming the OTP until step 3 validates complexity and history.",
       impersonationTitle: "Admin Impersonation",
       impersonationIntro:
         "SuperAdmins can impersonate other admins to troubleshoot issues. An impersonation token carries the target admin's claims plus an impersonator_id claim. All actions during impersonation are audited with the original admin's identity.",
@@ -81,9 +81,12 @@ export const en = {
         "Impersonation is a privileged operation. The impersonator must be a SuperAdmin, cannot impersonate protected admins or admins with equal/higher roles, and all actions are logged with the impersonator's identity for accountability.",
       sessionTitle: "Session Management",
       sessionIntro:
-        "SCRIPE uses a stateless JWT-based session model. Access tokens are held in client memory (never localStorage), refresh tokens are stored as HttpOnly secure cookies or in the database, and 2FA session tokens are temporary in-memory tokens valid for 5 minutes.",
+        "SCRIPE uses a stateless JWT-based session model paired with database-backed single-use rotating refresh tokens. Access tokens live strictly in client memory (never localStorage), refresh tokens ride in HttpOnly Secure SameSite=Lax cookies ({CookiePrefix}_refresh_token on platform/workspace origins or __Host-scripe_refresh_token via the custom-domain micro-relay), 2FA pending tickets expire in 5 minutes, and RevokeAllSessions revokes sibling sessions' JTIs (BlacklistSessionJtisAsync) while preserving the caller's current active session.",
       cookieAuthTip:
-        "For maximum security, configure refresh tokens to be sent as HttpOnly, Secure, SameSite=Strict cookies. This prevents XSS attacks from accessing refresh tokens via JavaScript.",
+        "Workspace and custom-domain browser sessions use SameSite=Lax HttpOnly Secure refresh cookies (__Host-scripe_refresh_token on custom domains via HMAC micro-relay) so top-level cross-origin SSO redirects work cleanly while cross-site subrequests remain blocked.",
+      federationControlsTitle: "Dual-RP WebAuthn & Sudo Step-Up Governance",
+      federationControlsContent:
+        "Under Central Federation (Authentication:CentralFederation), native admin login and WebAuthn passkeys remain locked on admin.scripe.org and *.admin.scripe.org (EnableCentralNativeAndPasskeyMigration = false) with WebAuthn:UserVerification = 'required', PasskeyAuthLimit = 12 (15m window), and 0-error --idempotent schema parity across PostgreSQL 18, SQL Server 2025, and live Oracle 21c XE (IDENTITY schema). AdminPasskey.RpId (varchar(253)) and WebAuthnChallenge.RpId enforce AllowedRpIds validation in Fido2PasskeyService, while privileged mutations decorated with ISovereignSudoProtectedCommand enforce 15-minute HMAC X-Sudo-Token verification with automatic frontend <SudoVerificationModal /> challenge-and-replay across Identity.SudoRequired, Identity.SudoRevokedOrExpired, Identity.SudoPolicyDowngradeRefused, and Identity.SudoTokenInvalid.",
       ssoSuspensionTitle: "SSO Tenant Suspension Gate",
       ssoSuspensionIntro:
         "The ExternalLoginCommandHandler now includes a tenant suspension security gate. Before issuing a JWT after SSO/OIDC authentication, the handler checks the admin's tenant status. If the tenant is Suspended or Cancelled, the login is rejected with a localized error — preventing deactivated users from bypassing the standard login checks via SSO. This gate runs after token validation and account linking but before JWT issuance.",
@@ -163,14 +166,14 @@ export const en = {
         "Test your security headers using securityheaders.com. SCRIPE's default configuration scores A+ when properly configured.",
       replayTitle: "Replay Attack Prevention",
       replayIntro:
-        "Short-lived access tokens (15 minutes), single-use refresh tokens with rotation, and TOTP time-step validation prevent replay attacks across all authentication flows.",
+        "Short-lived access tokens (30 minutes default via Jwt:ExpiryMinutes), JTI revocation denylists, single-use refresh tokens with rotation, and TOTP time-step validation prevent replay attacks across all authentication flows.",
     },
     middlewarePipeline: {
       title: "Middleware Pipeline",
       description:
-        "11 middleware components in execution order  from exception handling through tenant context to field projection.",
+        "33 ordered stages in MiddlewarePipeline.cs — from edge headers, JWT/API-key auth, and post-auth rate limiting to Trusted CIDR, mcp=true, mfa_enroll=true, and field projection.",
       intro:
-        "SCRIPE's HTTP request pipeline consists of 11 middleware components executed in a specific order. Each middleware has a single responsibility and can short-circuit the pipeline on failure. Understanding the order is critical for debugging and extending the system.",
+        "SCRIPE's HTTP request pipeline executes 33 ordered stages in MiddlewarePipeline.cs. Each stage enforces a single boundary—including post-auth rate limiting, Trusted CIDR checks, MustChangePasswordMiddleware, and RequireMfaEnrollmentMiddleware—and short-circuits on failure.",
       overviewTitle: "Pipeline Overview",
       overviewIntro:
         "Requests flow through the middleware pipeline from top to bottom. Each middleware can process the request, modify it, or short-circuit by returning a response directly. The order matters  tenant context must be established before any tenant-scoped operation.",
@@ -202,7 +205,7 @@ export const en = {
         "Collects request metrics (duration, status codes, error rates) and exposes them via a /metrics endpoint for Prometheus scraping. Includes distributed tracing with OpenTelemetry integration.",
       registrationTitle: "Middleware Registration Order",
       registrationIntro:
-        "The middleware registration order in Program.cs determines execution order. Changing the order can break functionality  for example, registering TenantContext before Authentication would fail because the JWT hasn't been validated yet.",
+        "The registration order in MiddlewarePipeline.cs determines execution order. Changing the order breaks invariants—for example, ApiKeyUsageMiddleware and Rate Limiting rely on UseAuthentication() running first, while TrustedCidrEnforcementMiddleware, MustChangePasswordMiddleware (mcp=true), and RequireMfaEnrollmentMiddleware (mfa_enroll=true) run right after UseAuthorization().",
       summaryTitle: "Middleware Summary",
       orderWarning:
         "Changing middleware registration order can cause cascading failures. Always test the full request pipeline after modifying middleware order.",
@@ -262,9 +265,9 @@ export const en = {
       samlTitle: "SAML 2.0 & Cryptographic Assertion Security",
       samlContent:
         "In addition to OIDC, the platform integrates SAML 2.0 authentication using the ITfoxtec.Identity.Saml2 library. For inbound SSO, public X.509 certificates are loaded from base64 string configurations to validate SAML response signatures while ignoring certificate chain validations. Outbound client connections use platform-wide signing certificates to issue secure SAML assertions.",
-      oidcCallbackTitle: "OIDC Callback & Workspace Caching Flow",
+      oidcCallbackTitle: "Central OIDC/SAML Callback & Single-Use Handoff Ticket",
       oidcCallbackContent:
-        "The callback handler validates incoming credentials and manages workspace selection for administrators with access to multiple tenants. A temporary token caches the login profile (SsoTempLoginData) in Redis for 15 minutes, allowing safe workspace selection in the frontend without transferring raw user variables.",
+        "Central callbacks at https://api.scripe.org (GET /api/v1/auth/oidc/callback and POST /api/v1/auth/saml/acs/{providerId}) decrypt the provider reference, validate the server-side ExternalAuthStateTicket (including PKCE code_verifier, nonce, and validated returnOrigin), enforce tenant suspension and HybridMfaPolicy, and mint an ephemeral ExternalAuthHandoffTicket (120s TTL, SHA-256 keyed auth:ext-handoff:{sha256} with atomic single-use auth:ext-handoff-used:{sha256} replay guard). The callback then 302-redirects to https://auth.scripe.org/sso/continue (for workspace discovery or 2FA) or to the verified tenant {ReturnOrigin}/sso/callback?code=&state=, where POST /api/v1/auth/sso/handoff redeems the ticket once.",
       oauthMirroringTitle: "OAuth Application Mirroring & Subscription Quotas",
       oauthMirroringContent:
         "Administrators can register custom client applications to use SCRIPE as their primary OIDC server. New application creations are gated by tenant-scoped quotas. Once validated, client details are registered in OpenIddict and mirrored locally in the platform's OAuthApplication database table for fast performance, masking confidential client secrets.",
@@ -278,28 +281,34 @@ export const en = {
         "SCRIPE uses the Authorization Code Flow with PKCE (Proof Key for Code Exchange) for SSO. This is the most secure OAuth2 flow, recommended by the OAuth 2.1 specification for all client types.",
       step1Title: "1. Provider Discovery",
       step1Content:
-        "The login page fetches available SSO providers via GET /auth/oidc/providers/admin. Only enabled providers for the current login context (admin/user) are returned.",
-      step2Title: "2. PKCE Challenge",
+        "The login surface at https://auth.scripe.org (or tenant origin) fetches enabled external providers via GET /api/v1/auth/oidc/providers/admin (or user discovery), honoring Tenancy:AuthBaseUrl and OriginRouting.",
+      step2Title: "2. Server-Side PKCE & State Ticket",
       step2Content:
-        "When the user clicks an SSO button, the frontend calls POST /auth/oidc/challenge. The backend generates a code_verifier, computes the code_challenge (SHA-256), and returns the authorization URL.",
-      step3Title: "3. IdP Redirect",
+        "When the user clicks an SSO provider, the frontend calls POST /api/v1/auth/oidc/challenge. The backend generates the cryptographic code_verifier, nonce, state, and validated returnOrigin inside a server-side ExternalAuthStateTicket (never browser sessionStorage) and returns the IdP authorization URL.",
+      step3Title: "3. External IdP Redirect (Central Callback)",
       step3Content:
-        "The frontend stores PKCE state (code_verifier, state, providerId) in sessionStorage, then redirects the user to the external IdP's authorization endpoint.",
-      step4Title: "4. User Authentication",
+        "The browser redirects directly to the external IdP with redirect_uri pinned to central https://api.scripe.org/api/v1/auth/oidc/callback (or /api/v1/auth/saml/acs/{providerId}). No secrets or PKCE verifiers reside in client storage.",
+      step4Title: "4. Central Callback & Handoff Ticket",
       step4Content:
-        "The user authenticates at the external IdP (Azure AD, Google, Okta, etc.) and grants consent for the requested scopes.",
-      step5Title: "5. Callback & Token Exchange",
+        "The user authenticates at the external IdP (Azure AD, Google, Okta, etc.) and returns to api.scripe.org. The backend consumes ExternalAuthStateTicket, exchanges the code server-side, evaluates tenant suspension and MFA gates, mints a 120s SHA-256 ExternalAuthHandoffTicket, and 302-redirects to auth.scripe.org/sso/continue or verified {ReturnOrigin}/sso/callback.",
+      step5Title: "5. Single-Use Handoff & Origin Session Establish",
       step5Content:
-        "The IdP redirects to /sso/callback with an authorization code. The frontend retrieves PKCE state from sessionStorage, validates the state parameter, and calls POST /auth/oidc/callback. The backend exchanges the code for tokens using the code_verifier.",
-      pkceTitle: "PKCE Security Model",
+        "The destination /sso/callback or /sso/continue page calls POST /api/v1/auth/sso/handoff (or /api/auth/session/establish HMAC relay on custom domains) to atomically consume the 120s ExternalAuthHandoffTicket and hydrate memory JWT + HttpOnly Lax refresh cookie state.",
+      pkceTitle: "PKCE & Central Handoff Security Model",
       pkceContent:
-        "PKCE prevents authorization code interception attacks by ensuring that only the client that initiated the flow can exchange the code. The code_verifier is never sent over the network — only its SHA-256 hash (code_challenge) is sent during the challenge step.",
+        "Server-side ExternalAuthStateTicket persistence eliminates browser sessionStorage PKCE/state exposure. Central callbacks mint single-use 120s SHA-256 ExternalAuthHandoffTicket payloads claimed atomically via auth:ext-handoff-used:{sha256}, binding returnOrigin against IVerifiedOriginEvaluator to block open redirects and authorization-code interception.",
       entityModelTitle: "Identity Provider Entity",
       entityModelContent:
         "The IdentityProvider entity stores all OIDC configuration for an external IdP. Each provider is optionally scoped to a tenant (TenantId = null means system-wide).",
       linkingTitle: "External Login Linking",
       linkingContent:
-        "Before SSO login works, a SCRIPE admin/user must link their account to the external identity. This creates an ExternalLogin record mapping the provider's subject ID to the SCRIPE account.",
+        "Authenticated account linking requires Sudo elevation (X-Sudo-Token) via POST /api/v1/auth/admin/external-logins/initiate-link (direct /external-logins/link is removed with 410 Gone). The IdP returns to the central callback on api.scripe.org, mints a link-purpose ExternalAuthHandoffTicket, and completes linking before returning to /account/security?ssoLinked=success.",
+      centralRelayTitle: "Custom-Domain First-Party Session Micro-Relay & Dynamic CORS",
+      centralRelayContent:
+        "Verified custom tenant domains cannot share cross-site cookies with api.scripe.org, so Next.js BFF exposes three fail-closed routes (/api/auth/session/establish, /api/auth/session/refresh, /api/auth/session/logout) gated by same-origin Sec-Fetch-Site/Origin checks and signed with HMAC-SHA256 (X-Scripe-Session-Relay-Ts/Nonce/Client-Ip/Sig, 30s skew, 60s atomic nonce in SessionRelayAuthenticator, rate-limited by X-Scripe-Session-Relay-Client-Ip, and honoring X-Scripe-Relay-Refresh-MaxAge: 0 ephemeral staySignedIn=false cookies). When SSO on auth.scripe.org/sso/continue requires SCRIPE 2FA, PostMfaHandoffHelper, TenantOriginOwnershipValidator, and ssoTwoFactorBridge.ts mint a post-MFA ExternalAuthHandoffTicket back to {ReturnOrigin}/sso/callback. Production Cloudflare edge requires X-Scripe-Origin-Verify on api.scripe.org, ForwardedHeaders ForwardLimit=2, Saml:SpBaseUrl=https://api.scripe.org, Entra email+xms_edov claims, GitHub user:email read:user scopes, and 2-step SAML ACS setup.",
+      splitLogoutTitle: "Split App vs. Central SSO Logout (scr.oidc.session)",
+      splitLogoutContent:
+        "Logout accepts logoutScope ('app' default or 'central'). CookieAuthMiddleware and AuthLogoutScopeHelper preserve the central OpenIddict server cookie (scr.oidc.session) during silent /refresh, /sso/handoff, /complete-workspace-selection, and app-scoped logouts so signing out of one workspace tab clears local bearer and refresh cookies without destroying the user's central SSO session; passing logoutScope: 'central' clears scr.oidc.session across the identity plane.",
       oauthAppsTitle: "OAuth Applications",
       oauthAppsContent:
         "OAuth Applications are third-party apps that authenticate against SCRIPE as an OIDC server. Each app gets a Client ID and Client Secret, with configurable redirect URIs, scopes, and PKCE enforcement.",

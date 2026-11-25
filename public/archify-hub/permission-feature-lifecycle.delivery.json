@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "21485b39-7464-45d7-bddc-407ce22a5d89",
+  "status": "current",
+  "command": "deliver",
+  "type": "lifecycle",
+  "input": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\permission-feature-lifecycle.lifecycle.json",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\permission-feature-lifecycle.html",
+  "specification": {
+    "sha256": "a393cbc676c2161a3b0691eeca8ba417458f3d0b0f95c67970851b568eda6f15",
+    "bytes": 8989
+  },
+  "artifact": {
+    "sha256": "1d1e487e2e6554cffa22180f4e81d7eb140c8a02a10bae04a2fbfc4f8ba36210",
+    "bytes": 942916
+  }
+}

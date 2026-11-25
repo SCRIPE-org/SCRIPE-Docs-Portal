@@ -27,7 +27,7 @@ export const fr = {
         "Empêche les membres d'organisations suspendues de contourner les restrictions via des tiers comme Google ou Azure AD.",
       jwtTitle: "Configuration des Jetons JWT",
       jwtIntro:
-        "Le système utilise des jetons d'accès de courte durée (15 minutes) avec des jetons d'actualisation de longue durée (7 jours). Les jetons d'actualisation sont pivotés à chaque utilisation pour empêcher les attaques par rejeu.",
+        "Le système utilise des jetons d'accès de courte durée (30 minutes par défaut via Jwt:ExpiryMinutes et SessionPolicyDto) associés à des jetons d'actualisation rotatifs plafonnés par AbsoluteExpiresAt (24 h standard, >= 30 jours StaySignedIn, 8 h en usurpation).",
       dualAuthTitle: "Double Authentification (Admin et Utilisateur)",
       dualAuthIntro:
         "SCRIPE dispose de deux pipelines d'authentification distincts. L'authentification admin (AdminAuthController) émet des JWT avec des revendications spécifiques à l'admin (TenantId, IsSuperAdmin, Roles). L'authentification utilisateur (UserAuthController) émet des JWT avec des revendications spécifiques à l'utilisateur (NationalId, Gender, Country). Chacun a ses propres endpoints de connexion, d'inscription et de rafraîchissement de jeton.",
@@ -51,9 +51,9 @@ export const fr = {
       tokenValidationTitle: "Validation Cryptographique des Jetons",
       tokenValidationIntro:
         "Contrôle des signatures, délais d'expiration et empreintes de périphériques contre le vol de sessions.",
-      mcpMiddlewareTitle: "Middleware de Sécurité MCP",
+      mcpMiddlewareTitle: "Filtres Post-Connexion (MustChangePassword & RequireMfaEnrollment)",
       mcpMiddlewareIntro:
-        "Encadrement et filtrage stricts des communications Model Context Protocol pour les fonctionnalités d'IA.",
+        "Lorsqu'un changement de mot de passe (`mcp: true`) ou un enrôlement MFA/Passkey obligatoire (`mfa_enroll: true`) est requis, `MustChangePasswordMiddleware` et `RequireMfaEnrollmentMiddleware` bloquent l'API avec `403 Forbidden` et n'autorisent que les routes de remédiation (`change-password`, `force-change-password`, `2fa/enable|confirm|status`, `passkeys/registration/*`, `sudo/*`, `account/security`, `principal`, `refresh`, `logout`, `revoke`, `password-policy`, `customization/resolve`, `/hubs/*`, `/health`).",
       ssoCallbackTitle: "Traitement des Retours SSO",
       ssoCallbackIntro:
         "Échange sécurisé de jetons et association automatique de profils d'après les e-mails certifiés.",
@@ -478,9 +478,12 @@ export const fr = {
       samlTitle: "Authentification d'Entreprise SAML 2.0",
       samlContent:
         "Interconnexion Single Sign-On avec les fournisseurs d'identité des grandes organisations.",
-      oidcCallbackTitle: "Gestionnaire de Callback OpenID Connect",
+      oidcCallbackTitle: "Callback Central OIDC/SAML et Ticket Handoff à Usage Unique",
       oidcCallbackContent:
-        "Contrôle d'intégrité des jetons ID Token et échange sécurisé de codes d'autorisation.",
+        "Les callbacks IdP externes convergent sur https://api.scripe.org (GET /api/v1/auth/oidc/callback et POST /api/v1/auth/saml/acs/{providerId}), consomment le ExternalAuthStateTicket côté serveur (sans sessionStorage) et émettent un ExternalAuthHandoffTicket SHA-256 de 120s vers auth.scripe.org/sso/continue ou {ReturnOrigin}/sso/callback pour échange unique via POST /api/v1/auth/sso/handoff.",
+      centralFederationTitle: "Fédération Centrale d'Identité et Relais de Domaine Personnalisé",
+      centralFederationContent:
+        "Avec Authentication:CentralFederation (https://auth.scripe.org et https://api.scripe.org), les domaines personnalisés vérifiés utilisent le micro-relais HMAC Next.js (/api/auth/session/establish, /refresh, /logout -> __Host-scripe_refresh_token avec X-Scripe-Session-Relay-Client-Ip et X-Scripe-Relay-Refresh-MaxAge: 0), le pont post-MFA PostMfaHandoffHelper + ssoTwoFactorBridge.ts et CORS/CSRF dynamique IVerifiedOriginEvaluator, tout en verrouillant la connexion native et les passkeys Dual-RP sur admin.scripe.org (EnableCentralNativeAndPasskeyMigration: false, WebAuthn:UserVerification = 'required', PasskeyAuthLimit = 12 ; migrations --idempotent vérifiées sur PostgreSQL 18, SQL Server 2025 et Oracle 21c XE).",
       oauthMirroringTitle: "Synchronisation de Profil OAuth",
       oauthMirroringContent:
         "Mise à jour en continu des données d'identité et avatars à chaque authentification externe.",

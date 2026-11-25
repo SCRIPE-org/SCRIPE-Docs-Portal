@@ -28,10 +28,10 @@ export const zh = {
       intro:
         "安全性深深植根于 SCRIPE 的 DNA 中。我们的零信任身份架构利用行业领先的加密技术、高度可配置的密码策略和严格的 JWT 验证，来保护您的应用程序免受现代攻击向量的侵害。",
       jwtContent:
-        "我们使用由非对称 RSA 密钥签名的快速、无状态 JSON Web Tokens (JWT)。访问令牌的生命周期较短，而安全的、仅限 HTTP 的刷新令牌则在不牺牲安全性的情况下确保了无缝的用户体验。",
-      jwtTitle: "非对称 JWT 协议",
+        "API 访问令牌采用无状态 HS256（HMAC-SHA256）JWT 并仅驻留于客户端内存，同时与 RS256 签名的 OpenIddict OIDC 服务端协作，搭配 HttpOnly SameSite 刷新 Cookie（{CookiePrefix}_refresh_token）、JTI 黑名单及毫秒级撤销截止保护。",
+      jwtTitle: "HS256 API JWT 与 OIDC 协议",
       passwordContent:
-        "强制执行符合 NIST 标准的密码复杂性。指定所需的长度、特殊字符组合，并防止在可配置的时间段内重复使用历史密码。",
+        "强制执行租户级密码复杂度策略，结合版本化 $s2$ SHA-256 Base64 预哈希 + BCrypt（工作因子 12）、PasswordHistory 历史查重与 8,616 条泄露密码黑名单拦截。",
       passwordTitle: "自适应密码策略",
       sessionTitle: "并发会话控制",
       title: "身份验证与安全",

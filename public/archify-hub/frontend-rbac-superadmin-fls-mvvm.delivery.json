@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "fd0febcb-b1e5-4d80-8964-71b949cb5832",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\frontend-rbac-superadmin-fls-mvvm.architecture.json",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\frontend-rbac-superadmin-fls-mvvm.html",
+  "specification": {
+    "sha256": "dbd3fe7d786302cfb4025f39e928bf9209497b4497695da556a3b00d782f8d85",
+    "bytes": 11876
+  },
+  "artifact": {
+    "sha256": "a9b2d2fcc244922cafe841acc466b599a551b51a78475dec7bb50966f69e9e3e",
+    "bytes": 968166
+  }
+}

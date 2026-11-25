@@ -1,0 +1,317 @@
+{
+  "schema_version": 1,
+  "diagram_type": "erd",
+  "meta": {
+    "title": "Identity Authentication, Password History & Session Security Schema (ERD)",
+    "subtitle": "Physical EF Core tables and security invariants inside the identity.* schema supporting Admin/User auth parity, $s2$ reuse checks, HMAC OTPs, and capped refresh families.",
+    "locale": "en",
+    "output": "identity-auth-security-erd.html",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Backend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "1c1631172d447d311686211c07b52b84a6245678"
+    }
+  },
+  "layout": {
+    "mode": "grid",
+    "gapX": 64,
+    "gapY": 44
+  },
+  "entities": [
+    {
+      "id": "identity_tenant_settings",
+      "label": "identity.TenantSettings",
+      "tag": "policy",
+      "row": 0,
+      "col": 0,
+      "width": 286,
+      "sources": [
+        { "path": "src/Modules/Identity/Identity.Infrastructure/Persistence/Configurations/TenantSettingsConfiguration.cs", "line": 10, "end_line": 19, "label": "Security Policy Config" }
+      ],
+      "attributes": [
+        { "name": "Id", "type": "uuid", "key": "pk" },
+        { "name": "TenantId", "type": "uuid", "key": ["fk", "uk"], "references": "identity_tenants.Id" },
+        { "name": "LoginLockoutThreshold", "type": "int" },
+        { "name": "LoginLockoutMinutes", "type": "int" },
+        { "name": "PasswordHistoryCount", "type": "int" },
+        { "name": "CheckBreachedPasswords", "type": "boolean" }
+      ]
+    },
+    {
+      "id": "identity_tenants",
+      "label": "identity.Tenants",
+      "tag": "root",
+      "row": 0,
+      "col": 1,
+      "width": 276,
+      "sources": [
+        { "path": "src/Modules/Identity/Identity.Domain/Entities/Tenant.cs", "line": 12, "end_line": 35, "label": "Tenant Aggregate" }
+      ],
+      "attributes": [
+        { "name": "Id", "type": "uuid", "key": "pk" },
+        { "name": "Code", "type": "varchar(100)", "key": "uk" },
+        { "name": "ParentTenantId", "type": "uuid", "key": "fk", "references": "identity_tenants.Id" },
+        { "name": "Kind", "type": "varchar(20)" },
+        { "name": "IsDeleted", "type": "boolean" }
+      ]
+    },
+    {
+      "id": "identity_admins",
+      "label": "identity.Admins",
+      "tag": "admin",
+      "row": 1,
+      "col": 0,
+      "width": 292,
+      "sources": [
+        { "path": "src/Modules/Identity/Identity.Infrastructure/Persistence/Configurations/AdminConfiguration.cs", "line": 15, "end_line": 74, "label": "Admin Schema Mapping" }
+      ],
+      "attributes": [
+        { "name": "Id", "type": "uuid", "key": "pk" },
+        { "name": "TenantId", "type": "uuid", "key": "fk", "references": "identity_tenants.Id" },
+        { "name": "Username", "type": "varchar(100)", "key": "uk" },
+        { "name": "PasswordHash", "type": "varchar(200)" },
+        { "name": "AccountSetupTokenHash", "type": "varchar(200)" },
+        { "name": "PasswordResetTokenHash", "type": "varchar(64)" }
+      ]
+    },
+    {
+      "id": "identity_refresh_tokens",
+      "label": "identity.RefreshTokens",
+      "tag": "session",
+      "row": 1,
+      "col": 1,
+      "width": 276,
+      "sources": [
+        { "path": "src/Modules/Identity/Identity.Infrastructure/Persistence/Configurations/RefreshTokenConfiguration.cs", "line": 13, "end_line": 41, "label": "RefreshToken EF Config" }
+      ],
+      "attributes": [
+        { "name": "Id", "type": "uuid", "key": "pk" },
+        { "name": "AdminId", "type": "uuid", "key": "fk", "references": "identity_admins.Id" },
+        { "name": "UserId", "type": "uuid", "key": "fk", "references": "identity_users.Id" },
+        { "name": "Token", "type": "varchar(500)" },
+        { "name": "AbsoluteExpiresAt", "type": "timestamptz" },
+        { "name": "StaySignedIn", "type": "boolean" }
+      ]
+    },
+    {
+      "id": "identity_users",
+      "label": "identity.Users",
+      "tag": "user",
+      "row": 1,
+      "col": 2,
+      "width": 276,
+      "sources": [
+        { "path": "src/Modules/Identity/Identity.Infrastructure/Persistence/Configurations/UserConfiguration.cs", "line": 13, "end_line": 58, "label": "User Schema Mapping" }
+      ],
+      "attributes": [
+        { "name": "Id", "type": "uuid", "key": "pk" },
+        { "name": "TenantId", "type": "uuid", "key": "fk", "references": "identity_tenants.Id" },
+        { "name": "Username", "type": "varchar(100)", "key": "uk" },
+        { "name": "Email", "type": "varchar(100)", "key": "uk" },
+        { "name": "PasswordHash", "type": "varchar(200)" },
+        { "name": "MustChangePassword", "type": "boolean" }
+      ]
+    },
+    {
+      "id": "identity_admin_security_profiles",
+      "label": "identity.admin_security_profiles",
+      "tag": "sovereign",
+      "row": 2,
+      "col": 0,
+      "width": 312,
+      "sources": [
+        { "path": "src/Modules/Identity/Identity.Infrastructure/Persistence/Configurations/AdminSecurityProfileConfiguration.cs", "line": 15, "end_line": 32, "label": "Admin Security Profile EF" }
+      ],
+      "attributes": [
+        { "name": "Id", "type": "uuid", "key": "pk" },
+        { "name": "AdminId", "type": "uuid", "key": ["fk", "uk"], "references": "identity_admins.Id" },
+        { "name": "AllowedCidrsJson", "type": "varchar(2000)" },
+        { "name": "SupportVerificationPin", "type": "varchar(16)" },
+        { "name": "SuccessionCustodianAdminId", "type": "uuid" }
+      ]
+    },
+    {
+      "id": "identity_otp_codes",
+      "label": "identity.OtpCodes",
+      "tag": "hmac-sha256",
+      "row": 2,
+      "col": 1,
+      "width": 276,
+      "sources": [
+        { "path": "src/Modules/Identity/Identity.Infrastructure/Persistence/Configurations/OtpCodeConfiguration.cs", "line": 13, "end_line": 34, "label": "OtpCode EF Config" }
+      ],
+      "attributes": [
+        { "name": "Id", "type": "uuid", "key": "pk" },
+        { "name": "AdminId", "type": "uuid", "key": "fk", "references": "identity_admins.Id" },
+        { "name": "UserId", "type": "uuid", "key": "fk", "references": "identity_users.Id" },
+        { "name": "Code", "type": "varchar(10)" },
+        { "name": "MaxAttempts", "type": "int" },
+        { "name": "IsUsed", "type": "boolean" }
+      ]
+    },
+    {
+      "id": "identity_password_reset_tokens",
+      "label": "identity.PasswordResetTokens",
+      "tag": "reset grant",
+      "row": 2,
+      "col": 2,
+      "width": 292,
+      "sources": [
+        { "path": "src/Modules/Identity/Identity.Infrastructure/Persistence/Configurations/PasswordResetTokenConfiguration.cs", "line": 13, "end_line": 29, "label": "PasswordResetToken EF Config" }
+      ],
+      "attributes": [
+        { "name": "Id", "type": "uuid", "key": "pk" },
+        { "name": "TokenHash", "type": "varchar(64)", "key": "uk" },
+        { "name": "NormalizedEmail", "type": "varchar(256)" },
+        { "name": "Purpose", "type": "varchar(32)" },
+        { "name": "AllowedTenantIdsJson", "type": "varchar(4000)" },
+        { "name": "IsConsumed", "type": "boolean" }
+      ]
+    },
+    {
+      "id": "identity_password_histories",
+      "label": "identity.PasswordHistories",
+      "tag": "$s2$ reuse",
+      "row": 3,
+      "col": 0,
+      "width": 292,
+      "sources": [
+        { "path": "src/Modules/Identity/Identity.Infrastructure/Persistence/Configurations/PasswordHistoryConfiguration.cs", "line": 10, "end_line": 26, "label": "Password History EF" }
+      ],
+      "attributes": [
+        { "name": "Id", "type": "uuid", "key": "pk" },
+        { "name": "PrincipalType", "type": "int" },
+        { "name": "PrincipalId", "type": "uuid" },
+        { "name": "PasswordHash", "type": "varchar(200)" },
+        { "name": "RecordedAtUtc", "type": "timestamptz" }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "rel_tenant_settings",
+      "from": "identity_tenants",
+      "to": "identity_tenant_settings",
+      "label": "configures",
+      "fromCardinality": "one",
+      "toCardinality": "one",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "rel_tenant_admins",
+      "from": "identity_tenants",
+      "to": "identity_admins",
+      "label": "isolates",
+      "fromCardinality": "one",
+      "toCardinality": "many",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "rel_tenant_users",
+      "from": "identity_tenants",
+      "to": "identity_users",
+      "label": "isolates",
+      "fromCardinality": "one",
+      "toCardinality": "many",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "id": "rel_admin_sec_profile",
+      "from": "identity_admins",
+      "to": "identity_admin_security_profiles",
+      "label": "profile",
+      "fromCardinality": "one",
+      "toCardinality": "one",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "rel_admin_refresh",
+      "from": "identity_admins",
+      "to": "identity_refresh_tokens",
+      "label": "family",
+      "fromCardinality": "one",
+      "toCardinality": "many",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "rel_user_refresh",
+      "from": "identity_users",
+      "to": "identity_refresh_tokens",
+      "label": "family",
+      "fromCardinality": "one",
+      "toCardinality": "many",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "rel_admin_otp",
+      "from": "identity_admins",
+      "to": "identity_otp_codes",
+      "label": "otp",
+      "fromCardinality": "one",
+      "toCardinality": "many",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "id": "rel_user_otp",
+      "from": "identity_users",
+      "to": "identity_otp_codes",
+      "label": "otp",
+      "fromCardinality": "one",
+      "toCardinality": "many",
+      "fromSide": "bottom",
+      "toSide": "right"
+    },
+    {
+      "id": "rel_admin_pwdhist",
+      "from": "identity_password_histories",
+      "to": "identity_admins",
+      "label": "PrincipalId",
+      "fromCardinality": "many",
+      "toCardinality": "one",
+      "identifying": false,
+      "variant": "dashed",
+      "fromSide": "left",
+      "toSide": "left"
+    },
+    {
+      "id": "rel_otp_reset_grant",
+      "from": "identity_password_reset_tokens",
+      "to": "identity_otp_codes",
+      "label": "grant on verify",
+      "fromCardinality": "many",
+      "toCardinality": "one",
+      "identifying": false,
+      "variant": "dashed",
+      "fromSide": "left",
+      "toSide": "right"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Zero Plaintext Secrets Stored",
+      "items": [
+        "RefreshTokens automatically SHA-256 hex-hashes Token and ReplacedByToken inside IdentityDbContext.SaveChangesAsync.",
+        "PasswordResetTokens stores a unique 64-char SHA-256 TokenHash (IX_PwdResetTok_Hash) alongside AllowedTenantIdsJson; Admins & Users store $s2$ hashes and Verification:VerifierKey HMAC verifiers."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Dual Principal Isolation & Bounded Lifetimes",
+      "items": [
+        "Admins and Users retain separate DbSets and foreign keys on RefreshTokens and OtpCodes while sharing polymorphic PasswordHistories (PrincipalType, PrincipalId) and TenantSettings policy rules.",
+        "Immutable AbsoluteExpiresAt ceilings prevent infinite refresh chaining across 24h standard, >=30d StaySignedIn, and 8h impersonation windows."
+      ]
+    }
+  ]
+}

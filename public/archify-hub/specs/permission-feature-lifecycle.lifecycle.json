@@ -1,0 +1,279 @@
+{
+  "schema_version": 3,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "SCRIPE Feature & Permission 5-State Lifecycle",
+    "locale": "en",
+    "output": "SCRIPE-Docs-Portal/public/archify-hub/permission-feature-lifecycle.html",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "parentHref": "authorization-remediation-rbac-fullstack.html",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Backend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "42629f69a3081a83e7e69e678b1b04b28c12e1f0"
+    }
+  },
+  "mainPath": [
+    "defined",
+    "available",
+    "assignable",
+    "assigned",
+    "effective"
+  ],
+  "states": [
+    {
+      "id": "defined",
+      "type": "start",
+      "label": "Defined",
+      "sublabel": "490 Perms / 190 Feats",
+      "tag": "IPermissionCatalogCache",
+      "step": "01",
+      "explanation": "Compiled from 19 module providers with explicit RequiredFeature, RequiredAnyFeatures (10), or IsGloballyAvailable (10). Zero ambiguous nulls or broken refs.",
+      "sources": [
+        {
+          "path": "src/Core/Core.Application/Services/PermissionCatalogCache.cs",
+          "line": 1,
+          "end_line": 115,
+          "label": "490-Perm Catalog Definition"
+        }
+      ]
+    },
+    {
+      "id": "available",
+      "type": "active",
+      "label": "Available",
+      "sublabel": "389 SCRIPE Pool",
+      "tag": "TenantPermissions",
+      "step": "02",
+      "explanation": "EffectiveFeatureMapBuilder resolves TenantFeatureOverride -> EditionFeature -> FeaturePackExpansion -> Feature.DefaultValue (IsMarketingOnly last); TenantPermissionManager syncs !PlatformOnly satisfied perms while keeping IsGloballyAvailable modules.",
+      "sources": [
+        {
+          "path": "src/Modules/Identity/Identity.Infrastructure/Services/TenantPermissionManager.cs",
+          "line": 55,
+          "end_line": 165,
+          "label": "TenantPermissions Sync"
+        }
+      ]
+    },
+    {
+      "id": "assignable",
+      "type": "decision",
+      "label": "Assignable",
+      "sublabel": "Tenant Pickers",
+      "tag": "Permissions API",
+      "step": "03",
+      "explanation": "PermissionsController and RolesController filter strictly to !PlatformOnly, active tenant pool, and live IFeatureChecker whenever TenantId != null.",
+      "sources": [
+        {
+          "path": "src/Modules/Identity/Identity.Application/Queries/Permission/PermissionCatalogTenantScopeHelper.cs",
+          "line": 1,
+          "end_line": 136,
+          "label": "Tenant Picker Scope Filter"
+        }
+      ]
+    },
+    {
+      "id": "assigned",
+      "type": "waiting",
+      "label": "Assigned",
+      "sublabel": "16 Roles + 10 Groups",
+      "tag": "DB Persistence",
+      "step": "04",
+      "explanation": "Stored in RolePermissions (own/own_tenant/hierarchy, no all_tenants) and dotted UserGroupRestrictions. Disabling a feature preserves custom RolePermission rows.",
+      "sources": [
+        {
+          "path": "src/Modules/Identity/Identity.Infrastructure/Services/AdminSecurityService.cs",
+          "line": 1,
+          "end_line": 185,
+          "label": "Assigned Roles & Groups"
+        }
+      ]
+    },
+    {
+      "id": "effective",
+      "type": "success",
+      "label": "Effective",
+      "sublabel": "Runtime + FLS + Cache",
+      "tag": "Live Request",
+      "step": "05",
+      "explanation": "PermissionAuthorizationHandler + IFeatureChecker + AdminSecurityService (Priority 0 asc) + FieldLevelSecurityMergeHelper govern JSON, writes, and exports.",
+      "sources": [
+        {
+          "path": "src/Core/Core.Application/Authorization/PermissionAuthorizationHandler.cs",
+          "line": 120,
+          "end_line": 240,
+          "label": "Runtime Effective Gate"
+        }
+      ]
+    },
+    {
+      "id": "platform_only_blocked",
+      "type": "failure",
+      "label": "PlatformOnly",
+      "sublabel": "69 Host Perms",
+      "tag": "Tenant Denied",
+      "step": "X1",
+      "explanation": "69 PlatformOnly permissions (Entitlements 47, Identity 11, CustomFields 8, Marketplace 2, CRM 1) never enter TenantPermissions, pickers, Break-Glass, or tenant execution.",
+      "sources": [
+        {
+          "path": "src/Core/Core.Application/Authorization/PermissionAuthorizationHandler.cs",
+          "line": 140,
+          "end_line": 175,
+          "label": "PlatformOnly Tenant Block"
+        }
+      ]
+    },
+    {
+      "id": "feature_disabled",
+      "type": "waiting",
+      "label": "Feature Off",
+      "sublabel": "32 Off / Override",
+      "tag": "RolePerms Kept",
+      "step": "X2",
+      "explanation": "Plugins (14) and Marketplace (18) stay off on scripe-internal; live override to false immediately revokes Effective access & T_SCRIPE_SA mirror while preserving custom RolePermissions.",
+      "sources": [
+        {
+          "path": "src/Modules/Identity/Identity.Infrastructure/Services/TenantPermissionManager.cs",
+          "line": 170,
+          "end_line": 255,
+          "label": "Preserve Custom RolePerms"
+        }
+      ]
+    },
+    {
+      "id": "cache_evicting",
+      "type": "active",
+      "label": "Cache Evict",
+      "sublabel": "Commit -> Stamp",
+      "tag": "Principal Sync",
+      "step": "X3",
+      "explanation": "Post-commit FeatureCache + AdminPermissionCache + PrincipalResponseCacheHelper version stamp invalidation prevents stale 30s principal or worker snapshots.",
+      "sources": [
+        {
+          "path": "src/Modules/Identity/Identity.Application/Services/PrincipalResponseCacheHelper.cs",
+          "line": 1,
+          "end_line": 68,
+          "label": "Atomic Stamp Eviction"
+        }
+      ]
+    },
+    {
+      "id": "denied_403",
+      "type": "failure",
+      "label": "Denied 403",
+      "sublabel": "JWT / FLS / PAT",
+      "tag": "Fail-Closed",
+      "step": "X4",
+      "explanation": "Live IFeatureChecker, pat_scope intersection, HttpFeatureChecker fail-closed mode, or FieldRestrictionEnforcementBehavior refuses unauthorized requests.",
+      "sources": [
+        {
+          "path": "src/Core/Core.Infrastructure/Services/HttpFeatureChecker.cs",
+          "line": 1,
+          "end_line": 80,
+          "label": "Fail-Closed Feature Refusal"
+        }
+      ]
+    }
+  ],
+  "transitions": [
+    {
+      "id": "t_def_avail",
+      "from": "defined",
+      "to": "available",
+      "label": "Entitled",
+      "variant": "emphasis"
+    },
+    {
+      "id": "t_def_po",
+      "from": "defined",
+      "to": "platform_only_blocked",
+      "label": "PlatformOnly",
+      "variant": "security"
+    },
+    {
+      "id": "t_def_dis",
+      "from": "defined",
+      "to": "feature_disabled",
+      "label": "Flag Off",
+      "variant": "dashed"
+    },
+    {
+      "id": "t_avail_asg",
+      "from": "available",
+      "to": "assignable",
+      "label": "Scoped",
+      "variant": "default"
+    },
+    {
+      "id": "t_asg_ass",
+      "from": "assignable",
+      "to": "assigned",
+      "label": "Granted",
+      "variant": "default"
+    },
+    {
+      "id": "t_ass_eff",
+      "from": "assigned",
+      "to": "effective",
+      "label": "Enforced",
+      "variant": "emphasis"
+    },
+    {
+      "id": "t_eff_dis",
+      "from": "effective",
+      "to": "feature_disabled",
+      "label": "Override Off",
+      "variant": "security"
+    },
+    {
+      "id": "t_dis_avail",
+      "from": "feature_disabled",
+      "to": "available",
+      "label": "Re-Enabled",
+      "variant": "emphasis"
+    },
+    {
+      "id": "t_eff_evict",
+      "from": "effective",
+      "to": "cache_evicting",
+      "label": "Mutated",
+      "variant": "dashed"
+    },
+    {
+      "id": "t_evict_eff",
+      "from": "cache_evicting",
+      "to": "effective",
+      "label": "Re-Synced",
+      "variant": "default"
+    },
+    {
+      "id": "t_eff_deny",
+      "from": "effective",
+      "to": "denied_403",
+      "label": "Refusal 403",
+      "variant": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Non-Destructive Toggle Law",
+      "items": [
+        "Disabling a feature revokes TenantPermission & T_SCRIPE_SA mirror immediately",
+        "Custom RolePermission rows stay intact in DB so re-enabling restores access cleanly",
+        "IsGloballyAvailable tenant self-service permissions remain active across toggles"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Zero PlatformOnly Leaks",
+      "items": [
+        "69 PlatformOnly permissions exit immediately at Defined -> PlatformOnly Blocked",
+        "Break-Glass, Delegations, Tenant Pickers & MembershipMode reject PlatformOnly",
+        "DataTransfer background jobs re-verify IFeatureChecker before execution"
+      ]
+    }
+  ]
+}

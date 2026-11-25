@@ -27,7 +27,7 @@ export const ar = {
         "تمنع هذه البوابة المستخدمين المعلقين من الالتفاف على قيود الحساب عبر موفري الهوية مثل Google أو Azure AD.",
       jwtTitle: "تكوين رموز JWT",
       jwtIntro:
-        "يستخدم النظام رموز وصول قصيرة العمر (15 دقيقة) مع رموز تحديث طويلة العمر (7 أيام). يتم تدوير رموز التحديث (Rotated) لمنع هجمات إعادة الاستخدام.",
+        "يستخدم النظام رموز وصول قصيرة العمر (30 دقيقة افتراضياً عبر Jwt:ExpiryMinutes وبما يتوافق مع SessionPolicyDto) مع رموز تحديث محددة بسقف AbsoluteExpiresAt (24 ساعة قياسياً، >=30 يوماً عند البقاء متصلاً، و8 ساعات لانتحال الشخصية) وتُدوَّر عند كل استخدام.",
       dualAuthTitle: "المصادقة المزدوجة (المستخدم والمستخدم)",
       dualAuthIntro:
         "تمتلك SCRIPE مسارين منفصلين للمصادقة: مسار الإدارة يصدر JWT بصلاحيات الإدارة، ومسار المستخدم يصدر JWT بصلاحيات تخص المستخدم النهائي.",
@@ -39,7 +39,7 @@ export const ar = {
       passwordPolicyTitle: "سياسة كلمة المرور الخاصة بالوحدة",
       passwordPolicyIntro: "متطلبات كلمة المرور قابلة للتكوين لكل وحدة عبر TenantSettings.",
       endpointsTitle: "نقاط نهاية واجهة برمجة تطبيقات المصادقة",
-      endpointsAdminTitle: "نقاط نهاية مصادقة المستخدم",
+      endpointsAdminTitle: "نقاط نهاية مصادقة المشرفين",
       endpointsUserTitle: "نقاط نهاية مصادقة المستخدم",
       rateLimitingTitle: "تقييد معدل الطلبات (Rate Limiting)",
       rateLimitingIntro:
@@ -48,9 +48,9 @@ export const ar = {
       tokenValidationTitle: "التحقق من صحة الرموز المميزة (JWT)",
       tokenValidationIntro:
         "تشفير وتوقيع رقمي متقدم لرموز JWT مع فحص صلاحية الأجهزة وبصمات الأصابع لمنع سرقة الجلسات.",
-      mcpMiddlewareTitle: "الطبقة الوسيطة لحماية أدوات MCP",
+      mcpMiddlewareTitle: "بوابات ما بعد تسجيل الدخول (MustChangePassword و RequireMfaEnrollment)",
       mcpMiddlewareIntro:
-        "عزل كامل وتفويض دقيق للطلبات الصادرة والواردة عبر بروتوكول Model Context Protocol للأدوات الذكية.",
+        "عند فرض تغيير كلمة المرور (`mcp: true`) أو اشتراط تفعيل MFA/Passkey (`mfa_enroll: true`)، تحظر `MustChangePasswordMiddleware` و`RequireMfaEnrollmentMiddleware` جميع طلبات API العامة برمز `403 Forbidden` ولا تسمح إلا بمسارات المعالجة الذاتية (`change-password`، `force-change-password`، `2fa/enable|confirm|status`، `passkeys/registration/*`، `sudo/*`، `account/security`، `principal`، `refresh`، `logout`، `revoke`، `password-policy`، `customization/resolve`، `/hubs/*`، و`/health`).",
       ssoCallbackTitle: "مسار استدعاء SSO ومعالجة الردود",
       ssoCallbackIntro:
         "معالجة مشفرة وسريعة لردود تسجيل الدخول الموحد مع ربط الحسابات تلقائيًا بناءً على البريد الإلكتروني المؤكد.",
@@ -432,8 +432,12 @@ export const ar = {
       samlTitle: "بروتوكول SAML 2.0 المؤسسي",
       samlContent:
         "تكامل تام مع مزودي الهوية المؤسسيين (IdP) مع دعم التزويد التلقائي عبر بروتوكول SCIM.",
-      oidcCallbackTitle: "مسار استدعاء OpenID Connect",
-      oidcCallbackContent: "التحقق من صحة رموز ID Tokens وتبادل رموز التخويل المشفرة بسلاسة وأمان.",
+      oidcCallbackTitle: "مسار استدعاء OIDC/SAML المركزي وتذكرة التسليم أحادية الاستخدام",
+      oidcCallbackContent:
+        "تنتهي استدعاءات موفري الهوية مركزياً عند https://api.scripe.org عبر GET /api/v1/auth/oidc/callback و POST /api/v1/auth/saml/acs/{providerId} مع استهلاك ExternalAuthStateTicket الخادمية (دون sessionStorage)، وتصدر تذكرة ExternalAuthHandoffTicket بمهلة 120 ثانية (SHA-256) تُسترد مرة واحدة عبر POST /api/v1/auth/sso/handoff في auth.scripe.org/sso/continue أو {ReturnOrigin}/sso/callback.",
+      centralFederationTitle: "الاتحاد المركزي للهوية ومرحل النطاقات المخصصة",
+      centralFederationContent:
+        "تفصل رايات Authentication:CentralFederation (Tenancy:AuthBaseUrl و OpenIddict:FrontendBaseUrl إلى https://auth.scripe.org) تجربة SSO عن النطاقات المخصصة عبر ثلاث نقاط مرحّل HMAC (/api/auth/session/establish و /refresh و /logout -> __Host-scripe_refresh_token مع تقسيم حد المعدل بـ X-Scripe-Session-Relay-Client-Ip ودعم X-Scripe-Relay-Refresh-MaxAge: 0) وجسر ما بعد المصادقة الثنائية PostMfaHandoffHelper + ssoTwoFactorBridge.ts و CORS/CSRF ديناميكي عبر IVerifiedOriginEvaluator، بينما يظل الدخول الأصلي ومفاتيح المرور محصورة في admin.scripe.org (EnableCentralNativeAndPasskeyMigration: false و WebAuthn:UserVerification = 'required' و PasskeyAuthLimit = 12) مع تكافؤ ترحيل --idempotent عبر PostgreSQL 18 و SQL Server 2025 و Oracle 21c XE.",
       oauthMirroringTitle: "مطابقة حسابات OAuth وتحديث البيانات",
       oauthMirroringContent:
         "تحديث تلقائي لبيانات البريد والاسم والصورة الشخصية من مزود الهوية الخارجي عند كل تسجيل دخول.",

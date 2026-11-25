@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "ef5c50d2-4321-4963-bad1-889050255f40",
+  "status": "current",
+  "command": "deliver",
+  "type": "dataflow",
+  "input": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\rbac-fls-projection-dataflow.dataflow.json",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\rbac-fls-projection-dataflow.html",
+  "specification": {
+    "sha256": "9b794f3d45627d0aeef9716acd05cb3f15d01bbf367a1a801975a275ab754c03",
+    "bytes": 7550
+  },
+  "artifact": {
+    "sha256": "5806a727e8120053bce243fac121217ec29f32e0f8580f7687fa59cb7a001480",
+    "bytes": 937326
+  }
+}

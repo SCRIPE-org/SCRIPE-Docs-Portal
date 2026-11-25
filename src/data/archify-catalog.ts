@@ -49,9 +49,9 @@ export const ARCHIFY_PILLAR_META: Record<
     tagline:
       "End-to-End Platform Single Source of Truth uniting Next.js 16 MVVM, .NET 10 AstraFlow 2.4.7, Dual-Mode DB, Outbox & 193-Command CLI",
     repoName: "SCRIPE-org/SCRIPE",
-    commit: "960923d",
+    commit: "9dfe79d",
     accentColor: "#B7FF00",
-    count: 23,
+    count: 28,
   },
   backend: {
     label: "SCRIPE-Backend Deep Dive (.NET 10 & AstraFlow 2.4.7)",
@@ -59,9 +59,9 @@ export const ARCHIFY_PILLAR_META: Record<
     tagline:
       "18 Isolated 3-Project Domain Modules, 29-Stage Security Gate, 927+ CQRS Handlers, 3-TX Idempotency & Multi-DB Persistence",
     repoName: "SCRIPE-org/SCRIPE-Backend",
-    commit: "e772fd54bb8d0b3361190a33f0137487310c8791",
+    commit: "e32ae3f78bf13a607a6351e904a68893166c66b0",
     accentColor: "#38BDF8",
-    count: 14,
+    count: 22,
   },
   frontend: {
     label: "SCRIPE-Frontend Deep Dive (Next.js 16 + React 19 MVVM)",
@@ -69,9 +69,9 @@ export const ARCHIFY_PILLAR_META: Record<
     tagline:
       "65+ Isolated Sub-Modules, 5-Layer SOLID MVVM Data Flow, Inversify DI, Sileo UI & Bilingual EN/AR Parity",
     repoName: "SCRIPE-org/SCRIPE-Frontend",
-    commit: "91232f19b",
+    commit: "5c36a85e4330548815a4f8eed719c83817e6035a",
     accentColor: "#A78BFA",
-    count: 15,
+    count: 18,
   },
 };
 
@@ -94,7 +94,7 @@ export const ARCHIFY_MODE_META: Record<
 
 export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
   // ============================================================================
-  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 23 PAGES
+  // PILLAR 1: SUPER FULL-STACK (BOTH BACKEND + FRONTEND + ECOSYSTEM) — 28 PAGES
   // ============================================================================
   {
     id: "scripe-internal-sovereign-tenant-architecture",
@@ -793,9 +793,156 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
       ".agents/rules/archify-docs-portal-ssot.md",
     ],
   },
+  {
+    id: "identity-auth-recovery-hardening-fullstack",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "AUTH HARDENING · DRIFT-01..10 · SHOWCASE",
+    title: "End-to-End Authentication, Recovery & Session Governance Hardening",
+    subtitle:
+      "$s2$ Crypto + ResetGrantToken 204 Recovery -> ISessionIssuerService Caps & +5ms Revocation -> Next.js 16 Proxy & RouteGuard MVVM",
+    description:
+      "Full-stack Archify Explainer board uniting the finalized Backend security remediation, Frontend Next.js 16 MVVM lockdown, scripe-cli BE-037..039 & Verification.VerifierKey scanners, and 7-language DRIFT-01..10 documentation convergence.",
+    htmlUrl: "/archify-hub/identity-auth-recovery-hardening-fullstack.html",
+    specUrl: "/archify-hub/specs/identity-auth-recovery-hardening-fullstack.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "1c1631172 / d3978a00e / e838fe5",
+    featured: true,
+    highlights: [
+      "Covers 4 KPIs (30m JWT, 5-fail lockout, 5 PasswordHistory, 8,616 denylist), xychart-beta backlog distribution, and DRIFT-01..10 register",
+      "Traces ResetGrantToken no-auto-login recovery (204 No Content), HybridMfaPolicy, and mcp=true -> mfa_enroll=true ordering",
+      "Links dedicated child Workflow, Lifecycle, Physical ERD, and Frontend MVVM Architecture boards",
+    ],
+    keySources: [
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Services/SessionIssuerService.PolicyHelpers.cs",
+      "SCRIPE-Frontend/src/core/providers/route-guard.tsx",
+      "SCRIPE-Dev-Tools/scripe-cli/src/commands/arch-check-scanner.ts",
+    ],
+  },
+  {
+    id: "central-identity-federation-fullstack",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "CENTRAL FEDERATION · ASVS V10.2.2 SSO CSRF · 14-MODE BFF",
+    title: "Central Identity Federation, ASVS V10.2.2 SSO Login CSRF, 14-Mode HMAC Relay & Dual-RP WebAuthn",
+    subtitle:
+      "auth.scripe.org + api.scripe.org -> __Host-scripe_sso_nonce & /oidc/start __Host-scripe_oidc_tx -> 14-Mode Custom-Domain BFF Relay -> Redis DataProtection & 3-DB Parity",
+    description:
+      "Full-stack Archify Explainer uniting Central Identity Federation across SCRIPE-Backend (0ffde14c9), SCRIPE-Frontend (2f962e2a4), and SCRIPE-Dev-Tools (268f169): ASVS V10.2.2 browser-bound SSO Login CSRF (__Host-scripe_sso_nonce, GET /api/v1/auth/oidc/start __Host-scripe_oidc_tx, ExternalAuthTokenHash, ProcessOidcCallbackCommandValidator ac5955af2), server-held PKCE ExternalAuthStateTicket, 120s ExternalAuthHandoffTicket (mandatory Origin + fail-closed ITenantDomainRepository), PostMfaHandoffHelper + ssoTwoFactorBridge.ts hybrid-2FA custom-domain bridging, 14-mode HMAC BFF micro-relay (/api/auth/session/establish with Sudo step-up forwarding & 0 third-party cookies), multi-replica AES-256-GCM Redis dataprotection:keys (8968bee3b), scoped IsExternalSsoFlow (c081fded9), WebAuthn:UserVerification='required', PasskeyAuthLimit=12, 0-error --idempotent PG 18 / SQL 2025 / live Oracle 21c XE parity, and 11/11 Live Chromium E2E.",
+    htmlUrl: "/archify-hub/central-identity-federation-fullstack.html",
+    specUrl: "/archify-hub/specs/central-identity-federation-fullstack.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "0ffde14c9 / 2f962e2a4 / 268f169",
+    featured: true,
+    highlights: [
+      "Covers ASVS V10.2.2 SSO Login CSRF (__Host-scripe_sso_nonce + /oidc/start __Host-scripe_oidc_tx + ExternalAuthTokenHash ead632a6a/9ca1916e9/ac5955af2), 14-mode custom-domain BFF relay (f93fc3533/be2b8783b/a2e951352), and multi-replica AES-256-GCM Redis DataProtection (8968bee3b)",
+      "Documents Cloudflare X-Scripe-Origin-Verify -> Railway ForwardedHeaders__ForwardLimit=2 edge topology plus Google, Microsoft Entra (email+xms_edov), GitHub (user:email read:user) & 2-step Enterprise SAML ACS setup",
+      "Cross-links Backend Relay Sequence (backend-central-federation-relay-sequence.html), Frontend Central Auth MVVM (frontend-central-auth-sudo-mvvm.html), and Enterprise Security Assurance (enterprise-security-assurance-platform-hardening.html)",
+    ],
+    keySources: [
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Application/Services/PostMfaHandoffHelper.cs",
+      "SCRIPE-Backend/src/Host/API/Controllers/Auth/OidcClientController.StartAndBinding.cs",
+      "SCRIPE-Frontend/src/core/services/session-relay-sso-binding.ts",
+      "SCRIPE-Frontend/e2e/sso-csrf-and-custom-domain-relay.spec.ts",
+    ],
+  },
+  {
+    id: "enterprise-security-assurance-platform-hardening",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "SECURITY ASSURANCE · JSENTINEL 48/48 · 0 OPEN CODE DEFECTS",
+    title: "Enterprise Security Assurance, JSENTINEL 48/48 & 19-Module Platform Hardening",
+    subtitle:
+      "5-Layer Defense Topology, 26 Net-New Threats & All Category 5 Closures, Nonce CSP, DNS-Pinned SSRF, 4×9 Domain-Identity Matrix & 11/11 Live Chromium E2E",
+    description:
+      "Authoritative Single Source of Truth for SCRIPE Enterprise Security Assurance & Platform Hardening across all 19 backend modules, Next.js 16 frontend, and CLI/CI supply chain. Reconciles all 48 JSENTINEL findings (13 confirmed live-drift/app-hardened, 31 codebase-proven false positives, 4 managed-edge items), closes all 26 net-new platform threats (3 Critical: Paymob/PayPal constant-time webhook auth 8567de9c3, IDsrSubjectOwnershipVerifier DSR isolation b446a5575, DnsVerificationService _scripe-verify DNS TXT & RFC 1123 ASCII FQDN 9fffee765; 15 High; 8 Medium), closes all Category 5 hardening items (ASVS V10.2.2 SSO Login CSRF ead632a6a/9ca1916e9/ac5955af2/f93fc3533/be2b8783b/a2e951352 with 14-mode BFF relay, multi-replica AES-256-GCM Redis IDataProtectionProvider 8968bee3b, fail-closed IdEncryptionOptions/VerificationSettings/AssignPermissionsToRoleCommand Sudo ba2e85344/efcacddc8, binary export cell/DTO FLS 1d8a856c1 shrinking FileGuard to 2 prefixes, scoped 2FA IsExternalSsoFlow & QrLoginController relay c081fded9), and proves 4×9 domain-identity isolation with 318 baseline + 150 Wave 4 xUnit tests, 65 baseline + 31 Wave 4 Vitest checks, 11/11 live unmocked Chromium E2E journeys (2f962e2a4), 100/100 security arch-check rules (BE-040..042, FE-035..036), and 0 NuGet/pnpm CVEs.",
+    htmlUrl: "/archify-hub/enterprise-security-assurance-platform-hardening.html",
+    specUrl: "/archify-hub/specs/enterprise-security-assurance-platform-hardening.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "0ffde14c9 / 2f962e2a4 / 268f169 / d1c5fdb",
+    featured: true,
+    highlights: [
+      "JSENTINEL 48/48 Reconciled: 13 confirmed live-drift/app-hardened findings closed, 31 codebase-proven bundle AST false positives disproved, and 4 managed-edge items bounded",
+      "26 Net-New Threats & All Category 5 Closures: 3 Critical (TH-API-01 Paymob/PayPal FixedTimeEquals 8567de9c3, TH-TEN-01 IDsrSubjectOwnershipVerifier b446a5575, TH-TEN-02 _scripe-verify DNS TXT 9fffee765), 15 High, 8 Medium, plus V10.2.2 SSO Login CSRF, Redis DataProtection (8968bee3b), binary export FLS (1d8a856c1), and 16/16 review catches (R-01..R-16) closed",
+      "Nonce CSP & Browser Hardening: Per-request 128-bit x-nonce script-src, /studio-preview & /dashboard-preview SAMEORIGIN framing, 6-pass CSS L3 & SVG sanitization (84be82539), strict postMessage origin+source+schema, and sw.js v3 static-only",
+      "4-Layer Proof & Cutover Boundary: 318 + 150 xUnit, 65 + 31 Vitest, 11/11 live Chromium E2E (2f962e2a4), 100/100 BE-040..042 & FE-035..036 (0 CVEs); Scoped GO (0 open code defects) and explicit 4-gate external production cutover checklist",
+    ],
+    keySources: [
+      "SCRIPE-Backend/docs/security/enterprise-assurance/SECURITY_GO_NO_GO.md",
+      "SCRIPE-Backend/docs/security/enterprise-assurance/INDEPENDENT_SECURITY_REVIEW.md",
+      "SCRIPE-Backend/docs/security/enterprise-assurance/PLATFORM_SECURITY_AUDIT.md",
+      "SCRIPE-Backend/docs/security/enterprise-assurance/OWASP_SECURITY_REQUIREMENTS_TRACEABILITY.md",
+      "SCRIPE-Backend/docs/security/enterprise-assurance/SECURITY_REGRESSION_TEST_MATRIX.md",
+      "SCRIPE-Frontend/e2e/sso-csrf-and-custom-domain-relay.spec.ts",
+    ],
+  },
+  {
+    id: "authorization-remediation-rbac-fullstack",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "AUTHORIZATION REMEDIATION · 490 PERMS · 16 ROLES · 10 GROUPS",
+    title: "SCRIPE Authorization, Entitlements & Multi-Role RBAC Remediation",
+    subtitle:
+      "490 Permissions, 190 Features, 389 Active Tenant Perms, 69 PlatformOnly Fence, 16 Internal Roles, 10 UserGroups & Multi-Role Dotted FLS",
+    description:
+      "End-to-end Single Source of Truth for SCRIPE's fail-closed authorization and internal tenant RBAC remediation across SCRIPE-Backend (ba10de98f..e32ae3f78) and SCRIPE-Frontend (def51bf48..5c36a85e4). Reconciles all 490 catalog permissions across 19 modules and 190 features (10 RequiredAnyFeatures, 10 IsGloballyAvailable, 0 broken links), establishes the 389-perm scripe-internal tenant pool (quarantining 69 PlatformOnly permissions and disabling 32 in Marketplace & Plugins), seeds 16 internal roles (Priority 0..900) and 10 UserGroups, enforces live IFeatureChecker PBAC and TenantContextMiddleware cold-cache warming, merges multi-role read-preferred FLS + additive dotted UserGroupRestrictions across API & exports, decouples Frontend Platform vs Tenant SuperAdmin gates, hardens Sudo/ConfirmationDialog containment & post-save refetch races, and passes 14/14 unmocked live Playwright acceptance tests (10/10 RBAC + 4/4 Email/Communication) with 34 PNG screenshots.",
+    htmlUrl: "/archify-hub/authorization-remediation-rbac-fullstack.html",
+    specUrl: "/archify-hub/specs/authorization-remediation-rbac-fullstack.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "e32ae3f78 / 5c36a85e4 / 9dfe79d",
+    featured: true,
+    highlights: [
+      "Reconciled 490-perm / 190-feature catalog across 19 modules with 389 scripe-internal active perms, 69 PlatformOnly quarantined, and 32 disabled in Marketplace & Plugins",
+      "Fail-closed runtime authorization: TenantContextMiddleware pre-authz cold-cache warming, live HttpFeatureChecker PBAC, 16 transactional feature-sync publishers, and post-commit cache eviction",
+      "Multi-role Priority 0 Asc read-preferred FLS intersection unioned with additive UserGroupRestrictions, preserving dotted resource keys (crm.opportunities) across JSON & audit/CSV exports",
+      "16 Sovereign Internal Roles (Priority 0..900) + 10 UserGroups with SoD boundaries and Frontend Platform (!user?.tenantId) vs Tenant SuperAdmin split across Next.js 16 MVVM",
+    ],
+    keySources: [
+      "SCRIPE-Backend/src/Core/Core.Application/Authorization/PermissionAuthorizationHandler.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Infrastructure/Services/AdminSecurityService.cs",
+      "SCRIPE-Backend/src/Host/API/Middleware/TenantContextMiddleware.cs",
+      "SCRIPE-Frontend/src/core/providers/route-guard.tsx",
+      "docs/architecture/authorization-remediation/FEATURE_PERMISSION_CATALOG.md",
+      "docs/architecture/authorization-remediation/SCRIPE_Internal_Tenant_RBAC_Matrix.xlsx",
+    ],
+  },
+  {
+    id: "scripe-email-architecture-audit",
+    pillar: "fullstack",
+    mode: "explainer",
+    badge: "EMAIL & ONBOARDING · 13/13 OWASP · MULTI-DB UOW",
+    title: "SCRIPE Emailing, Multi-DB Persistence & Admin Onboarding Remediation",
+    subtitle:
+      "Active-Scope IEmailQueue Dispatch + CommunicationDbContext UoW Flush + 13/13 OWASP Hardening + 40 Templates & Next.js 16 Onboarding UX",
+    description:
+      "End-to-end Single Source of Truth explainer board with 4 embedded Archify v3.3 native diagrams (Architecture, Sequence, Workflow, ERD) documenting the SCRIPE Emailing, Multi-DB UnitOfWork, and Admin Onboarding remediation across Slices 6F, 6G, and 7A-fix: replacing detached Task.Run disposed-scope closures in CreateAdminCommandHandler, RegisterTenantSelfServiceCommandHandler, and SignupCheckoutCompletedEventHandler with active-scope URL resolution and priority IEmailQueue ([Queue(\"emails\")]); fixing all 4 Email commands and 5 MessageTemplate commands to flush CommunicationDbContext directly with encrypted IDs (0 Guid.TryParse) and .IgnoreQueryFilters() global template visibility; closing all 13 OWASP P0–P2 vulnerabilities (EmailAttachmentPathPolicy, SafeContainerNameRegex, 10 MB stream cap, OneTimeTokenTemplateKeys retry/resend exclusion, bounded Scriban TemplateContext, H(...) & SafeHttpUrl encoding, LogPiiMasker, and non-destructive AccountSetupService token snapshots); and delivering Next.js 16 Pending Setup badges, mode-aware onboarding toasts, post-replaceState setup token retention, and 1-POST CC/BCC deduplication.",
+    htmlUrl: "/archify-hub/scripe-email-architecture-audit.html",
+    specUrl: "/archify-hub/specs/scripe-email-architecture-audit.archify.md",
+    repoName: "SCRIPE-org/SCRIPE",
+    repoCommit: "e32ae3f78 / 5ea144ac1",
+    featured: true,
+    highlights: [
+      "Eliminates detached Task.Run ObjectDisposedException bugs via active-scope GetTenantUrlAsync resolution and priority IEmailQueue ([Queue(\"emails\")])",
+      "Fixes CommunicationDbContext vs IdentityDbContext UoW split-brain across all 9 Core.Application email/template write commands, restores global template visibility, and enforces 100% encrypted IDs",
+      "Closes all 13 OWASP P0–P2 findings: container traversal shield, 10 MB stream cap, OneTimeTokenTemplateKeys retry exclusion, bounded Scriban sandbox, H(...) & SafeHttpUrl encoding, and PII log masking",
+      "Hardens Next.js 16 AdminsView (Pending Setup badge, mode-aware toast), SetupAccountView (post-replaceState token retention), Composer (1-POST CC/BCC deduplication), and 50,000-char template validators",
+    ],
+    keySources: [
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Application/Commands/Admin/CreateAdminCommandHandler.PersistenceAndEmail.cs",
+      "SCRIPE-Backend/src/Modules/Identity/Identity.Application/Services/AccountSetupService.cs",
+      "SCRIPE-Backend/src/Core/Core.Application/Emails/EmailSecurityPolicies.cs",
+      "SCRIPE-Backend/src/Core/Core.Application/Emails/EmailAttachmentPathPolicy.cs",
+      "SCRIPE-Backend/src/Core/Core.Application/Features/Email/Commands/SendManualEmailCommand.cs",
+      "SCRIPE-Backend/src/Core/Core.Infrastructure/Services/TemplateRenderer.cs",
+      "SCRIPE-Backend/src/Modules/Communication/Communication.Infrastructure/Persistence/Repositories/MessageTemplateRepository.cs",
+      "SCRIPE-Frontend/src/modules/admin/identity/admin/src/presentation/views/AdminsView.tsx",
+      "SCRIPE-Frontend/src/modules/shared/auth/account-setup/src/presentation/views/SetupAccountView.tsx",
+      "SCRIPE-Frontend/src/modules/admin/communication/message-composer/src/presentation/viewmodels/useEmailComposerViewModel.ts",
+    ],
+  },
 
   // ============================================================================
-  // PILLAR 2: BACKEND DEEP DIVE (.NET 10 & ASTRAFLOW 2.4.7) — 14 PAGES
+  // PILLAR 2: BACKEND DEEP DIVE (.NET 10 & ASTRAFLOW 2.4.7) — 22 PAGES
   // ============================================================================
   {
     id: "backend-seeding-architecture-review",
@@ -1158,9 +1305,223 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
       "src/Modules/Finance/Finance.Domain/Entities/CustomerInvoice.cs",
     ],
   },
+  {
+    id: "backend-auth-session-pipeline",
+    pillar: "backend",
+    mode: "workflow",
+    badge: "33-STAGE PIPELINE · STORY V2",
+    title: "SCRIPE-Backend Auth, Middleware & Session Hardening Workflow",
+    subtitle:
+      "Pre-Auth & BrandingSettings Cookies -> OnTokenValidated (+5ms / jti / imp) & mcp/mfa_enroll Walls -> SessionIssuerService & Sudo",
+    description:
+      "Native Archify Workflow v2 diagram with attached 3-scene interactive Story pinned to SCRIP-Backend commit 1c1631172, modeling controller parity, dynamic BrandingSettings cookies, fail-closed revocation fences, $s2$ + HMAC OTP validation, and SessionPolicy ceilings.",
+    htmlUrl: "/archify-hub/backend-auth-session-pipeline.html",
+    specUrl: "/archify-hub/specs/backend-auth-session-pipeline.workflow.json",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "1c1631172d447d311686211c07b52b84a6245678",
+    featured: true,
+    highlights: [
+      "Pinned to AdminAuthController, UserAuthController, CookieAuthMiddleware, DependencyInjection OnTokenValidated & SudoService",
+      "Documents BrandingSettings dynamic cookies, +5ms MarkRevokedAsync cutoff, 8h impersonation ceiling & StopImpersonation revocation checks",
+      "Includes 3-scene Story playback walking ingress, security walls, and atomic session revocation",
+    ],
+    keySources: [
+      "src/Host/API/Middleware/CookieAuthMiddleware.cs",
+      "src/Core/Core.Infrastructure/DependencyInjection.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Services/SessionIssuerService.PolicyHelpers.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Services/SudoService.cs",
+    ],
+  },
+  {
+    id: "auth-recovery-lifecycle",
+    pillar: "backend",
+    mode: "lifecycle",
+    badge: "9 STATES · STORY V2",
+    title: "Identity Authentication, Recovery & Session Lifecycle",
+    subtitle:
+      "Pre-Auth .IgnoreQueryFilters() -> $s2$ + Lockout -> TwoFactorPendingToken -> mcp/mfa_enroll -> Active Session -> +5ms Revoke",
+    description:
+      "Native Archify Lifecycle v3 state machine with interactive Story playback tracking login, Hybrid MFA pending tickets, ResetGrantToken 204 no-auto-login recovery, lockout exits, and AbsoluteExpiresAt session termination.",
+    htmlUrl: "/archify-hub/auth-recovery-lifecycle.html",
+    specUrl: "/archify-hub/specs/auth-recovery-lifecycle.lifecycle.json",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "1c1631172d447d311686211c07b52b84a6245678",
+    highlights: [
+      "Models 6 primary checkpoints plus Recovery Grant (204), Lockout (5/15m), and Ceiling Hit (24h/30d/8h) exits",
+      "Strictly orders HybridMfaPolicy -> MustChangePassword (mcp=true) -> RequireMfaEnrollment (mfa_enroll=true)",
+    ],
+    keySources: [
+      "src/Host/API/Controllers/Auth/AdminAuthController.ExternalAndReset.cs",
+      "src/Host/API/Extensions/MiddlewarePipeline.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Services/SessionIssuerService.PolicyHelpers.cs",
+    ],
+  },
+  {
+    id: "identity-auth-security-erd",
+    pillar: "backend",
+    mode: "erd",
+    badge: "9 TABLES · IDENTITY SCHEMA · STORY V2",
+    title: "Identity Authentication, Password History & Session Security Schema (ERD)",
+    subtitle:
+      "identity.Tenants, TenantSettings, Admins, Users, admin_security_profiles, RefreshTokens, OtpCodes, PasswordResetTokens & PasswordHistories",
+    description:
+      "Physical EF Core entity-relationship diagram inside identity.* with 0 crossings and 9/9 verified configuration sources, detailing $s2$ password history indexing, HMAC OTP storage, SHA-256 refresh hashing, and ResetGrantToken scoping.",
+    htmlUrl: "/archify-hub/identity-auth-security-erd.html",
+    specUrl: "/archify-hub/specs/identity-auth-security-erd.erd.json",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "1c1631172d447d311686211c07b52b84a6245678",
+    highlights: [
+      "Models Admin vs User isolation, polymorphic PasswordHistories (PrincipalType, PrincipalId), and AdminSecurityProfiles",
+      "Documents SHA-256 RefreshToken hashing on SaveChangesAsync and unique 64-char PasswordResetTokens TokenHash",
+    ],
+    keySources: [
+      "src/Modules/Identity/Identity.Infrastructure/Persistence/IdentityDbContext.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Persistence/Configurations/RefreshTokenConfiguration.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Persistence/Configurations/PasswordResetTokenConfiguration.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Persistence/Configurations/PasswordHistoryConfiguration.cs",
+    ],
+  },
+  {
+    id: "backend-central-federation-relay-sequence",
+    pillar: "backend",
+    mode: "sequence",
+    badge: "POST-MFA BRIDGE · 3-DB PARITY · STORY V2",
+    title: "SCRIPE-Backend Central Identity Federation, Post-MFA Handoff, HMAC Relay & Dual-RP Sequence",
+    subtitle:
+      "api.scripe.org OIDC/SAML -> PostMfaHandoffHelper & ExternalAuthHandoffStore (120s SHA-256) -> SessionRelayAuthenticator -> Dual-RP UV=required & Split Logout",
+    description:
+      "Native Archify Sequence diagram with attached 2-scene Story pinned to SCRIPE-Backend commit e64e61e651ba3bef36c56866f777d5c1b6761f29 (12/12 verified source citations, 702/702 API.UnitTests, 200/200 AuthorizationGates, 90/90 builds, 0-error --idempotent PG 18 / SQL 2025 / Oracle 21c XE parity), tracing central callbacks, PostMfaHandoffHelper custom-domain 2FA bridging, X-Scripe-Session-Relay-Client-Ip rate-limit partitioning (PasskeyAuthLimit=12), CookieAuthMiddleware.Relay MaxAge: 0 parity, sibling-JTI RevokeAllSessions, and AuthLogoutScopeHelper.",
+    htmlUrl: "/archify-hub/backend-central-federation-relay-sequence.html",
+    specUrl: "/archify-hub/specs/backend-central-federation-relay-sequence.sequence.json",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "e64e61e651ba3bef36c56866f777d5c1b6761f29",
+    featured: true,
+    highlights: [
+      "12/12 verified SCRIPE-Backend sources across OidcClientController.Central, PostMfaHandoffHelper, SessionRelayAuthenticator, RateLimitingSettings (PasskeyAuthLimit=12), CookieAuthMiddleware.Relay & Fido2PasskeyService",
+      "Traces PostMfaHandoffHelper custom-domain hybrid-2FA handoff, 30s/60s HMAC relay validation, WebAuthn:UserVerification='required' & split scr.oidc.session teardown",
+    ],
+    keySources: [
+      "src/Modules/Identity/Identity.Application/Services/PostMfaHandoffHelper.cs",
+      "src/Host/API/Middleware/SessionRelayAuthenticator.cs",
+      "src/Host/API/Extensions/RateLimitingSettings.cs",
+      "src/Host/API/Middleware/CookieAuthMiddleware.Relay.cs",
+    ],
+  },
+  {
+    id: "authorization-feature-permission-architecture",
+    pillar: "backend",
+    mode: "architecture",
+    badge: "16 MODULES · 490 PERMS · 4 VIEWS · STORY V2",
+    title: "SCRIPE Authorization, Feature-Permission & Internal RBAC Architecture",
+    subtitle:
+      "TenantContextMiddleware -> HttpFeatureChecker & PermissionAuthorizationHandler -> 16 Feature-Sync Publishers -> Multi-Role FLS & 16-Role RBAC",
+    description:
+      "Interactive Showcase Architecture diagram with 4 Guided Views and a 3-scene Story pinned to SCRIPE-Backend commit 42629f69a3081a83e7e69e678b1b04b28c12e1f0 (16/16 verified source citations). Maps pre-authorization TenantContextMiddleware warming, fail-closed PermissionAuthorizationHandler with live IFeatureChecker evaluation, EffectiveFeatureMapBuilder across 16 transactional feature-sync publishers, post-commit cache invalidation, and multi-role FLS + dotted resource enforcement across endpoints and exports.",
+    htmlUrl: "/archify-hub/authorization-feature-permission-architecture.html",
+    specUrl: "/archify-hub/specs/authorization-feature-permission-architecture.architecture.json",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "42629f69a3081a83e7e69e678b1b04b28c12e1f0",
+    featured: true,
+    viewsCount: 4,
+    highlights: [
+      "16/16 verified SCRIPE-Backend source citations pinned to commit 42629f69a3081a83e7e69e678b1b04b28c12e1f0",
+      "4 Guided Views: 1. Edge, Context & Feature Gate, 2. Feature Sync & Cache Eviction, 3. Multi-Role FLS & Exports, 4. SCRIPE 16-Role Internal Tenant",
+    ],
+    keySources: [
+      "src/Host/API/Middleware/TenantContextMiddleware.cs",
+      "src/Host/API/Extensions/MiddlewarePipeline.cs",
+      "src/Core/Core.Application/Authorization/PermissionAuthorizationHandler.cs",
+      "src/Core/Core.Application/Services/PermissionCatalogCache.cs",
+      "src/Modules/Entitlements/Entitlements.Infrastructure/Services/FeatureChecker.cs",
+      "src/Core/Core.Infrastructure/Services/HttpFeatureChecker.cs",
+    ],
+  },
+  {
+    id: "authorization-enforcement-sequence",
+    pillar: "backend",
+    mode: "sequence",
+    badge: "FAIL-CLOSED RBAC · CONTEXT SWITCH · STORY V2",
+    title: "Authorization Enforcement, Context-Switch & Post-Commit Eviction Sequence",
+    subtitle:
+      "Next.js Client -> TenantContextMiddleware (Cold Warm + Mode) -> PermissionAuthorizationHandler (HttpFeatureChecker) -> Post-Commit Eviction",
+    description:
+      "Interactive Showcase Sequence diagram with a 3-scene Story pinned to SCRIPE-Backend commit 42629f69a3081a83e7e69e678b1b04b28c12e1f0 (9 verified source citations). Traces live runtime enforcement across TenantContextMiddleware cold-cache warming, PermissionAuthorizationHandler fail-closed IFeatureChecker gates, EndpointResourceResolver + FieldLevelSecurityMergeHelper projection, and post-commit outbox/role cache eviction.",
+    htmlUrl: "/archify-hub/authorization-enforcement-sequence.html",
+    specUrl: "/archify-hub/specs/authorization-enforcement-sequence.sequence.json",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "42629f69a3081a83e7e69e678b1b04b28c12e1f0",
+    featured: true,
+    highlights: [
+      "9 verified SCRIPE-Backend source citations pinned to commit 42629f69a3081a83e7e69e678b1b04b28c12e1f0",
+      "Attached 3-scene Story walking through fail-closed PBAC checks, entitlement sync, and post-commit cache invalidation",
+    ],
+    keySources: [
+      "src/Host/API/Middleware/TenantContextMiddleware.cs",
+      "src/Core/Core.Application/Authorization/PermissionAuthorizationHandler.cs",
+      "src/Host/API/Filters/EndpointResourceResolver.cs",
+      "src/Core/Core.Application/Abstractions/FieldLevelSecurityMergeHelper.cs",
+      "src/Modules/Entitlements/Entitlements.Application/Services/EffectiveFeatureMapBuilder.cs",
+      "src/Modules/Identity/Identity.Application/Services/PrincipalResponseCacheHelper.cs",
+    ],
+  },
+  {
+    id: "permission-feature-lifecycle",
+    pillar: "backend",
+    mode: "lifecycle",
+    badge: "5-STATE LIFECYCLE · ENTITLEMENTS TO EFFECTIVE · STORY V2",
+    title: "SCRIPE Feature & Permission 5-State Lifecycle",
+    subtitle:
+      "Defined (490 Perms / 190 Feats) -> Available (389 Pool) -> Assignable -> Assigned (16 Roles) -> Effective Runtime + Eviction",
+    description:
+      "Interactive Showcase 5-State Lifecycle diagram (schema_version 3) with a 3-scene Story pinned to SCRIPE-Backend commit 42629f69a3081a83e7e69e678b1b04b28c12e1f0 (9 verified source citations). Models every state transition from Defined (490 catalog perms across 19 providers), Available (389 scripe-internal pool via EffectiveFeatureMapBuilder), Assignable (PlatformOnly + catalog scope fence), Assigned (16 roles + Priority 0 Asc FLS + 10 UserGroups), to Effective runtime enforcement and cache invalidation.",
+    htmlUrl: "/archify-hub/permission-feature-lifecycle.html",
+    specUrl: "/archify-hub/specs/permission-feature-lifecycle.lifecycle.json",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "42629f69a3081a83e7e69e678b1b04b28c12e1f0",
+    featured: true,
+    highlights: [
+      "9 verified SCRIPE-Backend source citations pinned to commit 42629f69a3081a83e7e69e678b1b04b28c12e1f0",
+      "Traces exact 5-state transitions (Defined -> Available -> Assignable -> Assigned -> Effective) plus non-destructive toggle & eviction loops",
+    ],
+    keySources: [
+      "src/Core/Core.Application/Services/PermissionCatalogCache.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Services/TenantPermissionManager.cs",
+      "src/Modules/Identity/Identity.Application/Queries/Permission/PermissionCatalogTenantScopeHelper.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Services/AdminSecurityService.cs",
+      "src/Modules/Identity/Identity.Application/Services/PrincipalResponseCacheHelper.cs",
+    ],
+  },
+  {
+    id: "rbac-fls-projection-dataflow",
+    pillar: "backend",
+    mode: "dataflow",
+    badge: "DOTTED FLS MERGE · EXPORTS · AUDITING · STORY V2",
+    title: "SCRIPE Multi-Role FLS, Dotted Resource Normalization & Export Security Dataflow",
+    subtitle:
+      "Priority 0 Asc Role FLS Intersection + Additive UserGroupRestrictions -> PermissionResourceNormalizer -> FieldProjectionMiddleware & Export Guards",
+    description:
+      "Interactive Showcase 5-Stage Dataflow diagram with a 2-scene Story pinned to SCRIPE-Backend commit 42629f69a3081a83e7e69e678b1b04b28c12e1f0 (9 verified source citations). Details how Role FLS intersections (Priority 0 Asc) merge with additive UserGroupRestrictions without truncating dotted resource keys (crm.opportunities), flowing into EndpointResourceResolver, FieldProjectionMiddleware, FieldRestrictionEnforcementBehavior, and AuditExportRedactionHelper.",
+    htmlUrl: "/archify-hub/rbac-fls-projection-dataflow.html",
+    specUrl: "/archify-hub/specs/rbac-fls-projection-dataflow.dataflow.json",
+    repoName: "SCRIPE-org/SCRIPE-Backend",
+    repoCommit: "42629f69a3081a83e7e69e678b1b04b28c12e1f0",
+    featured: true,
+    highlights: [
+      "9 verified SCRIPE-Backend source citations pinned to commit 42629f69a3081a83e7e69e678b1b04b28c12e1f0",
+      "Attached 2-scene Story illustrating dotted resource key preservation and export/API FLS redaction sinks",
+    ],
+    keySources: [
+      "src/Modules/Identity/Identity.Infrastructure/Services/AdminSecurityService.cs",
+      "src/Modules/Identity/Identity.Infrastructure/Persistence/Seeding/IdentityDevDataSeeder.ScripeGroupCatalog.cs",
+      "src/Core/Core.Application/Abstractions/PermissionResourceNormalizer.cs",
+      "src/Core/Core.Application/Abstractions/FieldLevelSecurityMergeHelper.cs",
+      "src/Host/API/Middleware/FieldProjectionMiddleware.cs",
+      "src/Modules/Identity/Identity.Application/Services/AuditExportRedactionHelper.cs",
+    ],
+  },
 
   // ============================================================================
-  // PILLAR 3: FRONTEND DEEP DIVE (NEXT.JS 16 + REACT 19 MVVM) — 14 PAGES
+  // PILLAR 3: FRONTEND DEEP DIVE (NEXT.JS 16 + REACT 19 MVVM) — 18 PAGES
   // ============================================================================
   {
     id: "frontend-adaptive-sso-and-cleanup-workflow",
@@ -1565,6 +1926,90 @@ export const ARCHIFY_CATALOG: ArchifyArtifactItem[] = [
       "src/core/ui/dropdown-menu.tsx",
       "src/core/ui/select.tsx",
       "src/core/ui/notification/NotificationBell.tsx",
+    ],
+  },
+  {
+    id: "frontend-auth-recovery-mvvm",
+    pillar: "frontend",
+    mode: "architecture",
+    badge: "NEXT.JS 16 MVVM · STORY V2",
+    title: "SCRIPE-Frontend Auth, Recovery & MFA Boundary Architecture",
+    subtitle:
+      "next.config.ts CSP -> proxy.ts Edge -> RouteGuard (mcp/mfa_enroll) -> useAppStore Memory JWT & api-factory 401 Mutex",
+    description:
+      "Native Archify Architecture diagram with attached 3-scene Story pinned to SCRIPE-Frontend commit d3978a00e, mapping CSP headers, scr_auth_state edge gating, RouteGuard exemption/remediation routing, URL hash recovery handling, memory-only JWT state, and shared axios mutex refresh.",
+    htmlUrl: "/archify-hub/frontend-auth-recovery-mvvm.html",
+    specUrl: "/archify-hub/specs/frontend-auth-recovery-mvvm.architecture.json",
+    repoName: "SCRIPE-org/SCRIPE-Frontend",
+    repoCommit: "d3978a00ea6a51f625bc14a9fd6bb52cef07a02f",
+    featured: true,
+    highlights: [
+      "12/12 verified source references across next.config.ts, proxy.ts, route-guard.tsx, useAppStore.ts, api-factory.ts & signalr-provider.tsx",
+      "Details removal of persisted defaultRedirectPath, RequireMfaEnrollment routing to /account/security?setupMfa=1, and SignalR gating",
+    ],
+    keySources: [
+      "next.config.ts",
+      "src/proxy.ts",
+      "src/core/store/useAppStore.ts",
+      "src/core/providers/route-guard.tsx",
+      "src/core/services/api-factory.ts",
+    ],
+  },
+  {
+    id: "frontend-central-auth-sudo-mvvm",
+    pillar: "frontend",
+    mode: "architecture",
+    badge: "POST-MFA BRIDGE · BFF RELAY · STORY V2",
+    title: "SCRIPE-Frontend Central Auth, Post-MFA Bridge, HMAC Session Relay & Sudo MVVM",
+    subtitle:
+      "OriginRouting -> ssoTwoFactorBridge & ActivePrincipal -> Next.js BFF /api/auth/session/* HMAC Relay -> ApiService Sudo 403 Retry & useAuthLogout",
+    description:
+      "Native Archify Architecture diagram with attached 3-scene Story and 3 Guided Views pinned to SCRIPE-Frontend commit eea985c95d7a718593029ceeede1b9f745dc1adc (12/12 verified source citations, 208/208 build, 92 arch score, 9/9 Live RateLimiting=true E2E, 24/24 visual gallery), detailing ssoTwoFactorBridge.ts post-MFA custom-domain bridging, __Host-scripe_refresh_token HMAC relay (Client-Ip + MaxAge: 0 parity), cross-tab ActivePrincipal + BroadcastChannel isolation, expanded 403 Sudo retry, and split logoutScope.",
+    htmlUrl: "/archify-hub/frontend-central-auth-sudo-mvvm.html",
+    specUrl: "/archify-hub/specs/frontend-central-auth-sudo-mvvm.architecture.json",
+    repoName: "SCRIPE-org/SCRIPE-Frontend",
+    repoCommit: "eea985c95d7a718593029ceeede1b9f745dc1adc",
+    featured: true,
+    viewsCount: 3,
+    highlights: [
+      "12/12 verified SCRIPE-Frontend sources covering origin-routing.ts, ssoTwoFactorBridge.ts, ssoHandoffDispatch.ts, session-relay-hmac.ts, /api/auth/session/{establish,refresh,logout}, active-principal.ts & SudoVerificationModal.tsx",
+      "Models 3 Guided Views: Origin Routing & HMAC Relay, Post-MFA Bridge & Tab Isolation, and Sudo 403 Retry & Split Logout",
+    ],
+    keySources: [
+      "src/modules/shared/auth/signin/src/presentation/utils/ssoTwoFactorBridge.ts",
+      "src/core/common/origin-routing.ts",
+      "src/core/services/session-relay-hmac.ts",
+      "src/app/api/auth/session/establish/route.ts",
+      "src/core/services/api.service.ts",
+    ],
+  },
+  {
+    id: "frontend-rbac-superadmin-fls-mvvm",
+    pillar: "frontend",
+    mode: "architecture",
+    badge: "SUPERADMIN SPLIT · DOTTED FLS STUDIO · SESSION SYNC · STORY V2",
+    title: "SCRIPE-Frontend Multi-Role RBAC, Dotted FLS & Session Sync Architecture",
+    subtitle:
+      "RouteGuard & SuperAdmin Split -> Tenant Pickers & Dotted FLS Studio -> useAuthorizationSync & Partial CRM FLS Mutations",
+    description:
+      "Interactive Showcase Architecture diagram with 3 Guided Views and a 3-scene Story pinned to SCRIPE-Frontend commit 044ecc1eeac75d0a443c118701292fa1bf749507 (16/16 verified source citations). Details the Platform vs Tenant SuperAdmin split (!user?.tenantId), fail-closed RouteGuard + PAGE_PERMISSIONS, platformOnly catalog filtering, dotted FLS resource preservation (crm.opportunities) in Roles & UserGroups Studio, live Zustand principal cache resync via useAuthorizationSync, and partial-payload CRM FLS mutations.",
+    htmlUrl: "/archify-hub/frontend-rbac-superadmin-fls-mvvm.html",
+    specUrl: "/archify-hub/specs/frontend-rbac-superadmin-fls-mvvm.architecture.json",
+    repoName: "SCRIPE-org/SCRIPE-Frontend",
+    repoCommit: "044ecc1eeac75d0a443c118701292fa1bf749507",
+    featured: true,
+    viewsCount: 3,
+    highlights: [
+      "16/16 verified SCRIPE-Frontend source citations pinned to commit 044ecc1eeac75d0a443c118701292fa1bf749507",
+      "Models 3 Guided Views: 1. RouteGuard & SuperAdmin Split, 2. Tenant Pickers & Dotted FLS Studio, 3. Session Sync & Partial CRM FLS",
+    ],
+    keySources: [
+      "src/core/providers/route-guard.tsx",
+      "src/core/common/types/permissions.ts",
+      "src/core/providers/permission-provider.tsx",
+      "src/core/hooks/use-permission.ts",
+      "src/core/hooks/use-restricted-fields.ts",
+      "src/core/hooks/use-authorization-sync.ts",
     ],
   },
 ];
