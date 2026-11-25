@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "SCRIPE Multi-Role FLS, Dotted Resource Normalization & Export Security Dataflow",
+    "locale": "en",
+    "output": "SCRIPE-Docs-Portal/public/archify-hub/rbac-fls-projection-dataflow.html",
+    "quality_profile": "showcase",
+    "parentHref": "authorization-remediation-rbac-fullstack.html",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Backend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "42629f69a3081a83e7e69e678b1b04b28c12e1f0"
+    }
+  },
+  "stages": [
+    {
+      "label": "Grants & Context"
+    },
+    {
+      "label": "Normalize & Merge"
+    },
+    {
+      "label": "Route & Scope"
+    },
+    {
+      "label": "Enforcement Sink"
+    },
+    {
+      "label": "Verified Output"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "role_grants",
+      "type": "database",
+      "label": "Role Grants",
+      "sublabel": "Priority 0 Asc + Entitled",
+      "stage": 0,
+      "row": 0,
+      "tag": "Roles",
+      "sources": [
+        {
+          "path": "src/Modules/Identity/Identity.Infrastructure/Services/AdminSecurityService.cs",
+          "line": 25,
+          "end_line": 145,
+          "label": "Priority 0 Asc Grants"
+        }
+      ]
+    },
+    {
+      "id": "group_caps",
+      "type": "security",
+      "label": "UserGroup FLS",
+      "sublabel": "GRP_SCRIPE_PII_MASKED",
+      "stage": 0,
+      "row": 1,
+      "tag": "Additive Cap",
+      "sources": [
+        {
+          "path": "src/Modules/Identity/Identity.Infrastructure/Persistence/Seeding/IdentityDevDataSeeder.ScripeGroupCatalog.cs",
+          "line": 85,
+          "end_line": 113,
+          "label": "GRP_SCRIPE_PII_MASKED Overlay"
+        }
+      ]
+    },
+    {
+      "id": "norm_res",
+      "type": "backend",
+      "label": "Resource Normalizer",
+      "sublabel": "Keeps crm.opportunities",
+      "stage": 1,
+      "row": 0,
+      "tag": "No Split[0]",
+      "sources": [
+        {
+          "path": "src/Core/Core.Application/Abstractions/PermissionResourceNormalizer.cs",
+          "line": 155,
+          "end_line": 230,
+          "label": "Dotted Resource Extractor"
+        }
+      ]
+    },
+    {
+      "id": "fls_merge",
+      "type": "security",
+      "label": "FLS Merge Helper",
+      "sublabel": "Intersect Read + Union Cap",
+      "stage": 1,
+      "row": 1,
+      "tag": "OrdinalIgnoreCase",
+      "sources": [
+        {
+          "path": "src/Core/Core.Application/Abstractions/FieldLevelSecurityMergeHelper.cs",
+          "line": 1,
+          "end_line": 212,
+          "label": "Intersect + Union Algebra"
+        }
+      ]
+    },
+    {
+      "id": "ep_resolver",
+      "type": "backend",
+      "label": "Endpoint Resource",
+      "sublabel": "[Resource] / Single PBAC",
+      "stage": 2,
+      "row": 0,
+      "tag": "113+ Routes",
+      "sources": [
+        {
+          "path": "src/Host/API/Filters/EndpointResourceResolver.cs",
+          "line": 1,
+          "end_line": 109,
+          "label": "Endpoint Resource Match"
+        }
+      ]
+    },
+    {
+      "id": "vis_policy",
+      "type": "security",
+      "label": "Record & Scope Gate",
+      "sublabel": "ICrmRecordVisibilityPolicy",
+      "stage": 2,
+      "row": 1,
+      "tag": "RLS + Alias"
+    },
+    {
+      "id": "json_write",
+      "type": "backend",
+      "label": "JSON & Write FLS",
+      "sublabel": "Projection + Behavior",
+      "stage": 3,
+      "row": 0,
+      "tag": "API",
+      "sources": [
+        {
+          "path": "src/Host/API/Middleware/FieldProjectionMiddleware.cs",
+          "line": 1,
+          "end_line": 201,
+          "label": "Response JSON Projection"
+        },
+        {
+          "path": "src/Core/Core.Application/Behaviors/FieldRestrictionEnforcementBehavior.cs",
+          "line": 1,
+          "end_line": 136,
+          "label": "Write FLS Enforcement"
+        }
+      ]
+    },
+    {
+      "id": "export_guard",
+      "type": "security",
+      "label": "Export Guard",
+      "sublabel": "Audit + CSV + Transfer",
+      "stage": 3,
+      "row": 1,
+      "tag": "CSV/XLSX/PDF",
+      "sources": [
+        {
+          "path": "src/Modules/Identity/Identity.Application/Services/AuditExportRedactionHelper.cs",
+          "line": 1,
+          "end_line": 150,
+          "label": "Audit/Dashboard Export FLS"
+        },
+        {
+          "path": "src/Modules/DataTransfer/DataTransfer.Infrastructure/Services/DataExchangeOrchestrator.Jobs.cs",
+          "line": 465,
+          "end_line": 640,
+          "label": "DataTransfer Download FLS"
+        }
+      ]
+    },
+    {
+      "id": "fe_crud",
+      "type": "frontend",
+      "label": "GenericCrudView UI",
+      "sublabel": "Masks + Scrubs ***",
+      "stage": 4,
+      "row": 0,
+      "tag": "Next.js 16"
+    },
+    {
+      "id": "safe_files",
+      "type": "database",
+      "label": "Safe Export Artifact",
+      "sublabel": "Redacted + CsvFormulaGuard",
+      "stage": 4,
+      "row": 1,
+      "tag": "Zero Leaks"
+    }
+  ],
+  "flows": [
+    {
+      "id": "f1",
+      "from": "role_grants",
+      "to": "norm_res",
+      "label": "entitled grants",
+      "variant": "emphasis"
+    },
+    {
+      "id": "f2",
+      "from": "group_caps",
+      "to": "fls_merge",
+      "label": "group caps",
+      "variant": "security"
+    },
+    {
+      "id": "f3",
+      "from": "norm_res",
+      "to": "fls_merge",
+      "label": "canonical key",
+      "variant": "default"
+    },
+    {
+      "id": "f4",
+      "from": "fls_merge",
+      "to": "ep_resolver",
+      "label": "FLS dictionary",
+      "variant": "security"
+    },
+    {
+      "id": "f5",
+      "from": "fls_merge",
+      "to": "vis_policy",
+      "label": "effective scope",
+      "variant": "default"
+    },
+    {
+      "id": "f6",
+      "from": "ep_resolver",
+      "to": "json_write",
+      "label": "matched resource",
+      "variant": "emphasis"
+    },
+    {
+      "id": "f7",
+      "from": "vis_policy",
+      "to": "export_guard",
+      "label": "scoped rows + FLS",
+      "variant": "security"
+    },
+    {
+      "id": "f8",
+      "from": "json_write",
+      "to": "fe_crud",
+      "label": "masked DTO + keys",
+      "variant": "emphasis"
+    },
+    {
+      "id": "f9",
+      "from": "export_guard",
+      "to": "safe_files",
+      "label": "sanitized artifact",
+      "variant": "security"
+    },
+    {
+      "id": "f10",
+      "from": "json_write",
+      "to": "export_guard",
+      "label": "audit.export gate",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "violet",
+      "title": "Multi-Role FLS Algebra",
+      "items": [
+        "Within each role: union RestrictedFieldsJson across permissions of the same resource",
+        "Across roles: intersect read-capable roles (so Manager + Rep unmasks Manager)",
+        "Across UserGroups: union UserGroupRestrictions on top (cannot be bypassed by role)"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Write & Export Parity",
+      "items": [
+        "UpdateOpportunityCommandHandler blocks modified restricted non-nullable fields (0m/SAR)",
+        "Dashboard & Audit exports require audit.export + AuditExportRedactionHelper",
+        "Compliance CSV uses CsvFormulaGuard.Neutralize & rejects open Redirect(FileUrl)"
+      ]
+    }
+  ]
+}

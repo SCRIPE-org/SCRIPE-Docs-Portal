@@ -1,0 +1,510 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "SCRIPE Authorization, Feature-Permission & Internal RBAC Architecture",
+    "locale": "en",
+    "output": "SCRIPE-Docs-Portal/public/archify-hub/authorization-feature-permission-architecture.html",
+    "quality_profile": "showcase",
+    "parentHref": "authorization-remediation-rbac-fullstack.html",
+    "views": [
+      {
+        "id": "ingress_gate",
+        "label": "1. Edge, Context & Feature Gate",
+        "focus": [
+          "fe_portal",
+          "mw_context",
+          "authz_handler",
+          "feature_checker",
+          "catalog_cache"
+        ],
+        "note": "TenantContextMiddleware resolves membership & drill-down before RequireMfaEnrollment and live IFeatureChecker PBAC."
+      },
+      {
+        "id": "feature_sync",
+        "label": "2. Feature Sync & Cache Eviction",
+        "focus": [
+          "feature_builder",
+          "sub_event_bus",
+          "tenant_perm_mgr",
+          "perm_cache",
+          "identity_db"
+        ],
+        "note": "All 16 publishers compute effective features via EffectiveFeatureMapBuilder, then commit before evicting caches."
+      },
+      {
+        "id": "fls_pipeline",
+        "label": "3. Multi-Role FLS & Exports",
+        "focus": [
+          "admin_sec_svc",
+          "fls_merge",
+          "resource_norm",
+          "fls_filter",
+          "export_guards"
+        ],
+        "note": "Read-preferred role FLS intersection unions with UserGroupRestrictions while preserving dotted resources across JSON & exports."
+      },
+      {
+        "id": "internal_rbac",
+        "label": "4. SCRIPE 16-Role Internal Tenant",
+        "focus": [
+          "fe_portal",
+          "fe_rbac_ui",
+          "tenant_perm_mgr",
+          "identity_db",
+          "entitlements_db"
+        ],
+        "note": "SCRIPE (scripe-internal) seeds 389 active perms across 16 roles & 10 UserGroups with zero PlatformOnly leaks."
+      }
+    ],
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Backend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "42629f69a3081a83e7e69e678b1b04b28c12e1f0"
+    }
+  },
+  "layout": {
+    "mode": "auto"
+  },
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "ASP.NET Core Zero-Trust Ingress & FLS Pipeline",
+      "wraps": [
+        "mw_context",
+        "authz_handler",
+        "fls_filter",
+        "export_guards"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "Core.Application & Identity Authorization Engine",
+      "wraps": [
+        "catalog_cache",
+        "feature_checker",
+        "admin_sec_svc",
+        "fls_merge",
+        "resource_norm",
+        "tenant_perm_mgr",
+        "perm_cache"
+      ]
+    }
+  ],
+  "components": [
+    {
+      "id": "fe_portal",
+      "type": "frontend",
+      "label": "Next.js 16 MVVM Portal",
+      "sublabel": "RouteGuard + SuperAdmin Guard",
+      "tag": "SCRIPE-Frontend",
+      "explanation": "Enforces tenant isolation on SuperAdmin helpers (rejects username/substring elevation), overwrites empty [] principals, and scrubs restricted/sentinel fields before PUT/PATCH."
+    },
+    {
+      "id": "fe_rbac_ui",
+      "type": "frontend",
+      "label": "Roles & Restrictions Studio",
+      "sublabel": "Dotted Resources + Tenant Pickers",
+      "tag": "UI Config",
+      "explanation": "Consumes tenant-filtered available permissions, hides all_tenants from tenant roles, supports dotted UserGroupRestrictions, and invalidates auth/entitlements/nav caches on save."
+    },
+    {
+      "id": "mw_context",
+      "type": "security",
+      "label": "Tenant Context & MFA Gate",
+      "sublabel": "Pre-Authz Validation + Warm",
+      "tag": "Middleware",
+      "explanation": "Passes unauthenticated calls through, warms AdminPermissionCache on cold starts, resolves DrillDown/Membership EffectivePermissions & EffectiveRestrictedFields, then enforces RequireMfaEnrollment.",
+      "sources": [
+        {
+          "path": "src/Host/API/Middleware/TenantContextMiddleware.cs",
+          "line": 1,
+          "end_line": 220,
+          "label": "TenantContextMiddleware Warm"
+        },
+        {
+          "path": "src/Host/API/Extensions/MiddlewarePipeline.cs",
+          "line": 240,
+          "end_line": 320,
+          "label": "Pre-Authz Middleware Order"
+        }
+      ]
+    },
+    {
+      "id": "authz_handler",
+      "type": "security",
+      "label": "Permission Authz Handler",
+      "sublabel": "PBAC + Live Feature + PAT",
+      "tag": "Policy Gate",
+      "explanation": "Evaluates endpoint metadata & pat_scope, blocks PlatformOnly on tenant or membership sessions, and verifies live IFeatureChecker against IPermissionCatalogCache even on unexpired JWTs.",
+      "sources": [
+        {
+          "path": "src/Core/Core.Application/Authorization/PermissionAuthorizationHandler.cs",
+          "line": 1,
+          "end_line": 240,
+          "label": "PBAC, Feature & PAT Gate"
+        }
+      ]
+    },
+    {
+      "id": "catalog_cache",
+      "type": "backend",
+      "label": "Permission Catalog Cache",
+      "sublabel": "490 Perms / 190 Features",
+      "tag": "FrozenDict",
+      "explanation": "Immutable singleton dictionary compiled from 19 IModulePermissionProviders supporting RequiredFeature, RequiredAnyFeatures (10), and IsGloballyAvailable (10) with fail-closed lookup.",
+      "sources": [
+        {
+          "path": "src/Core/Core.Application/Services/PermissionCatalogCache.cs",
+          "line": 1,
+          "end_line": 115,
+          "label": "FrozenDictionary Catalog Cache"
+        }
+      ]
+    },
+    {
+      "id": "feature_checker",
+      "type": "security",
+      "label": "Live Feature Checker",
+      "sublabel": "Fail-Closed Entitlements",
+      "tag": "IFeatureChecker",
+      "explanation": "Applies Override > Edition > FeaturePackExpansion (Venue) > DefaultValue, resets IsMarketingOnly, and fails closed in HttpFeatureChecker on transport failure.",
+      "sources": [
+        {
+          "path": "src/Modules/Entitlements/Entitlements.Infrastructure/Services/FeatureChecker.cs",
+          "line": 1,
+          "end_line": 132,
+          "label": "FeatureChecker Resolution"
+        },
+        {
+          "path": "src/Core/Core.Infrastructure/Services/HttpFeatureChecker.cs",
+          "line": 1,
+          "end_line": 80,
+          "label": "Fail-Closed HttpFeatureChecker"
+        }
+      ]
+    },
+    {
+      "id": "fls_filter",
+      "type": "security",
+      "label": "FLS Middleware & Behavior",
+      "sublabel": "EndpointResourceResolver",
+      "tag": "Read/Write FLS",
+      "explanation": "Resolves canonical resource from [Resource] or single [PermissionRequired], masks JSON responses via FieldProjectionMiddleware, and blocks restricted write mutations.",
+      "sources": [
+        {
+          "path": "src/Host/API/Filters/EndpointResourceResolver.cs",
+          "line": 1,
+          "end_line": 109,
+          "label": "EndpointResourceResolver"
+        },
+        {
+          "path": "src/Host/API/Middleware/FieldProjectionMiddleware.cs",
+          "line": 1,
+          "end_line": 201,
+          "label": "JSON & Export FLS Guard"
+        }
+      ]
+    },
+    {
+      "id": "export_guards",
+      "type": "security",
+      "label": "Hardened Export & Download",
+      "sublabel": "Audit, CRM RLS & DataTransfer",
+      "tag": "Exports/IDOR",
+      "explanation": "Requires audit.export on Dashboard exports, enforces ICrmRecordVisibilityPolicy across CRM exports, neutralizes CSV formulas, blocks global Compliance/Subscription IDORs, and re-checks queued jobs.",
+      "sources": [
+        {
+          "path": "src/Modules/Identity/Identity.Application/Services/AuditExportRedactionHelper.cs",
+          "line": 1,
+          "end_line": 150,
+          "label": "Audit/Dashboard FLS Redactor"
+        },
+        {
+          "path": "src/Modules/CRM/CRM.Application/Commands/Opportunities/UpdateOpportunityCommandHandler.FieldSecurity.cs",
+          "line": 1,
+          "end_line": 89,
+          "label": "CRM Partial Write FLS Guard"
+        }
+      ]
+    },
+    {
+      "id": "admin_sec_svc",
+      "type": "backend",
+      "label": "Admin Security Service",
+      "sublabel": "Priority 0 Asc + Entitled",
+      "tag": "Identity",
+      "explanation": "Sorts AdminRoles ascending (Priority 0 = highest), filters active entitled RolePermissions, and computes effective permissions, scopes, and restricted fields.",
+      "sources": [
+        {
+          "path": "src/Modules/Identity/Identity.Infrastructure/Services/AdminSecurityService.cs",
+          "line": 1,
+          "end_line": 258,
+          "label": "Priority 0 Asc & Scope Merge"
+        }
+      ]
+    },
+    {
+      "id": "fls_merge",
+      "type": "backend",
+      "label": "FLS Merge Engine",
+      "sublabel": "Intersect Roles + Union Groups",
+      "tag": "Core.App",
+      "explanation": "Prefers read-capable roles when intersecting RestrictedFieldsJson across multiple roles, then unions active UserGroupRestriction overlays case-insensitively.",
+      "sources": [
+        {
+          "path": "src/Core/Core.Application/Abstractions/FieldLevelSecurityMergeHelper.cs",
+          "line": 1,
+          "end_line": 212,
+          "label": "Read-Preferred Intersect + Group"
+        }
+      ]
+    },
+    {
+      "id": "resource_norm",
+      "type": "backend",
+      "label": "Resource Normalizer",
+      "sublabel": "Preserves Dotted Resources",
+      "tag": "Core.App",
+      "explanation": "Resolves canonical lowercase resource keys (crm.opportunities, finance.payments, employment-records) without naive Split('.')[0] truncation.",
+      "sources": [
+        {
+          "path": "src/Core/Core.Application/Abstractions/PermissionResourceNormalizer.cs",
+          "line": 150,
+          "end_line": 230,
+          "label": "Dotted Resource Normalizer"
+        }
+      ]
+    },
+    {
+      "id": "perm_cache",
+      "type": "database",
+      "label": "Authz & Principal Cache",
+      "sublabel": "AdminCache + Version Stamps",
+      "tag": "L1/L2 Cache",
+      "explanation": "PrincipalResponseCacheHelper invalidates 30s admin:principal:* keys atomically whenever AdminPermissionCache evicts by admin, role, or global stamp.",
+      "sources": [
+        {
+          "path": "src/Modules/Identity/Identity.Application/Services/PrincipalResponseCacheHelper.cs",
+          "line": 1,
+          "end_line": 68,
+          "label": "Version-Stamped Cache Evict"
+        }
+      ]
+    },
+    {
+      "id": "tenant_perm_mgr",
+      "type": "backend",
+      "label": "Tenant Permission Manager",
+      "sublabel": "Preserves Custom RolePerms",
+      "tag": "Identity Sync",
+      "explanation": "Syncs TenantPermissions using IPermissionCatalogCache (blocking PlatformOnly and disabled modules, retaining IsGloballyAvailable), while preserving regular RolePermission rows across toggles.",
+      "sources": [
+        {
+          "path": "src/Modules/Identity/Identity.Infrastructure/Services/TenantPermissionManager.cs",
+          "line": 1,
+          "end_line": 255,
+          "label": "Non-Destructive Pool Sync"
+        }
+      ]
+    },
+    {
+      "id": "feature_builder",
+      "type": "backend",
+      "label": "Effective Feature Builder",
+      "sublabel": "Base+AddOn+Pack+Override",
+      "tag": "Entitlements",
+      "explanation": "Called by all 16 SubscriptionChangedEvent publishers after SaveChangesAsync; merges active/trialing Base & Add-On subscriptions without clobbering Tenant.EditionName.",
+      "sources": [
+        {
+          "path": "src/Modules/Entitlements/Entitlements.Application/Services/EffectiveFeatureMapBuilder.cs",
+          "line": 1,
+          "end_line": 247,
+          "label": "Effective Feature Builder"
+        }
+      ]
+    },
+    {
+      "id": "sub_event_bus",
+      "type": "messagebus",
+      "label": "Subscription & Cache Bus",
+      "sublabel": "Post-Commit Domain Events",
+      "tag": "AstraFlow",
+      "explanation": "Dispatches SubscriptionChanged, Canceled, Expired, Suspended, and Resumed events after DB commit so Entitlements never writes directly to Identity tables."
+    },
+    {
+      "id": "identity_db",
+      "type": "database",
+      "label": "Identity Schema DB",
+      "sublabel": "389 SCRIPE / 16 Roles / 10 Grps",
+      "tag": "PostgreSQL/SQL/Ora",
+      "explanation": "Persists TenantPermissions, Roles, RolePermissions, UserGroups, UserGroupRestrictions, and AdminDelegations across SQL Server, PostgreSQL, and Oracle."
+    },
+    {
+      "id": "entitlements_db",
+      "type": "database",
+      "label": "Entitlements Schema DB",
+      "sublabel": "scripe-internal + Overrides",
+      "tag": "Isolated DB",
+      "explanation": "Stores 190 Feature definitions, EditionFeatures (Tier-1 platform false, Tier-2 self-service true), Subscriptions, and TenantFeatureOverrides."
+    }
+  ],
+  "connections": [
+    {
+      "id": "fe_to_mw",
+      "from": "fe_portal",
+      "to": "mw_context",
+      "label": "JWT / Cookie + X-Tenant-Context",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fe_rbac_to_fls",
+      "from": "fe_rbac_ui",
+      "to": "authz_handler",
+      "label": "Filtered Pickers & Role/Group Edits",
+      "variant": "default"
+    },
+    {
+      "id": "mw_to_authz",
+      "from": "mw_context",
+      "to": "authz_handler",
+      "label": "Context & Cold-Warmed Claims",
+      "variant": "security"
+    },
+    {
+      "id": "authz_to_cat",
+      "from": "authz_handler",
+      "to": "catalog_cache",
+      "label": "Resolve RequiredAny / Global",
+      "variant": "default"
+    },
+    {
+      "id": "authz_to_feat",
+      "from": "authz_handler",
+      "to": "feature_checker",
+      "label": "Live Tenant Feature Gate",
+      "variant": "security"
+    },
+    {
+      "id": "authz_to_fls",
+      "from": "authz_handler",
+      "to": "fls_filter",
+      "label": "Authorized -> Field Filter",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fls_to_export",
+      "from": "fls_filter",
+      "to": "export_guards",
+      "label": "CSV/XLSX/PDF & Job Guard",
+      "variant": "security"
+    },
+    {
+      "id": "mw_to_sec",
+      "from": "mw_context",
+      "to": "admin_sec_svc",
+      "label": "Compute Role + Group Security",
+      "variant": "default"
+    },
+    {
+      "id": "sec_to_merge",
+      "from": "admin_sec_svc",
+      "to": "fls_merge",
+      "label": "Intersect Roles + Union Groups",
+      "variant": "default"
+    },
+    {
+      "id": "merge_to_norm",
+      "from": "fls_merge",
+      "to": "resource_norm",
+      "label": "Canonical Resource Key",
+      "variant": "default"
+    },
+    {
+      "id": "sec_to_cache",
+      "from": "admin_sec_svc",
+      "to": "perm_cache",
+      "label": "Cache + Stamp principal:*",
+      "variant": "default"
+    },
+    {
+      "id": "feat_to_edb",
+      "from": "feature_builder",
+      "to": "entitlements_db",
+      "label": "SaveChanges Before Invalidate",
+      "variant": "emphasis"
+    },
+    {
+      "id": "chk_to_edb",
+      "from": "feature_checker",
+      "to": "entitlements_db",
+      "label": "Read Overrides & Subscriptions",
+      "variant": "default"
+    },
+    {
+      "id": "feat_to_bus",
+      "from": "feature_builder",
+      "to": "sub_event_bus",
+      "label": "Post-Commit SubscriptionChanged",
+      "variant": "dashed"
+    },
+    {
+      "id": "bus_to_tpm",
+      "from": "sub_event_bus",
+      "to": "tenant_perm_mgr",
+      "label": "Catalog-Filtered Pool Sync",
+      "variant": "dashed"
+    },
+    {
+      "id": "tpm_to_idb",
+      "from": "tenant_perm_mgr",
+      "to": "identity_db",
+      "label": "Sync TenantPerms & T_SCRIPE_SA",
+      "variant": "emphasis"
+    },
+    {
+      "id": "tpm_to_cache",
+      "from": "tenant_perm_mgr",
+      "to": "perm_cache",
+      "label": "Atomic Evict Admin & Principal",
+      "variant": "security"
+    },
+    {
+      "id": "sec_to_idb",
+      "from": "admin_sec_svc",
+      "to": "identity_db",
+      "label": "Load Active Roles & Restrictions",
+      "variant": "default"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Zero Module Coupling",
+      "items": [
+        "Identity never references Entitlements; Entitlements never writes Identity tables",
+        "Core.Application owns IPermissionCatalogCache, IFeatureChecker, FeaturePackExpansion & PermissionResourceNormalizer",
+        "All 16 SubscriptionChangedEvent publishers respect TenantFeatureOverrides & Base EditionName"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Fail-Closed Defense-in-Depth",
+      "items": [
+        "UseTenantContextValidation executes before RequireMfaEnrollment & UseAuthorization",
+        "PermissionAuthorizationHandler checks live IFeatureChecker even on unexpired JWTs",
+        "HttpFeatureChecker fails closed (false/0) on transport exceptions"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "SCRIPE Internal Tenant Invariants",
+      "items": [
+        "490 catalog perms -> 69 PlatformOnly blocked, 32 Plugins/Marketplace off, 389 active",
+        "16 Roles (Priority 0..900 ascending) & 10 UserGroups (zero all_tenants, zero passwords)",
+        "Read-preferred role FLS intersection + additive GRP_SCRIPE_PII_MASKED union"
+      ]
+    }
+  ]
+}

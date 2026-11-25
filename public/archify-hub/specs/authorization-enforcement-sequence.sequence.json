@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Authorization Enforcement, Context-Switch & Post-Commit Eviction Sequence",
+    "locale": "en",
+    "output": "SCRIPE-Docs-Portal/public/archify-hub/authorization-enforcement-sequence.html",
+    "quality_profile": "showcase",
+    "parentHref": "authorization-remediation-rbac-fullstack.html",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Backend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "42629f69a3081a83e7e69e678b1b04b28c12e1f0"
+    }
+  },
+  "participants": [
+    {
+      "id": "spa",
+      "type": "frontend",
+      "label": "Next.js 16 Client",
+      "sublabel": "Auth + Context Switch"
+    },
+    {
+      "id": "ctx_mw",
+      "type": "security",
+      "label": "TenantContext MW",
+      "sublabel": "Cold Warm + Mode",
+      "sources": [
+        {
+          "path": "src/Host/API/Middleware/TenantContextMiddleware.cs",
+          "line": 40,
+          "end_line": 195,
+          "label": "Pre-Authz Context & Warm"
+        },
+        {
+          "path": "src/Host/API/Extensions/MiddlewarePipeline.cs",
+          "line": 255,
+          "end_line": 310,
+          "label": "Pipeline Middleware Order"
+        }
+      ]
+    },
+    {
+      "id": "authz",
+      "type": "security",
+      "label": "Authz Handler",
+      "sublabel": "PBAC + Feature + PAT",
+      "sources": [
+        {
+          "path": "src/Core/Core.Application/Authorization/PermissionAuthorizationHandler.cs",
+          "line": 75,
+          "end_line": 235,
+          "label": "PBAC, Feature & PAT Handler"
+        }
+      ]
+    },
+    {
+      "id": "fls",
+      "type": "backend",
+      "label": "FLS & Export Guard",
+      "sublabel": "Resource + Merge",
+      "sources": [
+        {
+          "path": "src/Host/API/Filters/EndpointResourceResolver.cs",
+          "line": 1,
+          "end_line": 109,
+          "label": "Endpoint Resource Resolution"
+        },
+        {
+          "path": "src/Core/Core.Application/Abstractions/FieldLevelSecurityMergeHelper.cs",
+          "line": 1,
+          "end_line": 180,
+          "label": "Multi-Role FLS Merge Helper"
+        }
+      ]
+    },
+    {
+      "id": "ent",
+      "type": "backend",
+      "label": "Entitlements",
+      "sublabel": "EffectiveBuilder",
+      "sources": [
+        {
+          "path": "src/Modules/Entitlements/Entitlements.Application/Services/EffectiveFeatureMapBuilder.cs",
+          "line": 1,
+          "end_line": 220,
+          "label": "Effective Feature Map Builder"
+        },
+        {
+          "path": "src/Modules/Entitlements/Entitlements.Infrastructure/Services/FeatureChecker.cs",
+          "line": 1,
+          "end_line": 132,
+          "label": "Live Feature Checker"
+        }
+      ]
+    },
+    {
+      "id": "cache",
+      "type": "database",
+      "label": "Cache & DB",
+      "sublabel": "Principal + Identity",
+      "sources": [
+        {
+          "path": "src/Modules/Identity/Identity.Application/Services/PrincipalResponseCacheHelper.cs",
+          "line": 1,
+          "end_line": 68,
+          "label": "Principal Stamp Invalidation"
+        },
+        {
+          "path": "src/Modules/Identity/Identity.Infrastructure/Services/TenantPermissionManager.cs",
+          "line": 55,
+          "end_line": 195,
+          "label": "Tenant Permission Sync"
+        }
+      ]
+    }
+  ],
+  "segments": [
+    {
+      "from": 152,
+      "to": 344,
+      "label": "1. Pre-Authorization Context & Live Feature Gate"
+    },
+    {
+      "from": 352,
+      "to": 456,
+      "label": "2. Multi-Role FLS Intersection & Export Redaction"
+    },
+    {
+      "from": 470,
+      "to": 628,
+      "label": "3. Feature Override Mutation & Atomic Cache Eviction"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "from": "spa",
+      "to": "ctx_mw",
+      "y": 170,
+      "label": "GET /crm/opportunities + X-Tenant-Context",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m2",
+      "from": "ctx_mw",
+      "to": "cache",
+      "y": 200,
+      "label": "Warm AdminPermissionCache + Load Membership",
+      "variant": "default"
+    },
+    {
+      "id": "m3",
+      "from": "cache",
+      "to": "ctx_mw",
+      "y": 230,
+      "label": "Target EffectivePermissions + FLS",
+      "variant": "return"
+    },
+    {
+      "id": "m4",
+      "from": "ctx_mw",
+      "to": "authz",
+      "y": 260,
+      "label": "RequireMfa -> UseAuthorization",
+      "variant": "security"
+    },
+    {
+      "id": "m5",
+      "from": "authz",
+      "to": "ent",
+      "y": 290,
+      "label": "IFeatureChecker.IsEnabledAsync(TargetTenant, CRM.Enabled)",
+      "variant": "security",
+      "note": "Rejects stale JWTs & PATs if feature off (403)."
+    },
+    {
+      "id": "m6",
+      "from": "authz",
+      "to": "fls",
+      "y": 366,
+      "label": "Resolve [Resource] -> crm.opportunities",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m7",
+      "from": "fls",
+      "to": "cache",
+      "y": 396,
+      "label": "Read-Preferred Intersect + Group Union",
+      "variant": "default"
+    },
+    {
+      "id": "m8",
+      "from": "fls",
+      "to": "spa",
+      "y": 426,
+      "label": "200 JSON (masked FLS) or CSV Neutralized",
+      "variant": "return"
+    },
+    {
+      "id": "m9",
+      "from": "spa",
+      "to": "ent",
+      "y": 490,
+      "label": "SetFeatureOverride(CRM.Enabled = false)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m10",
+      "from": "ent",
+      "to": "cache",
+      "y": 520,
+      "label": "SaveChangesAsync -> Invalidate FeatureCache",
+      "variant": "security"
+    },
+    {
+      "id": "m11",
+      "from": "ent",
+      "to": "cache",
+      "y": 550,
+      "label": "SubscriptionChanged -> Sync Pool (Keep RolePerms)",
+      "variant": "dashed"
+    },
+    {
+      "id": "m12",
+      "from": "cache",
+      "to": "spa",
+      "y": 580,
+      "label": "Evict AdminCache + admin:principal:* Stamp",
+      "variant": "security"
+    },
+    {
+      "id": "m13",
+      "from": "spa",
+      "to": "authz",
+      "y": 610,
+      "label": "Stale JWT Re-Test -> 403 Forbidden",
+      "variant": "return"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "ctx_mw",
+      "from": 168,
+      "to": 266,
+      "type": "security"
+    },
+    {
+      "participant": "authz",
+      "from": 256,
+      "to": 372,
+      "type": "security"
+    },
+    {
+      "participant": "fls",
+      "from": 360,
+      "to": 432,
+      "type": "backend"
+    },
+    {
+      "participant": "ent",
+      "from": 486,
+      "to": 556,
+      "type": "backend"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Middleware Order Fix",
+      "items": [
+        "Unauthenticated requests skip TenantContextMiddleware cleanly (preserving 401)",
+        "Cold-cache warm prevents false 403 after AdminPermissionCache invalidation",
+        "Bidirectional MembershipMode works whether Home=false/Target=true or Home=true/Target=false"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Commit-Before-Invalidate",
+      "items": [
+        "DB transaction commits before FeatureCache & AdminPermissionCache clear",
+        "PrincipalResponseCacheHelper bumps version stamps so 30s cache never serves stale perms",
+        "Regular RolePermission rows survive temporary feature disables intact"
+      ]
+    }
+  ]
+}

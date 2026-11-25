@@ -1,0 +1,71 @@
+{
+  "version": 2,
+  "title": "Request Enforcement, Dotted FLS & Cache Eviction Sequence",
+  "intro": "Follow a single API request from the Next.js client through cold-warmed TenantContextMiddleware, live feature verification, dotted FLS redaction, and atomic post-commit cache invalidation.",
+  "outro": "Stale JWTs and 30-second cached principals are invalidated the moment a feature override or subscription commits.",
+  "scenes": [
+    {
+      "title": "1. Cross-Tenant Cold-Cache Warm & Live Feature Gate",
+      "points": [
+        {
+          "anchor": "spa",
+          "via": "m1",
+          "action": "trace",
+          "title": "Inbound Request with X-Tenant-Context",
+          "text": "The frontend submits GET /crm/opportunities alongside X-Tenant-Context to enter a target tenant workspace.",
+          "caption": "Inbound CRM read carries target tenant header"
+        },
+        {
+          "anchor": "ctx_mw",
+          "via": ["m2", "m3"],
+          "action": "trace",
+          "title": "Cold-Cache Warm Before Validation",
+          "text": "TenantContextMiddleware warms AdminPermissionCache if empty and loads target MembershipMode effective permissions and FLS before rejecting context access.",
+          "caption": "Prevents false 403s immediately after cache eviction"
+        },
+        {
+          "anchor": "authz",
+          "via": ["m4", "m5"],
+          "action": "trace",
+          "title": "MFA -> UseAuthorization -> Live Feature Gate",
+          "text": "After RequireMfaEnrollmentMiddleware, PermissionAuthorizationHandler invokes live IFeatureChecker.IsEnabledAsync(TargetTenant, CRM.Enabled), stopping stale JWTs and PATs with 403.",
+          "caption": "Live Entitlements check rejects disabled modules"
+        }
+      ]
+    },
+    {
+      "title": "2. Multi-Role Dotted FLS & Export Redaction",
+      "points": [
+        {
+          "anchor": "fls",
+          "via": ["m6", "m7", "m8"],
+          "action": "trace",
+          "title": "Canonical Key & Intersect/Union Redaction",
+          "text": "FLS & Export Guard resolves crm.opportunities cleanly, intersects read-capable role masks, unions additive UserGroup caps, and returns masked JSON or CsvFormulaGuard-neutralized exports.",
+          "caption": "Identical FLS protection for JSON APIs and downloads"
+        }
+      ]
+    },
+    {
+      "title": "3. Feature Override Mutation & Atomic Eviction",
+      "points": [
+        {
+          "anchor": "ent",
+          "via": ["m9", "m10", "m11"],
+          "action": "parallel",
+          "title": "DB Commit Before Cache & Pool Sync",
+          "text": "Toggling CRM.Enabled = false commits EntitlementsDbContext first, invalidates FeatureCache, and triggers SubscriptionChanged pool sync without deleting custom RolePermissions.",
+          "caption": "Database truth commits before cache clear"
+        },
+        {
+          "anchor": "cache",
+          "via": ["m12", "m13"],
+          "action": "trace",
+          "title": "Principal Stamp Bump & Immediate 403",
+          "text": "Evicting AdminPermissionCache and bumping admin:principal:* stamps ensures subsequent calls using an older JWT fail immediately with 403 Forbidden.",
+          "caption": "Stale token rejected without waiting for TTL expiry"
+        }
+      ]
+    }
+  ]
+}
