@@ -90,22 +90,24 @@ const sections: DocSection[] = [
       {
         label: "Success Response (200)",
         language: "json",
-        filename: "Login Success — Response",
+        filename: "Login Success — Response (TokenResponse)",
         code: `{
   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "refreshToken": "dGhpcyBpcyBhIHJlZnJlc2ggdG9rZW4...",
-  "expiresIn": 3600,
-  "tokenType": "Bearer",
-  "requiresTwoFactor": false,
-  "user": {
-    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "refreshToken": "", // Stripped to HttpOnly cookie by CookieAuthMiddleware for web clients
+  "expiresAt": "2026-11-23T12:30:00Z", // Jwt:ExpiryMinutes (default 30 min)
+  "requires2FA": false,
+  "staySignedIn": true,
+  "mustChangePassword": false,
+  "requireMfaEnrollment": false,
+  "defaultRedirectPath": "/",
+  "userProfile": {
+    "id": "encrypted-admin-id",
     "email": "admin@example.com",
     "username": "admin",
     "firstName": "John",
     "lastName": "Doe",
-    "role": "SuperAdmin",
-    "tenantId": "f8e7d6c5-b4a3-2190-fedc-ba0987654321",
-    "tenantCode": "ACME",
+    "isSuperAdmin": true,
+    "tenantId": "encrypted-tenant-id",
     "permissions": ["admins.view", "tenants.view", "roles.manage"]
   }
 }`,
@@ -113,11 +115,14 @@ const sections: DocSection[] = [
       {
         label: "2FA Required (200)",
         language: "json",
-        filename: "Login — 2FA Challenge",
+        filename: "Login — 2FA Challenge (TokenResponse)",
         code: `{
-  "requiresTwoFactor": true,
-  "twoFactorSessionToken": "temp_session_abc123...",
-  "message": "Two-factor authentication is required for this account."
+  "accessToken": "",
+  "refreshToken": "",
+  "expiresAt": "0001-01-01T00:00:00Z",
+  "requires2FA": true,
+  "staySignedIn": false,
+  "twoFactorPendingToken": "single-use-5m-pending-ticket"
 }`,
       },
       {
@@ -196,17 +201,27 @@ const sections: DocSection[] = [
 ]`,
       },
       {
+        label: "POST /logout (Split Scope)",
+        language: "json",
+        filename: "POST /api/v1/auth/admin/logout — Request & Response (204 No Content)",
+        code: `// Request Body — 'app' preserves scr.oidc.session; 'central' revokes central SSO session too
+{
+  "refreshToken": "optional-when-sent-via-httponly-cookie",
+  "logoutScope": "app" // "app" (default) | "central"
+}`,
+      },
+      {
         label: "POST /sessions/revoke-all",
         language: "json",
         filename: "POST /api/v1/auth/admin/sessions/revoke-all — Request & Response",
-        code: `// Request Body
+        code: `// Request Body (current caller session is preserved; sibling session JTIs are blacklisted)
 {
-  "refreshToken": "dGhpcyBpcyBhIHJlZnJlc2ggdG9rZW4..."
+  "refreshToken": "optional-when-sent-via-httponly-cookie"
 }
 
-// Response (200 OK)
+// Response (200 OK — sibling revoked count)
 {
-  "revokedCount": 1
+  "revokedCount": 2
 }`,
       },
     ],
@@ -289,16 +304,22 @@ const sections: DocSection[] = [
         code: `// Request
 {
   "identifier": "admin@example.com",
-  "password": "P@ssw0rd123!",
+  "password": "P@ssw0rd123!", // Optional when redeeming twoFactorPendingToken
+  "twoFactorPendingToken": "single-use-5m-pending-ticket", // Optional passwordless flow
   "code": "654321",
-  "tenantId": "f8e7d6c5-b4a3-2190-fedc-ba0987654321" // Optional
+  "tenantId": "encrypted-tenant-id", // Optional
+  "staySignedIn": false
 }
 
-// Response (200 OK) — Same as TokenResponse
+// Response (200 OK) — TokenResponse (TwoFactorAttemptLockHelper enforces lockout)
 {
   "accessToken": "eyJhbGciOiJIUzI1NiJ9...",
-  "refreshToken": "cmVmcmVzaC10b2tlbg...",
-  "expiresIn": 3600
+  "refreshToken": "",
+  "expiresAt": "2026-11-23T12:30:00Z",
+  "requires2FA": false,
+  "staySignedIn": false,
+  "mustChangePassword": false,
+  "requireMfaEnrollment": false
 }`,
       },
       {
@@ -333,7 +354,7 @@ const sections: DocSection[] = [
         method: "POST",
         path: "/api/v1/auth/admin/impersonate/{id}",
         descriptionKey: "apiReference.adminApi.impersonateDesc",
-        auth: "Bearer Token",
+        auth: "Bearer Token + X-Sudo-Token",
         permission: "admins.impersonate",
       },
       {
@@ -350,36 +371,35 @@ const sections: DocSection[] = [
       {
         label: "Impersonate Response",
         language: "json",
-        filename: "POST /impersonate/{id} — Response",
+        filename: "POST /impersonate/{id} — Response (8h hard ceiling)",
         code: `{
-  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...", // Impersonated Admin JWT
-  "refreshToken": "impersonation_refresh_token_here...",
-  "expiresIn": 3600,
-  "tokenType": "Bearer",
-  "requiresTwoFactor": false,
-  "user": {
-    "id": "target-admin-uuid",
-    "email": "target@example.com",
-    "role": "TenantAdmin",
-    "tenantId": "target-tenant-uuid",
-    "impersonatorAdminId": "superadmin-uuid" // Auditing trail marker
-  }
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...", // Impersonated JWT (contains imp + scripe_iat_ms)
+  "refreshToken": "", // Stored in {CookiePrefix}_refresh_token (non-extendable 8h ceiling)
+  "expiresAt": "2026-11-23T12:30:00Z",
+  "requires2FA": false,
+  "staySignedIn": false,
+  "mustChangePassword": false,
+  "requireMfaEnrollment": false,
+  "defaultRedirectPath": "/"
 }`,
       },
       {
         label: "Stop Impersonation",
         language: "json",
-        filename: "POST /stop-impersonation — Request",
-        code: `// Request
+        filename: "POST /stop-impersonation — Request & Response",
+        code: `// Request (CookieAuthMiddleware injects refreshToken from HttpOnly cookie automatically)
 {
-  "refreshToken": "impersonation_refresh_token_here..."
+  "refreshToken": "optional-when-sent-via-httponly-cookie"
 }
 
-// Response (200 OK) — Restored Original Session TokenResponse
+// Response (200 OK) — Validates original & target revocation + active check before restoring TokenResponse
 {
   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...", // Original Admin JWT
-  "refreshToken": "original_restored_refresh_token...",
-  "expiresIn": 3600
+  "refreshToken": "",
+  "expiresAt": "2026-11-23T12:30:00Z",
+  "requires2FA": false,
+  "mustChangePassword": false,
+  "requireMfaEnrollment": false
 }`,
       },
     ],
@@ -403,15 +423,21 @@ const sections: DocSection[] = [
       },
       {
         method: "POST",
-        path: "/api/v1/auth/admin/external-logins/link",
+        path: "/api/v1/auth/admin/external-logins/initiate-link",
         descriptionKey: "apiReference.authApi.linkExternalLoginDesc",
-        auth: "Bearer Token",
+        auth: "Bearer Token + X-Sudo-Token",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/admin/external-logins/link",
+        descriptionKey: "Removed direct link endpoint (returns 410 Gone; use initiate-link)",
+        auth: "Removed (410 Gone)",
       },
       {
         method: "DELETE",
         path: "/api/v1/auth/admin/external-logins/{externalLoginId}",
         descriptionKey: "apiReference.authApi.unlinkExternalLoginDesc",
-        auth: "Bearer Token",
+        auth: "Bearer Token + X-Sudo-Token",
       },
     ],
   },
@@ -435,26 +461,72 @@ const sections: DocSection[] = [
 ]`,
       },
       {
-        label: "POST /link Request",
+        label: "POST /initiate-link Request",
         language: "json",
-        filename: "POST /external-logins/link — Request",
+        filename: "POST /external-logins/initiate-link — Request",
         code: `{
-  "identityProviderId": "idp-config-uuid",
-  "providerName": "Google",
-  "providerKey": "1048596048593028",
-  "email": "admin@gmail.com",
-  "displayName": "John Google"
+  "identityProviderId": "idp-config-encrypted-id",
+  "redirectUri": "https://admin.scripe.org/account/security"
 }`,
       },
       {
-        label: "Link Success (201)",
+        label: "Initiate Link Success (200)",
         language: "json",
-        filename: "POST /external-logins/link — Response",
+        filename: "POST /external-logins/initiate-link — Response",
         code: `{
-  "id": "external-login-uuid-1",
-  "providerName": "Google",
-  "email": "admin@gmail.com"
+  "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth?...",
+  "protocol": "Oidc",
+  "state": "signed-state-ticket"
 }`,
+      },
+    ],
+  },
+
+  // ─── Central Identity Federation & Custom-Domain Relay ────
+  {
+    type: "heading",
+    level: 2,
+    titleKey: "apiReference.authApi.federationEndpointsTitle",
+    id: "central-federation-relay",
+  },
+  {
+    type: "api-table",
+    endpoints: [
+      {
+        method: "GET",
+        path: "/api/v1/auth/oidc/callback",
+        descriptionKey: "apiReference.authApi.centralOidcCallbackDesc",
+        auth: "None ([AllowAnonymous], consumes ExternalAuthStateTicket)",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/saml/acs/{providerId}",
+        descriptionKey: "apiReference.authApi.centralSamlAcsDesc",
+        auth: "None ([AllowAnonymous], XML Signature + RelayState)",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/sso/handoff",
+        descriptionKey: "apiReference.authApi.ssoHandoffDesc",
+        auth: "None ([AllowAnonymous], 120s SHA-256 Handoff Ticket)",
+      },
+      {
+        method: "POST",
+        path: "/api/auth/session/establish",
+        descriptionKey: "apiReference.authApi.relayEstablishDesc",
+        auth: "Same-Origin BFF Relay + HMAC-SHA256 (X-Scripe-Session-Relay-*)",
+      },
+      {
+        method: "POST",
+        path: "/api/auth/session/refresh",
+        descriptionKey: "apiReference.authApi.relayRefreshDesc",
+        auth: "__Host-scripe_refresh_token + HMAC-SHA256 BFF Relay",
+      },
+      {
+        method: "POST",
+        path: "/api/auth/session/logout",
+        descriptionKey: "apiReference.authApi.relayLogoutDesc",
+        auth: "__Host-scripe_refresh_token + HMAC-SHA256 BFF Relay",
       },
     ],
   },
@@ -469,6 +541,12 @@ const sections: DocSection[] = [
   {
     type: "api-table",
     endpoints: [
+      {
+        method: "GET",
+        path: "/api/v1/auth/admin/password-policy",
+        descriptionKey: "apiReference.authApi.passwordPolicyDesc",
+        auth: "None ([AllowAnonymous])",
+      },
       {
         method: "POST",
         path: "/api/v1/auth/admin/request-password-reset",
@@ -486,6 +564,12 @@ const sections: DocSection[] = [
         path: "/api/v1/auth/admin/reset-password",
         descriptionKey: "apiReference.authApi.resetPasswordDesc",
         auth: "None",
+      },
+      {
+        method: "POST",
+        path: "/api/v1/auth/admin/force-change-password",
+        descriptionKey: "apiReference.authApi.forceChangePasswordDesc",
+        auth: "Bearer Token",
       },
     ],
   },
@@ -516,31 +600,46 @@ const sections: DocSection[] = [
         code: `// Request
 {
   "email": "admin@example.com",
-  "code": "123456"
+  "code": "123456",
+  "method": "otp" // "otp" or "magic-link"
 }
 
-// Response (200 OK)
+// Response (200 OK — OTP remains unconsumed until step 3 succeeds)
 {
-  "email": "admin@example.com",
+  "isValid": true,
   "workspaces": [
     {
-      "tenantId": "f8e7d6c5-b4a3-2190-fedc-ba0987654321",
+      "tenantId": "encrypted-tenant-id",
       "name": "Acme Corp",
       "code": "ACME"
     }
-  ]
+  ],
+  "passwordPolicy": {
+    "minLength": 8,
+    "maxLength": 128,
+    "requireUppercase": true,
+    "requireLowercase": false,
+    "requireDigit": true,
+    "requireSpecial": false,
+    "expiryDays": null,
+    "historyCount": 5,
+    "checkBreachedPasswords": true
+  },
+  "resetGrantToken": "single-use-reset-grant-token"
 }`,
       },
       {
         label: "Step 3: Reset Password",
         language: "json",
-        filename: "POST /reset-password — Request",
-        code: `// Request
+        filename: "POST /reset-password — Request & Response (204 No Content)",
+        code: `// Request (requires verified resetGrantToken; returns 204 No Content with NO auto-login)
 {
   "email": "admin@example.com",
-  "code": "123456", // Or "otp" field
+  "code": "123456",
+  "method": "otp",
+  "resetGrantToken": "single-use-reset-grant-token",
   "newPassword": "NewSecureP@ssword1!",
-  "tenantIds": ["f8e7d6c5-b4a3-2190-fedc-ba0987654321"] // Decryptable/Encrypted list or null (null resets all)
+  "tenantIds": ["encrypted-tenant-id"] // Encrypted tenant IDs or null to reset all workspaces
 }`,
       },
     ],

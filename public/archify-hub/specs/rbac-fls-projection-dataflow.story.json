@@ -1,0 +1,58 @@
+{
+  "version": 2,
+  "title": "Multi-Role FLS & Export Redaction Dataflow Walkthrough",
+  "intro": "Follow how active RolePermissions and UserGroup restrictions preserve dotted resource keys, merge across multiple roles, and govern UI masking and file exports uniformly.",
+  "outro": "Both JSON API responses and CSV/XLSX/PDF exports enforce the exact same canonical dotted FLS and record scope rules.",
+  "scenes": [
+    {
+      "title": "1. Canonical Dotted Merge & Group Cap",
+      "points": [
+        {
+          "anchor": "role_grants",
+          "via": "f1",
+          "action": "trace",
+          "title": "Entitled Roles Normalized Cleanly",
+          "text": "Active RolePermissions ordered by Priority 0 ascending enter PermissionResourceNormalizer, which preserves dotted keys such as crm.opportunities instead of truncating on Split('.')[0].",
+          "caption": "Dotted resource keys survive normalization intact"
+        },
+        {
+          "anchor": "group_caps",
+          "via": ["f2", "f3"],
+          "action": "parallel",
+          "title": "Read-Preferred Intersect + Group Union",
+          "text": "FieldLevelSecurityMergeHelper intersects masks across read-capable roles (so Manager + Rep unlocks Manager visibility) and unions additive UserGroup restrictions like GRP_SCRIPE_PII_MASKED on top.",
+          "caption": "Permissive across roles, strict cap from UserGroups"
+        },
+        {
+          "anchor": "fls_merge",
+          "via": ["f4", "f5"],
+          "action": "parallel",
+          "title": "Route & Record Visibility Alignment",
+          "text": "The merged FLS map and effective scope feed both EndpointResourceResolver ([Resource] overrides / single PBAC inference) and ICrmRecordVisibilityPolicy with restriction aliases.",
+          "caption": "Same merged context governs columns and rows"
+        }
+      ]
+    },
+    {
+      "title": "2. Enforcement Sinks & Sanitized Outputs",
+      "points": [
+        {
+          "anchor": "ep_resolver",
+          "via": ["f6", "f8"],
+          "action": "trace",
+          "title": "REST JSON Masking, Write Refusal & UI Scrubbing",
+          "text": "JSON projection masks restricted DTO properties, write behaviors block restricted payload tampering with 403, and GenericCrudView omits or renders *** masks consistently.",
+          "caption": "Read and write APIs + React UI enforce identical FLS"
+        },
+        {
+          "anchor": "export_guard",
+          "via": ["f7", "f9", "f10"],
+          "action": "trace",
+          "title": "Export Redactor & Background DataTransfer Parity",
+          "text": "Audit, Dashboard (requiring audit.export), CRM, Compliance (CsvFormulaGuard.Neutralize), and DataTransfer exports redact restricted columns and aliases before producing safe files.",
+          "caption": "Zero sensitive leakage through spreadsheets or async exports"
+        }
+      ]
+    }
+  ]
+}

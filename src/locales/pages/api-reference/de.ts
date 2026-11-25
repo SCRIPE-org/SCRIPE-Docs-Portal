@@ -29,18 +29,20 @@ export const de = {
       refreshTitle: "Refresh Token",
       refreshDesc: "Tauscht ein gültiges Refresh-Token gegen ein neues Token-Paar.",
       logoutTitle: "Logout",
-      logoutDesc: "Widerruft alle Refresh-Tokens des Nutzers.",
+      logoutDesc:
+        "[AllowAnonymous] Widerruft das aktuelle Refresh-Token und löscht BrandingSettings-Sitzungscookies; unterstützt logoutScope ('app' erhält scr.oidc.session, 'central' löscht es) mit 204 No Content.",
       tfaTitle: "Zwei-Faktor-Authentifizierung",
       tfaIntro: "TOTP-basiertes 2FA für zusätzliche Sicherheit.",
       tfaEnableDesc: "Generiert einen QR-Code für Authenticator-Apps.",
       tfaConfirmDesc: "Bestätigt das Setup und liefert Backup-Codes.",
-      tfaVerifyDesc: "Verifiziert einen TOTP-Code während des Logins.",
-      tfaDisableDesc: "Deaktiviert 2FA für das aktuelle Konto.",
+      tfaVerifyDesc: "Anmeldung über Passwort + Code oder einmaliges twoFactorPendingToken abschließen.",
+      tfaDisableDesc:
+        "2FA per Passwort + twoFactorCode deaktivieren (bei Require2FA ohne Passkey-Fallback blockiert).",
       tfaBackupDesc: "Generiert neue Backup-Codes (alte werden ungültig).",
       profileTitle: "Profilverwaltung",
       meDesc: "Holt das Profil des authentifizierten Admins.",
       updateProfileDesc: "Aktualisiert Name und Telefonnummer.",
-      changePasswordDesc: "Ändert das Passwort.",
+      changePasswordDesc: "Passwort ändern und rotierte TokenResponse (200 OK) zurückgeben.",
       uploadAvatarDesc: "Lädt ein Profilbild hoch (max 2 MB).",
       removeAvatarDesc: "Entfernt das aktuelle Profilbild.",
       securityTitle: "Sicherheits-Endpunkte",
@@ -51,16 +53,34 @@ export const de = {
       discoverWorkspacesDesc:
         "Alle mit den Anmeldedaten zugänglichen Workspaces und Organisationen ermitteln.",
       revokeAllSessionsDesc:
-        "Alle aktiven Sitzungen und Refresh-Tokens geräteübergreifend sofort widerrufen.",
+        "Alle anderen aktiven Sitzungen durch Blacklisting von Geschwister-JTIs widerrufen und dabei die aktuelle Sitzung des Aufrufers erhalten.",
+      federationEndpointsTitle: "Zentrale Federation & Custom-Domain Session-Relay",
+      centralOidcCallbackDesc:
+        "[AllowAnonymous] Zentraler OIDC-Callback auf api.scripe.org zum Einlösen von ExternalAuthStateTicket und Ausstellen eines 120s ExternalAuthHandoffTicket.",
+      centralSamlAcsDesc:
+        "[AllowAnonymous] Zentraler SAML 2.0 ACS-Handler zum Erzeugen eines 120s SHA-256 ExternalAuthHandoffTicket Richtung auth.scripe.org oder Custom-Domain.",
+      ssoHandoffDesc:
+        "[AllowAnonymous] Atomares einmaliges Einlösen eines ExternalAuthHandoffTicket (auth:ext-handoff-used:{sha256}) in Sitzungstokens oder 2FA-/Workspace-Status.",
+      relayEstablishDesc:
+        "First-Party Next.js BFF Micro-Relay mit HMAC-SHA256 X-Scripe-Session-Relay-* Headern zum Setzen von __Host-scripe_refresh_token.",
+      relayRefreshDesc:
+        "First-Party Next.js BFF Micro-Relay zur Rotation von __Host-scripe_refresh_token über HMAC-signierten API-Aufruf.",
+      relayLogoutDesc:
+        "First-Party Next.js BFF Micro-Relay zur Weiterleitung von logoutScope ('app' oder 'central') und Löschung von __Host-scripe_refresh_token.",
       getExternalLoginsDesc: "Verknüpfte externe SSO- und Identitätsanbieter des Kontos auflisten.",
       linkExternalLoginDesc:
-        "Externes OAuth/OIDC-Konto mit dem authentifizierten Administratorkonto verknüpfen.",
+        "Sudo-geschützte föderierte OIDC/SAML-Verknüpfung starten (/external-logins/link liefert 410 Gone).",
       unlinkExternalLoginDesc:
         "Externen Authentifizierungsanbieter vom Administratorkonto trennen.",
       requestPasswordResetDesc:
         "Kennwortzurücksetzung für Administratoren mit zeitlich begrenzter Challenge anfordern.",
       verifyResetOtpDesc: "Einmalpasswort-Challenge zur Kennwortwiederherstellung verifizieren.",
-      resetPasswordDesc: "Administratives Kennwort mit validiertem Challenge-Token neu setzen.",
+      resetPasswordDesc:
+        "Admin-Kennwort per ResetGrantToken zurücksetzen; liefert 204 No Content ohne Auto-Login.",
+      passwordPolicyDesc:
+        "Anonyme mandantenspezifische Passwortrichtlinie für Setup und Wiederherstellung abrufen.",
+      forceChangePasswordDesc:
+        "Erzwungene Passwortrotation (mcp=true) abschließen und rotierte TokenResponse zurückgeben.",
     },
     userAuthApi: {
       title: "User Authentifizierungs-API",
@@ -83,19 +103,25 @@ export const de = {
       resetPasswordDesc: "Setzt das Passwort per Code zurück.",
       tokenTitle: "Token-Management",
       refreshDesc: "Aktualisiert das Token-Paar.",
-      logoutDesc: "Beendet die Sitzung.",
+      logoutDesc:
+        "[AllowAnonymous] Aktuelles Refresh-Token widerrufen und Sitzungscookies löschen; logoutScope ('app' schützt scr.oidc.session, 'central' löscht es) (204 No Content).",
       tfaTitle: "User Zwei-Faktor-Authentifizierung",
       tfaEnableDesc: "Generiert das TOTP-Secret.",
       tfaConfirmDesc: "Bestätigt 2FA.",
-      tfaVerifyDesc: "Verifiziert den 2FA-Code beim Login.",
-      tfaDisableDesc: "Deaktiviert 2FA.",
+      tfaVerifyDesc: "Login mit Passwort + Code oder einmaligem twoFactorPendingToken abschließen.",
+      tfaDisableDesc:
+        "2FA mit aktuellem Passwort + twoFactorCode deaktivieren (bei Require2FA ohne Passkey-Fallback blockiert).",
       tfaBackupDesc: "Generiert Backup-Codes.",
       profileTitle: "User-Profil",
       meDesc: "Ruft das User-Profil ab.",
       updateProfileDesc: "Aktualisiert Profildaten.",
-      changePasswordDesc: "Ändert das Passwort.",
+      changePasswordDesc: "Benutzerpasswort ändern und rotierte TokenResponse (200 OK) zurückgeben.",
+      passwordPolicyDesc: "Anonyme mandantenspezifische Passwortregeln für Registrierung/Reset abrufen.",
+      forceChangePasswordDesc:
+        "Erzwungenen Passwortwechsel (mcp=true) abschließen und TokenResponse neu ausstellen.",
       summaryTitle: "Zusammenfassung der Endpunkte",
-      diffNote: "Die User-Auth API ist von der Admin-Auth API komplett getrennt.",
+      diffNote:
+        "Die User-Auth API (/api/v1/auth/user/*) ist strikt von der Admin-Auth API (/api/v1/auth/admin/*) getrennt.",
       loginProviderDesc:
         "SSO- oder OAuth2-Anmeldevorgang über externen Identitätsanbieter starten.",
       sendEmailVerificationDesc:
@@ -103,7 +129,8 @@ export const de = {
       sendPhoneVerificationDesc: "SMS-Einmalkennwort an die hinterlegte Mobilfunknummer senden.",
       getExternalLoginsDesc:
         "Alle mit diesem Benutzerkonto verknüpften externen Anmeldedienste auflisten.",
-      linkExternalLoginDesc: "Externes Social- oder OIDC-Konto mit dem Benutzerprofil verknüpfen.",
+      linkExternalLoginDesc:
+        "Direktes /external-logins/link entfernt (410 Gone); Verknüpfung erfolgt über Provider-Anmeldung.",
       unlinkExternalLoginDesc:
         "Verknüpfung zu externem Identitätsanbieter aus Benutzerkonto aufheben.",
     },
@@ -136,7 +163,7 @@ export const de = {
       transferDesc: "Überträgt die SuperAdmin-Rolle.",
       protectDesc: "Schaltet den Schutz vor Löschung um.",
       impersonationWarning:
-        "Ein mächtiges Feature, das vollständig im Audit-Log dokumentiert wird.",
+        "Erfordert SuperAdmin + X-Sudo-Token. Alle Aktionen werden doppelt protokolliert, bei Widerruf sofort gestoppt und nach maximal 8 Stunden beendet.",
       queryParamsTitle: "Query-Parameter",
     },
     tenantApi: {

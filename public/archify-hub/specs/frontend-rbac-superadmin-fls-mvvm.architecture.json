@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "SCRIPE-Frontend Multi-Role RBAC, Dotted FLS & Session Sync Architecture",
+    "locale": "en",
+    "output": "SCRIPE-Docs-Portal/public/archify-hub/frontend-rbac-superadmin-fls-mvvm.html",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "parentHref": "authorization-remediation-rbac-fullstack.html",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Frontend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "044ecc1eeac75d0a443c118701292fa1bf749507"
+    },
+    "views": [
+      {
+        "id": "superadmin_gates",
+        "label": "1. RouteGuard & SuperAdmin Split",
+        "focus": ["route_guard", "perm_provider", "use_perm_hook", "page_perms"],
+        "note": "Separates isPlatformSuperAdminUser (!user?.tenantId) from isTenantSuperAdminUser and enforces PAGE_PERMISSIONS fail-closed."
+      },
+      {
+        "id": "studio_dotted_fls",
+        "label": "2. Tenant Pickers & Dotted FLS Studio",
+        "focus": ["perm_catalog", "roles_matrix", "groups_studio", "restricted_hook"],
+        "note": "Catalog separates system vs tenant caches and drops platformOnly while Roles & UserGroups keep dotted keys like crm.opportunities."
+      },
+      {
+        "id": "session_partial_crm",
+        "label": "3. Session Sync & Partial CRM FLS",
+        "focus": ["authz_sync", "session_sync_hook", "app_store", "crm_service", "be_api"],
+        "note": "RBAC and entitlement edits resync Zustand principals (overwriting []) while CRM update/close omit undefined restricted fields."
+      }
+    ]
+  },
+  "layout": {
+    "mode": "auto"
+  },
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Core Client Authz, Sync & Store Isolation Layer",
+      "wraps": ["route_guard", "page_perms", "perm_provider", "use_perm_hook", "authz_sync", "session_sync_hook", "perm_catalog", "restricted_hook", "app_store"]
+    },
+    {
+      "kind": "region",
+      "label": "RBAC Studio & Partial-Payload CRM Modules",
+      "wraps": ["roles_matrix", "groups_studio", "crm_service"]
+    }
+  ],
+  "components": [
+    {
+      "id": "route_guard",
+      "type": "security",
+      "label": "RouteGuard Boundary",
+      "sublabel": "Fail-Closed Navigation",
+      "tag": "route-guard.tsx",
+      "explanation": "Evaluates normalized route paths against PAGE_PERMISSIONS and synchronized menu trees before rendering protected views.",
+      "sources": [
+        { "path": "src/core/providers/route-guard.tsx", "line": 420, "end_line": 470, "label": "Fail-closed PBAC route guard" }
+      ]
+    },
+    {
+      "id": "page_perms",
+      "type": "security",
+      "label": "PAGE_PERMISSIONS Map",
+      "sublabel": "490 Codes + Manifest",
+      "tag": "permissions.ts",
+      "explanation": "Synchronizes all 490 catalog codes, separates isPlatformSuperAdminUser (!user?.tenantId) from isTenantSuperAdminUser, and removes platform locks on /audit, /security, and /entitlements/payouts.",
+      "sources": [
+        { "path": "src/core/common/types/permissions.ts", "line": 134, "end_line": 190, "label": "Platform vs Tenant SuperAdmin predicates" },
+        { "path": "src/core/common/types/permissions.ts", "line": 353, "end_line": 680, "label": "PAGE_PERMISSIONS route map" }
+      ]
+    },
+    {
+      "id": "perm_provider",
+      "type": "security",
+      "label": "PermissionProvider",
+      "sublabel": "isTenantSuperAdmin Flag",
+      "tag": "Provider",
+      "explanation": "Replaces loose substring role matching with explicit backend flags and exposes canAccessPage and superadmin booleans cleanly.",
+      "sources": [
+        { "path": "src/core/providers/permission-provider.tsx", "line": 102, "end_line": 220, "label": "PermissionProvider & path matcher" }
+      ]
+    },
+    {
+      "id": "use_perm_hook",
+      "type": "frontend",
+      "label": "usePermission Hooks",
+      "sublabel": "No Username Bypass",
+      "tag": "use-permission.ts",
+      "explanation": "Restricts unconditional superadmin bypass strictly to platform sessions (!user?.tenantId) while enforcing effective permissions on tenant admins.",
+      "sources": [
+        { "path": "src/core/hooks/use-permission.ts", "line": 33, "end_line": 106, "label": "usePermission & usePermissions hooks" }
+      ]
+    },
+    {
+      "id": "app_store",
+      "type": "database",
+      "label": "Zustand Auth Store",
+      "sublabel": "Perms + FLS Map",
+      "tag": "useAppStore",
+      "explanation": "Holds current effective permissions, roles ordered by priority, and lowercased FLS restrictedFields map in memory.",
+      "sources": [
+        { "path": "src/core/hooks/use-restricted-fields.ts", "line": 28, "end_line": 42, "label": "Zustand restrictedFields selector" }
+      ]
+    },
+    {
+      "id": "authz_sync",
+      "type": "backend",
+      "label": "Authz Cache Sync",
+      "sublabel": "[] Overwrite & 401 Purge",
+      "tag": "use-authorization-sync.ts",
+      "explanation": "Refreshes /auth/admin/principal, overwrites permissions/roles even when empty [], wipes store and TanStack caches on 401/403, and invalidates navigation and catalog keys.",
+      "sources": [
+        { "path": "src/core/hooks/use-authorization-sync.ts", "line": 28, "end_line": 171, "label": "Authz Cache & Principal Sync" }
+      ]
+    },
+    {
+      "id": "session_sync_hook",
+      "type": "frontend",
+      "label": "Session Sync Bridge",
+      "sublabel": "7 Mutation VMs Wired",
+      "tag": "module-bridges.ts",
+      "explanation": "Exposes useSessionAuthorizationSync across UserGroups, Overrides, Subscriptions, and Editions ViewModels via getAuthRepository without cross-module imports.",
+      "sources": [
+        { "path": "src/core/hooks/use-session-authorization-sync.ts", "line": 1, "end_line": 33, "label": "Shared VM sync hook" },
+        { "path": "src/core/services/module-bridges.ts", "line": 1, "end_line": 83, "label": "FE-018 Auth bridge" }
+      ]
+    },
+    {
+      "id": "perm_catalog",
+      "type": "backend",
+      "label": "Permission Catalog Hook",
+      "sublabel": "Mode Key + !platformOnly",
+      "tag": "use-permission-catalog.ts",
+      "explanation": "Separates system vs tenant TanStack queryKeys and filters out platformOnly items across all tenant permission pickers.",
+      "sources": [
+        { "path": "src/core/hooks/use-permission-catalog.ts", "line": 1, "end_line": 57, "label": "Tenant-scoped catalog hook" }
+      ]
+    },
+    {
+      "id": "restricted_hook",
+      "type": "security",
+      "label": "FLS Field Guard Hook",
+      "sublabel": "Ordinal Case Scrub",
+      "tag": "use-restricted-fields.ts",
+      "explanation": "Normalizes resource keys to lowercase and matches restricted DTO fields case-insensitively across CRUD tables and forms.",
+      "sources": [
+        { "path": "src/core/hooks/use-restricted-fields.ts", "line": 28, "end_line": 81, "label": "useIsFieldRestricted" }
+      ]
+    },
+    {
+      "id": "roles_matrix",
+      "type": "frontend",
+      "label": "Roles & Matrix Studio",
+      "sublabel": "Priority 0 Asc + Dotted FLS",
+      "tag": "Slice 4B-1",
+      "explanation": "Preserves dotted resources in PermissionConfigDialog, hides all_tenants in BulkScopeMenu for tenant roles, locks T_SCRIPE_SA, and sorts roles by priority ascending.",
+      "sources": [
+        { "path": "src/modules/admin/identity/roles/src/presentation/components/PermissionConfigDialog.tsx", "line": 1, "end_line": 260, "label": "Dotted resource FLS editor" },
+        { "path": "src/modules/admin/identity/roles/src/presentation/components/permission-resource-label.ts", "line": 1, "end_line": 115, "label": "Dotted resource extractor" }
+      ]
+    },
+    {
+      "id": "groups_studio",
+      "type": "frontend",
+      "label": "UserGroups Restrictions",
+      "sublabel": "Immutable + Unique Datalist",
+      "tag": "Slice 4B-2",
+      "explanation": "Uses immutable draft cloning, per-row React useId datalists, additive union alerts, truthful required-field error copy, and has-gated picker branching.",
+      "sources": [
+        { "path": "src/modules/admin/identity/user-groups/src/presentation/components/SetRestrictionsDialog.tsx", "line": 1, "end_line": 265, "label": "Immutable UserGroup FLS dialog" },
+        { "path": "src/modules/admin/identity/user-groups/src/presentation/components/RestrictionRowCard.tsx", "line": 1, "end_line": 286, "label": "Per-row RestrictionRowCard" }
+      ]
+    },
+    {
+      "id": "crm_service",
+      "type": "frontend",
+      "label": "CRM Partial Payload Svc",
+      "sublabel": "Omits Masked Update/Close",
+      "tag": "Slices 6A & 6C",
+      "explanation": "Omits undefined restricted fields (currencyCode, dealKind, estimatedAmount) on updateOpportunity and closeOpportunity so server FLS preserves DB state cleanly.",
+      "sources": [
+        { "path": "src/modules/crm/opportunities/src/data/services/CrmOpportunityService.ts", "line": 65, "end_line": 165, "label": "Partial updateOpportunity & closeOpportunity" }
+      ]
+    },
+    {
+      "id": "be_api",
+      "type": "external",
+      "label": "SCRIPE-Backend API",
+      "sublabel": "/admins/me & PBAC Gates",
+      "tag": ".NET 10 Host"
+    }
+  ],
+  "connections": [
+    { "id": "c_rg_pp", "from": "route_guard", "to": "page_perms", "label": "Matches Route Pattern", "variant": "security" },
+    { "id": "c_rg_pv", "from": "route_guard", "to": "perm_provider", "label": "Checks canAccessPage", "variant": "security" },
+    { "id": "c_pv_hk", "from": "perm_provider", "to": "use_perm_hook", "label": "Shares Guard Predicates", "variant": "default" },
+    { "id": "c_hk_st", "from": "use_perm_hook", "to": "app_store", "label": "Reads Effective Claims", "variant": "default" },
+    { "id": "c_rf_st", "from": "restricted_hook", "to": "app_store", "label": "Reads restrictedFields", "variant": "security" },
+    { "id": "c_sy_st", "from": "authz_sync", "to": "app_store", "label": "Overwrites [] / Wipes 401", "variant": "security" },
+    { "id": "c_br_sy", "from": "session_sync_hook", "to": "authz_sync", "label": "Triggers Principal Sync", "variant": "emphasis" },
+    { "id": "c_rm_br", "from": "roles_matrix", "to": "session_sync_hook", "label": "Syncs On Role Save", "variant": "emphasis" },
+    { "id": "c_ug_br", "from": "groups_studio", "to": "session_sync_hook", "label": "Syncs On Group Save", "variant": "emphasis" },
+    { "id": "c_rm_ct", "from": "roles_matrix", "to": "perm_catalog", "label": "Fetches Tenant Pool", "variant": "default" },
+    { "id": "c_ug_ct", "from": "groups_studio", "to": "perm_catalog", "label": "Strips PlatformOnly", "variant": "security" },
+    { "id": "c_cr_rf", "from": "crm_service", "to": "restricted_hook", "label": "Aligns Omitted FLS Keys", "variant": "default" },
+    { "id": "c_sy_api", "from": "authz_sync", "to": "be_api", "label": "GET /auth/admin/principal", "variant": "emphasis" },
+    { "id": "c_cr_api", "from": "crm_service", "to": "be_api", "label": "PUT / POST Partial JSON", "variant": "security" }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Eliminated Privilege Escalation",
+      "items": [
+        "Removed roleName.includes('super') and username === 'superadmin' tenant bypasses",
+        "applyRefreshedPrincipal overwrites permissions/roles cleanly even on empty [] responses",
+        "401 and 403 revocation errors wipe Zustand state, navigation store, and TanStack Query cache"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Dotted FLS & Partial Payloads",
+      "items": [
+        "Roles and UserGroups editors extract full dotted resources like crm.opportunities",
+        "SetRestrictionsDialog clones drafts immutably with unique per-row useId() datalists",
+        "updateOpportunity & closeOpportunity omit undefined dealKind/currencyCode (Slices 6A/6C)"
+      ]
+    }
+  ]
+}

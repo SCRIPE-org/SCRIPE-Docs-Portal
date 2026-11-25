@@ -166,8 +166,13 @@ export const queryClient = new QueryClient({
     rows: [
       [
         "useAppStore",
-        "User session, permissions, roles, sidebar status, density setting, tenant context",
-        "Yes (localStorage, partialized)",
+        "Non-secret user profile hints, permissions, roles, mcp/mfa_enroll flags, sidebar & density",
+        "Yes (localStorage, partialized — access tokens stay memory-only in SecureTokenService)",
+      ],
+      [
+        "useSudoStore / usePatOneTimeSecretStore",
+        "In-memory Sudo elevation TTL & one-time PAT display buffer",
+        "No (cleared on logout / navigation)",
       ],
       [
         "useCurrencyPreference",
@@ -203,11 +208,18 @@ export const queryClient = new QueryClient({
   setAuth: (user: User, permissions: PermissionCode[], roles: AdminRole[], isFreshLogin?: boolean) => void;
   logout: () => void;
 
+  // Must Change Password & Mandatory MFA Enrollment (mcp -> mfa_enroll wall order)
+  mustChangePassword: boolean;
+  setMustChangePassword: (must: boolean) => void;
+  requireMfaEnrollment: boolean;
+  setRequireMfaEnrollment: (require: boolean) => void;
+
   // Tenant & Subscription Info
   tenantCode: string | null;
   setTenantCode: (code: string | null) => void;
   editionName: string | null;
   subscriptionStatus: string | null;
+  gracePhase: string | null;
 
   // Hydration State
   _hasHydrated: boolean;
@@ -222,7 +234,7 @@ export const queryClient = new QueryClient({
   (set) => ({ ... }),
   {
     name: "app-storage",
-    // 1. Partialize: excludes in-memory tokens, keeps user hints and layout config
+    // 1. Partialize: excludes in-memory tokens and defaultRedirectPath, keeps non-secret UX hints
     partialize: (state) => ({
       sidebarOpen: state.sidebarOpen,
       density: state.density,
@@ -230,11 +242,13 @@ export const queryClient = new QueryClient({
       isAuthenticated: state.isAuthenticated,
       permissions: state.permissions,
       roles: state.roles,
+      restrictedFields: state.restrictedFields,
       tenantCode: state.tenantCode,
       subscriptionStatus: state.subscriptionStatus,
+      gracePhase: state.gracePhase,
       editionName: state.editionName,
       mustChangePassword: state.mustChangePassword,
-      defaultRedirectPath: state.defaultRedirectPath,
+      requireMfaEnrollment: state.requireMfaEnrollment,
     }),
     // 2. Hydration Sync: prevents flashing of server-rendered components
     onRehydrateStorage: () => (state) => {

@@ -239,9 +239,9 @@ const sections: DocSection[] = [
       [
         "passkey-auth",
         "Fixed Window",
-        "5 requests",
+        "12 requests",
         "15 minutes",
-        "WebAuthn / passkey authentication attempts",
+        "WebAuthn / passkey & Sudo ceremony authentication attempts (PasskeyAuthLimit = 12; X-Scripe-Session-Relay-Client-Ip partitioned)",
       ],
       [
         "qr-poll",
@@ -486,8 +486,8 @@ public class ReplayProtectionMiddleware
     rows: [
       [
         "Access Token Lifetime",
-        "15 minutes",
-        "Configured in Jwt:ExpiryMinutes. Short lifetime limits the window of opportunity for stolen tokens.",
+        "30 minutes (default)",
+        "Configured in Jwt:ExpiryMinutes and SessionPolicyDto. Short lifetime limits the window of opportunity for stolen tokens.",
         "Mitigate token theft / session hijacking",
       ],
       [

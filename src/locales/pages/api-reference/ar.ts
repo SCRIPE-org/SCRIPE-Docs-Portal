@@ -30,18 +30,19 @@ export const ar = {
       refreshTitle: "تحديث الرمز (Refresh)",
       refreshDesc: "استبدال الرمز المنتهي بآخر جديد للاستمرار.",
       logoutTitle: "تسجيل الخروج",
-      logoutDesc: "إبطال جميع الجلسات الفعالة للمستخدم.",
+      logoutDesc:
+        "[AllowAnonymous] إبطال رمز التحديث الحالي ومسح ملفات تعريف ارتباط الجلسة؛ يدعم logoutScope ('app' يحافظ على scr.oidc.session و 'central' يمسحه) مع إرجاع 204 No Content.",
       tfaTitle: "المصادقة الثنائية",
       tfaIntro: "دعم لـ TOTP لحماية إضافية من الهجمات والاختراقات.",
       tfaEnableDesc: "توليد كود QR ورمز التأسيس للتفعيل.",
       tfaConfirmDesc: "تأكيد الرمز الأولي والاحتفاظ بالرموز الاحتياطية.",
-      tfaVerifyDesc: "تسجيل الدخول بخطوة المصادقة الثنائية.",
-      tfaDisableDesc: "إلغاء التفعيل للـ 2FA.",
+      tfaVerifyDesc: "إتمام الدخول عبر كلمة المرور + الرمز أو تذكرة twoFactorPendingToken أحادية الاستخدام.",
+      tfaDisableDesc: "تعطيل 2FA بكلمة المرور + twoFactorCode (يُحظر عند تفعيل Require2FA دون مفتاح مرور بديل).",
       tfaBackupDesc: "توليد رموز احتياطية جديدة وإبطال القديمة.",
       profileTitle: "إدارة الملف الشخصي",
       meDesc: "الحصول على بيانات المستخدم الكاملة.",
       updateProfileDesc: "تحديث الاسم والهاتف للمستخدم.",
-      changePasswordDesc: "تغيير كلمة المرور باشتراط مطابقة الحالية.",
+      changePasswordDesc: "تغيير كلمة المرور مع تدوير الجلسة وإرجاع TokenResponse محدّث (200 OK).",
       uploadAvatarDesc: "رفع الصورة الشخصية (الحد الأقصى 2 ميجابايت).",
       removeAvatarDesc: "إزالة الصورة والعودة للحالة الافتراضية.",
       securityTitle: "نقاط نهاية الأمان",
@@ -52,15 +53,35 @@ export const ar = {
         "يمكن للمستخدمين العامين رؤية الأحداث الأمنية لجميع الإداريين عبر /api/v1/audit.",
       discoverWorkspacesDesc:
         "اكتشاف جميع مساحات العمل والمؤسسات المتاحة للمستخدم بناءً على بيانات اعتماده.",
-      revokeAllSessionsDesc: "إلغاء جميع الجلسات النشطة ورموز التحديث عبر كافة الأجهزة في آن واحد.",
+      revokeAllSessionsDesc:
+        "إلغاء جميع الجلسات النشطة الأخرى عبر حظر معرفات JTI الشقيقة مع الحفاظ على الجلسة الحالية النشطة للمتصل.",
+      federationEndpointsTitle: "نقاط الاتحاد المركزي ومرحل جلسات النطاقات المخصصة",
+      centralOidcCallbackDesc:
+        "[AllowAnonymous] استدعاء OIDC المركزي على api.scripe.org لاستهلاك ExternalAuthStateTicket وإصدار تذكرة ExternalAuthHandoffTicket بمهلة 120 ثانية.",
+      centralSamlAcsDesc:
+        "[AllowAnonymous] مستلم تأكيدات SAML 2.0 المركزي لإصدار تذكرة تسليم SHA-256 بمهلة 120 ثانية والتوجيه لـ auth.scripe.org أو النطاق الموثق.",
+      ssoHandoffDesc:
+        "[AllowAnonymous] استرداد تذكرة ExternalAuthHandoffTicket أحادية الاستخدام ذرياً للحصول على رموز الجلسة أو حالة 2FA واختيار مساحة العمل.",
+      relayEstablishDesc:
+        "مرحل Next.js BFF للنطاق المخصص (HMAC-SHA256 X-Scripe-Session-Relay-*) لتأسيس الجلسة وتعيين __Host-scripe_refresh_token.",
+      relayRefreshDesc:
+        "مرحل Next.js BFF لتدوير __Host-scripe_refresh_token على النطاقات المخصصة عبر طلب موقع بـ HMAC.",
+      relayLogoutDesc:
+        "مرحل Next.js BFF لتمرير logoutScope ('app' افتراضياً أو 'central') ومسح __Host-scripe_refresh_token.",
       getExternalLoginsDesc:
         "سرد وسائل الدخول الموحد SSO ومزودي الهوية الخارجية المرتبطة بهذا الحساب.",
-      linkExternalLoginDesc: "ربط بيانات اعتماد OAuth/OIDC خارجية بحساب المسؤول المصادق عليه.",
+      linkExternalLoginDesc:
+        "بدء ربط موحّد محمي بـ Sudo عبر OIDC/SAML (المسار المباشر /link يُرجع 410 Gone).",
       unlinkExternalLoginDesc: "إلغاء ربط مزود مصادقة خارجي من الحساب.",
       requestPasswordResetDesc:
         "بدء إجراءات استعادة كلمة المرور الإدارية برمز تحقق ذي صلاحية محددة.",
       verifyResetOtpDesc: "التحقق من رمز المرور لمرة واحدة OTP الخاص بمسار استعادة كلمة المرور.",
-      resetPasswordDesc: "إتمام إعادة تعيين كلمة المرور الإدارية باستخدام رمز التحدي المؤكد.",
+      resetPasswordDesc:
+        "إتمام إعادة تعيين كلمة المرور عبر ResetGrantToken وإرجاع 204 No Content دون تسجيل دخول تلقائي.",
+      passwordPolicyDesc:
+        "جلب سياسة تعقيد كلمة المرور الخاصة بالمستأجر دون مصادقة قبل الإعداد أو الاستعادة.",
+      forceChangePasswordDesc:
+        "إتمام تدوير كلمة المرور الإلزامي (mcp=true) وإرجاع TokenResponse محدّث.",
     },
     userAuthApi: {
       title: "واجهة مصادقة المستخدمين",
@@ -83,25 +104,30 @@ export const ar = {
       resetPasswordDesc: "تعيين كلمة المرور باستخدام الرمز السري المرسل.",
       tokenTitle: "إدارة الرموز",
       refreshDesc: "تدوير الرموز القديمة.",
-      logoutDesc: "الخروج وإلغاء صلاحية الجلسة.",
+      logoutDesc:
+        "[AllowAnonymous] إبطال رمز التحديث الحالي ومسح ملفات تعريف ارتباط الجلسة؛ يدعم logoutScope ('app' يحافظ على scr.oidc.session و 'central' يمسحه) مع إرجاع 204 No Content.",
       tfaTitle: "مصادقة ثنائية للمستخدم",
       tfaEnableDesc: "توليد كود QR للمستخدم.",
       tfaConfirmDesc: "تأكيد وتوليد رموز بديلة للمستخدم.",
-      tfaVerifyDesc: "إتمام الدخول بكود الـ TOTP.",
-      tfaDisableDesc: "إلغاء خاصية 2FA للمستخدم.",
+      tfaVerifyDesc: "إتمام الدخول بكود TOTP عبر كلمة المرور أو تذكرة twoFactorPendingToken.",
+      tfaDisableDesc: "تعطيل 2FA بكلمة المرور + twoFactorCode (محظور مع Require2FA دون Passkey بديل).",
       tfaBackupDesc: "تجديد الرموز.",
       profileTitle: "ملف المستخدم",
       meDesc: "جلب معلومات المستخدم.",
       updateProfileDesc: "تحديث الهاتف والاسم.",
-      changePasswordDesc: "تغيير الرقم السري.",
+      changePasswordDesc: "تغيير كلمة مرور المستخدم وتدوير TokenResponse في نفس الجلسة.",
+      passwordPolicyDesc: "جلب متطلبات تعقيد كلمة المرور الخاصة بالمستأجر دون مصادقة.",
+      forceChangePasswordDesc: "إتمام تغيير كلمة المرور الإلزامي (mcp=true) للمستخدم وإعادة إصدار الرموز.",
       summaryTitle: "ملخص الـ API",
-      diffNote: "واجهة مصادقة المستخدمين منفصلة تماماً عن المستخدمين للحفاظ على الأمان والتخصيص.",
+      diffNote:
+        "واجهة مصادقة المستخدمين (/api/v1/auth/user/*) معزولة تماماً عن واجهة المسؤولين (/api/v1/auth/admin/*) مع تدوير ملفات تعريف الارتباط HttpOnly وفق BrandingSettings.",
       loginProviderDesc: "بدء مسار مصادقة SSO أو OAuth2 عبر مزود هوية خارجي.",
       sendEmailVerificationDesc: "إرسال رمز تحقق إلكتروني إلى البريد الأساسي المسجل للمستخدم.",
       sendPhoneVerificationDesc:
         "إرسال رمز مرور لمرة واحدة عبر SMS إلى رقم الجوال المسجل للمستخدم.",
       getExternalLoginsDesc: "سرد جميع مزودي تسجيل الدخول الخارجيين المرتبطين بهذا المستخدم.",
-      linkExternalLoginDesc: "ربط رمز مصادقة اجتماعي أو OIDC خارجي بملف المستخدم الشخصي.",
+      linkExternalLoginDesc:
+        "تمت إزالة /external-logins/link المباشر (410 Gone)؛ يتم الربط عبر تسجيل الدخول الموحد للمزود.",
       unlinkExternalLoginDesc: "إزالة ارتباط هوية خارجية من حساب المستخدم.",
     },
     adminApi: {
@@ -133,7 +159,7 @@ export const ar = {
       transferDesc: "نقل ملكية الصلاحيات الكبرى لمستخدم آخر والتنازل عنها.",
       protectDesc: "حماية حساب مستخدم من الحذف.",
       impersonationWarning:
-        "يتم توثيق كل خطوة باسم المنتحل الحقيقي والأصلي لضمان المساءلة الكاملة.",
+        "يتطلب انتحال الشخصية رفع مستوى التحقق عبر X-Sudo-Token، ويتم توثيق هوية المنتحل والهدف مع فحص الإبطال وتطبيق سقف صارم غير قابل للتمديد لمدة 8 ساعات.",
       queryParamsTitle: "متغيرات استعلام الرابط (Query Params)",
     },
     tenantApi: {

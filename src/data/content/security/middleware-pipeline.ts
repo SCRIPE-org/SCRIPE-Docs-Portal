@@ -18,7 +18,7 @@ const sections: DocSection[] = [
     title: "Full HTTP Request Middleware Execution Pipeline",
     direction: "vertical",
     nodes: [
-      { id: "p1", label: "PHASE 1: Request Bootstrapping & Diagnostics", type: "primary" },
+      { id: "p1", label: "STAGE 1: Request Bootstrapping & Diagnostics", type: "primary" },
       { id: "m1", label: "1. Forwarded Headers (Real IP)", type: "default" },
       {
         id: "m2",
@@ -53,8 +53,13 @@ const sections: DocSection[] = [
         description: "Culture selection",
       },
 
-      { id: "p2", label: "PHASE 2: Routing, Gateway & Access Policies", type: "primary" },
-      { id: "m9", label: "9. Static Files (/api/files)", type: "default" },
+      { id: "p2", label: "STAGE 2: Routing, Edge Gate & Caching", type: "primary" },
+      {
+        id: "m9",
+        label: "9. Guarded Static Files (/api/files)",
+        type: "default",
+        description: "tenant-logos & email-images only",
+      },
       { id: "m10", label: "10. CORS Middleware", type: "default", description: "Origin checking" },
       {
         id: "m11",
@@ -63,75 +68,80 @@ const sections: DocSection[] = [
         description: "Fail-closed check",
       },
       { id: "m12", label: "12. Background Jobs Dashboard", type: "default" },
-      {
-        id: "m13",
-        label: "13. Rate Limiter",
-        type: "warning",
-        description: "Tiered rate limiting",
-      },
-      { id: "m14", label: "14. Response Caching & Cache Headers", type: "success" },
+      { id: "m13", label: "13. Response Caching & Cache Headers", type: "success" },
 
-      { id: "p3", label: "PHASE 3: Authentication & Anti-CSRF", type: "primary" },
-      { id: "m15", label: "15. Cookie Auth (Cookie-to-Bearer)", type: "info" },
+      { id: "p3", label: "STAGE 3: Authentication, Throttling & CSRF", type: "primary" },
+      { id: "m14", label: "14. Cookie Auth (Cookie-to-Bearer)", type: "info" },
       {
-        id: "m16",
-        label: "16. Authentication (JWT)",
+        id: "m15",
+        label: "15. Authentication (JWT)",
         type: "primary",
         description: "Validates access token",
       },
       {
-        id: "m17",
-        label: "17. CSRF Protection",
-        type: "warning",
-        description: "Double-submit validation",
+        id: "m16",
+        label: "16. API Key Usage Middleware",
+        type: "info",
+        description: "Post-JWT X-API-Key attribution",
       },
-      { id: "m18", label: "18. Input Sanitization", type: "info", description: "Strips HTML tags" },
+      {
+        id: "m17",
+        label: "17. Rate Limiter (Post-Auth)",
+        type: "warning",
+        description: "Per-user & tenant partitions",
+      },
+      {
+        id: "m18",
+        label: "18. CSRF & Input Sanitization",
+        type: "warning",
+        description: "Double-submit & HTML stripping",
+      },
 
-      { id: "p4", label: "PHASE 4: Authorization, Replay & Tenant Isolation", type: "primary" },
+      { id: "p4", label: "STAGE 4: PBAC, Policy Walls & Isolation", type: "primary" },
       {
         id: "m19",
-        label: "19. Authorization (RBAC)",
+        label: "19. Authorization (PBAC)",
         type: "primary",
-        description: "Permission checks",
+        description: "Permission & policy checks",
       },
       {
         id: "m20",
-        label: "20. Must Change Password Gate",
+        label: "20. Trusted CIDR Allowlist",
         type: "danger",
-        description: "Blocks expired credentials",
+        description: "Global tenant IP bounds",
       },
       {
         id: "m21",
-        label: "21. Replay Protection",
+        label: "21. MustChangePassword Gate",
         type: "danger",
-        description: "Timestamp ±5m & Nonce unique",
+        description: "Blocks API calls when mcp=true",
       },
       {
         id: "m22",
-        label: "22. Tenant Context Validation",
-        type: "warning",
-        description: "Validates tenant context",
+        label: "22. RequireMfaEnrollment Gate",
+        type: "danger",
+        description: "Blocks API calls when mfa_enroll=true",
       },
       {
         id: "m23",
-        label: "23. TenantContextMiddleware",
-        type: "success",
-        description: "IDataScopeService scoping",
+        label: "23. Replay Protection",
+        type: "danger",
+        description: "Timestamp & Nonce unique",
       },
       {
         id: "m24",
-        label: "24. Field Projection",
-        type: "info",
-        description: "Filters restricted fields",
+        label: "24. Tenant Context & Idempotency",
+        type: "warning",
+        description: "Validates X-Tenant-Context",
       },
       {
         id: "m25",
-        label: "25. Request Logging & Audit",
-        type: "success",
-        description: "Serilog audit trail creation",
+        label: "25. Field Projection & Request Audit",
+        type: "info",
+        description: "Restricted field filtering + Serilog",
       },
 
-      { id: "p5", label: "PHASE 5: Endpoint Mapping & Execution", type: "primary" },
+      { id: "p5", label: "STAGE 5: Endpoint Mapping & Execution", type: "primary" },
       { id: "m26", label: "26. Health Checks (/health)", type: "success" },
       {
         id: "m27",
@@ -157,10 +167,10 @@ const sections: DocSection[] = [
       { from: "m10", to: "m11" },
       { from: "m11", to: "m12" },
       { from: "m12", to: "m13" },
-      { from: "m13", to: "m14" },
-      { from: "m14", to: "p3" },
+      { from: "m13", to: "p3" },
 
-      { from: "p3", to: "m15" },
+      { from: "p3", to: "m14" },
+      { from: "m14", to: "m15" },
       { from: "m15", to: "m16" },
       { from: "m16", to: "m17" },
       { from: "m17", to: "m18" },
@@ -172,6 +182,7 @@ const sections: DocSection[] = [
       { from: "m21", to: "m22" },
       { from: "m22", to: "m23" },
       { from: "m23", to: "m24" },
+      { from: "m24", to: "m25" },
       { from: "m25", to: "p5" },
 
       { from: "p5", to: "m26" },
@@ -568,10 +579,8 @@ public class ObservabilityMiddleware
   {
     type: "code",
     language: "csharp",
-    filename: "Program.cs — Middleware Pipeline Registration",
-    code: `var app = builder.Build();
-
-// ─── Middleware Pipeline (ORDER MATTERS!) ───────────────
+    filename: "MiddlewarePipeline.cs — Actual Execution Order",
+    code: `// ─── Middleware Pipeline (ORDER MATTERS!) ───────────────
 app.UseForwardedHeaders();                           // 1. Resolve client IP
 app.UseMiddleware<GlobalExceptionMiddleware>();      // 2. Catch all errors
 if (!app.Environment.IsDevelopment())
@@ -583,28 +592,30 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();                       // 7. Enforce SSL
 app.UseResponseCompression();                        // 8. Brotli/Gzip compression
 app.UseRequestLocalization();                        // 9. Multi-lingual context
-app.UseStaticFiles();                                // 10. Serve static files
-app.UseCorsConfiguration();                          // 11. CORS policies
-app.UseCloudflareOriginVerification();               // 12. Cloudflare gate
-app.UseBackgroundJobsDashboard();                    // 13. Hangfire dashboard
-app.UseRateLimiting();                               // 14. Throttling limiters
-app.UseResponseCaching();                            // 15. Response caching
-app.UseMiddleware<CacheHeadersMiddleware>();          // 16. Cache headers
-app.UseCookieAuth();                                 // 17. Cookie auth fallback
-app.UseAuthentication();                             // 18. Authenticate JWT token
-app.UseCsrfProtection();                             // 19. CSRF double-submit
-app.UseInputSanitization();                          // 20. Input sanitization
-app.UseAuthorization();                              // 21. Check RBAC permissions
-app.UseMiddleware<MustChangePasswordMiddleware>();   // 22. MCP flag check
-app.UseReplayProtection();                           // 23. Timestamp & Nonce check
-app.UseTenantContextValidation();                    // 24. Switch-tenant checks
-app.UseMiddleware<FieldProjectionMiddleware>();       // 25. Field level security
-app.UseRequestLogging();                             // 26. Log HTTP audits (after auth)
-
-app.MapHealthChecks("/health");                      // 27. Health endpoint
-app.UseMiddleware<ETagMiddleware>();                 // 28. Client ETag validation
-app.MapControllers();                                // 29. Route to controllers
-app.Run();`,
+// 10. Guarded Static Files (/api/files/tenant-logos & /email-images only; sensitive downloads use /api/v1/downloads)
+app.UseCorsConfiguration(app.Environment);           // 11. CORS policies
+app.UseCloudflareOriginVerification();               // 12. Cloudflare origin gate (fail-closed)
+app.UseBackgroundJobsConfiguration(configuration);   // 13. Hangfire dashboard (/hangfire)
+app.UseResponseCaching();                            // 14. Response caching
+app.UseMiddleware<CacheHeadersMiddleware>();          // 15. Cache headers
+app.UseCookieAuth();                                 // 16. Cookie-to-Bearer + scripe-auth fallback
+app.UseAuthentication();                             // 17. Authenticate JWT Bearer token
+app.UseMiddleware<ApiKeyUsageMiddleware>();          // 18. API Key auth & usage tracking (post-JWT)
+app.UseRateLimitingConfiguration(configuration);     // 19. Rate limiting (uses resolved user/tenant partitions)
+app.UseCsrfProtection();                             // 20. CSRF double-submit check
+app.UseInputSanitization();                          // 21. Strip HTML tags from JSON bodies
+app.UseAuthorization();                              // 22. Check PBAC permissions & policies
+app.UseMiddleware<TrustedCidrEnforcementMiddleware>(); // 23. Tenant Trusted CIDR allowlist
+app.UseMiddleware<MustChangePasswordMiddleware>();   // 24. Enforce mcp=true password change wall
+app.UseMiddleware<RequireMfaEnrollmentMiddleware>(); // 25. Enforce mfa_enroll=true MFA enrollment wall
+app.UseReplayProtection();                           // 26. Timestamp & Nonce replay prevention
+app.UseTenantContextValidation();                    // 27. Validate X-Tenant-Context switching
+app.UseIdempotencyContext();                         // 28. Extract Idempotency-Key context
+app.UseMiddleware<FieldProjectionMiddleware>();       // 29. Filter restricted JSON fields
+app.UseRequestLogging();                             // 30. HTTP request & audit logging (post-auth)
+app.MapHealthCheckEndpoints();                       // 31. Health & readiness probes (/health)
+app.UseMiddleware<ETagMiddleware>();                 // 32. Client ETag validation
+app.MapControllers();                                // 33. Route to API controllers`,
   },
   {
     type: "info",
@@ -694,10 +705,10 @@ app.Run();`,
       ],
       [
         "10",
-        "Static Files",
-        "Serves secure files from FileHost folder under /api/files",
-        "Yes (200 / 304)",
-        "Requests to RequestPath",
+        "Guarded Static Files",
+        "Serves public brand logos/email images under /api/files; sensitive files require /api/v1/downloads",
+        "Yes (200 / 304 / 404)",
+        "Allowlisted prefixes only",
       ],
       [
         "11",
@@ -716,121 +727,149 @@ app.Run();`,
       [
         "13",
         "Background Jobs Dashboard",
-        "Provides secure access dashboard for Hangfire or Quartz",
+        "Provides secure access dashboard for Hangfire recurring & queued jobs",
         "Yes (UI pages / 401)",
-        "/hangfire or dashboard routes",
+        "/hangfire dashboard routes",
       ],
       [
         "14",
-        "Rate Limiting",
-        "Enforces request throttling based on IP/User policies",
-        "Yes (429 Too Many Requests)",
-        "All endpoints (configured)",
-      ],
-      [
-        "15",
         "Response Caching",
         "Serves cached responses directly when available",
         "Yes (Cache hit 200)",
         "Configured GET requests",
       ],
       [
-        "16",
+        "15",
         "CacheHeadersMiddleware",
         "Injects cache-control headers and computes ETag hashes",
         "Yes (304 Not Modified)",
         "All GET requests",
       ],
       [
-        "17",
+        "16",
         "CookieAuthMiddleware",
-        "Reads JWT from httpOnly cookie as Authorization header fallback",
+        "Reads scripe-auth JWT from HttpOnly cookie as Authorization header fallback",
         "No",
         "Authorization header missing",
       ],
       [
-        "18",
+        "17",
         "Authentication",
-        "Validates JWT signature, validity, and extracts identity claims",
+        "Validates JWT signature, expiry, JTI/revocation cache, and extracts claims",
         "Yes (401 Unauthorized on invalid)",
         "All requests",
       ],
       [
+        "18",
+        "ApiKeyUsageMiddleware",
+        "Resolves X-API-Key principal and logs API key usage metrics after JWT auth",
+        "Yes (401 / 429)",
+        "X-API-Key requests",
+      ],
+      [
         "19",
+        "Rate Limiting",
+        "Enforces IP/User/Tenant throttling partitions (runs post-auth/API-key resolution)",
+        "Yes (429 Too Many Requests)",
+        "All configured policies",
+      ],
+      [
+        "20",
         "CSRF Protection",
-        "Validates double-submit cookie signature for state mutation",
+        "Validates double-submit cookie signature for cookie-authenticated mutations",
         "Yes (403 CSRF Mismatch)",
         "POST/PUT/DELETE non-Bearer",
       ],
       [
-        "20",
+        "21",
         "Input Sanitization",
         "Strips dangerous HTML/script tags from incoming JSON models",
         "No",
         "Mutating requests (JSON bodies)",
       ],
       [
-        "21",
+        "22",
         "Authorization",
         "Validates user permissions and roles against endpoint targets",
         "Yes (403 Forbidden)",
         "Endpoints with auth attributes",
       ],
       [
-        "22",
+        "23",
+        "TrustedCidrEnforcementMiddleware",
+        "Enforces per-tenant IP/CIDR allowlist restrictions globally across modules",
+        "Yes (403 Forbidden)",
+        "Tenant-configured CIDR rules",
+      ],
+      [
+        "24",
         "MustChangePasswordMiddleware",
-        "Blocks resource access when password needs rotation",
-        "Yes (403 Force Change)",
+        "Blocks general API access with ErrorCodes.MustChangePassword when mcp=true",
+        "Yes (403 Force Password Change)",
         "JWT contains mcp=true claim",
       ],
       [
-        "23",
+        "25",
+        "RequireMfaEnrollmentMiddleware",
+        "Blocks general API access until TOTP/Passkey enrollment when mfa_enroll=true",
+        "Yes (403 MFA Enrollment Required)",
+        "JWT contains mfa_enroll=true",
+      ],
+      [
+        "26",
         "Replay Protection",
         "Validates uniqueness of request UUID nonces within skew window",
         "Yes (409 Conflict / 400)",
         "Mutating authenticated requests",
       ],
       [
-        "24",
+        "27",
         "Tenant Context Validation",
-        "Ensures request tenant matches user bounds or drill-downs",
+        "Validates X-Tenant-Context switching bounds and hierarchical drill-downs",
         "Yes (403 Forbidden)",
         "Tenant-scoped requests",
       ],
       [
-        "25",
-        "TenantContextMiddleware",
-        "Binds the active tenant context to IDataScopeService",
+        "28",
+        "Idempotency Context",
+        "Extracts Idempotency-Key / X-Idempotency-Key and signals replay state",
         "No",
-        "Tenant-scoped requests",
+        "Mutating requests",
       ],
       [
-        "26",
+        "29",
         "FieldProjectionMiddleware",
         "Removes unauthorized restricted fields from JSON responses",
         "No",
         "GET requests with active policies",
       ],
       [
-        "27",
+        "30",
         "Request Logging",
-        "Logs request auditing data including user and tenant IDs",
+        "Logs request auditing data including user and tenant IDs (post-auth)",
         "No",
-        "All requests (post-auth context)",
+        "All requests",
       ],
       [
-        "28",
+        "31",
         "Health Checks",
-        "Exposes system health, database, and readiness probes",
+        "Exposes system liveness and readiness probes",
         "Yes (200 / 503)",
         "/health and /health/ready",
       ],
       [
-        "29",
+        "32",
         "ETag Middleware",
-        "Validates If-None-Match header against response MD5 hash",
+        "Validates If-None-Match header against response hash",
         "Yes (304 Not Modified)",
         "GET requests",
+      ],
+      [
+        "33",
+        "MVC Controllers",
+        "Routes validated, authorized requests to controller endpoints",
+        "Yes",
+        "All matched API routes",
       ],
     ],
   },

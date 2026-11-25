@@ -27,7 +27,7 @@ export const en = {
         "Without this gate, SSO users could authenticate via an external identity provider and receive a valid SCRIPE JWT even if their tenant has been suspended. All SSO login paths now enforce the same tenant status checks as the standard password login.",
       jwtTitle: "JWT Token Configuration",
       jwtIntro:
-        "The system uses short-lived access tokens (15 minutes) with long-lived refresh tokens (7 days). Refresh tokens are rotated on each use to prevent reuse attacks.",
+        "The system uses short-lived access tokens (30 minutes default via Jwt:ExpiryMinutes, reconciled with SessionPolicyDto) paired with rolling refresh tokens capped by AbsoluteExpiresAt (24 hours standard, >= 30 days StaySignedIn, 8 hours impersonation). Refresh tokens rotate on every use.",
       dualAuthTitle: "Dual Authentication (Admin & User)",
       dualAuthIntro:
         "SCRIPE has two separate authentication pipelines. Admin auth (AdminAuthController) issues JWTs with admin-specific claims (TenantId, IsSuperAdmin, Roles). User auth (UserAuthController) issues JWTs with user-specific claims (NationalId, Gender, Country). Each has its own login, register, and token refresh endpoints.",
@@ -51,9 +51,9 @@ export const en = {
       tokenValidationTitle: "Token Validation & Claim Checks",
       tokenValidationIntro:
         "Both authentication pipelines share the same JWT token validation process. The middleware verifies name identifier claims, checks the 'admin' flag, and queries the database bypassing global query filters using `IgnoreQueryFilters()` to verify the admin or user account is still active and has not been soft-deleted.",
-      mcpMiddlewareTitle: "MustChangePassword Middleware & Whitelist",
+      mcpMiddlewareTitle: "Post-Login Policy Gates (MustChangePassword & RequireMfaEnrollment)",
       mcpMiddlewareIntro:
-        "When a password expires, the user's JWT receives the `mcp: true` claim. The `MustChangePasswordMiddleware` blocks all incoming requests with 403 Forbidden unless the request matches the whitelist: password change endpoint `/api/v1/admins/{adminId}/change-password`, profile details `/api/v1/auth/admin/me`, token refresh `/api/v1/auth/admin/refresh`, session logouts `/api/v1/auth/admin/logout` or `/api/v1/auth/admin/revoke`, and the system `/health` endpoint.",
+        "When a password must be rotated (`mcp: true`) or mandatory 2FA/Passkey enrollment is missing (`mfa_enroll: true`), `MustChangePasswordMiddleware` and `RequireMfaEnrollmentMiddleware` reject general API calls with `403 Forbidden` (camelCase `ErrorResponse` with `errorCode`) and only permit self-service remediation routes (`change-password`, `force-change-password`, `2fa/enable|confirm|status`, `passkeys/registration/*`, `sudo/*`, `account/security`, `auth/{admin,user}/principal`, `refresh`, `logout`, `revoke`, `password-policy`, `customization/resolve`, `/hubs/*`, and `/health`).",
       ssoCallbackTitle: "OIDC/SSO Callback & Workspace Selection",
       ssoCallbackIntro:
         "For Single Sign-On (OIDC/SAML) callbacks, the system resolves the email and checks if multiple workspaces are linked. If there are multiple candidate workspaces, a temporary workspace selection token is generated and stored in a cache under `sso-login-selection:{token}`. The user is redirected to choose a workspace, which then dispatches `CompleteOidcWorkspaceSelectionCommand` to decrypt the selected tenant ID and issue final JWTs.",
@@ -483,9 +483,12 @@ export const en = {
       samlTitle: "SAML 2.0 & Cryptographic Assertion Security",
       samlContent:
         "In addition to OIDC, the platform integrates SAML 2.0 authentication using the ITfoxtec.Identity.Saml2 library. For inbound SSO, public X.509 certificates are loaded from base64 string configurations to validate SAML response signatures while ignoring certificate chain validations. Outbound client connections use platform-wide signing certificates to issue secure SAML assertions.",
-      oidcCallbackTitle: "OIDC Callback & Workspace Caching Flow",
+      oidcCallbackTitle: "Central OIDC/SAML Callback & Single-Use Handoff",
       oidcCallbackContent:
-        "The callback handler validates incoming credentials and manages workspace selection for administrators with access to multiple tenants. A temporary token caches the login profile (SsoTempLoginData) in Redis for 15 minutes, allowing safe workspace selection in the frontend without transferring raw user variables.",
+        "External IdP callbacks terminate centrally at https://api.scripe.org (GET /api/v1/auth/oidc/callback and POST /api/v1/auth/saml/acs/{providerId}), consuming the server-held ExternalAuthStateTicket (never browser sessionStorage), gating suspended tenants and HybridMfaPolicy, and issuing a 120s SHA-256 ExternalAuthHandoffTicket for https://auth.scripe.org/sso/continue or verified {ReturnOrigin}/sso/callback?code=&state= (redeemed once via POST /api/v1/auth/sso/handoff).",
+      centralFederationTitle: "Central Identity Federation & Custom-Domain Relay",
+      centralFederationContent:
+        "Under Authentication:CentralFederation (Tenancy:AuthBaseUrl & OpenIddict:FrontendBaseUrl -> https://auth.scripe.org), verified custom tenant domains authenticate seamlessly through Next.js HMAC-signed session relay routes (/api/auth/session/establish, /refresh, /logout -> __Host-scripe_refresh_token with X-Scripe-Session-Relay-Client-Ip rate-limit partitioning and X-Scripe-Relay-Refresh-MaxAge: 0 staySignedIn=false parity), PostMfaHandoffHelper + ssoTwoFactorBridge.ts post-MFA custom-domain bridging, and IVerifiedOriginEvaluator dynamic CORS/CSRF. Native admin login and Dual-RP WebAuthn passkeys remain locked on admin.scripe.org (EnableCentralNativeAndPasskeyMigration: false, WebAuthn:UserVerification = 'required', PasskeyAuthLimit = 12) with 0-error --idempotent migrations across PostgreSQL 18, SQL Server 2025, and live Oracle 21c XE.",
       oauthMirroringTitle: "OAuth Application Mirroring & Subscription Quotas",
       oauthMirroringContent:
         "Administrators can register custom client applications to use SCRIPE as their primary OIDC server. New application creations are gated by tenant-scoped quotas. Once validated, client details are registered in OpenIddict and mirrored locally in the platform's OAuthApplication database table for fast performance, masking confidential client secrets.",

@@ -1,0 +1,992 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "explainer",
+  "quality": "showcase",
+  "startedAt": "2026-11-25T06:45:20.234Z",
+  "specification": {
+    "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\authorization-remediation-rbac-fullstack.archify.md",
+    "sha256": "bdc7f9721e571ba3b9a1ba439975df66c45707295414a1631ae8d330091e07f6",
+    "bytes": 12481
+  },
+  "artifact": {
+    "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\authorization-remediation-rbac-fullstack.html",
+    "sha256": "9aefcdbc1d80dee98a653f9829baec522088c7be3e94f665ba44767288ffca51",
+    "bytes": 2221356
+  },
+  "stages": {
+    "browser-check": {
+      "status": "not-run",
+      "execution": "not-requested"
+    },
+    "validate": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": null,
+      "execution": "embedded-in-deliver",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "d:\\01_PROJECTS\\SCRIPE\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "deliver",
+        "explainer",
+        "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\authorization-remediation-rbac-fullstack.archify.md",
+        "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\authorization-remediation-rbac-fullstack.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Backend",
+        "--writing",
+        "strict",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": true,
+        "command": "validate",
+        "specification": {
+          "sha256": "bdc7f9721e571ba3b9a1ba439975df66c45707295414a1631ae8d330091e07f6",
+          "bytes": 12481
+        },
+        "validation": {
+          "checksPassed": 4,
+          "checkCount": 4,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        }
+      }
+    },
+    "deliver": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 3061,
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "d:\\01_PROJECTS\\SCRIPE\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "deliver",
+        "explainer",
+        "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\authorization-remediation-rbac-fullstack.archify.md",
+        "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\authorization-remediation-rbac-fullstack.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Backend",
+        "--writing",
+        "strict",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "receiptId": "af200e11-0661-42c2-b332-b26e21981ed8",
+        "ok": true,
+        "command": "deliver",
+        "type": "explainer",
+        "input": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\authorization-remediation-rbac-fullstack.archify.md",
+        "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\authorization-remediation-rbac-fullstack.html",
+        "explainer": {
+          "preparedSha256": "05a01841fc576e249b1c93693413bdc7103c2b63c8962509a0a0c479c2fda688",
+          "dependencies": [
+            {
+              "kind": "diagram-spec",
+              "id": "authz-arch",
+              "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\authorization-feature-permission-architecture.architecture.json",
+              "relativePath": "authorization-feature-permission-architecture.architecture.json",
+              "sha256": "cda0b517660f754a735889580e72ecb085201e3f1d6d3bc665e2746e496e3d28",
+              "bytes": 17750
+            },
+            {
+              "kind": "diagram-spec",
+              "id": "authz-seq",
+              "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\authorization-enforcement-sequence.sequence.json",
+              "relativePath": "authorization-enforcement-sequence.sequence.json",
+              "sha256": "112cd5a3a0e7da527664d6a1aad4ab40044acec9e236944035ccb7925209a500",
+              "bytes": 7634
+            },
+            {
+              "kind": "diagram-spec",
+              "id": "perm-lifecycle",
+              "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\permission-feature-lifecycle.lifecycle.json",
+              "relativePath": "permission-feature-lifecycle.lifecycle.json",
+              "sha256": "a393cbc676c2161a3b0691eeca8ba417458f3d0b0f95c67970851b568eda6f15",
+              "bytes": 8989
+            },
+            {
+              "kind": "diagram-spec",
+              "id": "fls-dataflow",
+              "path": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\rbac-fls-projection-dataflow.dataflow.json",
+              "relativePath": "rbac-fls-projection-dataflow.dataflow.json",
+              "sha256": "9b794f3d45627d0aeef9716acd05cb3f15d01bbf367a1a801975a275ab754c03",
+              "bytes": 7550
+            }
+          ]
+        },
+        "specification": {
+          "sha256": "bdc7f9721e571ba3b9a1ba439975df66c45707295414a1631ae8d330091e07f6",
+          "bytes": 12481
+        },
+        "artifact": {
+          "sha256": "9aefcdbc1d80dee98a653f9829baec522088c7be3e94f665ba44767288ffca51",
+          "bytes": 2221356
+        },
+        "validation": {
+          "checksPassed": 4,
+          "checkCount": 4,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        },
+        "update": {
+          "status": "unavailable",
+          "installedVersion": null,
+          "availableVersion": null,
+          "releaseNotes": null,
+          "checkedAt": null,
+          "source": null,
+          "noticeRequired": false,
+          "noticeText": null,
+          "reason": "disabled"
+        }
+      }
+    },
+    "check": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 2184,
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "d:\\01_PROJECTS\\SCRIPE\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "check",
+        "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\authorization-remediation-rbac-fullstack.html",
+        "--require-provenance"
+      ],
+      "receipt": {
+        "ok": true,
+        "file": "d:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\authorization-remediation-rbac-fullstack.html",
+        "family": "explainer",
+        "artifact": {
+          "sha256": "9aefcdbc1d80dee98a653f9829baec522088c7be3e94f665ba44767288ffca51",
+          "bytes": 2221356
+        },
+        "checks": [
+          {
+            "name": "explainer_structure",
+            "ok": true,
+            "details": [
+              "138 unique DOM IDs"
+            ]
+          },
+          {
+            "name": "explainer_payload_identity",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "explainer_dependencies",
+            "ok": true,
+            "details": [
+              "4 frozen dependencies"
+            ]
+          },
+          {
+            "name": "explainer_native_diagrams",
+            "ok": true,
+            "details": [
+              "authz-arch: pass",
+              "authz-seq: pass",
+              "perm-lifecycle: pass",
+              "fls-dataflow: pass"
+            ]
+          }
+        ],
+        "composition": {
+          "schemaVersion": 1,
+          "profile": "showcase",
+          "status": "pass",
+          "summary": {
+            "errors": 0,
+            "warnings": 0
+          },
+          "issues": [],
+          "nativeDiagrams": [
+            {
+              "id": "authz-arch",
+              "receipt": {
+                "ok": true,
+                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-CL8iNn\\child.html",
+                "artifact": {
+                  "sha256": "b21aad55f59a9652543103cac5c8086f8a55487c7391632ebaa9ec9f842a5dfc",
+                  "bytes": 982474
+                },
+                "checks": [
+                  {
+                    "name": "single_svg",
+                    "ok": true,
+                    "details": [
+                      "found 1 <svg> block(s)"
+                    ]
+                  },
+                  {
+                    "name": "finite_svg",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "orthogonal_arrows",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "label_route_clearance",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_crossings",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_corridors",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "container_border_runs",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "route_rhythm",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "legend_clearance",
+                    "ok": true,
+                    "details": []
+                  }
+                ],
+                "composition": {
+                  "schemaVersion": 1,
+                  "profile": "showcase",
+                  "status": "pass",
+                  "summary": {
+                    "errors": 0,
+                    "warnings": 0
+                  },
+                  "metrics": {
+                    "properCrossings": 0,
+                    "resolvedCrossovers": 9,
+                    "ambiguousCorridors": 0,
+                    "arrowheadCollisions": 0,
+                    "containerBorderRuns": 0,
+                    "labelRouteClearanceIssues": 0,
+                    "labelCanvasOverflowIssues": 0,
+                    "minLabelRouteClearance": 10.5,
+                    "desktopReadabilityIssues": 0,
+                    "viewportHeightIssues": 0,
+                    "minProjectedNodeTextPx": 6.453353893600617,
+                    "maxBends": 3,
+                    "routesOverSuggestedBends": 2,
+                    "maxStretch": 1.37,
+                    "routesOverSuggestedStretch": 1,
+                    "minSegmentPx": 16,
+                    "minInteriorSegmentPx": 127.5,
+                    "shortSegmentCount": 0,
+                    "shortEndpointSegmentCount": 0,
+                    "shortInteriorSegmentCount": 0,
+                    "microSegmentCount": 0
+                  },
+                  "suggestedLimits": {
+                    "bendsPerRelationship": 2,
+                    "stretch": 1.35,
+                    "segmentPx": 16,
+                    "microSegmentPx": 8
+                  },
+                  "routeReview": {
+                    "crossings": [
+                      {
+                        "left": {
+                          "id": "authz_to_cat",
+                          "from": "authz_handler",
+                          "to": "catalog_cache",
+                          "label": "Resolve RequiredAny / Global",
+                          "collectionIndex": 3,
+                          "artifactIndex": 4
+                        },
+                        "right": {
+                          "id": "mw_to_sec",
+                          "from": "mw_context",
+                          "to": "admin_sec_svc",
+                          "label": "Compute Role + Group Security",
+                          "collectionIndex": 7,
+                          "artifactIndex": 8
+                        },
+                        "point": [
+                          192,
+                          386
+                        ]
+                      },
+                      {
+                        "left": {
+                          "id": "authz_to_cat",
+                          "from": "authz_handler",
+                          "to": "catalog_cache",
+                          "label": "Resolve RequiredAny / Global",
+                          "collectionIndex": 3,
+                          "artifactIndex": 4
+                        },
+                        "right": {
+                          "id": "sec_to_idb",
+                          "from": "admin_sec_svc",
+                          "to": "identity_db",
+                          "label": "Load Active Roles &amp; Restrictions",
+                          "collectionIndex": 17,
+                          "artifactIndex": 18
+                        },
+                        "point": [
+                          64.5,
+                          1206
+                        ]
+                      },
+                      {
+                        "left": {
+                          "id": "authz_to_feat",
+                          "from": "authz_handler",
+                          "to": "feature_checker",
+                          "label": "Live Tenant Feature Gate",
+                          "collectionIndex": 4,
+                          "artifactIndex": 5
+                        },
+                        "right": {
+                          "id": "sec_to_merge",
+                          "from": "admin_sec_svc",
+                          "to": "fls_merge",
+                          "label": "Intersect Roles + Union Groups",
+                          "collectionIndex": 8,
+                          "artifactIndex": 9
+                        },
+                        "point": [
+                          298.5,
+                          887
+                        ]
+                      },
+                      {
+                        "left": {
+                          "id": "authz_to_feat",
+                          "from": "authz_handler",
+                          "to": "feature_checker",
+                          "label": "Live Tenant Feature Gate",
+                          "collectionIndex": 4,
+                          "artifactIndex": 5
+                        },
+                        "right": {
+                          "id": "sec_to_cache",
+                          "from": "admin_sec_svc",
+                          "to": "perm_cache",
+                          "label": "Cache + Stamp principal:*",
+                          "collectionIndex": 10,
+                          "artifactIndex": 11
+                        },
+                        "point": [
+                          298.5,
+                          909
+                        ]
+                      },
+                      {
+                        "left": {
+                          "id": "authz_to_feat",
+                          "from": "authz_handler",
+                          "to": "feature_checker",
+                          "label": "Live Tenant Feature Gate",
+                          "collectionIndex": 4,
+                          "artifactIndex": 5
+                        },
+                        "right": {
+                          "id": "bus_to_tpm",
+                          "from": "sub_event_bus",
+                          "to": "tenant_perm_mgr",
+                          "label": "Catalog-Filtered Pool Sync",
+                          "collectionIndex": 14,
+                          "artifactIndex": 15
+                        },
+                        "point": [
+                          467,
+                          1010
+                        ]
+                      },
+                      {
+                        "left": {
+                          "id": "authz_to_feat",
+                          "from": "authz_handler",
+                          "to": "feature_checker",
+                          "label": "Live Tenant Feature Gate",
+                          "collectionIndex": 4,
+                          "artifactIndex": 5
+                        },
+                        "right": {
+                          "id": "tpm_to_cache",
+                          "from": "tenant_perm_mgr",
+                          "to": "perm_cache",
+                          "label": "Atomic Evict Admin &amp; Principal",
+                          "collectionIndex": 16,
+                          "artifactIndex": 17
+                        },
+                        "point": [
+                          467,
+                          1114
+                        ]
+                      },
+                      {
+                        "left": {
+                          "id": "sec_to_cache",
+                          "from": "admin_sec_svc",
+                          "to": "perm_cache",
+                          "label": "Cache + Stamp principal:*",
+                          "collectionIndex": 10,
+                          "artifactIndex": 11
+                        },
+                        "right": {
+                          "id": "bus_to_tpm",
+                          "from": "sub_event_bus",
+                          "to": "tenant_perm_mgr",
+                          "label": "Catalog-Filtered Pool Sync",
+                          "collectionIndex": 14,
+                          "artifactIndex": 15
+                        },
+                        "point": [
+                          391.75,
+                          1010
+                        ]
+                      },
+                      {
+                        "left": {
+                          "id": "feat_to_edb",
+                          "from": "feature_builder",
+                          "to": "entitlements_db",
+                          "label": "SaveChanges Before Invalidate",
+                          "collectionIndex": 11,
+                          "artifactIndex": 12
+                        },
+                        "right": {
+                          "id": "feat_to_bus",
+                          "from": "feature_builder",
+                          "to": "sub_event_bus",
+                          "label": "Post-Commit SubscriptionChanged",
+                          "collectionIndex": 13,
+                          "artifactIndex": 14
+                        },
+                        "point": [
+                          1150.85,
+                          245
+                        ],
+                        "sharedNode": "feature_builder"
+                      },
+                      {
+                        "left": {
+                          "id": "tpm_to_idb",
+                          "from": "tenant_perm_mgr",
+                          "to": "identity_db",
+                          "label": "Sync TenantPerms &amp; T_SCRIPE_SA",
+                          "collectionIndex": 15,
+                          "artifactIndex": 16
+                        },
+                        "right": {
+                          "id": "tpm_to_cache",
+                          "from": "tenant_perm_mgr",
+                          "to": "perm_cache",
+                          "label": "Atomic Evict Admin &amp; Principal",
+                          "collectionIndex": 16,
+                          "artifactIndex": 17
+                        },
+                        "point": [
+                          322,
+                          1114
+                        ],
+                        "sharedNode": "tenant_perm_mgr"
+                      }
+                    ],
+                    "detours": [
+                      {
+                        "relationship": {
+                          "id": "authz_to_feat",
+                          "from": "authz_handler",
+                          "to": "feature_checker",
+                          "label": "Live Tenant Feature Gate",
+                          "collectionIndex": 4,
+                          "artifactIndex": 5
+                        },
+                        "bends": 3,
+                        "stretch": 1.37
+                      },
+                      {
+                        "relationship": {
+                          "id": "feat_to_edb",
+                          "from": "feature_builder",
+                          "to": "entitlements_db",
+                          "label": "SaveChanges Before Invalidate",
+                          "collectionIndex": 11,
+                          "artifactIndex": 12
+                        },
+                        "bends": 3,
+                        "stretch": 1.175
+                      }
+                    ]
+                  },
+                  "leadingSpace": {
+                    "measured": true,
+                    "emptyTopPx": 48,
+                    "emptyTopRatio": 0.032,
+                    "occupiedTop": 48,
+                    "viewBoxTop": 0,
+                    "canvasHeight": 1500,
+                    "typicalNodeHeight": 72,
+                    "reviewSuggested": false
+                  },
+                  "desktopReadability": {
+                    "budgetBasis": "legacy-930",
+                    "readerContract": "declared-wide-v1",
+                    "availableDiagramWidth": 930,
+                    "actualBudgetPx": 930,
+                    "limit": "legacy",
+                    "requestedTargetPx": 7.5,
+                    "requestedTargetMet": false,
+                    "hardFloorPx": 6,
+                    "hardFloorMet": true,
+                    "minimumOwner": {
+                      "kind": "boundary",
+                      "id": null
+                    },
+                    "minimumSourceTextPx": 9,
+                    "minimumProjectedTextPx": 6.453353893600617,
+                    "semanticTextCount": 54
+                  },
+                  "issues": []
+                }
+              }
+            },
+            {
+              "id": "authz-seq",
+              "receipt": {
+                "ok": true,
+                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-JLo4Vm\\child.html",
+                "artifact": {
+                  "sha256": "9194bd35b22a55604380de9543cacc1a513947e8bf3bff2b2c3f15b39dd49d1e",
+                  "bytes": 934566
+                },
+                "checks": [
+                  {
+                    "name": "single_svg",
+                    "ok": true,
+                    "details": [
+                      "found 1 <svg> block(s)"
+                    ]
+                  },
+                  {
+                    "name": "finite_svg",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "orthogonal_arrows",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "label_route_clearance",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_crossings",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_corridors",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "container_border_runs",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "route_rhythm",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "legend_clearance",
+                    "ok": true,
+                    "details": []
+                  }
+                ],
+                "composition": {
+                  "schemaVersion": 1,
+                  "profile": "showcase",
+                  "status": "pass",
+                  "summary": {
+                    "errors": 0,
+                    "warnings": 0
+                  },
+                  "metrics": {
+                    "properCrossings": 0,
+                    "resolvedCrossovers": 0,
+                    "ambiguousCorridors": 0,
+                    "arrowheadCollisions": 0,
+                    "containerBorderRuns": 0,
+                    "labelRouteClearanceIssues": 0,
+                    "labelCanvasOverflowIssues": 0,
+                    "minLabelRouteClearance": 10,
+                    "desktopReadabilityIssues": 0,
+                    "viewportHeightIssues": 0,
+                    "minProjectedNodeTextPx": 6.690647482014389,
+                    "maxBends": 0,
+                    "routesOverSuggestedBends": 0,
+                    "maxStretch": 1,
+                    "routesOverSuggestedStretch": 0,
+                    "minSegmentPx": 136.6,
+                    "minInteriorSegmentPx": null,
+                    "shortSegmentCount": 0,
+                    "shortEndpointSegmentCount": 0,
+                    "shortInteriorSegmentCount": 0,
+                    "microSegmentCount": 0
+                  },
+                  "suggestedLimits": {
+                    "bendsPerRelationship": 2,
+                    "stretch": 1.35,
+                    "segmentPx": 16,
+                    "microSegmentPx": 8
+                  },
+                  "routeReview": {
+                    "crossings": [],
+                    "detours": []
+                  },
+                  "leadingSpace": {
+                    "measured": false,
+                    "reviewSuggested": false
+                  },
+                  "sequenceColumnSpace": {
+                    "measured": true,
+                    "columnFit": "spread",
+                    "participantCount": 6,
+                    "occupiedRight": 976,
+                    "viewBoxLeft": 0,
+                    "canvasWidth": 973,
+                    "emptyRightPx": 0,
+                    "emptyRightRatio": 0,
+                    "typicalParticipantWidth": 118,
+                    "reviewSuggested": false
+                  },
+                  "desktopReadability": {
+                    "budgetBasis": "legacy-930",
+                    "readerContract": "declared-wide-v1",
+                    "availableDiagramWidth": 930,
+                    "actualBudgetPx": 930,
+                    "limit": "legacy",
+                    "requestedTargetPx": null,
+                    "requestedTargetMet": null,
+                    "hardFloorPx": 6,
+                    "hardFloorMet": true,
+                    "minimumOwner": {
+                      "kind": "edge",
+                      "id": "m5",
+                      "from": "authz",
+                      "to": "ent"
+                    },
+                    "minimumSourceTextPx": 7,
+                    "minimumProjectedTextPx": 6.690647482014389,
+                    "semanticTextCount": 26
+                  },
+                  "issues": []
+                }
+              }
+            },
+            {
+              "id": "perm-lifecycle",
+              "receipt": {
+                "ok": true,
+                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-ZAPnul\\child.html",
+                "artifact": {
+                  "sha256": "1d1e487e2e6554cffa22180f4e81d7eb140c8a02a10bae04a2fbfc4f8ba36210",
+                  "bytes": 942916
+                },
+                "checks": [
+                  {
+                    "name": "single_svg",
+                    "ok": true,
+                    "details": [
+                      "found 1 <svg> block(s)"
+                    ]
+                  },
+                  {
+                    "name": "finite_svg",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "orthogonal_arrows",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "label_route_clearance",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_crossings",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_corridors",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "container_border_runs",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "route_rhythm",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "legend_clearance",
+                    "ok": true,
+                    "details": []
+                  }
+                ],
+                "composition": {
+                  "schemaVersion": 1,
+                  "profile": "showcase",
+                  "status": "pass",
+                  "summary": {
+                    "errors": 0,
+                    "warnings": 0
+                  },
+                  "metrics": {
+                    "properCrossings": 0,
+                    "resolvedCrossovers": 0,
+                    "ambiguousCorridors": 0,
+                    "arrowheadCollisions": 0,
+                    "containerBorderRuns": 0,
+                    "labelRouteClearanceIssues": 0,
+                    "labelCanvasOverflowIssues": 0,
+                    "minLabelRouteClearance": 27,
+                    "desktopReadabilityIssues": 0,
+                    "viewportHeightIssues": 0,
+                    "minProjectedNodeTextPx": 6.297968397291196,
+                    "maxBends": 2,
+                    "routesOverSuggestedBends": 0,
+                    "maxStretch": 1,
+                    "routesOverSuggestedStretch": 0,
+                    "minSegmentPx": 34,
+                    "minInteriorSegmentPx": 72.8,
+                    "shortSegmentCount": 0,
+                    "shortEndpointSegmentCount": 0,
+                    "shortInteriorSegmentCount": 0,
+                    "microSegmentCount": 0
+                  },
+                  "suggestedLimits": {
+                    "bendsPerRelationship": 2,
+                    "stretch": 1.35,
+                    "segmentPx": 16,
+                    "microSegmentPx": 8
+                  },
+                  "routeReview": {
+                    "crossings": [],
+                    "detours": []
+                  },
+                  "leadingSpace": {
+                    "measured": false,
+                    "reviewSuggested": false
+                  },
+                  "desktopReadability": {
+                    "budgetBasis": "legacy-930",
+                    "readerContract": "declared-wide-v1",
+                    "availableDiagramWidth": 930,
+                    "actualBudgetPx": 930,
+                    "limit": "legacy",
+                    "requestedTargetPx": null,
+                    "requestedTargetMet": null,
+                    "hardFloorPx": 6,
+                    "hardFloorMet": true,
+                    "minimumOwner": {
+                      "kind": "node",
+                      "id": "defined"
+                    },
+                    "minimumSourceTextPx": 9,
+                    "minimumProjectedTextPx": 6.297968397291196,
+                    "semanticTextCount": 29
+                  },
+                  "issues": []
+                }
+              }
+            },
+            {
+              "id": "fls-dataflow",
+              "receipt": {
+                "ok": true,
+                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-QjL8IF\\child.html",
+                "artifact": {
+                  "sha256": "5806a727e8120053bce243fac121217ec29f32e0f8580f7687fa59cb7a001480",
+                  "bytes": 937326
+                },
+                "checks": [
+                  {
+                    "name": "single_svg",
+                    "ok": true,
+                    "details": [
+                      "found 1 <svg> block(s)"
+                    ]
+                  },
+                  {
+                    "name": "finite_svg",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "orthogonal_arrows",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "label_route_clearance",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_crossings",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_corridors",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "container_border_runs",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "route_rhythm",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "legend_clearance",
+                    "ok": true,
+                    "details": []
+                  }
+                ],
+                "composition": {
+                  "schemaVersion": 1,
+                  "profile": "showcase",
+                  "status": "pass",
+                  "summary": {
+                    "errors": 0,
+                    "warnings": 0
+                  },
+                  "metrics": {
+                    "properCrossings": 0,
+                    "resolvedCrossovers": 0,
+                    "ambiguousCorridors": 0,
+                    "arrowheadCollisions": 0,
+                    "containerBorderRuns": 0,
+                    "labelRouteClearanceIssues": 0,
+                    "labelCanvasOverflowIssues": 0,
+                    "minLabelRouteClearance": 28,
+                    "desktopReadabilityIssues": 0,
+                    "viewportHeightIssues": 0,
+                    "minProjectedNodeTextPx": 6.095505617977528,
+                    "maxBends": 2,
+                    "routesOverSuggestedBends": 0,
+                    "maxStretch": 1,
+                    "routesOverSuggestedStretch": 0,
+                    "minSegmentPx": 50,
+                    "minInteriorSegmentPx": 105,
+                    "shortSegmentCount": 0,
+                    "shortEndpointSegmentCount": 0,
+                    "shortInteriorSegmentCount": 0,
+                    "microSegmentCount": 0
+                  },
+                  "suggestedLimits": {
+                    "bendsPerRelationship": 2,
+                    "stretch": 1.35,
+                    "segmentPx": 16,
+                    "microSegmentPx": 8
+                  },
+                  "routeReview": {
+                    "crossings": [],
+                    "detours": []
+                  },
+                  "leadingSpace": {
+                    "measured": false,
+                    "reviewSuggested": false
+                  },
+                  "desktopReadability": {
+                    "budgetBasis": "legacy-930",
+                    "readerContract": "declared-wide-v1",
+                    "availableDiagramWidth": 930,
+                    "actualBudgetPx": 930,
+                    "limit": "legacy",
+                    "requestedTargetPx": null,
+                    "requestedTargetMet": null,
+                    "hardFloorPx": 6,
+                    "hardFloorMet": true,
+                    "minimumOwner": {
+                      "kind": "node",
+                      "id": "role_grants"
+                    },
+                    "minimumSourceTextPx": 7,
+                    "minimumProjectedTextPx": 6.095505617977528,
+                    "semanticTextCount": 30
+                  },
+                  "issues": []
+                }
+              }
+            }
+          ]
+        },
+        "diagnostics": [],
+        "provenance": "current",
+        "deliveryReceiptId": "af200e11-0661-42c2-b332-b26e21981ed8"
+      }
+    }
+  },
+  "browserCheck": {
+    "requested": false,
+    "ran": false
+  },
+  "diagnostics": [],
+  "evidence": {
+    "receipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\authorization-remediation-rbac-fullstack.finalize.json",
+    "summaryReceipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\authorization-remediation-rbac-fullstack.finalize-summary.json"
+  },
+  "visualReview": "not-requested",
+  "finishedAt": "2026-11-25T06:45:26.453Z",
+  "durationMs": 6218,
+  "update": {
+    "status": "unavailable",
+    "installedVersion": null,
+    "availableVersion": null,
+    "releaseNotes": null,
+    "checkedAt": null,
+    "source": null,
+    "noticeRequired": false,
+    "noticeText": null,
+    "reason": "check-failed"
+  }
+}

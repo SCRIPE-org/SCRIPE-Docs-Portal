@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "SCRIPE-Frontend Auth, Recovery & Post-Login Policy MVVM Architecture",
+    "locale": "en",
+    "output": "public/archify-hub/frontend-auth-recovery-mvvm.html",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "parentHref": "identity-auth-recovery-hardening-fullstack.html",
+    "repository": {
+      "url": "https://github.com/SCRIPE-org/SCRIPE-Frontend.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "d3978a00ea6a51f625bc14a9fd6bb52cef07a02f"
+    },
+    "views": [
+      {
+        "id": "edge_walls",
+        "label": "1. CSP, Proxy & RouteGuard Walls",
+        "focus": ["next_headers", "edge_proxy", "route_guard", "security_view"],
+        "note": "Strict CSP + WebAuthn headers, scr_auth_state proxy hint, and ordered walls (PendingPayment -> mcp -> mfa_enroll -> PBAC)."
+      },
+      {
+        "id": "mvvm_tokens",
+        "label": "2. 5-Layer MVVM & In-Memory Tokens",
+        "focus": ["signin_view", "auth_vm", "auth_repo", "auth_service", "api_factory", "token_store"],
+        "note": "Shared Auth MVVM (View -> ViewModel -> Repository -> Service -> api-factory) with memory-only access JWTs."
+      },
+      {
+        "id": "recovery_links",
+        "label": "3. Fragment Scrub & Policy Recovery",
+        "focus": ["recovery_view", "policy_vm", "auth_repo", "auth_service", "backend_auth"],
+        "note": "URL #token= fragment extraction + history.replaceState scrub, dynamic GET /password-policy, and 204 no-auto-login reset."
+      }
+    ]
+  },
+  "layout": {
+    "mode": "auto"
+  },
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Next.js 16 Edge & Security Envelope",
+      "wraps": ["next_headers", "edge_proxy", "route_guard"]
+    },
+    {
+      "kind": "region",
+      "label": "Shared Auth 5-Layer SOLID MVVM & Core",
+      "wraps": ["signin_view", "recovery_view", "security_view", "auth_vm", "policy_vm", "auth_repo", "auth_service", "token_store", "api_factory"]
+    }
+  ],
+  "components": [
+    {
+      "id": "next_headers",
+      "type": "security",
+      "label": "Next.js Security Headers",
+      "sublabel": "CSP, DENY, WebAuthn",
+      "tag": "next.config.ts",
+      "explanation": "Removes ignoreBuildErrors: true and sets X-Frame-Options: DENY, nosniff, WebAuthn Permissions-Policy, and API/WS Content-Security-Policy.",
+      "sources": [{ "path": "next.config.ts", "line": 15, "end_line": 67, "label": "Security Headers & Strict TS" }]
+    },
+    {
+      "id": "edge_proxy",
+      "type": "security",
+      "label": "Edge Auth Proxy",
+      "sublabel": "scr_auth_state + Manifest",
+      "tag": "proxy.ts",
+      "explanation": "Evaluates APP_ROUTE_MANIFEST public/devOnly flags, checks scr_auth_state hint cookie, and validates redirect params via isSafeRedirectTarget.",
+      "sources": [{ "path": "src/proxy.ts", "line": 29, "end_line": 57, "label": "Pre-Hydration UX Cookie Gate" }]
+    },
+    {
+      "id": "route_guard",
+      "type": "security",
+      "label": "RouteGuard Gatekeeper",
+      "sublabel": "mcp -> mfa_enroll -> PBAC",
+      "tag": "route-guard.tsx",
+      "explanation": "Exempts public recovery/callback routes and enforces PendingPayment -> MustChangePassword -> RequireMfaEnrollment (MFA_ENROLL_ALLOWED_ROUTES) -> PBAC.",
+      "sources": [{ "path": "src/core/providers/route-guard.tsx", "line": 394, "end_line": 444, "label": "Ordered Post-Login Gates" }]
+    },
+    {
+      "id": "signin_view",
+      "type": "frontend",
+      "label": "Signin & Setup Views",
+      "sublabel": "Credentials, 2FA, QR, SSO",
+      "tag": "Presentation",
+      "explanation": "Thin React Views keeping business logic in ViewModels while magicLinkUrl extracts #token= fragments and strips them via replaceState.",
+      "sources": [{ "path": "src/modules/shared/auth/signin/src/presentation/utils/magicLinkUrl.ts", "line": 1, "end_line": 38, "label": "Magic-Link Fragment Scrub" }]
+    },
+    {
+      "id": "recovery_view",
+      "type": "frontend",
+      "label": "Password Recovery UI",
+      "sublabel": "Forgot / Reset / Wizard",
+      "tag": "Presentation",
+      "explanation": "Renders @core/ui PasswordWithPolicyField backed by live GET /password-policy rules without inventing hardcoded client complexity.",
+      "sources": [{ "path": "src/modules/shared/auth/password-reset/src/presentation/views/PasswordRecoveryView.tsx", "line": 1, "end_line": 60, "label": "Unified Recovery Flow" }]
+    },
+    {
+      "id": "security_view",
+      "type": "frontend",
+      "label": "Account Security Console",
+      "sublabel": "TOTP, Passkeys, Sudo",
+      "tag": "mfa_enroll target",
+      "explanation": "Receives mfa_enroll=true redirects (/account/security?setupMfa=1) and fail-closed refreshes tokens upon 2FA/Passkey confirmation.",
+      "sources": [{ "path": "src/modules/shared/profile/core/src/presentation/viewmodels/useSecurityVaultViewModel.ts", "line": 40, "end_line": 70, "label": "Fail-Closed MFA Refresh Gate" }]
+    },
+    {
+      "id": "auth_vm",
+      "type": "frontend",
+      "label": "Auth & Login ViewModels",
+      "sublabel": "buildPostAuthEntryUrl",
+      "tag": "ViewModels",
+      "explanation": "Propagates requireMfaEnrollment across Password, 2FA, QR, SSO, Phone OTP, Workspace Selector, and Signup flows via useServices().",
+      "sources": [{ "path": "src/modules/shared/auth/signin/src/presentation/viewmodels/use-login-viewmodel.ts", "line": 1, "end_line": 60, "label": "DI-Wired Signin ViewModel" }]
+    },
+    {
+      "id": "policy_vm",
+      "type": "frontend",
+      "label": "Recovery & Policy Hooks",
+      "sublabel": "useRecoveryPolicyAndSession",
+      "tag": "ViewModels",
+      "explanation": "Coordinates ResetGrantToken recovery state, cooldowns, and dynamic tenant password policy hooks strictly under 300 lines.",
+      "sources": [{ "path": "src/modules/shared/auth/password-reset/src/presentation/viewmodels/useRecoveryPolicyAndSession.ts", "line": 1, "end_line": 60, "label": "Policy & Fragment Session Hook" }]
+    },
+    {
+      "id": "auth_repo",
+      "type": "frontend",
+      "label": "Auth Repositories",
+      "sublabel": "Result<T> & Mappers",
+      "tag": "Repository",
+      "explanation": "Maps Verify2FAResponseModel, AuthModel, and SignupResponseDto cleanly through explicit Mappers returning Result<T>.",
+      "sources": [{ "path": "src/modules/shared/auth/core/data/repositories/AuthRepository.ts", "line": 1, "end_line": 60, "label": "AuthRepository Contract" }]
+    },
+    {
+      "id": "auth_service",
+      "type": "frontend",
+      "label": "Auth Services",
+      "sublabel": "Endpoints & DTO Models",
+      "tag": "Service",
+      "explanation": "Dispatches typed /api/v1/auth/admin/* and /api/v1/auth/user/* calls via IApiService.",
+      "sources": [{ "path": "src/modules/shared/auth/core/data/services/AuthService.ts", "line": 1, "end_line": 60, "label": "AuthService Layer" }]
+    },
+    {
+      "id": "token_store",
+      "type": "security",
+      "label": "Memory Token & AppStore",
+      "sublabel": "No localStorage JWT",
+      "tag": "SecureTokenService",
+      "explanation": "Holds access JWTs strictly in SecureTokenService static memory while useAppStore partializes out secrets and defaultRedirectPath.",
+      "sources": [{ "path": "src/core/common/secure-token-service.ts", "line": 21, "end_line": 95, "label": "In-Memory Token Service" }]
+    },
+    {
+      "id": "api_factory",
+      "type": "frontend",
+      "label": "Per-Module ApiService",
+      "sublabel": "Shared 401 Refresh Mutex",
+      "tag": "api-factory.ts",
+      "explanation": "Broadcasts activeRefreshHandler, activeLogoutHandler, and tenant context across all module ApiService instances.",
+      "sources": [{ "path": "src/core/services/api-factory.ts", "line": 60, "end_line": 95, "label": "Single-Flight Refresh Hub" }]
+    },
+    {
+      "id": "backend_auth",
+      "type": "backend",
+      "label": ".NET 10 Auth API",
+      "sublabel": "/api/v1/auth/* & Cookies",
+      "tag": "HttpOnly + Bearer",
+      "href": "identity-auth-session-recovery-lifecycle.html",
+      "explanation": "Click through to inspect the .NET 10 SessionIssuerService, Lockout, ResetGrantToken, and Revocation Lifecycle."
+    }
+  ],
+  "connections": [
+    { "from": "next_headers", "to": "edge_proxy", "label": "CSP & headers" },
+    { "from": "edge_proxy", "to": "route_guard", "label": "hint ok" },
+    { "from": "route_guard", "to": "security_view", "label": "mfa_enroll=true", "variant": "security" },
+    { "from": "route_guard", "to": "signin_view", "label": "public / logout" },
+    { "from": "route_guard", "to": "recovery_view", "label": "reset exempt" },
+    { "from": "signin_view", "to": "auth_vm", "label": "submit / callback" },
+    { "from": "recovery_view", "to": "policy_vm", "label": "otp / #token=" },
+    { "from": "auth_vm", "to": "auth_repo", "label": "auth commands" },
+    { "from": "policy_vm", "to": "auth_repo", "label": "policy + reset" },
+    { "from": "auth_vm", "to": "token_store", "label": "hydrate flags" },
+    { "from": "auth_repo", "to": "auth_service", "label": "mapped DTO" },
+    { "from": "auth_service", "to": "api_factory", "label": "IApiService" },
+    { "from": "token_store", "to": "api_factory", "label": "memory Bearer" },
+    { "from": "api_factory", "to": "backend_auth", "label": "JWT + Cookie + CSRF", "variant": "emphasis" }
+  ],
+  "cards": [
+    {
+      "dot": "violet",
+      "title": "Zero Secret Persistence & Single-Flight Refresh",
+      "items": [
+        "Access JWTs reside strictly in SecureTokenService static memory; useAppStore partializes out secrets and tracks mustChangePassword & requireMfaEnrollment",
+        "api-factory.ts shares activeRefreshHandler, activeLogoutHandler, and tenant context headers across every module ApiService instance"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Post-Login Gate Order, Fragment Scrub & CSP",
+      "items": [
+        "RouteGuard exempts public recovery/SSO routes and enforces PendingPayment -> MustChangePassword -> RequireMfaEnrollment -> PBAC in strict sequence",
+        "next.config.ts strips ignoreBuildErrors: true and locks CSP, X-Frame-Options: DENY, and WebAuthn Permissions-Policy while magicLinkUrl strips #token= via replaceState"
+      ]
+    }
+  ]
+}

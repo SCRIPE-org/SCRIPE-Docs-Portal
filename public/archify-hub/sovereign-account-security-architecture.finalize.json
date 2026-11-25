@@ -5,16 +5,16 @@
   "status": "pass",
   "type": "explainer",
   "quality": "showcase",
-  "startedAt": "2026-11-16T04:00:58.532Z",
+  "startedAt": "2026-11-23T11:40:45.419Z",
   "specification": {
     "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\sovereign-account-security-architecture.archify.md",
-    "sha256": "2531018c9b9802ed7d8834c76edd44253927df2e0f4779c9601ac46546058681",
-    "bytes": 11504
+    "sha256": "ba8ad1f7435484270daf2e6ef6130c95100542b36169e2a0347c58d4ec1b42ec",
+    "bytes": 11445
   },
   "artifact": {
     "path": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\sovereign-account-security-architecture.html",
-    "sha256": "66d5bd69442a76a92a4365b81368ead41c7565c36bd619a58f1f0882cdeab881",
-    "bytes": 1464950
+    "sha256": "896d6bec423a4f763d1da69b393bd91eaf0ffca250620fa3ba9262fb454e8b9d",
+    "bytes": 1569010
   },
   "stages": {
     "browser-check": {
@@ -28,7 +28,7 @@
       "execution": "embedded-in-deliver",
       "command": [
         "C:\\Program Files\\nodejs\\node.exe",
-        "C:\\Users\\seifmoustafa\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "D:\\01_PROJECTS\\SCRIPE\\.agents\\skills\\archify\\bin\\archify.mjs",
         "deliver",
         "explainer",
         "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\sovereign-account-security-architecture.archify.md",
@@ -42,8 +42,8 @@
         "ok": true,
         "command": "validate",
         "specification": {
-          "sha256": "2531018c9b9802ed7d8834c76edd44253927df2e0f4779c9601ac46546058681",
-          "bytes": 11504
+          "sha256": "ba8ad1f7435484270daf2e6ef6130c95100542b36169e2a0347c58d4ec1b42ec",
+          "bytes": 11445
         },
         "validation": {
           "checksPassed": 4,
@@ -58,10 +58,10 @@
     "deliver": {
       "status": "pass",
       "exitCode": 0,
-      "durationMs": 1951,
+      "durationMs": 2287,
       "command": [
         "C:\\Program Files\\nodejs\\node.exe",
-        "C:\\Users\\seifmoustafa\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "D:\\01_PROJECTS\\SCRIPE\\.agents\\skills\\archify\\bin\\archify.mjs",
         "deliver",
         "explainer",
         "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\sovereign-account-security-architecture.archify.md",
@@ -72,14 +72,14 @@
       ],
       "receipt": {
         "schemaVersion": 1,
-        "receiptId": "ec4f5e74-bd19-496f-8cc8-d50ad75c0f98",
+        "receiptId": "b4b8db50-6f12-4fb5-95dc-5f00b6be9ff8",
         "ok": true,
         "command": "deliver",
         "type": "explainer",
         "input": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\sovereign-account-security-architecture.archify.md",
         "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\sovereign-account-security-architecture.html",
         "explainer": {
-          "preparedSha256": "4137f7d7ccfc14d953e1f58570a496e090101e3de1ed8396b72730e1b87ca487",
+          "preparedSha256": "9e7d7f7caecabfd30d9b567660113ca7f90c83ea67aab7393826eb9f89d3d0ad",
           "dependencies": [
             {
               "kind": "diagram-spec",
@@ -92,8 +92,8 @@
               "kind": "diagram-spec",
               "id": "sso-federation-flow",
               "inline": true,
-              "sha256": "88a1132beb5c0b4b757ba9b6c6201a32bd0cc676f59b52642e365919838aa824",
-              "bytes": 2073
+              "sha256": "30b8e7736e0fa45b97e0942f9486a7fc984ff96492d023423007faa4abcc8214",
+              "bytes": 1391
             },
             {
               "kind": "diagram-spec",
@@ -105,12 +105,12 @@
           ]
         },
         "specification": {
-          "sha256": "2531018c9b9802ed7d8834c76edd44253927df2e0f4779c9601ac46546058681",
-          "bytes": 11504
+          "sha256": "ba8ad1f7435484270daf2e6ef6130c95100542b36169e2a0347c58d4ec1b42ec",
+          "bytes": 11445
         },
         "artifact": {
-          "sha256": "66d5bd69442a76a92a4365b81368ead41c7565c36bd619a58f1f0882cdeab881",
-          "bytes": 1464950
+          "sha256": "896d6bec423a4f763d1da69b393bd91eaf0ffca250620fa3ba9262fb454e8b9d",
+          "bytes": 1569010
         },
         "validation": {
           "checksPassed": 4,
@@ -136,10 +136,10 @@
     "check": {
       "status": "pass",
       "exitCode": 0,
-      "durationMs": 1330,
+      "durationMs": 1790,
       "command": [
         "C:\\Program Files\\nodejs\\node.exe",
-        "C:\\Users\\seifmoustafa\\.agents\\skills\\archify\\bin\\archify.mjs",
+        "D:\\01_PROJECTS\\SCRIPE\\.agents\\skills\\archify\\bin\\archify.mjs",
         "check",
         "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\sovereign-account-security-architecture.html",
         "--require-provenance"
@@ -149,8 +149,8 @@
         "file": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\sovereign-account-security-architecture.html",
         "family": "explainer",
         "artifact": {
-          "sha256": "66d5bd69442a76a92a4365b81368ead41c7565c36bd619a58f1f0882cdeab881",
-          "bytes": 1464950
+          "sha256": "896d6bec423a4f763d1da69b393bd91eaf0ffca250620fa3ba9262fb454e8b9d",
+          "bytes": 1569010
         },
         "checks": [
           {
@@ -196,10 +196,10 @@
               "id": "passkey-ceremony-seq",
               "receipt": {
                 "ok": true,
-                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-UBTKJr\\child.html",
+                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-3Ul6IO\\child.html",
                 "artifact": {
-                  "sha256": "6aece32537190f11e41d4f6dfe119b090ff90f69183e293e6a1ad59ba0200c04",
-                  "bytes": 845305
+                  "sha256": "663bf7553263060896478d3367c31aadad5caf26e7e2e7241c973db6e6fc65c7",
+                  "bytes": 935632
                 },
                 "checks": [
                   {
@@ -333,10 +333,10 @@
               "id": "sso-federation-flow",
               "receipt": {
                 "ok": true,
-                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-Brt9OD\\child.html",
+                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-vFwYAn\\child.html",
                 "artifact": {
-                  "sha256": "dd49309ad584517f7f5ce8964772bdba77f5c27837e842e9f054c5cf6edfa5c7",
-                  "bytes": 839050
+                  "sha256": "3e83acf460e1d5dc6edb578982968e9aaca834ac4bf53b426795b168c4b34ef4",
+                  "bytes": 924172
                 },
                 "checks": [
                   {
@@ -403,18 +403,18 @@
                     "containerBorderRuns": 0,
                     "labelRouteClearanceIssues": 0,
                     "labelCanvasOverflowIssues": 0,
-                    "minLabelRouteClearance": 30.3,
+                    "minLabelRouteClearance": 16.3,
                     "desktopReadabilityIssues": 0,
                     "viewportHeightIssues": 0,
-                    "minProjectedNodeTextPx": 7.30844793713163,
+                    "minProjectedNodeTextPx": 8,
                     "maxBends": 0,
                     "routesOverSuggestedBends": 0,
                     "maxStretch": 1,
                     "routesOverSuggestedStretch": 0,
                     "minSegmentPx": 8,
                     "minInteriorSegmentPx": null,
-                    "shortSegmentCount": 1,
-                    "shortEndpointSegmentCount": 1,
+                    "shortSegmentCount": 2,
+                    "shortEndpointSegmentCount": 2,
                     "shortInteriorSegmentCount": 0,
                     "microSegmentCount": 0
                   },
@@ -444,13 +444,13 @@
                     "hardFloorMet": true,
                     "minimumOwner": {
                       "kind": "edge",
-                      "id": "callback-to-mediator-1",
+                      "id": "callback-to-handler-1",
                       "from": "callback",
-                      "to": "mediator"
+                      "to": "handler"
                     },
                     "minimumSourceTextPx": 8,
-                    "minimumProjectedTextPx": 7.30844793713163,
-                    "semanticTextCount": 13
+                    "minimumProjectedTextPx": 8,
+                    "semanticTextCount": 11
                   },
                   "issues": []
                 }
@@ -460,10 +460,10 @@
               "id": "perimeter-guard-seq",
               "receipt": {
                 "ok": true,
-                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-rUizii\\child.html",
+                "file": "C:\\Users\\SEIFMO~1\\AppData\\Local\\Temp\\archify-explainer-check-Oi1RRk\\child.html",
                 "artifact": {
-                  "sha256": "b4b96bf0c560a8929972d792ea45482663402e95fde1276c8f8a8faa9055fb76",
-                  "bytes": 835826
+                  "sha256": "66001d16b42425c8e3bc1ee28ff7e98f6016fa7276582ecdfe07ad8a50b8c700",
+                  "bytes": 926154
                 },
                 "checks": [
                   {
@@ -597,7 +597,7 @@
         },
         "diagnostics": [],
         "provenance": "current",
-        "deliveryReceiptId": "ec4f5e74-bd19-496f-8cc8-d50ad75c0f98"
+        "deliveryReceiptId": "b4b8db50-6f12-4fb5-95dc-5f00b6be9ff8"
       }
     }
   },
@@ -611,8 +611,8 @@
     "summaryReceipt": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\sovereign-account-security-architecture.finalize-summary.json"
   },
   "visualReview": "not-requested",
-  "finishedAt": "2026-11-16T04:01:02.166Z",
-  "durationMs": 3633,
+  "finishedAt": "2026-11-23T11:40:50.070Z",
+  "durationMs": 4650,
   "update": {
     "status": "unavailable",
     "installedVersion": null,

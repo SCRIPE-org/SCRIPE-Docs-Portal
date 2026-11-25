@@ -43,28 +43,33 @@ export const ru = {
       jwtLifecycleIntro:
         "Refresh-токены одноразовые и ротируются (обновляются) при каждом использовании для предотвращения кражи.",
       tokenStructureTitle: "Структура токена JWT",
-      bcryptTitle: "Хэширование паролей BCrypt",
+      bcryptTitle: "Хэширование паролей ($s2$ SHA-256 + BCrypt)",
       bcryptIntro:
-        "Умышленно медленный алгоритм (work factor = 12) делает атаки перебором нерентабельными (каждый хэш занимает ~250 мс).",
+        "Предварительное хэширование SHA-256 Base64 + BCrypt (work factor = 12, префикс $s2$) с проверкой по базе из 8 616 скомпрометированных паролей и историей из 5 паролей (PasswordHistory).",
       lockoutTitle: "Блокировка аккаунта (Account Lockout)",
       lockoutIntro: "5 последовательных неудачных попыток входа блокируют аккаунт на 15 минут.",
-      tfaTitle: "Двухфакторная аутентификация (TOTP)",
-      tfaIntro: "Генерация секретов и интеграция с приложениями-аутентификаторами.",
+      tfaTitle: "Гибридная MFA (TOTP / Passkeys / Email / SMS)",
+      tfaIntro:
+        "При включённой MFA вход возвращает временный twoFactorPendingToken; при mfa_enroll=true доступ к API блокируется RequireMfaEnrollmentMiddleware до завершения настройки.",
       externalAuthTitle: "Внешняя аутентификация (OAuth)",
       externalAuthIntro:
         "Интеграция с Google, Facebook, Apple и Microsoft с серверной валидацией токенов.",
-      otpTitle: "Система OTP (Одноразовые пароли)",
+      otpTitle: "Система OTP и сброса пароля (HMAC-SHA256)",
       otpIntro:
-        "6-значные коды для подтверждения почты, телефона и сброса пароля (живут 15 минут).",
+        "6-значные коды хранятся как HMAC-SHA256 верификаторы (Verification:VerifierKey), ограничены 5 попытками и действуют 10 мин (30 мин в Prod); для сброса также используются PasswordResetToken и лимит password-reset (5 запр./15 мин).",
       impersonationTitle: "Имперсонация (Impersonation)",
       impersonationIntro:
         "SuperAdmin может временно переключиться в профиль другого администратора для техподдержки.",
       impersonationWarning:
         "Все действия при имперсонации логируются с двойной идентичностью (Оригинал + Имитатор). Нельзя имитировать аккаунты с равными или высшими правами.",
       sessionTitle: "Управление сессиями",
-      sessionIntro: "Stateless (без сохранения состояния) архитектура. JWT хранятся на клиенте.",
+      sessionIntro:
+        "Stateless-архитектура JWT в сочетании с одноразовой ротацией Refresh-токенов в БД. Токены доступа хранятся только в памяти клиента, Refresh-токены передаются в cookies HttpOnly Secure SameSite=Lax ({CookiePrefix}_refresh_token или __Host-scripe_refresh_token через micro-relay кастомного домена), а RevokeAllSessions отзывает JTI соседних сессий, сохраняя текущую активную сессию.",
       cookieAuthTip:
-        "Для максимальной безопасности настройте отправку refresh-токенов как HttpOnly, Secure, SameSite=Strict cookies.",
+        "Рабочие и кастомные домены используют cookies HttpOnly Secure SameSite=Lax (__Host-scripe_refresh_token через HMAC micro-relay), обеспечивая SSO-редиректы верхнего уровня и блокируя межсайтовые подзапросы.",
+      federationControlsTitle: "Управление Dual-RP WebAuthn и Sudo Step-Up",
+      federationControlsContent:
+        "В режиме Central Federation нативный вход администраторов и passkeys WebAuthn закреплены на admin.scripe.org и *.admin.scripe.org (EnableCentralNativeAndPasskeyMigration = false) с WebAuthn:UserVerification = 'required', PasskeyAuthLimit = 12 (15 мин) и паритетом --idempotent миграций без ошибок на PostgreSQL 18, SQL Server 2025 и live Oracle 21c XE (схема IDENTITY). AdminPasskey.RpId (varchar(253)) и AllowedRpIds проверяются в Fido2PasskeyService, а команды ISovereignSudoProtectedCommand требуют 15-минутный HMAC X-Sudo-Token с автоповтором через <SudoVerificationModal />.",
       workspaceRoutingTitle: "Маршрутизация Входа в Несколько Рабочих Пространств",
       workspaceRoutingIntro:
         "При авторизации на платформенном домене без предзаданного тенанта алгоритм проверяет 3 сценария: вход по ID тенанта, прямой вход платформенного администратора (флаг isPlatformAdmin) и поиск организаций по почте с отображением селектора.",
@@ -85,9 +90,9 @@ export const ru = {
       samlTitle: "Интеграция SAML 2.0 и криптографическая валидация",
       samlContent:
         "Платформа поддерживает SAML 2.0 Single Sign-On с использованием библиотеки ITfoxtec.Identity.Saml2. В режиме сервис-провайдера (SP) запросы AuthnRequest генерируются и отправляются через редирект. Для ACS-колбеков XML-подписи проверяются с помощью публичных сертификатов X.509, сохраненных в формате base64 (через X509CertificateLoader). Проверка цепочки сертификатов и отзывов пропускается (None/NoCheck) для поддержки самоподписанных корпоративных сертификатов. В режиме провайдера удостоверений (IdP) третьим приложениям выдаются подписанные XML-утверждения SAML.",
-      oidcCallbackTitle: "OIDC-колбек и кэширование выбора рабочей области",
+      oidcCallbackTitle: "Центральный Callback OIDC/SAML и одноразовый тикет Handoff",
       oidcCallbackContent:
-        "Обработчик ProcessOidcCallbackCommandHandler обрабатывает входящие OIDC-колбеки, дешифруя ID провайдера с помощью AES-256 и обменивая код авторизации на клеймы. Если email пользователя соответствует нескольким активным рабочим областям администратора, состояние выбора входа SSO (SsoTempLoginData) кэшируется в Redis под ключом 'sso-login-selection:{tempToken}' со сроком действия 15 минут для предотвращения подмены параметров. Одиночные совпадения пропускают этот шаг и сразу выпускают финальные JWT токены на 7 дней.",
+        "Центральные колбеки на https://api.scripe.org (GET /api/v1/auth/oidc/callback и POST /api/v1/auth/saml/acs/{providerId}) проверяют серверный ExternalAuthStateTicket (включая code_verifier, nonce и returnOrigin), статус тенанта и HybridMfaPolicy, создают 120s SHA-256 ExternalAuthHandoffTicket (auth:ext-handoff:{sha256}, атомарная защита от повтора auth:ext-handoff-used:{sha256}) и выполняют 302-редирект на https://auth.scripe.org/sso/continue или {ReturnOrigin}/sso/callback для однократного погашения через POST /api/v1/auth/sso/handoff.",
       oauthMirroringTitle: "Зеркалирование клиентов OAuth и проверка квот",
       oauthMirroringContent:
         "Регистрация исходящих приложений OAuth проверяет квоты подписки клиента через QuotaService. Идентификаторы клиентов начинаются с префикса настроек брендинга клиента, а секреты конфиденциальных приложений генерируются безопасным образом (256-битные случайные числа) и показываются только один раз. Регистрации приложений синхронизируются с хранилищем OpenIddict и зеркалируются в локальной таблице базы данных OAuthApplication с маскированием секретов для производительности.",
@@ -113,29 +118,35 @@ export const ru = {
       howItWorksTitle: "How SSO Works",
       howItWorksContent:
         "SCRIPE uses the Authorization Code Flow with PKCE (Proof Key for Code Exchange) for SSO. This is the most secure OAuth2 flow, recommended by the OAuth 2.1 specification for all client types.",
-      step1Title: "1. Provider Discovery",
+      step1Title: "1. Обнаружение провайдеров",
       step1Content:
-        "The login page fetches available SSO providers via GET /auth/oidc/providers/admin. Only enabled providers for the current login context (admin/user) are returned.",
-      step2Title: "2. PKCE Challenge",
+        "Страница входа на https://auth.scripe.org загружает активных провайдеров через GET /api/v1/auth/oidc/providers/admin согласно Tenancy:AuthBaseUrl и OriginRouting.",
+      step2Title: "2. Серверный PKCE и State Ticket",
       step2Content:
-        "When the user clicks an SSO button, the frontend calls POST /auth/oidc/challenge. The backend generates a code_verifier, computes the code_challenge (SHA-256), and returns the authorization URL.",
-      step3Title: "3. IdP Redirect",
+        "При выборе SSO-провайдера фронтенд вызывает POST /api/v1/auth/oidc/challenge. Бэкенд сохраняет code_verifier, nonce, state и проверенный returnOrigin в серверном ExternalAuthStateTicket (без browser sessionStorage).",
+      step3Title: "3. Редирект на IdP с центральным Callback",
       step3Content:
-        "The frontend stores PKCE state (code_verifier, state, providerId) in sessionStorage, then redirects the user to the external IdP's authorization endpoint.",
-      step4Title: "4. User Authentication",
+        "Браузер перенаправляется на внешний IdP с redirect_uri, зафиксированным на https://api.scripe.org/api/v1/auth/oidc/callback (или /api/v1/auth/saml/acs/{providerId}).",
+      step4Title: "4. Центральный Callback и Handoff-тикет",
       step4Content:
-        "The user authenticates at the external IdP (Azure AD, Google, Okta, etc.) and grants consent for the requested scopes.",
-      step5Title: "5. Callback & Token Exchange",
+        "После входа во внешнем IdP запрос возвращается на api.scripe.org; сервер погашает ExternalAuthStateTicket, проверяет политику MFA, выпускает 120s SHA-256 ExternalAuthHandoffTicket и перенаправляет на auth.scripe.org/sso/continue или {ReturnOrigin}/sso/callback.",
+      step5Title: "5. Однократный Handoff и инициализация сессии",
       step5Content:
-        "The IdP redirects to /sso/callback with an authorization code. The frontend retrieves PKCE state from sessionStorage, validates the state parameter, and calls POST /auth/oidc/callback. The backend exchanges the code for tokens using the code_verifier.",
-      pkceTitle: "PKCE Security Model",
+        "Целевая страница однократно гасит тикет через POST /api/v1/auth/sso/handoff (на кастомных доменах — через HMAC micro-relay /api/auth/session/establish) и сохраняет JWT в памяти + cookie HttpOnly Lax.",
+      pkceTitle: "Модель безопасности PKCE и Central Handoff",
       pkceContent:
-        "PKCE prevents authorization code interception attacks by ensuring that only the client that initiated the flow can exchange the code. The code_verifier is never sent over the network — only its SHA-256 hash (code_challenge) is sent during the challenge step.",
+        "Хранение ExternalAuthStateTicket на сервере исключает утечку PKCE через sessionStorage. Одноразовые 120s SHA-256 тикеты ExternalAuthHandoffTicket проверяют returnOrigin через IVerifiedOriginEvaluator против открытых редиректов.",
       entityModelTitle: "Identity Provider Entity",
       entityModelContent:
         "The IdentityProvider entity stores all OIDC configuration for an external IdP. Each provider is optionally scoped to a tenant (TenantId = null means system-wide).",
       linkingContent:
-        "Before SSO login works, a SCRIPE admin/user must link their account to the external identity. This creates an ExternalLogin record mapping the provider's subject ID to the SCRIPE account.",
+        "Привязка внешней учетной записи требует Sudo-подтверждения (X-Sudo-Token) через POST /api/v1/auth/admin/external-logins/initiate-link (прямой /external-logins/link возвращает 410 Gone) и завершается через центральный callback и handoff.",
+      centralRelayTitle: "First-Party HMAC Session Micro-Relay и динамический CORS",
+      centralRelayContent:
+        "Проверенные кастомные домены не разделяют cookies с api.scripe.org, поэтому Next.js BFF предоставляет маршруты /api/auth/session/establish, /refresh и /logout с проверкой Sec-Fetch-Site/Origin и HMAC-SHA256 (X-Scripe-Session-Relay-*, окно 30с, nonce 60с, разделение rate-limit по X-Scripe-Session-Relay-Client-Ip и X-Scripe-Relay-Refresh-MaxAge: 0 для staySignedIn=false), выдавая локальный __Host-scripe_refresh_token. При Hybrid-2FA на auth.scripe.org/sso/continue PostMfaHandoffHelper, TenantOriginOwnershipValidator и ssoTwoFactorBridge.ts выпускают post-MFA тикет обратно на {ReturnOrigin}/sso/callback, а продакшен использует Cloudflare X-Scripe-Origin-Verify, ForwardedHeaders ForwardLimit=2, клеймы Entra email+xms_edov, скоупы GitHub user:email read:user и 2-шаговую настройку SAML ACS.",
+      splitLogoutTitle: "Раздельный выход App vs. Central SSO (scr.oidc.session)",
+      splitLogoutContent:
+        "Выход принимает logoutScope ('app' по умолчанию или 'central'). AuthLogoutScopeHelper и CookieAuthMiddleware сохраняют scr.oidc.session при /refresh, /sso/handoff, /complete-workspace-selection и выходе 'app'; параметр 'central' очищает её полностью.",
       oauthAppsTitle: "OAuth Applications",
       oauthAppsContent:
         "OAuth Applications are third-party apps that authenticate against SCRIPE as an OIDC server. Each app gets a Client ID and Client Secret, with configurable redirect URIs, scopes, and PKCE enforcement.",
@@ -222,9 +233,9 @@ export const ru = {
     middlewarePipeline: {
       title: "Конвейер промежуточного ПО (Middleware Pipeline)",
       description:
-        "11 компонентов middleware, выполняемых в строгом порядке, от перехвата исключений до контекста тенанта.",
+        "33 этапа в строгом порядке в MiddlewarePipeline.cs — от JWT/API-Key аутентификации и пост-авторизационного rate limiting до проверок Trusted CIDR, mcp=true и mfa_enroll=true.",
       intro:
-        "Пайплайн запросов SCRIPE — это сердце приложения. Порядок исполнения имеет критическое значение.",
+        "HTTP-конвейер SCRIPE выполняет 33 строго упорядоченных этапа в MiddlewarePipeline.cs и немедленно прерывает запрос при нарушении политики.",
       overviewTitle: "Обзор пайплайна",
       overviewIntro:
         "Каждый компонент выполняет единственную ответственность и может «замкнуть» (Short-circuit) запрос.",
@@ -252,7 +263,8 @@ export const ru = {
       observabilityTitle: "Middleware наблюдаемости (Observability)",
       observabilityIntro: "Сбор метрик OpenTelemetry и экспорт в Prometheus (/metrics).",
       registrationTitle: "Порядок регистрации",
-      registrationIntro: "Файл Program.cs организует этот строгий порядок.",
+      registrationIntro:
+        "Порядок задаётся в MiddlewarePipeline.cs: ApiKeyUsageMiddleware и Rate Limiting зависят от UseAuthentication(), а TrustedCidrEnforcementMiddleware, MustChangePasswordMiddleware и RequireMfaEnrollmentMiddleware выполняются после UseAuthorization().",
       summaryTitle: "Резюме Middleware",
       orderWarning: "Не меняйте порядок Middleware, это приведет к каскадным сбоям и уязвимостям.",
     },

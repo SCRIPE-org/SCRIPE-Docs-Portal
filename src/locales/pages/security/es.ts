@@ -44,23 +44,23 @@ export const es = {
       intro: "Exploración exhaustiva de los mecanismos de identidad de SCRIPE.",
       jwtLifecycleTitle: "Ciclo de Vida del Token JWT",
       jwtLifecycleIntro:
-        "Acceso ultracorto (15 min) respaldado por refrescos (7 días) que se destruyen y renuevan en cada solicitud exitosa.",
+        "Tokens de acceso de 30 minutos por defecto (Jwt:ExpiryMinutes / SessionPolicy) con firma HMAC-SHA256, revocación jti + scripe_iat_ms (+5ms) y refresh rotativo en cookie HttpOnly bajo techo AbsoluteExpiresAt (24h, >=30d StaySignedIn, 8h impersonation).",
       tokenStructureTitle: "Estructura del JWT",
-      bcryptTitle: "Hash de Contraseña BCrypt",
+      bcryptTitle: "Hash de Contraseña $s2$ SHA-256 + BCrypt",
       bcryptIntro:
-        "Uso de factor de trabajo de carga (work factor = 12) intencionalmente lento para rechazar la fuerza bruta masiva (tarda ~250ms por verificación).",
+        "Las contraseñas usan pre-hash SHA-256 Base64 ($s2$) + BCrypt (factor 12) evitando el truncamiento de 72 bytes, junto con PasswordHistory (5 contraseñas) y una lista de 8,616 contraseñas filtradas.",
       lockoutTitle: "Bloqueo de Cuentas",
       lockoutIntro:
-        "5 intentos de contraseña fallidos generan 15 minutos de bloqueo ineludible o hasta ser liberado manualmente.",
+        "5 intentos fallidos de acceso o 2FA (LoginLockoutThreshold) generan 15 minutos de bloqueo (LoginLockoutMinutes) o hasta desbloqueo administrativo.",
       tfaTitle: "Autenticación de Dos Factores (TOTP)",
       tfaIntro:
-        "Mecanismo estándar con comprobación de la ventana temporal de autenticadores (Google, Authy).",
+        "Compatible con Google Authenticator y Authy; devuelve un twoFactorPendingToken de un solo uso y mfa_enroll=true cuando Require2FA exige registro.",
       externalAuthTitle: "Autenticación Externa (OAuth)",
       externalAuthIntro:
         "Soporte oficial y validación en servidor para tokens recibidos de Google, Facebook, Microsoft y Apple.",
-      otpTitle: "Sistema OTP (Contraseñas de Un Solo Uso)",
+      otpTitle: "Sistema OTP y Credenciales de Recuperación",
       otpIntro:
-        "Códigos de 6 dígitos con hash BCrypt transitorio para confirmación de correos, SMS o resets de contraseñas.",
+        "Códigos de 6 dígitos verificados con HMAC-SHA256 (Verification:VerifierKey, 10 min / 30 min en Producción, máximo 5 intentos) y tokens PasswordResetToken SHA-256 de un solo uso.",
       impersonationTitle: "Suplantación de Administrador (Impersonation)",
       impersonationIntro:
         "Tokens especiales emitidos a un SuperAdmin para visualizar y depurar el panel como otro usuario, con rastreo en auditoría adjunto.",
@@ -68,9 +68,12 @@ export const es = {
         "Una función altamente privilegiada de uso temporal (máximo 1 hora). No puede usarse sobre usuarios protegidos ni SuperAdmins homólogos.",
       sessionTitle: "Gestión de Sesiones",
       sessionIntro:
-        "Modelo sin estado (Stateless), donde el acceso vive en la memoria y el token de refresco en la Base de Datos o Cookie Segura.",
+        "Modelo sin estado (Stateless) con rotación de Refresh Tokens de un solo uso en base de datos. El JWT de acceso vive solo en memoria, el refresh circula en cookies HttpOnly Secure SameSite=Lax ({CookiePrefix}_refresh_token o __Host-scripe_refresh_token en dominios personalizados), y RevokeAllSessions revoca las sesiones hermanas por JTI preservando la sesión activa actual.",
       cookieAuthTip:
-        "Para el máximo nivel de seguridad, los JWT de actualización (refresh) deben enviarse a través de cookies HttpOnly y SameSite=Strict en el frontend.",
+        "Las sesiones de espacios de trabajo y dominios personalizados emplean cookies HttpOnly Secure SameSite=Lax (__Host-scripe_refresh_token vía micro-relay HMAC) para permitir redirecciones SSO de primer nivel y bloquear subpeticiones entre sitios.",
+      federationControlsTitle: "Gobernanza WebAuthn Dual-RP y Elevación Sudo",
+      federationControlsContent:
+        "Bajo la Federación Central, el inicio nativo de administradores y passkeys WebAuthn permanecen fijados en admin.scripe.org y *.admin.scripe.org (EnableCentralNativeAndPasskeyMigration = false) con WebAuthn:UserVerification = 'required', PasskeyAuthLimit = 12 (15 min) y paridad de migraciones --idempotent sin errores en PostgreSQL 18, SQL Server 2025 y Oracle 21c XE en vivo (esquema IDENTITY). AdminPasskey.RpId (varchar(253)) y AllowedRpIds se validan en Fido2PasskeyService, mientras ISovereignSudoProtectedCommand exige X-Sudo-Token de 15 minutos con reintento automático en <SudoVerificationModal />.",
       workspaceRoutingTitle: "Enrutamiento de Acceso Multi-Espacio",
       workspaceRoutingIntro:
         "Al iniciar sesión en el dominio global sin inquilino predeterminado, el gestor aplica un algoritmo de 3 casos: acceso acotado por tenantId, acceso directo para administrador de plataforma (isPlatformAdmin) y descubrimiento de espacios por correo electrónico.",
@@ -110,29 +113,35 @@ export const es = {
       howItWorksTitle: "How SSO Works",
       howItWorksContent:
         "SCRIPE uses the Authorization Code Flow with PKCE (Proof Key for Code Exchange) for SSO. This is the most secure OAuth2 flow, recommended by the OAuth 2.1 specification for all client types.",
-      step1Title: "1. Provider Discovery",
+      step1Title: "1. Descubrimiento de Proveedores",
       step1Content:
-        "The login page fetches available SSO providers via GET /auth/oidc/providers/admin. Only enabled providers for the current login context (admin/user) are returned.",
-      step2Title: "2. PKCE Challenge",
+        "La interfaz de acceso en https://auth.scripe.org obtiene los proveedores activos mediante GET /api/v1/auth/oidc/providers/admin según Tenancy:AuthBaseUrl y OriginRouting.",
+      step2Title: "2. Reto PKCE y Ticket de Estado en Servidor",
       step2Content:
-        "When the user clicks an SSO button, the frontend calls POST /auth/oidc/challenge. The backend generates a code_verifier, computes the code_challenge (SHA-256), and returns the authorization URL.",
-      step3Title: "3. IdP Redirect",
+        "Al pulsar un proveedor SSO, el frontend invoca POST /api/v1/auth/oidc/challenge. El backend guarda code_verifier, nonce, state y returnOrigin validado dentro de ExternalAuthStateTicket en servidor (nunca en sessionStorage del navegador).",
+      step3Title: "3. Redirección al IdP con Callback Central",
       step3Content:
-        "The frontend stores PKCE state (code_verifier, state, providerId) in sessionStorage, then redirects the user to the external IdP's authorization endpoint.",
-      step4Title: "4. User Authentication",
+        "El navegador redirige al IdP externo con redirect_uri fijado en el punto central https://api.scripe.org/api/v1/auth/oidc/callback (o /api/v1/auth/saml/acs/{providerId}).",
+      step4Title: "4. Callback Central y Ticket Handoff",
       step4Content:
-        "The user authenticates at the external IdP (Azure AD, Google, Okta, etc.) and grants consent for the requested scopes.",
-      step5Title: "5. Callback & Token Exchange",
+        "El IdP devuelve al usuario a api.scripe.org; el servidor consume ExternalAuthStateTicket, evalúa suspensión de inquilino y HybridMfaPolicy, emite un ExternalAuthHandoffTicket SHA-256 de 120s (auth:ext-handoff:{sha256}, bloqueo atómico auth:ext-handoff-used:{sha256}) y redirige a auth.scripe.org/sso/continue o {ReturnOrigin}/sso/callback.",
+      step5Title: "5. Canje Único Handoff e Inicio de Sesión",
       step5Content:
-        "The IdP redirects to /sso/callback with an authorization code. The frontend retrieves PKCE state from sessionStorage, validates the state parameter, and calls POST /auth/oidc/callback. The backend exchanges the code for tokens using the code_verifier.",
-      pkceTitle: "PKCE Security Model",
+        "La página /sso/callback o /sso/continue canjea una sola vez el ticket vía POST /api/v1/auth/sso/handoff (o mediante el micro-relay HMAC /api/auth/session/establish en dominios propios) e hidrata el JWT en memoria y la cookie HttpOnly Lax.",
+      pkceTitle: "Modelo de Seguridad PKCE y Handoff Central",
       pkceContent:
-        "PKCE prevents authorization code interception attacks by ensuring that only the client that initiated the flow can exchange the code. The code_verifier is never sent over the network — only its SHA-256 hash (code_challenge) is sent during the challenge step.",
+        "Persistir ExternalAuthStateTicket en el servidor elimina la exposición PKCE en sessionStorage. Los tickets ExternalAuthHandoffTicket de 120s (SHA-256 atómico) validan returnOrigin contra IVerifiedOriginEvaluator para evitar redirecciones abiertas e interceptación de códigos.",
       entityModelTitle: "Identity Provider Entity",
       entityModelContent:
         "The IdentityProvider entity stores all OIDC configuration for an external IdP. Each provider is optionally scoped to a tenant (TenantId = null means system-wide).",
       linkingContent:
-        "Before SSO login works, a SCRIPE admin/user must link their account to the external identity. This creates an ExternalLogin record mapping the provider's subject ID to the SCRIPE account.",
+        "Vincular una cuenta autenticada exige elevación Sudo (X-Sudo-Token) vía POST /api/v1/auth/admin/external-logins/initiate-link (la ruta directa /external-logins/link devuelve 410 Gone) y concluye mediante el callback central y handoff.",
+      centralRelayTitle: "Micro-Relay HMAC de Sesión en Dominio Personalizado y CORS Dinámico",
+      centralRelayContent:
+        "Los dominios propios verificados no comparten cookies entre sitios con api.scripe.org; por ello Next.js BFF expone /api/auth/session/establish, /refresh y /logout protegidos con Sec-Fetch-Site/Origin y firma HMAC-SHA256 (X-Scripe-Session-Relay-*, ventana 30s, nonce 60s, partición de límite de tasa por X-Scripe-Session-Relay-Client-Ip y X-Scripe-Relay-Refresh-MaxAge: 0 para staySignedIn=false) emitiendo __Host-scripe_refresh_token local. Cuando SSO en auth.scripe.org/sso/continue requiere 2FA, PostMfaHandoffHelper, TenantOriginOwnershipValidator y ssoTwoFactorBridge.ts emiten un ticket post-MFA hacia {ReturnOrigin}/sso/callback, respaldado en producción por Cloudflare X-Scripe-Origin-Verify, ForwardedHeaders ForwardLimit=2, claims email+xms_edov en Entra, scopes user:email read:user en GitHub y configuración SAML ACS en 2 pasos.",
+      splitLogoutTitle: "Cierre de Sesión Dividido: App vs. Central (scr.oidc.session)",
+      splitLogoutContent:
+        "El cierre de sesión admite logoutScope ('app' por defecto o 'central'). AuthLogoutScopeHelper y CookieAuthMiddleware conservan scr.oidc.session durante /refresh, /sso/handoff, /complete-workspace-selection y cierres 'app', borrándola solo cuando logoutScope es 'central'.",
       oauthAppsTitle: "OAuth Applications",
       oauthAppsContent:
         "OAuth Applications are third-party apps that authenticate against SCRIPE as an OIDC server. Each app gets a Client ID and Client Secret, with configurable redirect URIs, scopes, and PKCE enforcement.",
@@ -221,8 +230,8 @@ export const es = {
     middlewarePipeline: {
       title: "Pipeline de Middleware",
       description:
-        "11 componentes ejecutados en riguroso orden para orquestar de manera limpia cada solicitud al servidor.",
-      intro: "La cinta transportadora del sistema en ASP.NET Core y el corazón de SCRIPE.",
+        "33 etapas ordenadas en MiddlewarePipeline.cs: cabeceras, autenticación JWT/API Key, Rate Limiting post-auth, Trusted CIDR, mcp=true, mfa_enroll=true y proyección de campos.",
+      intro: "La canalización HTTP de SCRIPE ejecuta 33 etapas en orden estricto dentro de MiddlewarePipeline.cs.",
       overviewTitle: "Visión General del Pipeline",
       overviewIntro:
         "El proceso es de caída libre: un error superior cancelará la ejecución de las capas subyacentes.",
@@ -253,7 +262,7 @@ export const es = {
       observabilityIntro: "Levanta métricas con OpenTelemetry y Prometheus.",
       registrationTitle: "Orden de Registro de Middleware",
       registrationIntro:
-        "Alterar el Program.cs requiere validación profunda del comportamiento del Pipeline.",
+        "Definido en MiddlewarePipeline.cs: ApiKeyUsageMiddleware y Rate Limiting dependen de UseAuthentication(), mientras que TrustedCidrEnforcementMiddleware, MustChangePasswordMiddleware y RequireMfaEnrollmentMiddleware se ejecutan tras UseAuthorization().",
       summaryTitle: "Resumen del Middleware",
       orderWarning:
         "Mueve el registro bajo tu propio riesgo: esto causará fallas en cascada y comportamientos impredecibles.",

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "e7b681f0-8bb0-478b-94b7-c14f1e8e0e6b",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\.archify\\explainer-scripe-email-architecture-audit-20261125\\candidate.archify.md",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-email-architecture-audit.html",
+  "specification": {
+    "sha256": "8b8838100fdcf70d750511d17ae6b8a815455c4cf8cd06d6582695f093c55af8",
+    "bytes": 29713
+  },
+  "artifact": {
+    "sha256": "6905ccd836b956a2d90916475fb5872ba9256dd6df022b681c9efadc20a0f265",
+    "bytes": 2153052
+  },
+  "explainer": {
+    "preparedSha256": "626b6bedc0e2343674663f7ac5fef17e9c404c8400842bb16c000a9d170e7598",
+    "dependencies": [
+      {
+        "kind": "diagram-spec",
+        "id": "email-system-topology",
+        "inline": true,
+        "sha256": "82f4d58039edd63e54f2a748a8a4e3794dd075503567e84a2c08a2102ea879ea",
+        "bytes": 2367
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "admin-onboarding-seq",
+        "inline": true,
+        "sha256": "a21fb24197226b384ecbab9c7db9f7ed0f298e54fb7de0a3825d55ae222b0aeb",
+        "bytes": 2128
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "comm-uow-security-flow",
+        "inline": true,
+        "sha256": "703881d1b83c56d5acfd63e4e09216d71b7fac93ae3eecf8806d4ed6b8b7871e",
+        "bytes": 1859
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "email-persistence-erd",
+        "inline": true,
+        "sha256": "215b380d36f5b3c1fe1186cb0ea3dbf10870a00fb426a137eac6414c2462ba9d",
+        "bytes": 1979
+      }
+    ]
+  }
+}

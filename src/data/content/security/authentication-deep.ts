@@ -169,42 +169,40 @@ const sections: DocSection[] = [
   {
     type: "code",
     language: "json",
-    filename: "Access Token Payload (decoded)",
+    filename: "Access Token Payload (JwtService.cs — Decoded)",
     code: `{
-  "sub": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-  "email": "admin@example.com",
-  "given_name": "John",
-  "family_name": "Doe",
-  "role": "SuperAdmin",
-  "permissions": [
-    "admins.view", "admins.create", "admins.update",
-    "users.view", "users.create", "roles.manage"
-  ],
-  "tenant_id": "f8e7d6c5-b4a3-2190-fedc-ba0987654321",
-  "is_admin": "true",
-  "impersonator_id": null,
-  "iat": 1708444800,
-  "exp": 1708445700,
-  "iss": "scripe-api",
-  "aud": "scripe-client"
+  "jti": "c9f1a4d2b8e74f0192b3a4c5d6e7f809",
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name": "admin",
+  "admin": "true",
+  "tenantId": "f8e7d6c5-b4a3-2190-fedc-ba0987654321",
+  "hierarchy_path": "/f8e7d6c5-b4a3-2190-fedc-ba0987654321/",
+  "mcp": "false",
+  "mfa_enroll": "false",
+  "imp": null,
+  "iat": 1795435200,
+  "scripe_iat_ms": 1795435200412,
+  "exp": 1795437000,
+  "iss": "SCRIPE",
+  "aud": "SCRIPE"
 }`,
   },
   {
     type: "table",
     headers: ["Claim", "Purpose", "Set By"],
     rows: [
-      ["sub", "User/Admin unique ID (Guid)", "JwtService"],
-      ["email", "Email address", "JwtService"],
-      ["role", "Primary role name", "JwtService"],
-      ["permissions", "Array of permission slugs", "JwtService (from role)"],
-      ["tenant_id", "Owning tenant ID", "JwtService"],
-      ["is_admin", "Admin vs User discriminator", "JwtService"],
-      ["impersonator_id", "Original admin ID during impersonation", "ImpersonateCommand"],
-      ["exp", "Expiration (15 min default)", "JwtService"],
+      ["jti", "Unique token ID (Guid \"N\") for CSRF binding & Redis revocation denylist", "JwtService"],
+      ["nameidentifier (sub)", "Principal ID (AdminId or UserId Guid)", "JwtService"],
+      ["name", "Username", "JwtService"],
+      ["admin", "\"true\" for Admin, \"false\" for End User", "JwtService"],
+      ["tenantId / hierarchy_path", "Owning tenant context and materialized hierarchy", "JwtService"],
+      ["mcp / mfa_enroll", "Triggers MustChangePasswordMiddleware then RequireMfaEnrollmentMiddleware", "JwtService"],
+      ["imp", "Original impersonator AdminId checked fail-closed against revocation cache", "ImpersonateCommand"],
+      ["scripe_iat_ms / exp", "Millisecond issuance cutoff (revokedAt + 5ms) and 30m default expiry (Jwt:ExpiryMinutes)", "JwtService"],
     ],
   },
 
-  // ─── BCrypt Password Hashing ──────────────────────────────
+  // ─── Versioned Pre-Hashed BCrypt ($s2$) & Reuse Guards ───
   {
     type: "heading",
     level: 2,
@@ -215,27 +213,32 @@ const sections: DocSection[] = [
   {
     type: "code",
     language: "csharp",
-    filename: "Password Hashing Implementation",
-    code: `// Hash password with BCrypt (work factor = 12)
-// ~250ms per hash — intentionally slow to resist brute force
-var hashedPassword = BCrypt.Net.BCrypt.HashPassword(
-    plainPassword,
-    workFactor: 12  // 2^12 = 4,096 iterations
-);
+    filename: "Identity.Infrastructure/Services/PasswordHasher.cs",
+    code: `// Versioned SHA-256 Base64 pre-hash ($s2$) + BCrypt (work factor 12)
+// Eliminates silent 72-byte / NUL-byte BCrypt truncation while retaining $2a$/$2b$/$2y$ verify compatibility
+private const int WorkFactor = 12;
+private const string PreHashPrefix = "$s2$";
 
-// Verify password during login
-var isValid = BCrypt.Net.BCrypt.Verify(plainPassword, storedHash);
-// Returns true/false — constant-time comparison prevents timing attacks`,
+public string Hash(string password)
+{
+    var digest = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(password)));
+    return string.Concat(PreHashPrefix, BCrypt.Net.BCrypt.HashPassword(digest, WorkFactor));
+}
+
+public bool Verify(string password, string hash) =>
+    hash.StartsWith(PreHashPrefix, StringComparison.Ordinal)
+        ? BCrypt.Net.BCrypt.Verify(PreHash(password), hash[PreHashPrefix.Length..])
+        : BCrypt.Net.BCrypt.Verify(password, hash);`,
   },
   {
     type: "table",
-    headers: ["Work Factor", "Iterations", "Time per Hash", "Use Case"],
+    headers: ["Control", "Default / Scope", "Enforcement Point"],
     rows: [
-      ["10", "1,024", "~65ms", "Development/testing"],
-      ["11", "2,048", "~130ms", "Low-security applications"],
-      ["12 (default)", "4,096", "~250ms", "Production (SCRIPE default)"],
-      ["13", "8,192", "~500ms", "High-security environments"],
-      ["14", "16,384", "~1s", "Maximum security (very slow)"],
+      ["Hash Scheme", "$s2$ SHA-256 Base64 pre-hash + BCrypt wf 12", "PasswordHasher.cs (all password writes)"],
+      ["Password History", "5 previous hashes (configurable 0–24)", "PasswordHistory table via IPermission/IPasswordMutationService"],
+      ["Breached Denylist", "8,616 NFKC-normalized entries + repeated-char check", "BreachedPasswordChecker.cs (CheckBreachedPasswords = true)"],
+      ["Context Identifiers", "Rejects email local-part, username, name, tenant code, 'scripe'", "BreachedPasswordChecker.ContainsContextIdentifier"],
+      ["Complexity Bounds", "8–128 chars, Upper=true, Digit=true, Lower/Special configurable", "ITenantPasswordValidator + PasswordValidationService"],
     ],
   },
 
@@ -252,14 +255,14 @@ var isValid = BCrypt.Net.BCrypt.Verify(plainPassword, storedHash);
     title: "Account Lockout Flow",
     direction: "vertical",
     nodes: [
-      { id: "attempt", label: "Login Attempt", type: "primary" },
-      { id: "check", label: "Check Lockout Status", type: "info" },
-      { id: "locked", label: "Account Locked", type: "danger", description: "Return 423 Locked" },
-      { id: "verify", label: "Verify Password", type: "warning" },
-      { id: "fail", label: "Wrong Password", type: "danger", description: "Increment FailedCount" },
-      { id: "threshold", label: "FailedCount >= 5?", type: "warning" },
-      { id: "lock", label: "Lock Account (5 min)", type: "danger" },
-      { id: "success", label: "Login Success", type: "success", description: "Reset FailedCount" },
+      { id: "attempt", label: "Login / 2FA Attempt", type: "primary" },
+      { id: "check", label: "Check LockoutEnd > UtcNow", type: "info" },
+      { id: "locked", label: "Account Locked", type: "danger", description: "Return AUTH_ACCOUNT_LOCKED (423)" },
+      { id: "verify", label: "Verify Credential ($s2$ / TOTP)", type: "warning" },
+      { id: "fail", label: "Invalid Credential", type: "danger", description: "Increment FailedLoginAttempts" },
+      { id: "threshold", label: "Attempts >= Effective MaxAttempts (default 5)?", type: "warning" },
+      { id: "lock", label: "Lock Account (default 15 min)", type: "danger" },
+      { id: "success", label: "Verification Success", type: "success", description: "ResetFailedAttempts()" },
     ],
     connections: [
       { from: "attempt", to: "check" },
@@ -274,13 +277,13 @@ var isValid = BCrypt.Net.BCrypt.Verify(plainPassword, storedHash);
   },
   {
     type: "table",
-    headers: ["Setting", "Default Value", "Configurable"],
+    headers: ["Setting", "Default Value", "Resolution Source"],
     rows: [
-      ["Max Failed Attempts", "5", "Yes (appsettings)"],
-      ["Lockout Duration", "5 minutes", "Yes (appsettings)"],
+      ["LoginLockoutThreshold", "5 failed attempts", "TenantSettings / Security:MaxFailedAttempts clamped by Identity.Login.MaxAttempts"],
+      ["LoginLockoutMinutes", "15 minutes", "TenantSettings / Security:LockoutMinutes via ISecurityPolicyService"],
       ["Lockout on First Failure", "No", "—"],
       ["Reset Counter on Success", "Yes (automatic)", "—"],
-      ["Admin Can Unlock", "Yes (POST /admins/{id}/unlock)", "—"],
+      ["Admin Can Unlock", "Yes (POST /api/v1/admins/{id}/unlock)", "—"],
     ],
   },
 
@@ -470,65 +473,27 @@ public record ExternalUserInfo(
   { type: "paragraph", contentKey: "security.authDeep.otpIntro" },
   {
     type: "table",
-    headers: ["OTP Purpose", "Delivery", "Length", "Expiry", "Max Attempts"],
+    headers: ["Credential / Flow", "Crypto / Storage", "Length", "Expiry", "Max Attempts"],
     rows: [
-      ["Email Verification", "Email", "6 digits", "15 minutes", "3"],
-      ["Phone Verification", "SMS", "6 digits", "10 minutes", "3"],
-      ["Password Reset", "Email", "6 digits", "15 minutes", "3"],
-      ["Rate Limit", "Per IP", "—", "60 seconds cooldown", "5 per hour"],
+      ["Email & Phone OTP", "HMAC-SHA256 verifier (Verification:VerifierKey)", "6 digits", "10 min (Verification:ExpirationMinutes)", "5"],
+      ["Password Reset OTP", "HMAC-SHA256 verifier + otp-scope token", "6 digits", "10 min (30 min Production)", "5"],
+      ["Magic Link / Reset Grant", "PasswordResetToken SHA-256 hex digest", "256-bit random", "10 min (30 min Production)", "5 (single-use)"],
+      ["Endpoint Throttle", "Fixed Window password-reset limiter", "—", "15 min window", "5 req / 15 min / IP"],
     ],
   },
   {
     type: "code",
     language: "csharp",
-    filename: "OtpService — Code Generation & Verification",
-    code: `public class OtpService : IOtpService
-{
-    public async Task<string> GenerateAsync(
-        string userId, OtpPurpose purpose, CancellationToken ct)
-    {
-        // 1. Invalidate any existing OTP for this user+purpose
-        await _repository.InvalidateExistingAsync(userId, purpose, ct);
-
-        // 2. Generate cryptographically random 6-digit code
-        var code = RandomNumberGenerator.GetInt32(100000, 999999).ToString();
-
-        // 3. Store hashed code (never store plaintext)
-        var otpCode = new OtpCode
-        {
-            UserId = userId,
-            Purpose = purpose,
-            CodeHash = BCrypt.Net.BCrypt.HashPassword(code),
-            ExpiresAt = DateTime.UtcNow.AddMinutes(15),
-            RemainingAttempts = 3
-        };
-
-        await _repository.AddAsync(otpCode, ct);
-        return code; // Return plaintext to send via email/SMS
-    }
-
-    public async Task<bool> VerifyAsync(
-        string userId, string code, OtpPurpose purpose, CancellationToken ct)
-    {
-        var otp = await _repository.GetLatestAsync(userId, purpose, ct);
-        if (otp is null || otp.ExpiresAt < DateTime.UtcNow) return false;
-        if (otp.RemainingAttempts <= 0) return false;
-
-        var isValid = BCrypt.Net.BCrypt.Verify(code, otp.CodeHash);
-        if (!isValid)
-        {
-            otp.RemainingAttempts--;
-            await _repository.SaveChangesAsync(ct);
-            return false;
-        }
-
-        // Mark as used
-        otp.UsedAt = DateTime.UtcNow;
-        await _repository.SaveChangesAsync(ct);
-        return true;
-    }
-}`,
-    highlightLines: [10, 15, 16, 17, 30, 31],
+    filename: "OtpService & PasswordResetToken — Verifier & Atomic Consume",
+    code: `// OTPs are NEVER stored or hashed with BCrypt or plaintext.
+// OtpService binds each 6-digit code with HMAC-SHA256(Verification:VerifierKey):
+//   • Normalized email (.Trim().ToLowerInvariant()) across generate/peek/consume
+//   • Lookback window clamped safely against VerificationSettings.ResendWindowMinutes
+//   • Step 2 (AdminVerifyResetOtp) peeks OTP without consuming it and mints a
+//     single-use PasswordResetToken (Purpose = "reset-grant", MaxVerificationAttempts = 5)
+//   • Step 3 (AdminResetPasswordWithOtp) validates TenantPasswordValidator + Breached + History
+//     FIRST so HTTP 422 never burns the OTP, then atomically consumes grant + OtpCode
+//     and revokes all active RefreshTokens inside one ExecuteInTransactionAsync unit of work.`,
   },
 
   // ─── Impersonation ────────────────────────────────────────
@@ -545,22 +510,27 @@ public record ExternalUserInfo(
     direction: "horizontal",
     nodes: [
       { id: "super", label: "SuperAdmin", type: "primary" },
-      { id: "impersonate", label: "POST /admins/{id}/impersonate", type: "warning" },
+      { id: "impersonate", label: "POST /auth/admin/impersonate/{id}", type: "warning" },
       {
         id: "check",
-        label: "Security Checks",
+        label: "Security, Sudo & Lockout",
         type: "danger",
-        description: "Can't impersonate protected/superior admins",
+        description: "Sudo HMAC (15m) + TwoFactorAttemptLockHelper; cannot target superior/protected admins",
       },
       {
         id: "token",
         label: "Issue Impersonation Token",
         type: "success",
-        description: "Claims of target + impersonator_id claim",
+        description: "Target claims + imp claim; non-extendable 8h ceiling",
       },
       { id: "act", label: "Act as Target Admin", type: "info" },
-      { id: "stop", label: "POST /admins/stop-impersonation", type: "primary" },
-      { id: "restore", label: "Restore Original Token", type: "success" },
+      { id: "stop", label: "POST /auth/admin/stop-impersonation", type: "primary" },
+      {
+        id: "restore",
+        label: "Revocation Check & Restore",
+        type: "success",
+        description: "Fail-closed check on original & target accounts before reissue",
+      },
     ],
     connections: [
       { from: "super", to: "impersonate" },
@@ -587,16 +557,43 @@ public record ExternalUserInfo(
   { type: "paragraph", contentKey: "security.authDeep.sessionIntro" },
   {
     type: "table",
-    headers: ["Token", "Storage", "Lifetime", "Rotation"],
+    headers: ["Token / Control", "Storage / Mechanism", "Lifetime / Bounds", "Rotation / Revocation"],
     rows: [
-      ["Access Token", "Client memory (not localStorage)", "15 minutes", "On refresh"],
-      ["Refresh Token", "HttpOnly secure cookie or DB", "7 days", "Single-use (rotate on use)"],
-      ["2FA Session Token", "Temporary in-memory", "5 minutes", "One-time use"],
       [
-        "Impersonation Token",
-        "Client (replaces access)",
-        "Same as access",
-        "On stop-impersonation",
+        "Access Token (JWT)",
+        "Client memory only (useAppStore)",
+        "30 minutes default (Jwt:ExpiryMinutes / SessionPolicyDto)",
+        "On refresh; fail-closed against JTI denylist + scripe_iat_ms (revokedAt + 5ms)",
+      ],
+      [
+        "Refresh Token",
+        "HttpOnly SameSite=Lax cookie ({CookiePrefix}_refresh_token or __Host-scripe_refresh_token via BFF relay) + SHA-256 DB hash",
+        "Rolling (SessionTimeoutMinutes / 7d) capped by AbsoluteExpiresAt (24h standard, >=30d StaySignedIn)",
+        "Single-use atomic rotation; RevokeAllSessions blacklists sibling JTIs while preserving caller's current session",
+      ],
+      [
+        "2FA Pending Token",
+        "Encrypted single-use ticket + TwoFactorAttemptLockHelper",
+        "5 minutes",
+        "One-time redemption via Verify2FACommand / VerifyUser2FACommand",
+      ],
+      [
+        "Impersonation Session",
+        "Access JWT (imp claim) + HttpOnly refresh cookie",
+        "8 hours hard non-extendable cap",
+        "Cleared on /stop-impersonation; revoked automatically if target or impersonator is revoked",
+      ],
+      [
+        "Sudo Step-Up Ticket",
+        "X-Sudo-Token / scripe_sudo_token HMAC + Distributed Lock (ISovereignSudoProtectedCommand)",
+        "15 minutes (900s)",
+        "Bound to (AdminId, SessionIdHash, Method); FE <SudoVerificationModal /> expands 403 retry across SudoRevokedOrExpired / SudoPolicyDowngradeRefused / SudoTokenInvalid",
+      ],
+      [
+        "Split Logout & OIDC Session",
+        "logoutScope ('app' default | 'central') in AuthLogoutScopeHelper + CookieAuthMiddleware.Relay",
+        "Preserved during silent /refresh, /sso/handoff & 'app' logout",
+        "Only explicit logoutScope: 'central' clears scr.oidc.session across auth.scripe.org",
       ],
     ],
   },
@@ -605,6 +602,13 @@ public record ExternalUserInfo(
     variant: "tip",
     contentKey: "security.authDeep.cookieAuthTip",
   },
+  {
+    type: "heading",
+    level: 3,
+    titleKey: "security.authDeep.federationControlsTitle",
+    id: "federation-controls",
+  },
+  { type: "paragraph", contentKey: "security.authDeep.federationControlsContent" },
 
   // ─── SSO Tenant Suspension Gate ──────────────────────────
   {
