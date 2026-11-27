@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "explainer",
+  "quality": "showcase",
+  "specification": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\.worktrees\\security-remediation\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-security-remediation-program-2026-11-27.archify.md",
+    "sha256": "2d6db886b521de0c3c705039bd8a07812011738e107c90268826cd6bab57fb1e",
+    "bytes": 7470
+  },
+  "artifact": {
+    "path": "D:\\01_PROJECTS\\SCRIPE\\.worktrees\\security-remediation\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-security-remediation-program-2026-11-27.html",
+    "sha256": "e090ace6e63e24b95535ee4a9a6fbdf1453f4806c6279924a36885fa684c2c8a",
+    "bytes": 1046372
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "not-run"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "D:\\01_PROJECTS\\SCRIPE\\.worktrees\\security-remediation\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-security-remediation-program-2026-11-27.finalize.json",
+    "summaryReceipt": "D:\\01_PROJECTS\\SCRIPE\\.worktrees\\security-remediation\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-security-remediation-program-2026-11-27.finalize-summary.json"
+  },
+  "visualReview": "not-requested",
+  "durationMs": 4768,
+  "browserCheck": {
+    "requested": false,
+    "ran": false
+  }
+}

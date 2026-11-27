@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "5c195b4d-f590-4eac-bd64-258d8c2ff91b",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "D:\\01_PROJECTS\\SCRIPE\\.worktrees\\security-remediation\\SCRIPE-Docs-Portal\\public\\archify-hub\\specs\\scripe-security-remediation-program-2026-11-27.archify.md",
+  "output": "D:\\01_PROJECTS\\SCRIPE\\.worktrees\\security-remediation\\SCRIPE-Docs-Portal\\public\\archify-hub\\scripe-security-remediation-program-2026-11-27.html",
+  "specification": {
+    "sha256": "2d6db886b521de0c3c705039bd8a07812011738e107c90268826cd6bab57fb1e",
+    "bytes": 7470
+  },
+  "artifact": {
+    "sha256": "e090ace6e63e24b95535ee4a9a6fbdf1453f4806c6279924a36885fa684c2c8a",
+    "bytes": 1046372
+  },
+  "explainer": {
+    "preparedSha256": "b3f57697d747006cc7236160cdf4471cd5996b7a8525eb23200e944b66eac71f",
+    "dependencies": [
+      {
+        "kind": "diagram-spec",
+        "id": "sec-topology",
+        "inline": true,
+        "sha256": "03c944b7c6286522caefea4762d92a97346bdb3b60dee9a972c1f5fccb6718de",
+        "bytes": 1536
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "pwd-mfa-flow",
+        "inline": true,
+        "sha256": "d3cb403e407bd4e52cc0f55fc2862b341bc55449284cf4c8a2868d8b73b1d042",
+        "bytes": 1223
+      }
+    ]
+  }
+}
